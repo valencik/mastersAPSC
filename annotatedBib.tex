@@ -37,7 +37,7 @@ The embedded applications, field reprogrammability, low non-reocurring engineeri
 The defined bitstrem, flip-flops, registers of a FPGS are sensitive to heavy ion and proton single event upsets that might occur near a radiation detector. An expensive option to protect against single evenet upsets is to use triple modular redundancy. This involves duplicating logic components and comparing the results after various operations to protecting againt the failure of a logic unit. Another method is configuration scrubbing by reflashing the bitstream on the fly, to avoid the build up of failures. It is likely that the efforts to migate radiation effects in space will be useful in particle physics experiments as well. There is an ungoing effort to used FPGAs in the liquird argon calorimeter at ATLAS. 
 \\[20pt]
 
-{\large\textbf{\cite{Cromaz}}}
+{\large\textbf{\cite{Cromaz2008233}}}
 
 For the GRETINA spectrometer a multichannel digital signal processing board has been custom built using FPGAs. The board has 12-bit resolution and is capable of digitizing continuously at 100MHz. The FPGA on the board derives an energy, leading-edge time, and constant-fraction time. The board discussed was a prototype to the actual boards which use 10 channels and 14-bit ADCs which should improve issues with differential non-linearity. The FPGA used in the production board is an commercially available one, the Xilinx Spartan XC3S5000.
 \\[20pt]
@@ -81,6 +81,11 @@ Adaptive filters are a huge benefit of digital signal processing. Regadio et al 
 
 {\large\textbf{\cite{Farsoni201375}}}
 Real time pulse discrimination and beta-gamma coincidence for Xenon radioisotopes is implemented on a single FPGA. An impressive level of detail is given for the algorithms and logic of coincidence calculations. The FPGA handles system triggering, pulse shape discrimination, coincidence, pileup rejection, and energy measurements. Four different operational modes were considered in algorithm design for the FPGA: scope, pulse shape analysis, coincidence event, and multichannel analyzer. This enabled the FPGA to be used in prototyping and realtime operation. Scope mode enables a circular buffer (similar to that seen in TIG10s).
+\\[20pt]
+
+
+{\large\textbf{\cite{Zhu2011454}}}
+A digital coincidence measurement system is implemented using FPGAs for pulse width and timing analysis. The system is small enough to have field applications. A timing resolution of 13ns and energy resolution of 12\% at 0.511MeV (annihilation gammas) is achieved. The system is used with sodium iodide detectors on $^{22}\mbox{Na}$ $^{60}\mbox{Co}$ and $^{137}\mbox{Cs}$ sources. The coicidence analysis logic is presented in detail. The pulse information is gathered from timing marks set around the pulse width using voltage thresholds. When the signal rises about the viltage threshold the first timing marker is set, the second is set once the voltages decay back below the threshold. The mathematics to extract pulse height from this information are simple and demonstrated in the article.
 \\[20pt]
 
 
