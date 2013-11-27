@@ -6,10 +6,6 @@
 
 \newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
 \newcommand{\subscript}[1]{\ensuremath{_{\textrm{#1}}}}
-%\newcommand{\th}[0]{\superscript{th}}
-%\newcommand{\st}[0]{\superscript{st}}
-%\newcommand{\nd}[0]{\superscript{nd}}
-%\newcommand{\rd}[0]{\superscript{rd}}
 
 \begin{document}
 
@@ -21,9 +17,9 @@
 
 \maketitle
 
-%%%%
+%%%
 
-\section{Field Programmable Gate Arrays}
+\section{Field Programmable Gate Arrays}   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 This section is about FPGAs
 \\[20pt]
 
@@ -53,21 +49,17 @@ One of the most important aspects of particle identification experiments is the 
 \\[20pt]
 
 
-%%%%%%%%%%
-
-\section{Digital Signal Processing}
+\section{Digital Signal Processing}   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 {\large\textbf{\cite{Menaa2011512}}}
 
 A significant advantage of digital signal processing over analog processing is the ability to apply a range of pulse shaping filters to the input signal. Menaa et al explore the use of cusp, 1/f, and pseudo-gaussian, pulse shaping in a FPGA implementation and compare it to the established CANBERRA trapezoidal shaper. The study concludes that for high throughput applications the trapezoidal filter has the best energy resolution. However in low noise germanium applications the cusp filter is ideal.
 The article goes into little detail about the FPGA implementation. It nonetheless serves as a useful resource on different pulse shaping techniques and their best applications.
+\\[20pt]
 
 
-%%%%%%%%%%
-
-\section{Nuclear Physics}
-
+\section{Nuclear Physics}   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 {\large\textbf{\cite{Mayer}}}
 
@@ -75,7 +67,7 @@ The orientation dependence of the backscattered yield of 1.0-MeV helium ions has
 \\[20pt]
 
 
-\section{Detectors}
+\section{Detectors}   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 {\large\textbf{\cite{Leviner201466}}}
 
@@ -83,6 +75,7 @@ The first N-type segmented Germanium detector with 85\% $^{76}\mbox{Ge}$ enrichm
 \\
 Neutrinoless double beta-decay has yet to be observed, but would show that neutrinos are mahorana particles, meaning they are their own antiparticle. These interactions have incredibly long halflives and are thus very rare.
 \\[20pt]
+
 
 {\large\textbf{\cite{Sangsingkeow2003183}}}
 
@@ -92,7 +85,14 @@ Monolithic segmentation is an improvement covered in detail. This technique also
 \\[20pt]
 
 
-%%%%%%%%%%%%
+{\large\textbf{\cite{Eberth2008283}}}
+
+A lengthy and detailed topical review of gamma-ray tracking with Germanium detectors over the last 50 years. Gamma-ray spectroscopy is the focus, as it has been a primarily method for probing the structure of the atomic nucleus over the decades. The first improvements where in Germanium purity and volume. Segmentation by separating electrical contacts to the crystals came as a later improvement. Advances in signal processing allowed for more complex pulse shape analysis to be done on the increase in information gathered from segmentation. The European AGATA gamma-ray tracking system is the highlighted equipment of the review.
+\\
+Various components and their history are discussed and compared. Bismuth germanate and NaI(Ti) supression shields are discussed. A strong theoretical knowledge base is constructed for many properties of germanium semiconductor detectors. This includes discussions from dead layers to the different ways of tiling a sphere for a detector setup.
+\\[20pt]
+
+%%%
 
 \bibliography{citationsAPSC.bib}
 
