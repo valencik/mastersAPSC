@@ -1,6 +1,7 @@
 \documentclass[12pt]{article}
 
 \usepackage{hyperref}
+\usepackage{setspace}
 \usepackage[round]{natbib}
 \bibliographystyle{plainnat}
 
@@ -20,6 +21,8 @@
 %%%
 
 The following papers are loosely categorized by areas of focus. In truth, many papers could exists in multiple, or all categories. In this sceneario an attempt has been made to categorize the paper based on what topic it will be most useful during research.
+
+\begin{doublespacing}
 
 \section{Field Programmable Gate Arrays}   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 There exists a tradeoff between performance and flexibility when it comes to integrated circuits. On the most flexible end exists general purpose CPUs found in PCs and servers. Many operations are possible on these chips, but they suffer a performance hit because no specific customization are made. Application specific integrated circuits, or ASICs, are on the high performance end of the spectrum. They are a custom design circuit for a set of predetermined logic operations, and are therefore incredibly fast. In the middle of the spectrum is the FPGA. It consists of an array of configurable logic units, controlled by flashing a firmware. Therefore optimizations can be refined in ssoftware and then flashed to the chip, allowing flexibility and speed.
@@ -50,8 +53,10 @@ For the GRETINA spectrometer a multichannel digital signal processing board has 
 One of the most important aspects of particle identification experiments is the digitisation of time, amplitude and charge data from detectors. These conversions are mostly undertaken with Application Specific Integrated Circuits (ASICs). However, recent developments in Field Pro- grammable Gate Array (FPGA) technology allow us to use commercial electronic components for the required Front-End Electronics (FEE) and to do the digitisation in the FPGA. It is possible to do Time-of-Flight (ToF), Time-over-Threshold (ToT), amplitude and charge measurements with converters implemented in FPGA. 
 \\[20pt]
 
-
+\pagebreak
 \section{Digital Signal Processing}   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The quanization and discretization of input signal data allows for complex analysis to be done without affecting the now digitized data. This can be huge improvement over analog signal processing and allows for previous impossible realtime analysis.
+\\[20pt]
 
 
 {\large\textbf{\cite{Menaa2011512}}}
@@ -91,17 +96,10 @@ A digital coincidence measurement system is implemented using FPGAs for pulse wi
 \\[20pt]
 
 
-\section{Nuclear Physics}   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-{\large\textbf{\cite{Mayer}}}
-
-Semiconductor detectors eventually suffer radiation damage from usage. This damage can be mitigated with an annealing process. Mayer et al investigates the disorder a heavy ion brings on to the nearby lattice by helium scattering at temperatures above room temperature. The method used gives information down to 0.2 angstroms. A detailed account of the crystaline structure of semiconduction detectors is given.
-\\
-It is found that for low dosages of dopant levels the germanium crystal reorders at 180C where silicon requires 260C. Annealing of an amorphous layer formed by high dosages occurs at 380C for germanium and 570C in silicon. Each of the implanted germanium atom is found to displace about 3000 lattice atoms. Diffusion and annealing both occur at significantly lower temperatures for germanium than for silicon.
-\\[20pt]
-
-
+\pagebreak
 \section{Detectors}   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+A wide range of detectors are available for various forms of radiation. Papers in this section focus on a specific implementation of a detector and usually describe the architectual setup at a high level.
+\\[20pt]
 
 {\large\textbf{\cite{Leviner201466}}}
 
@@ -131,6 +129,14 @@ Various components and their history are discussed and compared. Bismuth germana
 In-beam position measurements are checked againt Monte Carlo simulations for highly segmented icoaxial germanium detectors. The determined resolution is 2mm in three directions for analysis on $^{90}\mbox{Zr}$ gamma transitions. The study examines the departure of experimental results from simulated data and break down the contributions of position resolution into the various factors of the detector.
 \\
 The importance of position measurments is in enabling the reconstruction of the scattering path withing the detecting volume. In order to calculate the position of the first gamma interaction a Doppler correction must be made. The identified area to improve was in selecting a zero time for pulse shape analysis. This work is therefore very sensitive to improvements in timing information. Time and energy information were calculated using FPGAs on board.
+\\[20pt]
+
+
+{\large\textbf{\cite{Mayer}}}
+
+Semiconductor detectors eventually suffer radiation damage from usage. This damage can be mitigated with an annealing process. Mayer et al investigates the disorder a heavy ion brings on to the nearby lattice by helium scattering at temperatures above room temperature. The method used gives information down to 0.2 angstroms. A detailed account of the crystaline structure of semiconduction detectors is given.
+\\
+It is found that for low dosages of dopant levels the germanium crystal reorders at 180C where silicon requires 260C. Annealing of an amorphous layer formed by high dosages occurs at 380C for germanium and 570C in silicon. Each of the implanted germanium atom is found to displace about 3000 lattice atoms. Diffusion and annealing both occur at significantly lower temperatures for germanium than for silicon.
 \\[20pt]
 
 
@@ -169,6 +175,7 @@ A portable detector setup has been designed for the identification of radioactiv
 \\[20pt]
 
 
+\end{doublespacing}
 
 %%%
 
