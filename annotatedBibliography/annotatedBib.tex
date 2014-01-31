@@ -25,7 +25,7 @@ The following papers are loosely categorized by areas of focus. In truth, many p
 \begin{doublespacing}
 
 \section{Field Programmable Gate Arrays}   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-There exists a tradeoff between performance and flexibility when it comes to integrated circuits. On the most flexible end exists general purpose CPUs found in PCs and servers. Many operations are possible on these chips, but they suffer a performance hit because no specific customization are made. Application specific integrated circuits, or ASICs, are on the high performance end of the spectrum. They are a custom design circuit for a set of predetermined logic operations, and are therefore incredibly fast. In the middle of the spectrum is the FPGA. It consists of an array of configurable logic units, controlled by flashing a firmware. Therefore optimizations can be refined in software and then flashed to the chip, allowing flexibility and speed.
+There exists a trade-off between performance and flexibility when it comes to integrated circuits. On the most flexible end exists general purpose CPUs found in PCs and servers. Many operations are possible on these chips, but they suffer a performance hit because no specific customizations are made. Application specific integrated circuits, or ASICs, are on the high performance end of the spectrum. They are a custom designed circuit for a set of predetermined logic operations, and are therefore allow great optimizations and incredible speed. In the middle of the spectrum is the FPGA. It consists of an array of configurable logic units, controlled by flashing a software defined firmware to the device. Therefore optimizations can be refined in software and then flashed to the chip, allowing flexibility and speed.
 \\[20pt]
 
 {\large\textbf{\cite{currentState}}}
@@ -37,25 +37,25 @@ A good deal of the discussion focuses on the design and development of applicati
 
 {\large\textbf{\cite{Wirthlin}}}
 
-The embedded applications, field reprogrammability, low non-reoccurring engineering cost, and the short design cycle of FPGAs means they end up in a large range of environments. This study focuses on FPGAs in high radiation environments and draws largely off the knowledge base gained from the use of FPGA in space. 
+The embedded applications, field reprogrammability, low non-reoccurring engineering cost, and the short design cycle of FPGAs means they end up in a large range of environments. This study focuses on FPGAs in high radiation environments and draws largely off the knowledge base gained from the use of FPGAs in space. 
 \\
-The defined bitstream, flip-flops, registers of a FPGS are sensitive to heavy ion and proton single event upsets that might occur near a radiation detector. An expensive option to protect against single event upsets is to use triple modular redundancy. This involves duplicating logic components and comparing the results after various operations to protecting against the failure of a logic unit. Another method is configuration scrubbing by reflashing the bitstream on the fly, to avoid the build up of failures. It is likely that the efforts to mitigate radiation effects in space will be useful in particle physics experiments as well. There is an ongoing effort to used FPGAs in the liquid argon calorimeter at ATLAS. 
+The defined bitstream, flip-flops, and registers of a FPGA are sensitive to heavy ion and proton single event upsets that might occur near a radiation detector. An expensive option to protect against single event upsets is to use triple modular redundancy. This involves duplicating logic components and comparing the results after various operations to protect against the failure of a logic unit. Another method is configuration scrubbing by reflashing the bitstream on the fly, to avoid the build up of failures. It is likely that the efforts to mitigate radiation effects in space will be useful in particle physics experiments as well. There is an ongoing effort to use FPGAs in the liquid argon calorimeter at ATLAS. 
 \\[20pt]
 
 {\large\textbf{\cite{Cromaz2008233}}}
 
-For the GRETINA spectrometer a multichannel digital signal processing board has been custom built using FPGAs. The board has 12-bit resolution and is capable of digitizing continuously at 100MHz. The FPGA on the board derives an energy, leading-edge time, and constant-fraction time. The board discussed was a prototype to the actual boards which use 10 channels and 14-bit ADCs which should improve issues with differential non-linearity. The FPGA used in the production board is an commercially available one, the Xilinx Spartan XC3S5000.
+For the GRETINA spectrometer a multichannel digital signal processing board has been custom built using FPGAs. The board has 12-bit resolution and is capable of digitizing continuously at 100MHz. The FPGA on the board derives an energy, leading-edge time, and constant-fraction time of a detected event. The board discussed was a prototype to the actual boards which use 10 channels and 14-bit ADCs which should improve issues with differential non-linearity. The FPGA used in the production board is a commercially available one, the Xilinx Spartan XC3S5000.
 \\[20pt]
 
 
 {\large\textbf{\cite{Ugur}}}
 
-One of the most important aspects of particle identification experiments is the digitization of time, amplitude and charge data from detectors. These conversions are mostly undertaken with Application Specific Integrated Circuits (ASICs). However, recent developments in Field Programmable Gate Array (FPGA) technology allow us to use commercial electronic components for the required Front-End Electronics (FEE) and to do the digitization in the FPGA. It is possible to do Time-of-Flight (ToF), Time-over-Threshold (ToT), amplitude and charge measurements with converters implemented in FPGA. 
+One of the most important aspects of particle identification experiments is the digitization of time, amplitude, and electric charge data from detectors. These conversions are mostly undertaken with Application Specific Integrated Circuits (ASICs). However, recent developments in Field Programmable Gate Array (FPGA) technology allows the use of commercial electronic components for the required Front-End Electronics (FEE) and to do the digitization in the FPGA. It is possible to do Time-of-Flight (ToF), Time-over-Threshold (ToT), amplitude, and electric charge measurements with converters implemented in FPGA. 
 \\[20pt]
 
 \pagebreak
 \section{Digital Signal Processing}   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-The quantization and discretization of input signal data allows for complex analysis to be done without affecting the now digitized data. This can be huge improvement over analog signal processing and allows for previous impossible realtime analysis.
+The quantization and discretization of input signal data allows for complex analysis to be done without affecting the now digitized data. This can be huge improvement over analog signal processing and allows previously impossible real time analysis.
 \\[20pt]
 
 
@@ -71,14 +71,15 @@ The article goes into little detail about the FPGA implementation. It nonetheles
 
 Digital Signal Processing allows for complex pulse shape analysis, but if the algorithms are of sufficient complexity to require offline processing this produces new problems of handling and recording such data. A real time digital signal processing method is presented that accomplishes self-calibrating pulse shape analysis. Both fitting and parametric pulse analysis is discussed, but the focus is on the latter. Parametric analysis suffers some information loss with the added benefit of computational simplicity, allowing it to be done live on FPGAs.
 \\
-The article present an education view of the process of pulse shape discrimination. The work is conducted on a data collection board that features 14-bit ADCs and a FPGA for trapezoidal filtering and looking at pileup information. The algorithms of interest are walked through in detail.
+The article presents an education view of the process of pulse shape discrimination. The work is conducted on a data collection board that features 14-bit ADCs and a FPGA for trapezoidal filtering and looking at pileup information. The algorithms of interest are walked through in detail.
 \\[20pt]
 
 
 {\large\textbf{\cite{Abbene2013124}}}
-A commercial digitizer is used with a custom firmware for online pulse shape and height analysis. Both X-ray and gamma-ray spectra measurements are examined. A discussion of the application of paralyzable dead times to fast and slow pulse shape analysis is given. A comparison of digital signal processing and analog processing is given in regards to energy resolution as a function of input counting rate. This demonstrates the strong advantages the digital approach has over analog but also the effects of online shaping techniques at high throughput.
+
+A commercial digitizer is used with a custom firmware for online pulse shape and height analysis. Both X-ray and gamma-ray spectra measurements are examined. A discussion of the application of paralyzable dead times to fast and slow pulse shape analysis is given. A comparison of digital signal processing and analog processing is given in regards to energy resolution as a function of input counting rate. This demonstrates the strong advantages the digital approach has over analog, but also the effects of online shaping techniques at high throughput.
 \\
-The pulse height and shape analysis uses and describes the single delay line technique.Pile up rejection is performed by the use of a simple threshold. Dead times and the appropriate corrections are discussed in detail.
+The pulse height and shape analysis uses and describes the single delay line technique. Pile up rejection is performed by the use of a simple threshold. Dead times and the appropriate corrections are discussed in detail.
 \\[20pt]
 
 
