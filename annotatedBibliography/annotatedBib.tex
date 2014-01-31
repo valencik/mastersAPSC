@@ -68,6 +68,7 @@ The article goes into little detail about the FPGA implementation. It nonetheles
 
 
 {\large\textbf{\cite{Suarez2008276}}}
+
 Digital Signal Processing allows for complex pulse shape analysis, but if the algorithms are of sufficient complexity to require offline processing this produces new problems of handling and recording such data. A real time digital signal processing method is presented that accomplishes self-calibrating pulse shape analysis. Both fitting and parametric pulse analysis is discussed, but the focus is on the latter. Parametric analysis suffers some information loss with the added benefit of computational simplicity, allowing it to be done live on FPGAs.
 \\
 The article present an education view of the process of pulse shape discrimination. The work is conducted on a data collection board that features 14-bit ADCs and a FPGA for trapezoidal filtering and looking at pileup information. The algorithms of interest are walked through in detail.
@@ -82,16 +83,19 @@ The pulse height and shape analysis uses and describes the single delay line tec
 
 
 {\large\textbf{\cite{Regadio2014297}}}
+
 Adaptive filters are a huge benefit of digital signal processing. Regadio et al present a new digital shaper used in nuclear particle detection that employs adaptive adjustments to coefficients for shaping. Input signals are stored temporarily in a learning phase to be used as additional parameters for the immediately following signal processing. The system is capable of regular trapezoidal, cusp, and triangular shaping, in addition to more complex unipolar pulse shaping. The algorithms presented are detailed in logic diagrams and pseudo code. Simulated data is compared with experimental data from the commercial Xilinix FPGA implementation. Traditional analog methods are compared with concerns of simplicity and power consumption discussed in detail.
 \\[20pt]
 
 
 {\large\textbf{\cite{Farsoni201375}}}
+
 Real time pulse discrimination and beta-gamma coincidence for Xenon radioisotopes is implemented on a single FPGA. An impressive level of detail is given for the algorithms and logic of coincidence calculations. The FPGA handles system triggering, pulse shape discrimination, coincidence, pileup rejection, and energy measurements. Four different operational modes were considered in algorithm design for the FPGA: scope, pulse shape analysis, coincidence event, and multichannel analyzer. This enabled the FPGA to be used in prototyping and realtime operation. Scope mode enables a circular buffer (similar to that seen in TIG10s).
 \\[20pt]
 
 
 {\large\textbf{\cite{Zhu2011454}}}
+
 A digital coincidence measurement system is implemented using FPGAs for pulse width and timing analysis. The system is small enough to have field applications. A timing resolution of 13ns and energy resolution of 12\% at 0.511MeV (annihilation gammas) is achieved. The system is used with sodium iodide detectors on $^{22}\mbox{Na}$ $^{60}\mbox{Co}$ and $^{137}\mbox{Cs}$ sources. The coincidence analysis logic is presented in detail. The pulse information is gathered from timing marks set around the pulse width using voltage thresholds. When the signal rises about the voltage threshold the first timing marker is set, the second is set once the voltages decay back below the threshold. The mathematics to extract pulse height from this information are simple and demonstrated in the article.
 \\[20pt]
 
@@ -126,6 +130,7 @@ Various components and their history are discussed and compared. Bismuth germana
 
 
 {\large\textbf{\cite{Descovich2005535}}}
+
 In-beam position measurements are checked against Monte Carlo simulations for highly segmented coaxial germanium detectors. The determined resolution is 2mm in three directions for analysis on $^{90}\mbox{Zr}$ gamma transitions. The study examines the departure of experimental results from simulated data and break down the contributions of position resolution into the various factors of the detector.
 \\
 The importance of position measurements is in enabling the reconstruction of the scattering path within the detecting volume. In order to calculate the position of the first gamma interaction a Doppler correction must be made. The identified area to improve was in selecting a zero time for pulse shape analysis. This work is therefore very sensitive to improvements in timing information. Time and energy information were calculated using FPGAs on board.
@@ -146,11 +151,13 @@ The Gamma-Ray Energy Tracking In-beam Nuclear Array, GRETINA, detector modules m
 
 
 {\large\textbf{\cite{Palit201290}}}
+
 A compton suppressed germanium clover detector array with a Pixie-16 commercial digital gamma finder digitizer has been implemented at TIFR-BARC. Gamma-gamma coincidence measurements are made using logic operations on the four clover output. The discussion include point of improvement from moving to the digital system from the previous analog electronics. Notably, the previous system had limitations due to heat build up causing a gain drift. The experiments performed required a constant gain over a period of several days. The presented digital data acquisition system has improved data recording capabilities at INGA by a factor of five.
 \\[20pt]
 
 
 {\large\textbf{\cite{Alberto200999}}}
+
 Future improvements to digital acquisition systems will create self-triggering systems. In order to achieve this digital filtering must be improved and moved to online processing. Peak distortion, signal-to-noise ratio, energy deposition, and detector efficiency are all covered in their regard to filtering structures.
 \\
 The digital filters discussed are implemented on commercial Xilinix FPGAs and are compared to simulated data via Matlab and Simulink. Noteworthy filtering algorithms include infinite impulse response low pass Butterworth III and adaptive LMS filter. A discussion of the direct translation from VHDL shows the need for further optimization in performance driven tasks. The VHDL translation had higher FPGA consumption and a longer logical path length than the optimized bitstream.
@@ -160,17 +167,20 @@ The digital filters discussed are implemented on commercial Xilinix FPGAs and ar
 \subsection{Specific Detector Setups}
 
 {\large\textbf{\cite{Chen2010261}}}
+
 An overview of the technologies and developments for the ATLAS Liquid Argon calorimeter is given. The scale of this project is considerable and of the largest order. In real time there are 182,468 signals being digitized and processed on the detectors. The discussion is centered around the upgrade being made to LAr in preparation for the increased luminosity of the LHC around 2017. The digital readout systems use both ASIC and FPGA implementations.
 Interesting points about the concerns of high radiation exposure are raised. All optical links are radiation resistant due to the luminosity of the experiment environment. Analog elements are still considered in the planned upgrades. The voltage supply system will be upgraded and further protected from radiation.
  \\[20pt]
 
 
 {\large\textbf{\cite{Haefeli2006119}}}
+
 The architecture and design of the data acquisition system for the LHCb is overviewed.The design uses FPGAs to communicate between either digital optical or analog copper links to the Gigabit Ethernet connections. As with all LHC related equipment the scale of the problem is rather unique. However the logic and architecture diagrams are educational and of interest in smaller experimental setups.
 \\[20pt]
 
 
 {\large\textbf{\cite{Schiffer2011491}}}
+
 A portable detector setup has been designed for the identification of radioactive materials. The platform is scalable and uses FPGAs for the realtime integral pulse shape discrimination. Integral calculations, pulse shape discrimination, baseline offset, time stamping, and checking for clipped or double pulses have all been implemented. After the onboard digital data processing the results can be transmitted to a laptop for storage or further processing. The usage of such online processing is able to reduce the necessary storage capacity by a factor of 100. The FPGA module is a Virtex 5 and is programmed using Verilog and VHDL. The authors intended application of the platform is nuclear non-proliferation measurements. However other industry applications such as national and airport security are mentioned.
 \\[20pt]
 
