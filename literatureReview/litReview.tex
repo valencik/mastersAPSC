@@ -1,0 +1,297 @@
+\documentclass[12pt]{article}
+
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage[round]{natbib}
+\bibliographystyle{plainnat}
+
+\newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
+\newcommand{\subscript}[1]{\ensuremath{_{\textrm{#1}}}}
+
+\begin{document}
+
+\title{Literature Review}
+
+\author{Andrew Valencik}
+
+\date{\today}
+
+\maketitle
+
+%%%
+
+\begin{doublespacing}
+
+%%% Begin Introduction
+\section{Introduction}
+
+%%% General intro
+%%% Radiation
+%%% Semiconductor detectors
+%%% FPGAs have been covered
+
+\section{Field Programmable Gate Arrays} 
+There exists a tradeoff between performance and flexibility when it comes to integrated circuits.
+On the most flexible end exists general purpose CPUs found in PCs and servers.
+Many operations are possible on these chips, but they suffer a performance hit because no specific customization are made.
+Application specific integrated circuits, or ASICs, are on the high performance end of the spectrum.
+They are a custom design circuit for a set of predetermined logic operations, and are therefore incredibly fast.
+In the middle of the spectrum is the FPGA.
+It consists of an array of configurable logic units, controlled by flashing a firmware.
+Therefore optimizations can be refined in software and then flashed to the chip, allowing flexibility and speed.
+
+{\large\textbf{\cite{currentState}}}
+The article is an industry produced review of FPGAs in the nuclear power sector.
+It has a good and thorough introduction to FPGA technology, including a discussion of hardware aspects such as CMOS, chip architecture, different implementations (fuse, SRAM, antifuse), electrical and mechanical properties, and the reliability of FPGAs.
+\\
+
+A good deal of the discussion focuses on the design and development of applications for FPGAs.
+The development process includes aspects from software design along with concerns and practices in hardware design.
+Finally, due to the nature of a nuclear power plant, an in depth analysis is given on the concerns of safety and risks associated with a FPGA system.
+This includes suggestions such as triple modular redundancy (TMR), which is covered in detail, using error detection and correction codes, and diverse methods of implementation.
+
+{\large\textbf{\cite{Wirthlin}}}
+The embedded applications, field reprogrammability, low non-reoccurring engineering cost, and the short design cycle of FPGAs means they end up in a large range of environments.
+This study focuses on FPGAs in high radiation environments and draws largely off the knowledge base gained from the use of FPGA in space.
+\\
+
+The defined bitstream, flip-flops, registers of a FPGS are sensitive to heavy ion and proton single event upsets that might occur near a radiation detector.
+An expensive option to protect against single event upsets is to use triple modular redundancy.
+This involves duplicating logic components and comparing the results after various operations to protecting against the failure of a logic unit.
+Another method is configuration scrubbing by reflashing the bitstream on the fly, to avoid the build up of failures.
+It is likely that the efforts to mitigate radiation effects in space will be useful in particle physics experiments as well.
+There is an ongoing effort to used FPGAs in the liquid argon calorimeter at ATLAS.
+
+{\large\textbf{\cite{Cromaz2008233}}}
+For the GRETINA spectrometer a multichannel digital signal processing board has been custom built using FPGAs.
+The board has 12-bit resolution and is capable of digitizing continuously at 100MHz.
+The FPGA on the board derives an energy, leading-edge time, and constant-fraction time.
+The board discussed was a prototype to the actual boards which use 10 channels and 14-bit ADCs which should improve issues with differential non-linearity.
+The FPGA used in the production board is an commercially available one, the Xilinx Spartan XC3S5000.
+
+
+{\large\textbf{\cite{Ugur}}}
+One of the most important aspects of particle identification experiments is the digitization of time, amplitude and charge data from detectors.
+These conversions are mostly undertaken with Application Specific Integrated Circuits (ASICs). However, recent developments in Field Programmable Gate Array (FPGA) technology allow us to use commercial electronic components for the required Front-End Electronics (FEE) and to do the digitization in the FPGA.
+It is possible to do Time-of-Flight (ToF), Time-over-Threshold (ToT), amplitude and charge measurements with converters implemented in FPGA.
+\\[20pt]
+
+\pagebreak
+\section{Digital Signal Processing}   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The quantization and discretization of input signal data allows for complex analysis to be done without affecting the now digitized data.
+This can be huge improvement over analog signal processing and allows for previous impossible realtime analysis.
+\\[20pt]
+
+
+{\large\textbf{\cite{Menaa2011512}}}
+
+A significant advantage of digital signal processing over analog processing is the ability to apply a range of pulse shaping filters to the input signal.
+Menaa et al explore the use of cusp, 1/f, and pseudo-gaussian, pulse shaping in a FPGA implementation and compare it to the established CANBERRA trapezoidal shaper.
+The study concludes that for high throughput applications the trapezoidal filter has the best energy resolution.
+However in low noise germanium applications the cusp filter is ideal.
+\\
+
+The article goes into little detail about the FPGA implementation.
+It nonetheless serves as a useful resource on different pulse shaping techniques and their best applications.
+
+
+{\large\textbf{\cite{Suarez2008276}}}
+Digital Signal Processing allows for complex pulse shape analysis, but if the algorithms are of sufficient complexity to require offline processing this produces new problems of handling and recording such data.
+A real time digital signal processing method is presented that accomplishes self-calibrating pulse shape analysis.
+Both fitting and parametric pulse analysis is discussed, but the focus is on the latter.
+Parametric analysis suffers some information loss with the added benefit of computational simplicity, allowing it to be done live on FPGAs.
+\\
+
+The article present an education view of the process of pulse shape discrimination.
+The work is conducted on a data collection board that features 14-bit ADCs and a FPGA for trapezoidal filtering and looking at pileup information.
+The algorithms of interest are walked through in detail.
+
+
+{\large\textbf{\cite{Abbene2013124}}}
+A commercial digitizer is used with a custom firmware for online pulse shape and height analysis.
+Both X-ray and gamma-ray spectra measurements are examined.
+A discussion of the application of paralyzable dead times to fast and slow pulse shape analysis is given.
+A comparison of digital signal processing and analog processing is given in regards to energy resolution as a function of input counting rate.
+This demonstrates the strong advantages the digital approach has over analog but also the effects of online shaping techniques at high throughput.
+\\
+
+The pulse height and shape analysis uses and describes the single delay line technique.
+Pile up rejection is performed by the use of a simple threshold.
+Dead times and the appropriate corrections are discussed in detail.
+
+
+{\large\textbf{\cite{Regadio2014297}}}
+Adaptive filters are a huge benefit of digital signal processing.
+Regadio et al present a new digital shaper used in nuclear particle detection that employs adaptive adjustments to coefficients for shaping.
+Input signals are stored temporarily in a learning phase to be used as additional parameters for the immediately following signal processing.
+The system is capable of regular trapezoidal, cusp, and triangular shaping, in addition to more complex unipolar pulse shaping.
+The algorithms presented are detailed in logic diagrams and pseudo code.
+Simulated data is compared with experimental data from the commercial Xilinix FPGA implementation.
+Traditional analog methods are compared with concerns of simplicity and power consumption discussed in detail.
+
+
+{\large\textbf{\cite{Farsoni201375}}}
+Real time pulse discrimination and beta-gamma coincidence for Xenon radioisotopes is implemented on a single FPGA.
+An impressive level of detail is given for the algorithms and logic of coincidence calculations.
+The FPGA handles system triggering, pulse shape discrimination, coincidence, pileup rejection, and energy measurements.
+Four different operational modes were considered in algorithm design for the FPGA: scope, pulse shape analysis, coincidence event, and multichannel analyzer.
+This enabled the FPGA to be used in prototyping and realtime operation.
+Scope mode enables a circular buffer (similar to that seen in TIG10s).
+
+
+{\large\textbf{\cite{Zhu2011454}}}
+A digital coincidence measurement system is implemented using FPGAs for pulse width and timing analysis.
+The system is small enough to have field applications.
+A timing resolution of 13ns and energy resolution of 12\% at 0.511MeV (annihilation gammas) is achieved.
+The system is used with sodium iodide detectors on $^{22}\mbox{Na}$ $^{60}\mbox{Co}$ and $^{137}\mbox{Cs}$ sources.
+The coincidence analysis logic is presented in detail.
+The pulse information is gathered from timing marks set around the pulse width using voltage thresholds.
+When the signal rises about the voltage threshold the first timing marker is set, the second is set once the voltages decay back below the threshold.
+The mathematics to extract pulse height from this information are simple and demonstrated in the article.
+\\[20pt]
+
+
+\pagebreak
+\section{Detectors}   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+A wide range of detectors are available for various forms of radiation.
+Papers in this section focus on a specific implementation of a detector and usually describe the architectural setup at a high level.
+
+{\large\textbf{\cite{Leviner201466}}}
+The first N-type segmented Germanium detector with 85\% $^{76}\mbox{Ge}$ enrichment is characterized and evaluated for use in the Majorana collaboration.
+The segmented enriched germanium array (SEGA) is applicable to neutrinoless double beta-decay because of the strong energy resolution performance near 2039keV.
+The paper examines the cross-talk, electronic noise, and resolution of the detector.
+It concludes that SEGA is a viable detector for the search for neutrinoless double beta-decay.
+\\
+
+Neutrinoless double beta-decay has yet to be observed, but would show that neutrinos are majorana particles, meaning they are their own antiparticle.
+These interactions have incredibly long halflives and are thus very rare.
+
+
+{\large\textbf{\cite{Sangsingkeow2003183}}}
+An older paper that summarizes the then recent advancements in high purity germanium detectors.
+Manufacturing and fabrication methods are the focus of the improvements.
+Many advancements had been made in growing large Germanium crystals that allowed for many segment detectors.
+Large efficiency HPGe detectors are presented with FWHM resolutions of 2.4keV at 1.33MeV.
+Multi-element arrays of Germanium detectors are introduced including the now prevalent clover array.
+\\
+
+Monolithic segmentation is an improvement covered in detail.
+This technique also for further information gathering from the same germanium crystal.
+Photolithography enables the use of very closely packed segmented electrical contacts.
+Thus instead on one electrical output signal from a Germanium crystal, there can be many outputs.
+Along with reduction in Doppler broadening, the segmentation means the addition of position information useful in tracking the path of a radiation event in the crystal.
+
+
+{\large\textbf{\cite{Eberth2008283}}}
+A lengthy and detailed topical review of gamma-ray tracking with Germanium detectors over the last 50 years.
+Gamma-ray spectroscopy is the focus, as it has been a primarily method for probing the structure of the atomic nucleus over the decades.
+The first improvements where in Germanium purity and volume.
+Segmentation by separating electrical contacts to the crystals came as a later improvement.
+Advances in signal processing allowed for more complex pulse shape analysis to be done on the increase in information gathered from segmentation.
+The European AGATA gamma-ray tracking system is the highlighted equipment of the review.
+\\
+
+Various components and their history are discussed and compared.
+Bismuth germanate and NaI(Ti) suppression shields are discussed.
+A strong theoretical knowledge base is constructed for many properties of germanium semiconductor detectors.
+This includes discussions from dead layers to the different ways of tiling a sphere for a detector setup.
+
+
+{\large\textbf{\cite{Descovich2005535}}}
+In-beam position measurements are checked against Monte Carlo simulations for highly segmented coaxial germanium detectors.
+The determined resolution is 2mm in three directions for analysis on $^{90}\mbox{Zr}$ gamma transitions.
+The study examines the departure of experimental results from simulated data and break down the contributions of position resolution into the various factors of the detector.
+\\
+
+The importance of position measurements is in enabling the reconstruction of the scattering path within the detecting volume.
+In order to calculate the position of the first gamma interaction a Doppler correction must be made.
+The identified area to improve was in selecting a zero time for pulse shape analysis.
+This work is therefore very sensitive to improvements in timing information.
+Time and energy information were calculated using FPGAs on board.
+
+
+{\large\textbf{\cite{Mayer}}}
+Semiconductor detectors eventually suffer radiation damage from usage.
+This damage can be mitigated with an annealing process.
+Mayer et al investigates the disorder a heavy ion brings on to the nearby lattice by helium scattering at temperatures above room temperature.
+The method used gives information down to 0.2 angstroms.
+A detailed account of the crystalline structure of semiconductor detectors is given.
+\\
+
+It is found that for low dosages of dopant levels the germanium crystal reorders at 180C where silicon requires 260C.
+Annealing of an amorphous layer formed by high dosages occurs at 380C for germanium and 570C in silicon.
+Each of the implanted germanium atom is found to displace about 3000 lattice atoms.
+Diffusion and annealing both occur at significantly lower temperatures for germanium than for silicon.
+
+
+{\large\textbf{\cite{Paschalis201344}}}
+The Gamma-Ray Energy Tracking In-beam Nuclear Array, GRETINA, detector modules maximize solid angle coverage and tracking performance while minimizing costs in detector manufacturing.
+The energy and point position of each gamma interaction can be reconstructed with high precision.
+A detailed discussion on detector geometry is given to justify the design concepts of GRETINA.
+The detector modules are n-type high purity germanium crystals segmented 36 times.
+The testing and acceptance process is important is achieving the energy resolution of 2.2keV at 1333keV.
+The digital signal processing has 10 channel inputs, each leading to a 14-bit ADC with a 100MHz sampling rate.
+This information is then fed to a Xilinix FPGA which uses a trapezoidal filter to calculate energy, and leading edge and constant fraction discrimination algorithms for timing information.
+
+
+{\large\textbf{\cite{Palit201290}}}
+A compton suppressed germanium clover detector array with a Pixie-16 commercial digital gamma finder digitizer has been implemented at TIFR-BARC.
+Gamma-gamma coincidence measurements are made using logic operations on the four clover output.
+The discussion include point of improvement from moving to the digital system from the previous analog electronics.
+Notably, the previous system had limitations due to heat build up causing a gain drift.
+The experiments performed required a constant gain over a period of several days.
+The presented digital data acquisition system has improved data recording capabilities at INGA by a factor of five.
+
+
+{\large\textbf{\cite{Alberto200999}}}
+Future improvements to digital acquisition systems will create self-triggering systems.
+In order to achieve this digital filtering must be improved and moved to online processing.
+Peak distortion, signal-to-noise ratio, energy deposition, and detector efficiency are all covered in their regard to filtering structures.
+\\
+
+The digital filters discussed are implemented on commercial Xilinix FPGAs and are compared to simulated data via Matlab and Simulink.
+Noteworthy filtering algorithms include infinite impulse response low pass Butterworth III and adaptive LMS filter.
+A discussion of the direct translation from VHDL shows the need for further optimization in performance driven tasks.
+The VHDL translation had higher FPGA consumption and a longer logical path length than the optimized bitstream.
+
+
+\subsection{Specific Detector Setups}
+
+{\large\textbf{\cite{Chen2010261}}}
+An overview of the technologies and developments for the ATLAS Liquid Argon calorimeter is given.
+The scale of this project is considerable and of the largest order.
+In real time there are 182,468 signals being digitized and processed on the detectors.
+The discussion is centered around the upgrade being made to LAr in preparation for the increased luminosity of the LHC around 2017. The digital readout systems use both ASIC and FPGA implementations.
+\\
+
+Interesting points about the concerns of high radiation exposure are raised.
+All optical links are radiation resistant due to the luminosity of the experiment environment.
+Analog elements are still considered in the planned upgrades.
+The voltage supply system will be upgraded and further protected from radiation.
+
+
+{\large\textbf{\cite{Haefeli2006119}}}
+The architecture and design of the data acquisition system for the LHCb is overviewed.
+The design uses FPGAs to communicate between either digital optical or analog copper links to the Gigabit Ethernet connections.
+As with all LHC related equipment the scale of the problem is rather unique.
+However the logic and architecture diagrams are educational and of interest in smaller experimental setups.
+
+
+{\large\textbf{\cite{Schiffer2011491}}}
+A portable detector setup has been designed for the identification of radioactive materials.
+The platform is scalable and uses FPGAs for the realtime integral pulse shape discrimination.
+Integral calculations, pulse shape discrimination, baseline offset, time stamping, and checking for clipped or double pulses have all been implemented.
+After the onboard digital data processing the results can be transmitted to a laptop for storage or further processing.
+The usage of such online processing is able to reduce the necessary storage capacity by a factor of 100. The FPGA module is a Virtex 5 and is programmed using Verilog and VHDL.
+The authors intended application of the platform is nuclear non-proliferation measurements.
+However other industry applications such as national and airport security are mentioned.
+\\[20pt]
+
+
+\end{doublespacing}
+
+%%%
+
+\bibliography{../citationsAPSC.bib}
+
+\end{document}
