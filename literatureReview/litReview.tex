@@ -25,6 +25,7 @@
 \begin{doublespacing}
 
 %%% Begin Introduction
+\pagebreak
 \section{Introduction}
 
 %%% General intro
@@ -42,6 +43,7 @@
 % - Selected technique: Clustering and Classification
 % - Selected technique: Sentiment Analysis
 
+\pagebreak
 \section{Nuclear Science}
 The study of radiation and the structure of the atom is more thann 100 years old.
 
@@ -82,7 +84,6 @@ Over time the energy release from a radioactive source is usually isotropic. In 
 The penetration depth varies among radiation types. Photons propagate through the \href{https://en.wikipedia.org/wiki/Electromagnetic_field}{electromagnetic field} at the \href{https://en.wikipedia.org/wiki/Speed_of_light}{speed of light}. Other particulate radiation has a velocity dependent on its energy. Typical energies of alpha decay can be stopped by a piece of paper, beta decay by thin films of aluminum, and gamma rays by lead shielding.
 
 
-\pagebreak
 \subsection{Semiconductor Detectors}   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 A wide range of detectors are available for various forms of radiation.
 Papers in this section focus on a specific implementation of a detector and usually describe the architectural setup at a high level.
@@ -163,7 +164,7 @@ So it is always possible that an 'event' contains multiple incidences of radiati
 
 
 
-{\large\textbf{\cite{Leviner201466}}}
+\textbf{\cite{Leviner201466}}
 The first N-type segmented Germanium detector with 85\% $^{76}\mbox{Ge}$ enrichment is characterized and evaluated for use in the Majorana collaboration.
 The segmented enriched germanium array (SEGA) is applicable to neutrinoless double beta-decay because of the strong energy resolution performance near 2039keV.
 The paper examines the cross-talk, electronic noise, and resolution of the detector.
@@ -174,7 +175,7 @@ Neutrinoless double beta-decay has yet to be observed, but would show that neutr
 These interactions have incredibly long halflives and are thus very rare.
 
 
-{\large\textbf{\cite{Sangsingkeow2003183}}}
+\textbf{\cite{Sangsingkeow2003183}}
 An older paper that summarizes the then recent advancements in high purity germanium detectors.
 Manufacturing and fabrication methods are the focus of the improvements.
 Many advancements had been made in growing large Germanium crystals that allowed for many segment detectors.
@@ -189,7 +190,7 @@ Thus instead on one electrical output signal from a Germanium crystal, there can
 Along with reduction in Doppler broadening, the segmentation means the addition of position information useful in tracking the path of a radiation event in the crystal.
 
 
-{\large\textbf{\cite{Eberth2008283}}}
+\textbf{\cite{Eberth2008283}}
 A lengthy and detailed topical review of gamma-ray tracking with Germanium detectors over the last 50 years.
 Gamma-ray spectroscopy is the focus, as it has been a primarily method for probing the structure of the atomic nucleus over the decades.
 The first improvements where in Germanium purity and volume.
@@ -204,7 +205,7 @@ A strong theoretical knowledge base is constructed for many properties of german
 This includes discussions from dead layers to the different ways of tiling a sphere for a detector setup.
 
 
-{\large\textbf{\cite{Descovich2005535}}}
+\textbf{\cite{Descovich2005535}}
 In-beam position measurements are checked against Monte Carlo simulations for highly segmented coaxial germanium detectors.
 The determined resolution is 2mm in three directions for analysis on $^{90}\mbox{Zr}$ gamma transitions.
 The study examines the departure of experimental results from simulated data and break down the contributions of position resolution into the various factors of the detector.
@@ -217,7 +218,7 @@ This work is therefore very sensitive to improvements in timing information.
 Time and energy information were calculated using FPGAs on board.
 
 
-{\large\textbf{\cite{Mayer}}}
+\textbf{\cite{Mayer}}
 Semiconductor detectors eventually suffer radiation damage from usage.
 This damage can be mitigated with an annealing process.
 Mayer et al investigates the disorder a heavy ion brings on to the nearby lattice by helium scattering at temperatures above room temperature.
@@ -231,7 +232,7 @@ Each of the implanted germanium atom is found to displace about 3000 lattice ato
 Diffusion and annealing both occur at significantly lower temperatures for germanium than for silicon.
 
 
-{\large\textbf{\cite{Paschalis201344}}}
+\textbf{\cite{Paschalis201344}}
 The Gamma-Ray Energy Tracking In-beam Nuclear Array, GRETINA, detector modules maximize solid angle coverage and tracking performance while minimizing costs in detector manufacturing.
 The energy and point position of each gamma interaction can be reconstructed with high precision.
 A detailed discussion on detector geometry is given to justify the design concepts of GRETINA.
@@ -241,7 +242,7 @@ The digital signal processing has 10 channel inputs, each leading to a 14-bit AD
 This information is then fed to a Xilinix FPGA which uses a trapezoidal filter to calculate energy, and leading edge and constant fraction discrimination algorithms for timing information.
 
 
-{\large\textbf{\cite{Palit201290}}}
+\textbf{\cite{Palit201290}}
 A compton suppressed germanium clover detector array with a Pixie-16 commercial digital gamma finder digitizer has been implemented at TIFR-BARC.
 Gamma-gamma coincidence measurements are made using logic operations on the four clover output.
 The discussion include point of improvement from moving to the digital system from the previous analog electronics.
@@ -250,7 +251,7 @@ The experiments performed required a constant gain over a period of several days
 The presented digital data acquisition system has improved data recording capabilities at INGA by a factor of five.
 
 
-{\large\textbf{\cite{Alberto200999}}}
+\textbf{\cite{Alberto200999}}
 Future improvements to digital acquisition systems will create self-triggering systems.
 In order to achieve this digital filtering must be improved and moved to online processing.
 Peak distortion, signal-to-noise ratio, energy deposition, and detector efficiency are all covered in their regard to filtering structures.
@@ -262,48 +263,25 @@ A discussion of the direct translation from VHDL shows the need for further opti
 The VHDL translation had higher FPGA consumption and a longer logical path length than the optimized bitstream.
 
 
-\subsection{Specific Detector Setups}
 
-{\large\textbf{\cite{Chen2010261}}}
-An overview of the technologies and developments for the ATLAS Liquid Argon calorimeter is given.
-The scale of this project is considerable and of the largest order.
-In real time there are 182,468 signals being digitized and processed on the detectors.
-The discussion is centered around the upgrade being made to LAr in preparation for the increased luminosity of the LHC around 2017. The digital readout systems use both ASIC and FPGA implementations.
-\\
-
-Interesting points about the concerns of high radiation exposure are raised.
-All optical links are radiation resistant due to the luminosity of the experiment environment.
-Analog elements are still considered in the planned upgrades.
-The voltage supply system will be upgraded and further protected from radiation.
-
-
-{\large\textbf{\cite{Haefeli2006119}}}
-The architecture and design of the data acquisition system for the LHCb is overviewed.
-The design uses FPGAs to communicate between either digital optical or analog copper links to the Gigabit Ethernet connections.
-As with all LHC related equipment the scale of the problem is rather unique.
-However the logic and architecture diagrams are educational and of interest in smaller experimental setups.
-
-
-{\large\textbf{\cite{Schiffer2011491}}}
-A portable detector setup has been designed for the identification of radioactive materials.
-The platform is scalable and uses FPGAs for the realtime integral pulse shape discrimination.
-Integral calculations, pulse shape discrimination, baseline offset, time stamping, and checking for clipped or double pulses have all been implemented.
-After the onboard digital data processing the results can be transmitted to a laptop for storage or further processing.
-The usage of such online processing is able to reduce the necessary storage capacity by a factor of 100. The FPGA module is a Virtex 5 and is programmed using Verilog and VHDL.
-The authors intended application of the platform is nuclear non-proliferation measurements.
-However other industry applications such as national and airport security are mentioned.
-\\[20pt]
-
-\section{Knowledge Discovery}
-Knowledge Discovery and Data Mining refers to the field of techniques and tools for finding useful trends and patterns in large volumes of data.
-
+%%% Knowledge Discovery
+% - Intro to KD and DM
+% - Selected technique: Clustering and Classification
+% - Selected technique: Sentiment Analysis
 
 \pagebreak
+\section{Knowledge Discovery}
+Knowledge Discovery and Data Mining refers to the field of techniques and tools for finding useful trends and patterns in large volumes of data.
+This encompasses discovering new phenomena and enhancing our existing knowledge from data sources.
+
+\subsection{Classification and Clustering}
+
+\subsection{Text Mining}
 
 
+%%% That's all folks
+\pagebreak
 \end{doublespacing}
-
-%%%
 
 \bibliography{../citationsAPSC.bib}
 
