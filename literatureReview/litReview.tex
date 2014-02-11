@@ -18,6 +18,8 @@
 
 \maketitle
 
+\tableofcontents
+
 %%%
 
 \begin{doublespacing}
@@ -26,135 +28,140 @@
 \section{Introduction}
 
 %%% General intro
-%%% Radiation
-%%% Semiconductor detectors
-%%% FPGAs have been covered
+% - Nuclear Science
+% - Database
+% - Datamining
 
-\section{Field Programmable Gate Arrays} 
-There exists a tradeoff between performance and flexibility when it comes to integrated circuits.
-On the most flexible end exists general purpose CPUs found in PCs and servers.
-Many operations are possible on these chips, but they suffer a performance hit because no specific customization are made.
-Application specific integrated circuits, or ASICs, are on the high performance end of the spectrum.
-They are a custom design circuit for a set of predetermined logic operations, and are therefore incredibly fast.
-In the middle of the spectrum is the FPGA.
-It consists of an array of configurable logic units, controlled by flashing a firmware.
-Therefore optimizations can be refined in software and then flashed to the chip, allowing flexibility and speed.
+%%% Nuclear Science
+% - Radiation
+% - Selected technique: Semiconductor detectors
+% - Selected technique: FPGAs
 
-{\large\textbf{\cite{currentState}}}
-The article is an industry produced review of FPGAs in the nuclear power sector.
-It has a good and thorough introduction to FPGA technology, including a discussion of hardware aspects such as CMOS, chip architecture, different implementations (fuse, SRAM, antifuse), electrical and mechanical properties, and the reliability of FPGAs.
-\\
+%%% Knowledge Discovery
+% - Intro to KD and DM
+% - Selected technique: Clustering and Classification
+% - Selected technique: Sentiment Analysis
 
-A good deal of the discussion focuses on the design and development of applications for FPGAs.
-The development process includes aspects from software design along with concerns and practices in hardware design.
-Finally, due to the nature of a nuclear power plant, an in depth analysis is given on the concerns of safety and risks associated with a FPGA system.
-This includes suggestions such as triple modular redundancy (TMR), which is covered in detail, using error detection and correction codes, and diverse methods of implementation.
+\section{Nuclear Science}
+The study of radiation and the structure of the atom is more thann 100 years old.
 
-{\large\textbf{\cite{Wirthlin}}}
-The embedded applications, field reprogrammability, low non-reoccurring engineering cost, and the short design cycle of FPGAs means they end up in a large range of environments.
-This study focuses on FPGAs in high radiation environments and draws largely off the knowledge base gained from the use of FPGA in space.
-\\
+\subsection{Radiation}
+Radiation can be emitted through multiple processes involving many interactions. The radiation carries energy away from the parent nuclei or atom. Thus systems in an excited state may emit radiation to decay to their ground state or another unstable state. 
 
-The defined bitstream, flip-flops, registers of a FPGS are sensitive to heavy ion and proton single event upsets that might occur near a radiation detector.
-An expensive option to protect against single event upsets is to use triple modular redundancy.
-This involves duplicating logic components and comparing the results after various operations to protecting against the failure of a logic unit.
-Another method is configuration scrubbing by reflashing the bitstream on the fly, to avoid the build up of failures.
-It is likely that the efforts to mitigate radiation effects in space will be useful in particle physics experiments as well.
-There is an ongoing effort to used FPGAs in the liquid argon calorimeter at ATLAS.
+\subsubsection{Alpha Decay}
+Alpha, α, decay is a type of nuclear decay prevalent in heavy nuclei, in which an alpha particle (helium nucleus), is ejected from the parent nuclide. Alpha emitters are useful in \href{http://cs.smu.ca/~andrew/files/ugthesis/SMU-Thesis-v.1.0.1.pdf}{calibrating} nuclear detectors as they are effectively monoenergetic in terms of their energy resolution. There is a species change associated with alpha decay depicted in the following equation.
+The mechanism for alpha decay is Coulomb barrier penetration via \href{https://en.wikipedia.org/wiki/Quantum_tunneling}{quantum tunnelling}. The barrier penetration probability is needed to describe the relationship between energy and halflife. Alpha decay can happen alongside larger \href{https://en.wikipedia.org/wiki/Nuclear_fission}{fission breakup} reactions.
+% img: [](/img/alphaDecayEqn.gif)
+% img: [Alpha Decay^[[Wiki Commons: Alpha Decay Image](http://commons.wikimedia.org/wiki/File:Alpha_Decay.svg)]](http://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Alpha_Decay.svg/200px-Alpha_Decay.svg.png)
 
-{\large\textbf{\cite{Cromaz2008233}}}
-For the GRETINA spectrometer a multichannel digital signal processing board has been custom built using FPGAs.
-The board has 12-bit resolution and is capable of digitizing continuously at 100MHz.
-The FPGA on the board derives an energy, leading-edge time, and constant-fraction time.
-The board discussed was a prototype to the actual boards which use 10 channels and 14-bit ADCs which should improve issues with differential non-linearity.
-The FPGA used in the production board is an commercially available one, the Xilinx Spartan XC3S5000.
+\subsubsection{Beta Decay}
+There are three types of beta, β, decay, beta-minus decay, beta-plus decay, and electron capture. Both beta-minus decay, and beta-plus decay involve the ejection of a beta particle (an \href{http://en.wikipedia.org/wiki/Electron}{electron} or \href{http://en.wikipedia.org/wiki/Positron}{positron}) and a \href{http://en.wikipedia.org/wiki/Neutrino}{neutrino} (or \href{http://en.wikipedia.org/wiki/Antineutrino#Antineutrinos}{antineutrino}). Thus beta decay also produces a species change as described below. \href{https://en.wikipedia.org/wiki/Electron_capture}{Electron capture}, converts a nuclear proton to a neutron by absorping an orbiting electron.
+The neutrinos have a very low interaction probability with matter and are thus not detected directly. The beta particle and the neutrino take away a small amount of momentum from the system, resulting in a minute recoil energy on the daughter nucleus. This recoil energy is generally well below the ionization threshold of the detecting volume and therefore goes unmeasured.
+Beta emitters are good sources of fast electrons. A pure beta emitter is one that decays directly to a ground state. The energy spectrum of beta decay is continuous. If monoenergetic electrons are desired, a system that undergoes \href{https://en.wikipedia.org/wiki/Internal_conversion}{internal conversion} is desirable. The two processes are worth mentioning together as some beta emitters will undergo internal conversion after a beta decay event.
+% img: [](/img/betaDecayEqn.gif)
+% img: \href{http://commons.wikimedia.org/wiki/File:Beta-minus_Decay.svg}{Beta Decay^[[Wiki Commons: Beta Decay Image}]](http://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Beta-minus_Decay.svg/200px-Beta-minus_Decay.svg.png)
 
+\subsubsection{Nuclear Fission}
+Nuclear fission is the break up of an unstable nucleus into smaller pieces. These pieces can be quite large (by definition larger than an alpha particle) and can be unstable themselves. Nuclei that undergo fission have a distribution of emitted masses, not a single finite mass as in alpha decay. Nuclear fission is usually accompanied by alpha decay and neutron emission.
 
-{\large\textbf{\cite{Ugur}}}
-One of the most important aspects of particle identification experiments is the digitization of time, amplitude and charge data from detectors.
-These conversions are mostly undertaken with Application Specific Integrated Circuits (ASICs). However, recent developments in Field Programmable Gate Array (FPGA) technology allow us to use commercial electronic components for the required Front-End Electronics (FEE) and to do the digitization in the FPGA.
-It is possible to do Time-of-Flight (ToF), Time-over-Threshold (ToT), amplitude and charge measurements with converters implemented in FPGA.
-\\[20pt]
+\subsubsection{Gamma Radiation}
+An unstable nuclear state can decay by emitting a high energy photon called a gamma, γ, ray. Because the gamma ray is uncharged it is usually detected by observing the effects of its interaction with a detecting volume. In this form of radiation there is no change of species. 
+Gamma rays have enough energy to ionize some materials. It is through this process, and the production of \href{https://en.wikipedia.org/wiki/Secondary_emmission}{secondary emission} that gamma rays are detected. Gamma rays can follow beta decay, in which case they have halflife properties from the parent, but reflect energy levels of the daughter nucleus.
+Gamma rays can also be produced by an annihilation event where an electron and positron annihilate and produce two gamma rays of 0.511MeV in opposite directions. Because of this, beta-plus decay, which releases positrons, is often accompanied by 0.511MeV gamma rays.
+% img: [](/img/gammaDecayEqn.gif)
+% img: \href{http://commons.wikimedia.org/wiki/File:Gamma_Decay.svg}{Gamma Radiation^[[Wiki Commons: Gamma Radiation Image}]](http://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Gamma_Decay.svg/200px-Gamma_Decay.svg.png)
 
-\pagebreak
-\section{Digital Signal Processing}   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-The quantization and discretization of input signal data allows for complex analysis to be done without affecting the now digitized data.
-This can be huge improvement over analog signal processing and allows for previous impossible realtime analysis.
-\\[20pt]
+\subsubsection{Neutron Radiation}
+Another form of uncharged radiation, neutrons can be detected by the use of an absorber material which emits characteristic energy or ions that are then detected separately.
+Absorption of thermal neutrons can prompt the emission of gamma rays from the nucleus.
+%TODO ref to knoll
+A good discussion on neutron radiation applications and concepts can be found in Knoll's Radiation Detection and Measurement.
 
-
-{\large\textbf{\cite{Menaa2011512}}}
-
-A significant advantage of digital signal processing over analog processing is the ability to apply a range of pulse shaping filters to the input signal.
-Menaa et al explore the use of cusp, 1/f, and pseudo-gaussian, pulse shaping in a FPGA implementation and compare it to the established CANBERRA trapezoidal shaper.
-The study concludes that for high throughput applications the trapezoidal filter has the best energy resolution.
-However in low noise germanium applications the cusp filter is ideal.
-\\
-
-The article goes into little detail about the FPGA implementation.
-It nonetheless serves as a useful resource on different pulse shaping techniques and their best applications.
-
-
-{\large\textbf{\cite{Suarez2008276}}}
-Digital Signal Processing allows for complex pulse shape analysis, but if the algorithms are of sufficient complexity to require offline processing this produces new problems of handling and recording such data.
-A real time digital signal processing method is presented that accomplishes self-calibrating pulse shape analysis.
-Both fitting and parametric pulse analysis is discussed, but the focus is on the latter.
-Parametric analysis suffers some information loss with the added benefit of computational simplicity, allowing it to be done live on FPGAs.
-\\
-
-The article present an education view of the process of pulse shape discrimination.
-The work is conducted on a data collection board that features 14-bit ADCs and a FPGA for trapezoidal filtering and looking at pileup information.
-The algorithms of interest are walked through in detail.
-
-
-{\large\textbf{\cite{Abbene2013124}}}
-A commercial digitizer is used with a custom firmware for online pulse shape and height analysis.
-Both X-ray and gamma-ray spectra measurements are examined.
-A discussion of the application of paralyzable dead times to fast and slow pulse shape analysis is given.
-A comparison of digital signal processing and analog processing is given in regards to energy resolution as a function of input counting rate.
-This demonstrates the strong advantages the digital approach has over analog but also the effects of online shaping techniques at high throughput.
-\\
-
-The pulse height and shape analysis uses and describes the single delay line technique.
-Pile up rejection is performed by the use of a simple threshold.
-Dead times and the appropriate corrections are discussed in detail.
-
-
-{\large\textbf{\cite{Regadio2014297}}}
-Adaptive filters are a huge benefit of digital signal processing.
-Regadio et al present a new digital shaper used in nuclear particle detection that employs adaptive adjustments to coefficients for shaping.
-Input signals are stored temporarily in a learning phase to be used as additional parameters for the immediately following signal processing.
-The system is capable of regular trapezoidal, cusp, and triangular shaping, in addition to more complex unipolar pulse shaping.
-The algorithms presented are detailed in logic diagrams and pseudo code.
-Simulated data is compared with experimental data from the commercial Xilinix FPGA implementation.
-Traditional analog methods are compared with concerns of simplicity and power consumption discussed in detail.
-
-
-{\large\textbf{\cite{Farsoni201375}}}
-Real time pulse discrimination and beta-gamma coincidence for Xenon radioisotopes is implemented on a single FPGA.
-An impressive level of detail is given for the algorithms and logic of coincidence calculations.
-The FPGA handles system triggering, pulse shape discrimination, coincidence, pileup rejection, and energy measurements.
-Four different operational modes were considered in algorithm design for the FPGA: scope, pulse shape analysis, coincidence event, and multichannel analyzer.
-This enabled the FPGA to be used in prototyping and realtime operation.
-Scope mode enables a circular buffer (similar to that seen in TIG10s).
-
-
-{\large\textbf{\cite{Zhu2011454}}}
-A digital coincidence measurement system is implemented using FPGAs for pulse width and timing analysis.
-The system is small enough to have field applications.
-A timing resolution of 13ns and energy resolution of 12\% at 0.511MeV (annihilation gammas) is achieved.
-The system is used with sodium iodide detectors on $^{22}\mbox{Na}$ $^{60}\mbox{Co}$ and $^{137}\mbox{Cs}$ sources.
-The coincidence analysis logic is presented in detail.
-The pulse information is gathered from timing marks set around the pulse width using voltage thresholds.
-When the signal rises about the voltage threshold the first timing marker is set, the second is set once the voltages decay back below the threshold.
-The mathematics to extract pulse height from this information are simple and demonstrated in the article.
-\\[20pt]
+\subsubsection{Propagation}
+Over time the energy release from a radioactive source is usually isotropic. In an experimental setup, a solid angle portion may be incident on a [semiconductor detector](semiconductorDetectors). To avoid energy loss through interactions occurring between the source and the detector, the experimental setup is typically under vacuum. 
+The penetration depth varies among radiation types. Photons propagate through the \href{https://en.wikipedia.org/wiki/Electromagnetic_field}{electromagnetic field} at the \href{https://en.wikipedia.org/wiki/Speed_of_light}{speed of light}. Other particulate radiation has a velocity dependent on its energy. Typical energies of alpha decay can be stopped by a piece of paper, beta decay by thin films of aluminum, and gamma rays by lead shielding.
 
 
 \pagebreak
-\section{Detectors}   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Semiconductor Detectors}   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 A wide range of detectors are available for various forms of radiation.
 Papers in this section focus on a specific implementation of a detector and usually describe the architectural setup at a high level.
+
+\subsubsection{Immediate Sources of Energy Loss}
+
+%% Entrance Window
+In the case of a HPGe, High Purity Germanium, detector the radiation must pass through a protecting window. 
+Materials such as Beryllium or Aluminium may be used in ~1mm thicknesses.\footnote{\url{http://www.physics.fsu.edu/courses/Spring12/PHY3802L/exp4822/aptec_EGPC-.pdf}} 
+Their low densities and atomic masses allow some radiation to pass through with little energy loss.
+\\
+
+%% Dead Layer
+The dead layer is a section of the detecting volume that does not contribute to detecting. 
+Incident radiation may lose energy here, and no detection event is registered. 
+This effect may be significant for heavy charged particles or weakly penetrating radiation.
+The thickness of this layer can be reduced with an applied voltage called a bias voltage.
+\\
+
+
+\subsubsection{Structure of Detector Volume}
+
+%% Crystal Lattice
+The radiation begins interacting with the crystal lattice. 
+High energy photons impact electrons in the lattice and depart some energy via ionization, atomic excitation, and bremsstrahlung emission. 
+\\
+
+%% p-n Junctions
+A p-n junction is boundary between a p-type semiconductor and a n-type semiconductor material. 
+A n-type semiconductor has been doped to have an excess of electrons. 
+Similarly, a p-type semiconductor is implanted with a dopant such that it has an abundance of holes. 
+A displacement of charge carries occurs at a p-n junction. 
+This is the result of a diffusion force felt by charge carriers near the junction. 
+The electrons are attracted from the n-type material towards the p-type material through the Coulomb interaction with the excess hole in the p-type semiconductor. 
+Eventually a equilibrium charge distribution is reached, at which there is a potential difference across the junction opposing further diffusion.
+\\
+
+
+\subsubsection{Interactions}
+Photoelectric absorption: The photon transfers its energy to an atom, knocking out an electron, typically from the K shell. 
+The electron, a photoelectron, has kinetic energy equal to the the photon minus the original binding energy of the electron, and a very small amount of recoil energy.
+
+%% Secondary Emissions
+The output signal of a detector is reliant on collecting a charge associated with the radiation's interaction with the detecting volume. 
+These interactions can excite other particles in the volume that contribute to the overall charge.
+Detector materials are designed to favourably allow these interactions and produce a large amount of secondary emissions. 
+\\
+
+
+\subsubsection{Detector Operation}
+We make use of a simplified detector model to describe some of the processes involved in detector operation.
+Consider some incident radiation on our detecting volume. 
+By some process the radiation interacts with the detecting medium and deposits energy which produces a net charge. 
+A voltage is applied across the detecting volume, this biases the volume creating an electric field. 
+When charge carriers are produced by an interaction, the electron-hole pairs migrate apart, in opposite directions according to the field. 
+Without a bias the charge carriers are immobile and will not produce a current at the collection sites.
+
+%% Pulse Mode
+A detector can be run in current mode, mean square voltage mode, or pulse mode. 
+The pulse mode operation of a detector will be the focus of this study as it best enables the detection of individual radiation quanta by providing information on amplitude and timing.
+\\
+
+%% Charge Collection
+The bias applied to the detecting volume promotes charge carrying electrons into the conduction band and draws them to the collection sites. 
+Holes are also collected, but an opposite collection site.
+\\
+
+%% Dead Time
+A detector's dead time is the duration after a radiation event before the detector can correctly respond to another event.
+There are two models for dead time, paralyzable and nonparalyzable. 
+If consecutive events in the detector extend the dead time, it is said to be paralyzable. 
+In this behaviour a count rate higher than the inverse of the dead time will completely stop the detection of new events. 
+Each radiation interact will restart the dead time of the system and thus no events will be recorded. 
+In the nonparalyzable model the dead time is not restarted by an event occurring during the dead time. 
+Thus in the limiting case the count rate will be no higher than the inverse of the dead time.
+So it is always possible that an 'event' contains multiple incidences of radiation.
+\\
+
+
 
 {\large\textbf{\cite{Leviner201466}}}
 The first N-type segmented Germanium detector with 85\% $^{76}\mbox{Ge}$ enrichment is characterized and evaluated for use in the Majorana collaboration.
@@ -286,6 +293,12 @@ The usage of such online processing is able to reduce the necessary storage capa
 The authors intended application of the platform is nuclear non-proliferation measurements.
 However other industry applications such as national and airport security are mentioned.
 \\[20pt]
+
+\section{Knowledge Discovery}
+Knowledge Discovery and Data Mining refers to the field of techniques and tools for finding useful trends and patterns in large volumes of data.
+
+
+\pagebreak
 
 
 \end{doublespacing}
