@@ -28,3 +28,10 @@ nulam.iml
 *.blg
 *.log
 *.out
+*.toc
+
+# mastersAPSC Specifc
+/data
+/papers
+annotatedBibliography/
+literatureReview/
