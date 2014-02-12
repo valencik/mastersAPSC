@@ -4,30 +4,18 @@
 \usepackage{setspace}
 \usepackage[round]{natbib}
 \bibliographystyle{plainnat}
-
 \newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
 \newcommand{\subscript}[1]{\ensuremath{_{\textrm{#1}}}}
 
 \begin{document}
-
 \title{Literature Review}
-
 \author{Andrew Valencik}
-
 \date{\today}
-
 \maketitle
-
 \tableofcontents
-
-%%%
-
 \begin{doublespacing}
 
 %%% Begin Introduction
-\pagebreak
-\section{Introduction}
-
 %%% General intro
 % - Nuclear Science
 % - Database
@@ -37,12 +25,6 @@
 % - Radiation
 % - Selected technique: Semiconductor detectors
 % - Selected technique: FPGAs
-
-%%% Knowledge Discovery
-% - Intro to KD and DM
-% - Selected technique: Clustering and Classification
-% - Selected technique: Sentiment Analysis
-
 \pagebreak
 \section{Nuclear Science}
 The study of radiation and the structure of the atom is more thann 100 years old.
@@ -164,7 +146,7 @@ So it is always possible that an 'event' contains multiple incidences of radiati
 
 
 
-\textbf{\cite{Leviner201466}}
+\cite{Leviner201466}
 The first N-type segmented Germanium detector with 85\% $^{76}\mbox{Ge}$ enrichment is characterized and evaluated for use in the Majorana collaboration.
 The segmented enriched germanium array (SEGA) is applicable to neutrinoless double beta-decay because of the strong energy resolution performance near 2039keV.
 The paper examines the cross-talk, electronic noise, and resolution of the detector.
@@ -175,7 +157,7 @@ Neutrinoless double beta-decay has yet to be observed, but would show that neutr
 These interactions have incredibly long halflives and are thus very rare.
 
 
-\textbf{\cite{Sangsingkeow2003183}}
+\cite{Sangsingkeow2003183}
 An older paper that summarizes the then recent advancements in high purity germanium detectors.
 Manufacturing and fabrication methods are the focus of the improvements.
 Many advancements had been made in growing large Germanium crystals that allowed for many segment detectors.
@@ -190,7 +172,7 @@ Thus instead on one electrical output signal from a Germanium crystal, there can
 Along with reduction in Doppler broadening, the segmentation means the addition of position information useful in tracking the path of a radiation event in the crystal.
 
 
-\textbf{\cite{Eberth2008283}}
+\cite{Eberth2008283}
 A lengthy and detailed topical review of gamma-ray tracking with Germanium detectors over the last 50 years.
 Gamma-ray spectroscopy is the focus, as it has been a primarily method for probing the structure of the atomic nucleus over the decades.
 The first improvements where in Germanium purity and volume.
@@ -205,7 +187,7 @@ A strong theoretical knowledge base is constructed for many properties of german
 This includes discussions from dead layers to the different ways of tiling a sphere for a detector setup.
 
 
-\textbf{\cite{Descovich2005535}}
+\cite{Descovich2005535}
 In-beam position measurements are checked against Monte Carlo simulations for highly segmented coaxial germanium detectors.
 The determined resolution is 2mm in three directions for analysis on $^{90}\mbox{Zr}$ gamma transitions.
 The study examines the departure of experimental results from simulated data and break down the contributions of position resolution into the various factors of the detector.
@@ -218,7 +200,7 @@ This work is therefore very sensitive to improvements in timing information.
 Time and energy information were calculated using FPGAs on board.
 
 
-\textbf{\cite{Mayer}}
+\cite{Mayer}
 Semiconductor detectors eventually suffer radiation damage from usage.
 This damage can be mitigated with an annealing process.
 Mayer et al investigates the disorder a heavy ion brings on to the nearby lattice by helium scattering at temperatures above room temperature.
@@ -232,7 +214,7 @@ Each of the implanted germanium atom is found to displace about 3000 lattice ato
 Diffusion and annealing both occur at significantly lower temperatures for germanium than for silicon.
 
 
-\textbf{\cite{Paschalis201344}}
+\cite{Paschalis201344}
 The Gamma-Ray Energy Tracking In-beam Nuclear Array, GRETINA, detector modules maximize solid angle coverage and tracking performance while minimizing costs in detector manufacturing.
 The energy and point position of each gamma interaction can be reconstructed with high precision.
 A detailed discussion on detector geometry is given to justify the design concepts of GRETINA.
@@ -242,7 +224,7 @@ The digital signal processing has 10 channel inputs, each leading to a 14-bit AD
 This information is then fed to a Xilinix FPGA which uses a trapezoidal filter to calculate energy, and leading edge and constant fraction discrimination algorithms for timing information.
 
 
-\textbf{\cite{Palit201290}}
+\cite{Palit201290}
 A compton suppressed germanium clover detector array with a Pixie-16 commercial digital gamma finder digitizer has been implemented at TIFR-BARC.
 Gamma-gamma coincidence measurements are made using logic operations on the four clover output.
 The discussion include point of improvement from moving to the digital system from the previous analog electronics.
@@ -251,7 +233,7 @@ The experiments performed required a constant gain over a period of several days
 The presented digital data acquisition system has improved data recording capabilities at INGA by a factor of five.
 
 
-\textbf{\cite{Alberto200999}}
+\cite{Alberto200999}
 Future improvements to digital acquisition systems will create self-triggering systems.
 In order to achieve this digital filtering must be improved and moved to online processing.
 Peak distortion, signal-to-noise ratio, energy deposition, and detector efficiency are all covered in their regard to filtering structures.
@@ -268,7 +250,6 @@ The VHDL translation had higher FPGA consumption and a longer logical path lengt
 % - Intro to KD and DM
 % - Selected technique: Clustering and Classification
 % - Selected technique: Sentiment Analysis
-
 \pagebreak
 \section{Knowledge Discovery}
 Knowledge Discovery and Data Mining refers to the field of techniques and tools for finding useful trends and patterns in large volumes of data.
