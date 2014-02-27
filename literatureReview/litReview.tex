@@ -175,15 +175,29 @@ Thus in the limiting case the count rate will be no higher than the inverse of t
 So it is always possible that an 'event' contains multiple incidences of radiation.
 \\
 
+\subsubsection{Detector Examples}
 
+The following is a brief survey of a small selection of nuclear detectors and related collaborations.
+%GRETINA, SEGA, AGATA, 
 
+%TREND detector, FPGA
+\citep{Paschalis201344}
+The Gamma-Ray Energy Tracking In-beam Nuclear Array, GRETINA, detector modules maximize solid angle coverage and tracking performance while minimizing costs in detector manufacturing.
+The energy and point position of each gamma interaction can be reconstructed with high precision.
+A detailed discussion on detector geometry is given to justify the design concepts of GRETINA.
+The detector modules are n-type high purity germanium crystals segmented 36 times.
+The testing and acceptance process is important is achieving the energy resolution of 2.2keV at 1333keV.
+The digital signal processing has 10 channel inputs, each leading to a 14-bit ADC with a 100MHz sampling rate.
+This information is then fed to a Xilinix FPGA which uses a trapezoidal filter to calculate energy, and leading edge and constant fraction discrimination algorithms for timing information.
+
+%TREND SEGA, detect
 \citep{Leviner201466}
 The first N-type segmented Germanium detector with 85\% $^{76}\mbox{Ge}$ enrichment is characterized and evaluated for use in the Majorana collaboration.
 The segmented enriched germanium array (SEGA) is applicable to neutrinoless double beta-decay because of the strong energy resolution performance near 2039keV.
 The paper examines the cross-talk, electronic noise, and resolution of the detector.
 It concludes that SEGA is a viable detector for the search for neutrinoless double beta-decay.
 \\
-
+%EXPAND - Reference above sections, what is neutrinoless double beta-decay?
 Neutrinoless double beta-decay has yet to be observed, but would show that neutrinos are majorana particles, meaning they are their own antiparticle.
 These interactions have incredibly long halflives and are thus very rare.
 
@@ -244,17 +258,7 @@ Annealing of an amorphous layer formed by high dosages occurs at 380C for german
 Each of the implanted germanium atom is found to displace about 3000 lattice atoms.
 Diffusion and annealing both occur at significantly lower temperatures for germanium than for silicon.
 
-
-\citep{Paschalis201344}
-The Gamma-Ray Energy Tracking In-beam Nuclear Array, GRETINA, detector modules maximize solid angle coverage and tracking performance while minimizing costs in detector manufacturing.
-The energy and point position of each gamma interaction can be reconstructed with high precision.
-A detailed discussion on detector geometry is given to justify the design concepts of GRETINA.
-The detector modules are n-type high purity germanium crystals segmented 36 times.
-The testing and acceptance process is important is achieving the energy resolution of 2.2keV at 1333keV.
-The digital signal processing has 10 channel inputs, each leading to a 14-bit ADC with a 100MHz sampling rate.
-This information is then fed to a Xilinix FPGA which uses a trapezoidal filter to calculate energy, and leading edge and constant fraction discrimination algorithms for timing information.
-
-
+%TREND commercial, improvement
 \citep{Palit201290}
 A compton suppressed germanium clover detector array with a Pixie-16 commercial digital gamma finder digitizer has been implemented at TIFR-BARC.
 Gamma-gamma coincidence measurements are made using logic operations on the four clover output.
@@ -263,7 +267,7 @@ Notably, the previous system had limitations due to heat build up causing a gain
 The experiments performed required a constant gain over a period of several days.
 The presented digital data acquisition system has improved data recording capabilities at INGA by a factor of five.
 
-
+%TREND DSP, triggering, commercial
 \citep{Alberto200999}
 Future improvements to digital acquisition systems will create self-triggering systems.
 In order to achieve this digital filtering must be improved and moved to online processing.
