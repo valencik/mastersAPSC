@@ -1,0 +1,123 @@
+\documentclass[12pt]{article}
+
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage[round]{natbib}
+\bibliographystyle{plainnat}
+\newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
+\newcommand{\subscript}[1]{\ensuremath{_{\textrm{#1}}}}
+
+\begin{document}
+\title{Research Proposal}
+\author{Andrew Valencik}
+\date{\today}
+\maketitle
+\tableofcontents
+\begin{doublespacing}
+
+%What is the problem? 
+%Why should it be done? 
+%Where will it be done? 
+%How will you be doing it?
+%How much will it cost? 
+%How long will it take? 
+
+\pagebreak
+\section{Abstract}
+%The problem and its setting
+%Proposed methodology to solve problem
+
+\pagebreak
+\section{Introduction}
+%What is the problem? What will I study?
+We want to reveal patterns and understand connections in the body of nuclear science literature to predict worthwhile areas of research.
+
+\subsection{Motivation}
+%Why is it an important question?
+To find unexplored areas.
+To quantify the growth in areas of research over time.
+To search for interesting structures in the body of literature. The structure of citations and contributions may provide interesting insight.
+
+To apply social mining tools to an academic dataset.
+To discover.
+
+
+\subsection{Review}
+%What do we know already?
+The body of nuclear science literature is extensive, mature, and well categorized by the National Nuclear Data Center \citep{Kurgan200603} which provides the opportunity for knowledge discovery on the literature's meta data.
+This process should reveal trends in the collective scientific study of nuclear structure, processes, and detection.
+Additionally, categorizing trends may provide predictive power in determining a worthwhile area of study or application of a technique.
+
+%How will this advance our knowledge?
+%Explain your choice of model.
+%Significance, timeliness, and importance of project.
+
+\pagebreak
+\section{Objectives}
+%Define specific goals of research (which part of general problem am I tackling?)
+%Expected outcome
+Determine the structure of the nuclear science literature.
+Quantify the areas of growth and contribution over time.
+
+\pagebreak
+\section{Methodology}
+%Critical. Define plan of action.
+%How to tackle problem? Why this way?
+
+%Visualization
+%Representation of "paper"
+%Form data mining problems, questions,
+%Queries
+%Interpretation
+
+Classification and clustering are related approaches to organizing data elements into groups for further analysis.
+Classification is the process of deciding what group a particular datum should most optimally belong to.
+Clustering is the grouping of multiple data points such that those belonging to a group are more similar in some manner than those outside of that group.
+
+Clustering can be broken into two main groups, hierarchical and partitional.
+Both groups have applications in this study.
+The citation structure of the literature is likely to be hierarchical in nature.
+Partitional clustering should prove useful in determining the sub genres and fields of study within the body of work.
+
+
+K-means clustering is a cluster analysis technique that can group data objects in $K$ clusters based on minimizes their distances with respect to cluster centroids.
+K-means is a partitional clustering algorithm.
+In text mining or document comparing we often use cosine similarity between term frequency vectors
+
+\subsection{Text Mining}
+Text mining is an area of analysis that focuses on extracting useful information from unstructured plain text data.
+The data to analyze is often natural language text written by humans.
+Examples of such data include user reviews of a product or service, customer feedback comments, emails, forum posts, or even academic journal articles.
+
+A simple goal of text mining could be to summarize the input text.
+However, this can be abstracted further to 'numericizing' text data for use in an analysis model.
+
+%https://stackoverflow.com/questions/15173225/how-to-calculate-cosine-similarity-given-2-sentence-strings-python
+
+\subsubsection{Sentiment Analysis}
+Sentiment analysis is the extraction of subjective information, like opinions, from text data.
+This can be accomplished by parsing natural language and quantifying the affectivity of keywords.
+
+
+\pagebreak
+\section{Equipment and Research Materials}
+%Demonstrate feasibility
+
+Computing resources, hosting, database.
+
+\pagebreak
+\section{Budget}
+%Breakdown of expected expenses.
+
+\pagebreak
+\section{Timetable}
+%Expected date of completion for each major step in research project
+%Realistic for 2 year project
+
+%%% That's all folks
+\pagebreak
+\end{doublespacing}
+
+\bibliography{../citationsAPSC.bib}
+
+\end{document}
