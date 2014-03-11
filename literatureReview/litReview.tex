@@ -48,9 +48,34 @@ This encompasses discovering new phenomena and enhancing our existing knowledge 
 The traditional process begins with data selection, preprocessing of that data and any necessary transformations, traditional "Data Mining", and finally the interpretation and explanation of results.
 
 \subsection{Classification and Clustering}
-Classification and clustering are related approaches to organizing data elements into group for further analysis.
+Classification and clustering are related approaches to organizing data elements into groups for further analysis.
 Classification is the process of deciding what group a particular datum should most optimally belong to.
+This is a supervised process that requires domain specific knowledge.
+
 Clustering is the grouping of multiple data points such that those belonging to a group are more similar in some manner than those outside of that group.
+Cluster analysis is unsupervised learning.
+Clustering can be broken into two main groups, hierarchical and partitional.
+
+\subsubsection{K-means Clustering}
+K-means clustering is a cluster analysis technique that can group data objects in $K$ clusters based on minimizes their distances with respect to cluster centroids.
+K-means is a partitional clustering algorithm.
+
+Say we have a finite set of objects,  $X = {x_1, x_2, ..., x_n}$ where each is a data object in $d$ dimensions.
+We can create $k$ clusers $C = {c_1, c_2, ..., c_k}$ where $k <= n$.
+The process starts by randomly choosing $k$ points, ${x_1, ..., x_k}$ to be the centroids of a cluster.
+Iterate over each object $x$ and assign it to a cluster $c$ based on the minimization of some parameter, for now, Eucledean distance.
+The goal is to minimize the total sum of squared errors between the centroids and all objects. 
+\begin{equation} \label{kmeans}
+J(C) = \sum^K_{k=1} \sum_{x_i \in c_k} \left| x_i - \mu_k \right| ^2
+\end{equation}
+
+Three parameters for K-means must be specified initially, the number of clusters, intial centroid guesses, and the distance metric.
+%In text mining or document comparing we often use cosine simularity between term frequeceny vectors
+%Mahalanobis distance metric leads to hyperellopsoidal clusters.\citep{MaoJain1996}
+%Itakura-Saito distance for vector quantization in speech processing (Linde et al., 1980)
+
+
+
 
 \subsection{Text Mining}
 Text mining is an area of analysis that focuses on extracting useful information from unstructured plain text data.
