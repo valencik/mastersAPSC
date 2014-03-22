@@ -1,7 +1,10 @@
 # Node
-node_modules
+node_modules/
 node_output.log
 npm-debug.log
+
+#Bower
+bower_components/
 
 # Linux
 *.swp
@@ -33,6 +36,6 @@ nulam.iml
 # mastersAPSC Specifc
 /data
 /papers
-annotatedBibliography/
-literatureReview/
-proposal/
+/annotatedBibliography
+/literatureReview
+/proposal
