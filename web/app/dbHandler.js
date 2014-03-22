@@ -30,5 +30,17 @@ NSReferenceProvider.prototype.findStuff = function(query, limit, callback) {
     });
 };
 
+NSReferenceProvider.prototype.countQ = function(query, limit, callback) {
+    this.getCollection(query, function(error, nsr_collection) {
+        if( error ) callback(error);
+        else {
+            console.log("countQ: "+query);
+            nsr_collection.count(query).limit(limit).toArray(function(error, results) {
+                if( error ) callback(error)
+                else callback(null, results)
+            });
+        }
+    });
+};
 
 exports.NSReferenceProvider = NSReferenceProvider; 

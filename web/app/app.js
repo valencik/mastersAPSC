@@ -41,6 +41,28 @@ app.get('/', function(req, res){
     });
   });
 });
+
+app.get('/count', function(req, res){
+  var papersYearly = [];
+  for (var i = 1896; i < 2015; i++) {
+    var currentYear = "{ YEAR : '"+i+"' }";
+    //var query = JSON.parse(currentYear);
+    var query = { 'YEAR': i };
+    console.log(JSON.stringify(query));
+    var numyear = NSReferenceGrab.countQ(query, 0, function(error, docs){
+      console.log('##years:  ', docs);
+    });
+    papersYearly.push(numyear)
+  }
+
+  console.log('###papersYearly: ', papersYearly);
+
+  res.render('year', {
+    title: 'Papers Per Year',
+    papers: papersYearly
+  });
+});
+
 //app.get('/', routes.index);
 app.get('/users', user.list);
 
