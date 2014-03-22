@@ -1,0 +1,8 @@
+extends layout
+
+block content
+  h1 Welcome to #{title}
+  #papers
+     - each paper in papers
+       div.paper
+         div.keyno= paper.KEYNO
