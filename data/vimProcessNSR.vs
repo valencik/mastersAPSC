@@ -22,34 +22,40 @@
 :%s/&\n<\(KEYNO\)\@!\(HISTORY\)\@!\(CODEN\)\@!\(REFRENCE\)\@!\(AUTHORS\)\@!\(TITLE\)\@!\(KEYWORDS\)\@!\(SELECTRS\)\@!\(DOI\)\@!/</g 
 :echo "Regex 4: ".(t-localtime())." s"
 
-"To JSON 
+"KEYNO parsing
 :let t = localtime()
-:%s/<\(.*\)>\(.*\)&/"\1": "\2",/g 
-:echo "Regex 5: ".(t-localtime())." s"
+:%s/^<KEYNO   >\(\(\d\d\d\d\).*\)&$/{ "keyNumber": { "KEYNO": "\1", "yearPublication": \2,/g
+:%s/^<HISTORY >\(.*\)&$/"HISTORY": "\1" },/g
+:echo "Regex (keyno & history): ".(t-localtime())." s"
 
-"Start JSON struct 
+"Coden and Reference to JSON
 :let t = localtime()
-:%s/^"KEYNO\s\+": "\(.*",\)/{ "KEYNO": "\1/g 
-:echo "Regex 6: ".(t-localtime())." s"
+:%s/^<CODEN   >\(.*\)&$/"CODEN": "\1",/g
+:%s/^<REFRENCE>\(.*\)&$/"REFRENCE": "\1",/g
+:echo "Regex (coden & reference): ".(t-localtime())." s"
 
-"Remove trailing whitespace in tags 
+"Authors to an array
 :let t = localtime()
-:%s/\(^"\u\+\)\@<=\s*"/"/g 
-:echo "Regex 7: ".(t-localtime())." s"
+:%s/^<AUTHORS >\(.*\)&$/"authors": ["\1"],/g
+:%s/\(^"authors": \[".*\)\@<=, /", "/g
+:echo "Regex (Authors): ".(t-localtime())." s"
 
-"Split KEYNO into KEYNO and yearPublication
+"Title, Keywords, Selectors, DOI
 :let t = localtime()
-:%s/"KEYNO": "\(\(\d\d\d\d\).*\)"/"keyNumber": { "KEYNO": "\1", "yearPublication": \2 } /g
-:echo "Regex 8: ".(t-localtime())." s"
+:%s/^<TITLE   >\(.*\)&$/"TITLE": "\1",/g
+:%s/^<KEYWORDS>\(.*\)&$/"KEYWORDS": "\1",/g
+:%s/^<SELECTRS>\(.*\)&$/"SELECTRS": "\1",/g
+:%s/^<DOI     >\(.*\)&$/"DOI": "\1",/g
+:echo "Regex (Title, keywords, selectrs, DOI): ".(t-localtime())." s"
 
-"End JSON structures that don't have a DOI
+"End JSON structures
 :let t = localtime()
 :%s/",\n{/" }\r{/g 
-:echo "Regex 9: ".(t-localtime())." s"
+:echo "Regex (end json): ".(t-localtime())." s"
 
 "Make JSON structures one big line
 :let t = localtime()
-:%s/,\n/", /g 
+:%s/,\n/, /g 
 :echo "Regex 10: ".(t-localtime())." s"
 
 "Save and quit
@@ -59,6 +65,6 @@
 " ---- TIME TO RUN ----
 "time vim -S vimProcessNSR.vs NSRDump.out
 "
-"real	3m37.537s
-"user	3m24.598s
-"sys	0m8.055s
+"real	1m58.469s
+"user	1m49.242s
+"sys	0m6.962s
