@@ -1,14 +1,8 @@
-
-/**
- * Module dependencies.
- */
-
+// Module dependencies.
 var express = require('express');
-var routes = require('./routes');
-var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
-var NSReferenceProvider = require('./dbHandler.js').NSReferenceProvider;
+var mongoose = require('mongoose');
 
 // Express environment setup
 var app = express();
@@ -28,43 +22,59 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-//Setup the mongo handler
-var NSReferenceGrab = new NSReferenceProvider('127.0.0.1', 27017);
+//Mongodb setup
+mongoose.connect('mongodb://localhost/masters');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function callback () {
+  //connection is opened
+});
 
-// Routes 
+//Make schema and model for a 'paper'
+var PaperSchema = mongoose.Schema({
+    KEYNO: String,
+    HISTORY: String,
+    CODEN: String,
+    REFRENCE: String,
+    YEAR: String,
+    AUTHORS: String,
+    TITLE: String,
+    KEYWORDS: String,
+    SELECTRS: String
+    }, { collection : 'NSR' });
+var Paper = mongoose.model('Paper', PaperSchema)
+
+//Setup for yearly summaries
+var years = [];
+for(i=1896; i<=1902; i++) { years.push(i.toString()) } 
+var results = [];
+Paper.aggregate( 
+  { $match: { YEAR: { $in: years } } }, 
+  { $group: { _id: "$YEAR", total: { $sum: 1 } } }, 
+  { $sort: { _id: 1 } },
+  function(err, summary) {
+    results = summary;
+  }
+);
+
+//Routes
 app.get('/', function(req, res){
-  NSReferenceGrab.findStuff({}, 20, function(error, docs){
-    console.log('##findStuff:  ', docs[0]);
+  Paper.find({ KEYNO: /^1896/ }, function (err, docs) {
+    if (err) return console.error(err);
     res.render('index', {
-      title: 'Papers',
+      title: 'Papers in 1896',
       papers: docs
     });
-  });
+  }); 
 });
 
 app.get('/count', function(req, res){
-  var papersYearly = [];
-  for (var i = 1896; i < 2015; i++) {
-    var currentYear = "{ YEAR : '"+i+"' }";
-    //var query = JSON.parse(currentYear);
-    var query = { 'YEAR': i };
-    console.log(JSON.stringify(query));
-    var numyear = NSReferenceGrab.countQ(query, 0, function(error, docs){
-      console.log('##years:  ', docs);
+    res.render('year', {
+      title: 'Papers Per Year',
+      years: results
     });
-    papersYearly.push(numyear)
-  }
+}); //end /count route
 
-  console.log('###papersYearly: ', papersYearly);
-
-  res.render('year', {
-    title: 'Papers Per Year',
-    papers: papersYearly
-  });
-});
-
-//app.get('/', routes.index);
-app.get('/users', user.list);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
