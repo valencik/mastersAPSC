@@ -1,9 +1,0 @@
-extends layout
-
-block content
-  h1 Welcome to #{title}
-  #papers
-     - each year in years
-       div.paper
-         div.year= year._id 
-         div.papers= year.total 
