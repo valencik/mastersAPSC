@@ -10,6 +10,7 @@
     "jade": "*",
     "less-middleware": "*",
     "mongoose": "*",
-    "mongodb": "*"
+    "mongodb": "*",
+    "mongoviewer-server": "~0.2.1"
   }
 }
