@@ -7,15 +7,16 @@ var mongoose = require('mongoose');
 // Express environment setup
 var app = express();
 app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+//app.set('views', path.join(__dirname, 'views'));
+//app.set('view engine', 'jade');
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
-app.use(require('less-middleware')(path.join(__dirname, 'public')));
+//app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname+'/public/bower_components'));
 
 // development only
 if ('development' == app.get('env')) {
@@ -52,12 +53,18 @@ Paper.aggregate(
   { $match: { YEAR: { $in: years } } }, 
   { $group: { _id: "$YEAR", total: { $sum: 1 } } }, 
   { $sort: { _id: 1 } },
+  { $project : {_id : 0, label : "$_id", value : "$total"} },
   function(err, summary) {
     results = summary;
+    console.log(results);
   }
 );
 
 //Routes
+app.get('/yearSummary', function(req, res){
+  res.send(results)
+});
+
 app.get('/', function(req, res){
   Paper.find({ KEYNO: /^1896/ }, function (err, docs) {
     if (err) return console.error(err);
