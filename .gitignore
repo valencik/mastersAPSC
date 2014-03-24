@@ -36,6 +36,6 @@ nulam.iml
 # mastersAPSC Specifc
 /data
 /papers
-/annotatedBibliography
-/literatureReview
-/proposal
+/documents/annotatedBibliography/*.pdf
+/documents/literatureReview/*.pdf
+/documents/proposal/*.pdf
