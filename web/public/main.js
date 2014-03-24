@@ -92,7 +92,7 @@ $(document).ready(function() {
     graph(
         "#charts svg#yearly", 
         "NSR Data", 
-        "NSR", 
+        "NSR3", 
         [
             { $group: { _id: "$keyNumber.yearPublication", total: { $sum: 1} } },
             { $sort: {_id: 1} },
@@ -111,7 +111,7 @@ $(document).ready(function() {
     graph(
         "#charts svg#last50", 
         "NSR Data", 
-        "NSR", 
+        "NSR3", 
         [
             { $match: {"keyNumber.yearPublication": {$gt: 1964}}},
             { $group: { _id: "$keyNumber.yearPublication", total: { $sum: 1} } },
@@ -132,7 +132,7 @@ $(document).ready(function() {
     graph(
         "#charts svg#doctypes", 
         "NSR Data", 
-        "NSR2", 
+        "NSR3", 
         [
              { $match: { "CODEN.0": { $in: types } } },
              { $unwind: "$CODEN" },
@@ -152,7 +152,7 @@ $(document).ready(function() {
     graph(
         "#charts svg#doctypes2", 
         "NSR Data", 
-        "NSR2", 
+        "NSR3", 
         [
              { $match: { "CODEN.0": { $in: types } } },
              { $unwind: "$CODEN" },
@@ -173,7 +173,7 @@ $(document).ready(function() {
     // Prolific authors
     graphType = "pieChart";
 for (i=1950; i<=1970; i=i+10) {
-    graph("#charts svg#prolific"+(i-1900), "NSR Data", "NSR2", 
+    graph("#charts svg#prolific"+(i-1900), "NSR Data", "NSR3", 
         [
              { $match: {"keyNumber.yearPublication": {$gt: i, $lte: i+10}}},
              { $unwind: "$authors"},
@@ -184,7 +184,7 @@ for (i=1950; i<=1970; i=i+10) {
         graphType,
         function(chart, data){
             chart.labelThreshold(.01)
-            .donut(true).donutLabelsOutside(true).donutRatio(0.2)
+            .donut(true).donutLabelsOutside(true).donutRatio(0.3)
             .showLabels(false).showLegend(false);
             //function isBigEnough(value) {
             //  return function(element, index, array) {
