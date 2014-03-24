@@ -109,11 +109,11 @@ $(document).ready(function() {
     // Graph 90 year summary
     graphType = "discreteBarChart";
     graph(
-        "#charts svg#years90", 
+        "#charts svg#last50", 
         "NSR Data", 
         "NSR", 
         [
-            { $match: {"keyNumber.yearPublication": {$gt: 1930}}},
+            { $match: {"keyNumber.yearPublication": {$gt: 1964}}},
             { $group: { _id: "$keyNumber.yearPublication", total: { $sum: 1} } },
             { $sort: {_id: 1} },
             {$project: {_id: 0, label: "$_id", value: "$total" } } 
@@ -122,11 +122,11 @@ $(document).ready(function() {
         graphType,
         function(chart){
             chart.yAxis.tickFormat(d3.format('.0f'));
-            chart.xAxis.tickValues([1930,1940,1950,1960,1970,1980,1990,2000,2010]);
+            chart.xAxis.tickValues([1965,1970,1975,1980,1985,1990,1995,2000,2005,2010]);
         }
     );
 
-    // Pie chart 1
+    // Doctype Bar Chart
     graphType = "discreteBarChart";
     types = ["JOUR", "CONF", "REPT", "BOOK", "PC", "THESIS", "PREPRINT"];
     graph(
@@ -146,7 +146,7 @@ $(document).ready(function() {
         function(chart, data){console.log("Printed Bar Chart of doctypes: "+data);}
     );
 
-    // Pie chart 1
+    // Doctype Pie
     graphType = "pieChart";
     types = ["JOUR", "CONF", "REPT", "BOOK", "PC", "THESIS", "PREPRINT"];
     graph(
@@ -166,11 +166,35 @@ $(document).ready(function() {
         function(chart, data){
             console.log("pie pie pie: "+data);
             chart.labelThreshold(.01)
-            .donut(true)
-            .donutLabelsOutside(true)
-            .donutRatio(0.2);
+            .donut(true).donutLabelsOutside(true).donutRatio(0.2);
         }
     );
+
+    // Prolific authors
+    graphType = "pieChart";
+for (i=1950; i<=1970; i=i+10) {
+    graph("#charts svg#prolific"+(i-1900), "NSR Data", "NSR2", 
+        [
+             { $match: {"keyNumber.yearPublication": {$gt: i, $lte: i+10}}},
+             { $unwind: "$authors"},
+             { $group: { _id: "$authors", total: { $sum: 1} } },
+             { $match: {total: {$gt: i-1925} } },
+             { $project: {_id: 0, label: "$_id", value: "$total" } }
+        ], {},
+        graphType,
+        function(chart, data){
+            chart.labelThreshold(.01)
+            .donut(true).donutLabelsOutside(true).donutRatio(0.2)
+            .showLabels(false).showLegend(false);
+            //function isBigEnough(value) {
+            //  return function(element, index, array) {
+            //    return (element.value >= value);
+            //  }
+            //}
+            //d3.select("#charts svg#prolific70").datum(data[0].values.filter(isBigEnough(40))).transition().duration(350).call(chart);
+        }
+    );
+}
 
 
 });

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>MongoViewer</title>
+    <title>NSD Data</title>
 
     <!-- Bootstrap -->
     <link href="bootstrap/dist/css/bootstrap.css" rel="stylesheet">
@@ -37,22 +37,36 @@
         
         <div class="jumbotron">
           <h1>NSR Data Visuals</h1>
-          <p>Built with MongoViewer by Glavin Wiechert</p>
-          <p><a class="btn btn-primary btn-md" role="button" href="https://github.com/Glavin001/MongoViewer" target="_blank">Learn more</a></p>
+          <p>Built with <a href="https://github.com/Glavin001/MongoViewer" target="_blank">MongoViewer</a> by Andrew Valencik</p>
         </div>
         
         <div id="charts" class="container">
             <h3>Papers Published Yearly</h3>
-            <svg id="yearly"></svg>
+            <div class=row">
+              <svg id="yearly"></svg>
+            </div>
 
-            <h3>90 Year Summary</h3>
-            <svg id="years90"></svg>
+            <h3>Papers Published in Last 50 Years</h3>
+            <div class=row">
+              <svg id="last50"></svg>
+            </div>
 
             <h3>NSR Document Types</h3>
-            <svg id="doctypes2"></svg>
+            <div class=row">
+              <svg id="doctypes2"></svg>
+            </div>
 
             <h3>NSR Document Types</h3>
-            <svg id="doctypes"></svg>
+            <div class=row">
+              <svg id="doctypes"></svg>
+            </div>
+
+            <h3>Prolific Authors</h3>
+            <div class=row">
+              <svg id="prolific50" class="col-md-4"></svg>
+              <svg id="prolific60" class="col-md-4"></svg>
+              <svg id="prolific70" class="col-md-4"></svg>
+            </div>
 
         </div>
 
