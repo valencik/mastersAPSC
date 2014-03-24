@@ -31,7 +31,7 @@
 
 "Coden and Reference to JSON
 :let t = localtime()
-:%s/^<CODEN   >\(.*\)&$/"CODEN": "\1",/g
+:%s/^<CODEN   >\(\(\w*\) .*\)&$/"code": { "CODEN": "\1", "type": "\2" },/g
 :%s/^<REFRENCE>\(.*\)&$/"REFRENCE": "\1",/g
 :echo "Regex (coden & reference): ".(localtime()-t)." s"
 
