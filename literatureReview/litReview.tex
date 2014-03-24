@@ -61,20 +61,24 @@ K-means clustering is a cluster analysis technique that can group data objects i
 K-means is a partitional clustering algorithm.
 
 Say we have a finite set of objects,  $X = {x_1, x_2, ..., x_n}$ where each is a data object in $d$ dimensions.
-We can create $k$ clusers $C = {c_1, c_2, ..., c_k}$ where $k <= n$.
+We can create $k$ clusters $C = {c_1, c_2, ..., c_k}$ where $k <= n$.
 The process starts by randomly choosing $k$ points, ${x_1, ..., x_k}$ to be the centroids of a cluster.
-Iterate over each object $x$ and assign it to a cluster $c$ based on the minimization of some parameter, for now, Eucledean distance.
+Iterate over each object $x$ and assign it to a cluster $c$ based on the minimization of some parameter, for now, Euclidean distance.
+The new centroids are now computed and the process is repeated until cluster stability is achieved.
 The goal is to minimize the total sum of squared errors between the centroids and all objects. 
 \begin{equation} \label{kmeans}
 J(C) = \sum^K_{k=1} \sum_{x_i \in c_k} \left| x_i - \mu_k \right| ^2
 \end{equation}
 
-Three parameters for K-means must be specified initially, the number of clusters, intial centroid guesses, and the distance metric.
-%In text mining or document comparing we often use cosine simularity between term frequeceny vectors
-%Mahalanobis distance metric leads to hyperellopsoidal clusters.\citep{MaoJain1996}
+Three parameters for K-means must be specified initially, the number of clusters, initial centroid guesses, and the distance metric.
+The distance metric is the function on a space that describes distance...
+In text mining or document comparing we often use cosine similarity between term frequency vectors. (citation?)
+Mahalanobis distance metric leads to hyperellopsoidal clusters.\citep{MaoJain1996}
 %Itakura-Saito distance for vector quantization in speech processing (Linde et al., 1980)
 
-
+The chosen number of clusters has a huge impact on the data partitions.
+Some heuristics exist to aid in determining an optimal $k$. %TODO citation
+However, in practice, K-means is normally run multiple times with varying $k$ values and the best is selected by a domain expert.
 
 
 \subsection{Text Mining}
@@ -84,6 +88,8 @@ Examples of such data include user reviews of a product or service, customer fee
 
 A simple goal of text mining could be to summarize the input text.
 However, this can be abstracted further to 'numericizing' text data for use in an analysis model.
+
+%https://stackoverflow.com/questions/15173225/how-to-calculate-cosine-similarity-given-2-sentence-strings-python
 
 \subsubsection{Sentiment Analysis}
 Sentiment analysis is the extraction of subjective information, like opinions, from text data.
