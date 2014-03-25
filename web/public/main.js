@@ -106,26 +106,6 @@ $(document).ready(function() {
         }
     );
 
-    // Graph 90 year summary
-    graphType = "discreteBarChart";
-    graph(
-        "#charts svg#last50", 
-        "NSR Data", 
-        "NSR3", 
-        [
-            { $match: {"keyNumber.yearPublication": {$gt: 1964}}},
-            { $group: { _id: "$keyNumber.yearPublication", total: { $sum: 1} } },
-            { $sort: {_id: 1} },
-            {$project: {_id: 0, label: "$_id", value: "$total" } } 
-        ],
-        {},
-        graphType,
-        function(chart){
-            chart.yAxis.tickFormat(d3.format('.0f'));
-            chart.xAxis.tickValues([1965,1970,1975,1980,1985,1990,1995,2000,2005,2010]);
-        }
-    );
-
     // Doctype Bar Chart
     graphType = "discreteBarChart";
     types = ["JOUR", "CONF", "REPT", "BOOK", "PC", "THESIS", "PREPRINT"];

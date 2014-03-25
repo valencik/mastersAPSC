@@ -37,40 +37,49 @@
         
         <div class="jumbotron">
           <h1>NSR Data Visuals</h1>
-          <p>Built with <a href="https://github.com/Glavin001/MongoViewer" target="_blank">MongoViewer</a> by Andrew Valencik</p>
+          <p>Created by Andrew Valencik.</p>
+          <p>This is a very early exploration of the Nuclear Science References database.</p>
+          <p>Visualizations built with <a href="http://nvd3.org/">nvd3</a> which is powered by <a href="http://d3js.org/">d3.js</a>.
         </div>
         
         <div id="charts" class="container">
             <h3>Papers Published Yearly</h3>
-            <div class=row">
+            <p>The NSR database has papers from 1896 to 2014.</p>
+            <div class="row">
               <svg id="yearly"></svg>
             </div>
 
-            <h3>Papers Published in Last 50 Years</h3>
-            <div class=row">
-              <svg id="last50"></svg>
-            </div>
-
             <h3>NSR Document Types</h3>
-            <div class=row">
-              <svg id="doctypes2"></svg>
-            </div>
-
-            <h3>NSR Document Types</h3>
-            <div class=row">
-              <svg id="doctypes"></svg>
+            <p>The NSR database is made up of journal articles, reports, conference papers, thesis, private communications, preprints, and books.</p>
+            <div class="row">
+              <svg id="doctypes2" class="col-md-6"></svg>
+              <svg id="doctypes" class="col-md-6"></svg>
             </div>
 
             <h3>Prolific Authors</h3>
-            <div class=row">
-              <svg id="prolific50" class="col-md-4"></svg>
-              <svg id="prolific60" class="col-md-4"></svg>
-              <svg id="prolific70" class="col-md-4"></svg>
+            <p>Each segment of the below pie charts represents an author's contributions in a given period.</p>
+            <div id="prolific" class="row">
+              <div class="col-md-4">
+                <p>1950 - 1960</p>
+                <svg id="prolific50"></svg>
+              </div> 
+              <div class="col-md-4">
+                <p>1960 - 1970</p>
+                <svg id="prolific60"></svg>
+              </div> 
+              <div class="col-md-4">
+                <p>1970 - 1980</p>
+                <svg id="prolific70"></svg>
+              </div> 
             </div>
 
         </div>
 
     </div>
+
+      <div class="container">
+        <p class="muted credit">Queries passed over <a href="https://github.com/Glavin001/MongoViewer" target="_blank">MongoViewer-Server</a> a RESTful API for nvd3 and Mongodb.</p>
+      </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="jquery/dist/jquery.min.js"></script>
