@@ -26,15 +26,18 @@
 The body of nuclear science literature is extensive, mature, and well categorized by the National Nuclear Data Center \citep{Kurgan200603} which provides the opportunity for knowledge discovery on the literature's meta data.
 This process should reveal trends in the collective scientific study of nuclear structure, processes, and detection.
 Additionally, categorizing trends may provide predictive power in determining a worthwhile area of study or application of a technique.
+This work is a cross disciplinary work, combining data mining technique with domain knowledge in nuclear physics. 
+As such, two major sections will be reviewed, knowledge discovery and nuclear science.
+
+Knowledge discovery and data mining provides the techniques to study and analyze the Nuclear Science References database.
+Data representation and classification are necessary steps to establish the structures within the database, ie. papers and fields or genres.
+Cluster analysis is used to group data elements based on rules.
+K-means clustering will be looked at in detail.
 
 Radiation is the process through which a nuclear system becomes more stable by emission of energy that is in excess to the system's ground state.
 This energy emission has multiple types and properties that reveal information about the structure of the parent nuclear system.
 The emitted energy from a single nuclear reaction is incredibly tiny when compared to everyday interactions.
 Therefore nuclear physics experiments often involve complex radiation detection and data acquisition systems. 
-
-The following review summarizes important concepts in nuclear science related to radiation, and in radiation detection techniques.
-The primary body of work referenced for the Radiation and Semiconductor Detectors sections is Glenn Knoll's Radiation Detection and Measurement.
-This is largely due to the maturity of the science discussed. Knoll's work serves just as well, if not better than a topical review of the field.
 
 
 %%% Knowledge Discovery
@@ -55,9 +58,11 @@ This is a supervised process that requires domain specific knowledge.
 Clustering is the grouping of multiple data points such that those belonging to a group are more similar in some manner than those outside of that group.
 Cluster analysis is unsupervised learning.
 Clustering can be broken into two main groups, hierarchical and partitional.
+Partitional methods include centroid based clustering where data elements are assigned to the cluster with the closest centroid.
+Hierarchical methods seek to build a hierarchy of clusters.
 
 \subsubsection{K-means Clustering}
-K-means clustering is a cluster analysis technique that can group data objects in $K$ clusters based on minimizes their distances with respect to cluster centroids.
+K-means clustering is a cluster analysis technique that can group data objects in $K$ clusters based on minimizing their distances with respect to cluster centroids.
 K-means is a partitional clustering algorithm.
 
 Say we have a finite set of objects,  $X = {x_1, x_2, ..., x_n}$ where each is a data object in $d$ dimensions.
@@ -89,11 +94,55 @@ Examples of such data include user reviews of a product or service, customer fee
 A simple goal of text mining could be to summarize the input text.
 However, this can be abstracted further to 'numericizing' text data for use in an analysis model.
 
-%https://stackoverflow.com/questions/15173225/how-to-calculate-cosine-similarity-given-2-sentence-strings-python
-
-\subsubsection{Sentiment Analysis}
 Sentiment analysis is the extraction of subjective information, like opinions, from text data.
 This can be accomplished by parsing natural language and quantifying the affectivity of keywords.
+
+\subsubsection{Cosine Similarity}
+%https://stackoverflow.com/questions/15173225/how-to-calculate-cosine-similarity-given-2-sentence-strings-python
+The K-means discussion above mentioned a few types of distance metrics for use in clustering.
+When dealing with text we often use the cosine similarity of two documents to compute their 'distance.
+We build a term vector for each document to be analyzed, this is a vector describing the amount of occurrences each word has in the document
+Say document one, d1, is "The quick brown fox jumped over the lazy dog" and document two, d2, is "The brown dog jumped over the brown fox".
+We create a term vector for each document, as seen in table \ref{termtable}. 
+Often in doing this, very common words like 'the' are omitted.
+
+\begin{table} \label{termtable}
+    \begin{tabular}{llllllll}
+    ~  & quick & brown & fox & jumped & over & lazy & dog \\
+    d1 & 1     & 1     & 1   & 1      & 1    & 1    & 1   \\
+    d2 & 0     & 2     & 1   & 1      & 1    & 0    & 1   \\
+    \end{tabular}
+\end{table}
+
+\begin{equation} \label{d1termvector}
+d1 = {1, 1, 1, 1, 1, 1, 1}
+\end{equation}
+
+\begin{equation} \label{d2termvector}
+d2 = {0, 2, 1, 1, 1, 0, 1}
+\end{equation}
+
+\begin{equation} \label{cosinesimilarity}
+\cos (d1,d1) = \frac{d1 \cdot d2 }{\left| d1 \right| \left| d2 \right|} 
+\end{equation}
+
+\begin{equation} \label{cosinesimilarity1}
+ d1 \cdot d2 = (1)(0) + (1)(2) + (1)(1) + (1)(1) + (1)(1) + (1)(0) + (1)(1) = 6.0 
+\end{equation}
+
+\begin{equation} \label{cosinesimilarity2}
+ \left| d1 \right| = \left( (1)^2 + (1)^2 + (1)^2 + (1)^2 + (1)^2 + (1)^2 + (1)^2 \right) ^{\frac{1}{2}} =  2.645751311
+\end{equation}
+
+\begin{equation} \label{cosinesimilarity3}
+ \left| d2 \right| = \left( (0)^2 + (2)^2 + (1)^2 + (1)^2 + (1)^2 + (0)^2 + (1)^2 \right) ^{\frac{1}{2}} =  2.828427125
+\end{equation}
+
+\begin{equation} \label{cosinesimilarityF}
+\cos (d1,d1) = \frac{d1 \cdot d2 }{\left| d1 \right| \left| d2 \right|} = \frac{6.0}{\left| 2.645751311 \right| \left| 2.828427125 \right|} = 0.8017837257
+\end{equation}
+
+As equation \ref{cosinesimilarityF} shows, the two documents are quite similar, and thus have a high cosine similarity.
 
 
 %%% Nuclear Science
@@ -102,7 +151,10 @@ This can be accomplished by parsing natural language and quantifying the affecti
 % - Selected technique: Digital Signal Processing (FPGAs)
 \pagebreak
 \section{Nuclear Science}
-The study of radiation and the structure of the atom is more than 100 years old.
+The following review summarizes important concepts in nuclear science related to radiation, and in radiation detection techniques.
+The primary body of work referenced for the Radiation and Semiconductor Detectors sections is Glenn Knoll's Radiation Detection and Measurement.
+This is largely due to the maturity of the science discussed. Knoll's work serves just as well, if not better than a topical review of the field.
+
 
 \subsection{Radiation}
 Radiation can be emitted through multiple processes involving many interactions. The radiation carries energy away from the parent nuclei or atom. Thus systems in an excited state may emit radiation to decay to their ground state or another unstable state. 
