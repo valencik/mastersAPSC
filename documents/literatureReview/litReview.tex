@@ -3,6 +3,8 @@
 \usepackage{hyperref}
 \usepackage{setspace}
 \usepackage[round]{natbib}
+\usepackage{graphicx}
+\usepackage{indentfirst}
 \bibliographystyle{plainnat}
 \newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
 \newcommand{\subscript}[1]{\ensuremath{_{\textrm{#1}}}}
@@ -30,14 +32,11 @@ This work is a cross disciplinary work, combining data mining technique with dom
 As such, two major sections will be reviewed, knowledge discovery and nuclear science.
 
 Knowledge discovery and data mining provides the techniques to study and analyze the Nuclear Science References database.
-Data representation and classification are necessary steps to establish the structures within the database, ie. papers and fields or genres.
+Data representation and classification are necessary steps to establish the structures within the database, i.e.\ papers, fields, or genres.
 Cluster analysis is used to group data elements based on rules.
-K-means clustering will be looked at in detail.
+Though many techniques exist, K-means will be looked at in detail.
 
-Radiation is the process through which a nuclear system becomes more stable by emission of energy that is in excess to the system's ground state.
-This energy emission has multiple types and properties that reveal information about the structure of the parent nuclear system.
-The emitted energy from a single nuclear reaction is incredibly tiny when compared to everyday interactions.
-Therefore nuclear physics experiments often involve complex radiation detection and data acquisition systems. 
+An introductory review of radiation and semiconductor detectors is given as these topics will serve as the domain knowledge for the knowledge discovery process. 
 
 
 %%% Knowledge Discovery
@@ -57,7 +56,7 @@ This is a supervised process that requires domain specific knowledge.
 
 Clustering is the grouping of multiple data points such that those belonging to a group are more similar in some manner than those outside of that group.
 Cluster analysis is unsupervised learning.
-Clustering can be broken into two main groups, hierarchical and partitional.
+Clustering can be broken into two main groups, hierarchical and partitional. \citep{Jain2010651}
 Partitional methods include centroid based clustering where data elements are assigned to the cluster with the closest centroid.
 Hierarchical methods seek to build a hierarchy of clusters.
 
@@ -75,14 +74,21 @@ The goal is to minimize the total sum of squared errors between the centroids an
 J(C) = \sum^K_{k=1} \sum_{x_i \in c_k} \left| x_i - \mu_k \right| ^2
 \end{equation}
 
+\begin{figure}[!hb]
+    \centering
+    \includegraphics[width=\linewidth]{kmeansJain.pdf}
+    \caption{Step by step illustration of K-means algorithm. (a) The initial input data. (b) Three seed points are chosen as the starting 'centroids' and the data points are assigned to the cluster with the closest seed point. (c) (d) The centroids of the new clusters are calculated, and data labels updated; (e) the iteration stops when the clusters converge.}
+    \label{fig:K-Means-Jain}
+\end{figure}
+
 Three parameters for K-means must be specified initially, the number of clusters, initial centroid guesses, and the distance metric.
-The distance metric is the function on a space that describes distance...
-In text mining or document comparing we often use cosine similarity between term frequency vectors. (citation?)
-Mahalanobis distance metric leads to hyperellopsoidal clusters.\citep{MaoJain1996}
-%Itakura-Saito distance for vector quantization in speech processing (Linde et al., 1980)
+The metric is the function on a space that describes how two points differ from one another, i.e. distance.
+Euclidean distance is typically used, leading to ball or sphrer shaped clusters. \citep{Jain2010651}
+Other metrics maye have different results, like the Mahalanobis distance metric which leads to hyperellopsoidal clusters. \citep{MaoJain1996}
+The choice of metric may be domain specific; the Itakura-Saito distance represents the error between an auditory spectrum and its approximate, it is used in speech processing. \citep{chan2008advances}
 
 The chosen number of clusters has a huge impact on the data partitions.
-Some heuristics exist to aid in determining an optimal $k$. %TODO citation
+Some heuristics exist to aid in determining an optimal $k$. \citep{tibshirani2001estimating}
 However, in practice, K-means is normally run multiple times with varying $k$ values and the best is selected by a domain expert.
 
 
@@ -102,9 +108,11 @@ This can be accomplished by parsing natural language and quantifying the affecti
 The K-means discussion above mentioned a few types of distance metrics for use in clustering.
 When dealing with text we often use the cosine similarity of two documents to compute their 'distance.
 We build a term vector for each document to be analyzed, this is a vector describing the amount of occurrences each word has in the document
-Say document one, d1, is "The quick brown fox jumped over the lazy dog" and document two, d2, is "The brown dog jumped over the brown fox".
+Say document one, $d1$, is "The quick brown fox jumped over the lazy dog" and document two, $d2$, is "The brown dog jumped over the brown fox".
 We create a term vector for each document, as seen in table \ref{termtable}. 
 Often in doing this, very common words like 'the' are omitted.
+Equations \ref{d1termvector} and \ref{d2termvector} are the term vectors for each document.
+The cosine similarity is the dot product of the two documents divided by the product of their magnitudes (\ref{cosinesimilarity}). \citep{huang2008similarity}
 
 \begin{table} \label{termtable}
     \begin{tabular}{llllllll}
@@ -115,11 +123,11 @@ Often in doing this, very common words like 'the' are omitted.
 \end{table}
 
 \begin{equation} \label{d1termvector}
-d1 = {1, 1, 1, 1, 1, 1, 1}
+d1 = \left< 1, 1, 1, 1, 1, 1, 1 \right>
 \end{equation}
 
 \begin{equation} \label{d2termvector}
-d2 = {0, 2, 1, 1, 1, 0, 1}
+d2 = \left< 0, 2, 1, 1, 1, 0, 1 \right>
 \end{equation}
 
 \begin{equation} \label{cosinesimilarity}
@@ -139,25 +147,29 @@ d2 = {0, 2, 1, 1, 1, 0, 1}
 \end{equation}
 
 \begin{equation} \label{cosinesimilarityF}
-\cos (d1,d1) = \frac{d1 \cdot d2 }{\left| d1 \right| \left| d2 \right|} = \frac{6.0}{\left| 2.645751311 \right| \left| 2.828427125 \right|} = 0.8017837257
+\cos (d1,d2) = \frac{d1 \cdot d2 }{\left| d1 \right| \left| d2 \right|} = \frac{6.0}{\left| 2.645751311 \right| \left| 2.828427125 \right|} = 0.8017837257
 \end{equation}
 
 As equation \ref{cosinesimilarityF} shows, the two documents are quite similar, and thus have a high cosine similarity.
+When $d1 = d2$ the similarity is 1.0.
+This technique is a simple way of numercizing text for further mathematical manipulation and treatment.
 
 
 %%% Nuclear Science
 % - Radiation
 % - Selected technique: Semiconductor detectors
-% - Selected technique: Digital Signal Processing (FPGAs)
 \pagebreak
 \section{Nuclear Science}
 The following review summarizes important concepts in nuclear science related to radiation, and in radiation detection techniques.
-The primary body of work referenced for the Radiation and Semiconductor Detectors sections is Glenn Knoll's Radiation Detection and Measurement.
+The primary body of work referenced for the Radiation and Semiconductor Detectors sections is Glenn Knoll's Radiation Detection and Measurement. \citep{knoll2010radiation}
 This is largely due to the maturity of the science discussed. Knoll's work serves just as well, if not better than a topical review of the field.
 
 
 \subsection{Radiation}
-Radiation can be emitted through multiple processes involving many interactions. The radiation carries energy away from the parent nuclei or atom. Thus systems in an excited state may emit radiation to decay to their ground state or another unstable state. 
+Radiation is the process through which a nuclear system becomes more stable by emission of energy that is in excess to the system's ground state.
+This energy emission has multiple types and properties that reveal information about the structure of the parent nuclear system.
+The emitted energy from a single nuclear reaction is incredibly tiny when compared to everyday interactions.
+Therefore nuclear physics experiments often involve complex radiation detection and data acquisition systems. 
 
 \subsubsection{Alpha Decay}
 Alpha, $\alpha$, decay is a type of nuclear decay prevalent in heavy nuclei, in which an alpha particle (helium nucleus), is ejected from the parent nuclide. Alpha emitters are useful in \href{http://cs.smu.ca/~andrew/files/ugthesis/SMU-Thesis-v.1.0.1.pdf}{calibrating} nuclear detectors as they are effectively monoenergetic in terms of their energy resolution. There is a species change associated with alpha decay depicted in the following equation.
@@ -167,7 +179,12 @@ The mechanism for alpha decay is Coulomb barrier penetration via \href{https://e
 ^A_Z X \rightarrow ^{A-4}_{Z-2}Y + ^4_2 \alpha
 \end{equation}
 
-% img: [Alpha Decay^[[Wiki Commons: Alpha Decay Image](http://commons.wikimedia.org/wiki/File:Alpha_Decay.svg)]](http://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Alpha_Decay.svg/200px-Alpha_Decay.svg.png)
+\begin{figure}[!h]
+    \centering
+    \includegraphics[trim={6cm 11cm 6cm 11cm},clip]{AlphaDecay-wiki.pdf}
+    \caption{Wiki Commons: Alpha Decay Image} %(http://commons.wikimedia.org/wiki/File:Alpha_Decay.svg)
+    \label{fig:alphadecay}
+\end{figure}
 
 \subsubsection{Beta Decay}
 There are three types of beta, $\beta$, decay, beta-minus decay, beta-plus decay, and electron capture. Both beta-minus decay, and beta-plus decay involve the ejection of a beta particle (an \href{http://en.wikipedia.org/wiki/Electron}{electron} or \href{http://en.wikipedia.org/wiki/Positron}{positron}) and a \href{http://en.wikipedia.org/wiki/Neutrino}{neutrino} (or \href{http://en.wikipedia.org/wiki/Antineutrino#Antineutrinos}{antineutrino}). Thus beta decay also produces a species change as described below. \href{https://en.wikipedia.org/wiki/Electron_capture}{Electron capture}, converts a nuclear proton to a neutron by absorbing an orbiting electron.
@@ -182,7 +199,12 @@ Beta emitters are good sources of fast electrons. A pure beta emitter is one tha
 ^A_Z X \rightarrow ^{A}_{Z-1}Y + \beta^{+} + \nu \quad \mbox{Beta plus decay}
 \end{equation}
 
-% img: \href{http://commons.wikimedia.org/wiki/File:Beta-minus_Decay.svg}{Beta Decay^[[Wiki Commons: Beta Decay Image}]](http://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Beta-minus_Decay.svg/200px-Beta-minus_Decay.svg.png)
+\begin{figure}[!h]
+    \centering
+    \includegraphics[trim={6cm 11cm 6cm 11cm},clip]{BetaDecay-wiki.pdf}
+    \caption{Wiki Commons: Beta Decay Image} %(http://commons.wikimedia.org/wiki/File:Beta_Decay.svg)
+    \label{fig:Betadecay}
+\end{figure}
 
 \subsubsection{Nuclear Fission}
 Nuclear fission is the break up of an unstable nucleus into smaller pieces. These pieces can be quite large (by definition larger than an alpha particle) and can be unstable themselves. Nuclei that undergo fission have a distribution of emitted masses, not a single finite mass as in alpha decay. Nuclear fission is usually accompanied by alpha decay and neutron emission.
@@ -196,12 +218,16 @@ Gamma rays can also be produced by an annihilation event where an electron and p
 ^A_Z X^* \rightarrow ^{A}_{Z}X + ^0_0\gamma \quad \mbox{Gamma decay}
 \end{equation}
 
-% img: \href{http://commons.wikimedia.org/wiki/File:Gamma_Decay.svg}{Gamma Radiation^[[Wiki Commons: Gamma Radiation Image}]](http://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Gamma_Decay.svg/200px-Gamma_Decay.svg.png)
+\begin{figure}[!h]
+    \centering
+    \includegraphics[trim={6cm 11cm 6cm 11cm},clip]{GammaDecay-wiki.pdf}
+    \caption{Wiki Commons: Gamma Decay Image} %(http://commons.wikimedia.org/wiki/File:Gamma_Decay.svg)
+    \label{fig:Gammadecay}
+\end{figure}
 
 \subsubsection{Neutron Radiation}
 Another form of uncharged radiation, neutrons can be detected by the use of an absorber material which emits characteristic energy or ions that are then detected separately.
 Absorption of thermal neutrons can prompt the emission of gamma rays from the nucleus.
-%TODO ref to knoll
 A good discussion on neutron radiation applications and concepts can be found in Knoll's Radiation Detection and Measurement.
 
 \subsubsection{Propagation}
@@ -249,7 +275,7 @@ Eventually a equilibrium charge distribution is reached, at which there is a pot
 
 \subsubsection{Interactions}
 Photoelectric absorption: The photon transfers its energy to an atom, knocking out an electron, typically from the K shell. 
-The electron, a photoelectron, has kinetic energy equal to the the photon minus the original binding energy of the electron, and a very small amount of recoil energy.
+The electron, a photoelectron, has kinetic energy equal to the photon minus the original binding energy of the electron, and a very small amount of recoil energy.
 
 %% Secondary Emissions
 The output signal of a detector is reliant on collecting a charge associated with the radiation's interaction with the detecting volume. 
@@ -289,108 +315,23 @@ So it is always possible that an 'event' contains multiple incidences of radiati
 
 \subsubsection{Detector Examples}
 
-The following is a brief survey of a small selection of nuclear detectors and related collaborations.
-%GRETINA, SEGA, AGATA, 
-
-%TREND detector, FPGA
-\citep{Paschalis201344}
-The Gamma-Ray Energy Tracking In-beam Nuclear Array, GRETINA, detector modules maximize solid angle coverage and tracking performance while minimizing costs in detector manufacturing.
-The energy and point position of each gamma interaction can be reconstructed with high precision.
-A detailed discussion on detector geometry is given to justify the design concepts of GRETINA.
+The Gamma-Ray Energy Tracking In-beam Nuclear Array, GRETINA, detector modules maximize solid angle coverage and tracking performance while minimizing costs in detector manufacturing. \citep{Paschalis201344}
+The energy and point position of each gamma interaction can be reconstructed with high precision, exceeding the capabilities of previous germanium detectors. \citep{Eberth2008283}
+%A lengthy and detailed topical review of gamma-ray tracking with Germanium detectors over the last 50 years.
+Advancements in growing large Germanium crystals has allowed the very large detectors which are necessary for GRETINAs geometry. \citep{Sangsingkeow2003183}
 The detector modules are n-type high purity germanium crystals segmented 36 times.
 The testing and acceptance process is important is achieving the energy resolution of 2.2keV at 1333keV.
 The digital signal processing has 10 channel inputs, each leading to a 14-bit ADC with a 100MHz sampling rate.
 This information is then fed to a Xilinix FPGA which uses a trapezoidal filter to calculate energy, and leading edge and constant fraction discrimination algorithms for timing information.
+There are many advantages to using FPGAs in detector electronics, for example the hope of self-triggering systems. \citep{Alberto200999}
 
 %TREND SEGA, detect
-\citep{Leviner201466}
-The first N-type segmented Germanium detector with 85\% $^{76}\mbox{Ge}$ enrichment is characterized and evaluated for use in the Majorana collaboration.
+SEGA is the first N-type segmented Germanium detector with 85\% $^{76}\mbox{Ge}$ enrichment. \citep{Leviner201466}
+ is characterized and evaluated for use in the Majorana collaboration.
 The segmented enriched germanium array (SEGA) is applicable to neutrinoless double beta-decay because of the strong energy resolution performance near 2039keV.
-The paper examines the cross-talk, electronic noise, and resolution of the detector.
-It concludes that SEGA is a viable detector for the search for neutrinoless double beta-decay.
-\\
-%EXPAND - Reference above sections, what is neutrinoless double beta-decay?
+SEGA's performance in regards to cross-talk, electronic noise, and resolution make it a viable detector for the search for neutrinoless double beta-decay.
 Neutrinoless double beta-decay has yet to be observed, but would show that neutrinos are majorana particles, meaning they are their own antiparticle.
 These interactions have incredibly long halflives and are thus very rare.
-
-
-\citep{Sangsingkeow2003183}
-An older paper that summarizes the then recent advancements in high purity germanium detectors.
-Manufacturing and fabrication methods are the focus of the improvements.
-Many advancements had been made in growing large Germanium crystals that allowed for many segment detectors.
-Large efficiency HPGe detectors are presented with FWHM resolutions of 2.4keV at 1.33MeV.
-Multi-element arrays of Germanium detectors are introduced including the now prevalent clover array.
-\\
-
-Monolithic segmentation is an improvement covered in detail.
-This technique also for further information gathering from the same germanium crystal.
-Photolithography enables the use of very closely packed segmented electrical contacts.
-Thus instead on one electrical output signal from a Germanium crystal, there can be many outputs.
-Along with reduction in Doppler broadening, the segmentation means the addition of position information useful in tracking the path of a radiation event in the crystal.
-
-
-\citep{Eberth2008283}
-A lengthy and detailed topical review of gamma-ray tracking with Germanium detectors over the last 50 years.
-Gamma-ray spectroscopy is the focus, as it has been a primarily method for probing the structure of the atomic nucleus over the decades.
-The first improvements where in Germanium purity and volume.
-Segmentation by separating electrical contacts to the crystals came as a later improvement.
-Advances in signal processing allowed for more complex pulse shape analysis to be done on the increase in information gathered from segmentation.
-The European AGATA gamma-ray tracking system is the highlighted equipment of the review.
-\\
-
-Various components and their history are discussed and compared.
-Bismuth germanate and NaI(Ti) suppression shields are discussed.
-A strong theoretical knowledge base is constructed for many properties of germanium semiconductor detectors.
-This includes discussions from dead layers to the different ways of tiling a sphere for a detector setup.
-
-
-\citep{Descovich2005535}
-In-beam position measurements are checked against Monte Carlo simulations for highly segmented coaxial germanium detectors.
-The determined resolution is 2mm in three directions for analysis on $^{90}\mbox{Zr}$ gamma transitions.
-The study examines the departure of experimental results from simulated data and break down the contributions of position resolution into the various factors of the detector.
-\\
-
-The importance of position measurements is in enabling the reconstruction of the scattering path within the detecting volume.
-In order to calculate the position of the first gamma interaction a Doppler correction must be made.
-The identified area to improve was in selecting a zero time for pulse shape analysis.
-This work is therefore very sensitive to improvements in timing information.
-Time and energy information were calculated using FPGAs on board.
-
-
-\citep{Mayer}
-Semiconductor detectors eventually suffer radiation damage from usage.
-This damage can be mitigated with an annealing process.
-Mayer et al investigates the disorder a heavy ion brings on to the nearby lattice by helium scattering at temperatures above room temperature.
-The method used gives information down to 0.2 angstroms.
-A detailed account of the crystalline structure of semiconductor detectors is given.
-\\
-
-It is found that for low dosages of dopant levels the germanium crystal reorders at 180C where silicon requires 260C.
-Annealing of an amorphous layer formed by high dosages occurs at 380C for germanium and 570C in silicon.
-Each of the implanted germanium atom is found to displace about 3000 lattice atoms.
-Diffusion and annealing both occur at significantly lower temperatures for germanium than for silicon.
-
-%TREND commercial, improvement
-\citep{Palit201290}
-A compton suppressed germanium clover detector array with a Pixie-16 commercial digital gamma finder digitizer has been implemented at TIFR-BARC.
-Gamma-gamma coincidence measurements are made using logic operations on the four clover output.
-The discussion include point of improvement from moving to the digital system from the previous analog electronics.
-Notably, the previous system had limitations due to heat build up causing a gain drift.
-The experiments performed required a constant gain over a period of several days.
-The presented digital data acquisition system has improved data recording capabilities at INGA by a factor of five.
-
-%TREND DSP, triggering, commercial
-\citep{Alberto200999}
-Future improvements to digital acquisition systems will create self-triggering systems.
-In order to achieve this digital filtering must be improved and moved to online processing.
-Peak distortion, signal-to-noise ratio, energy deposition, and detector efficiency are all covered in their regard to filtering structures.
-\\
-
-The digital filters discussed are implemented on commercial Xilinix FPGAs and are compared to simulated data via Matlab and Simulink.
-Noteworthy filtering algorithms include infinite impulse response low pass Butterworth III and adaptive LMS filter.
-A discussion of the direct translation from VHDL shows the need for further optimization in performance driven tasks.
-The VHDL translation had higher FPGA consumption and a longer logical path length than the optimized bitstream.
-
 
 
 %%% That's all folks
