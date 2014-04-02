@@ -78,9 +78,6 @@
 The academic field of nuclear science is over one hundred years old, starting with the discovery of radiation.
 This discovery is the first of many entries in the Nuclear Science References database, collected, catalogoued, distributed, and evaluated by the National Nuclear Data Center. \citep{Kurgan200603} 
 The NSR has over 210,000 entries documenting the body of nuclear science literature, which provides the opportunity for knowledge discovery on the literature's meta data.
-This process should reveal trends in the collective scientific study of nuclear structure, processes, and detection.
-Additionally, categorizing trends may provide predictive power in determining a worthwhile area of study or application of a technique.
-We want to reveal patterns and understand connections in the body of nuclear science literature to predict worthwhile areas of research.
 This work is a cross disciplinary work, combining data mining technique with domain knowledge in nuclear physics. 
 
 
@@ -88,6 +85,10 @@ This work is a cross disciplinary work, combining data mining technique with dom
 %Why is it an important question?
 The current search facilities of the NSR are limited to text matching against the NSR entries.
 This informatoin could be of more value to researchers if more complex queries could be run on the data.
+
+This process should reveal trends in the collective scientific study of nuclear structure, processes, and detection.
+Additionally, categorizing trends may provide predictive power in determining a worthwhile area of study or application of a technique.
+We want to reveal patterns and understand connections in the body of nuclear science literature to predict worthwhile areas of research.
 
 To find unexplored areas.
 To quantify the growth in areas of research over time.
@@ -127,13 +128,8 @@ Quantify the areas of growth and contribution over time.
 %Critical. Define plan of action.
 %How to tackle problem? Why this way?
 
-%Visualization
-%Representation of "paper"
-%Form data mining problems, questions,
-%Queries
-%Interpretation
-
 %Creating the DB
+\subsection{Data Preparation}
 The most preliminary step is acquiring the Nuclear Science References from the National Nuclear Data Center.
 A full database dump was acquired on January 29th 2014.
 This dump of the NSR data will hereinafter be reffered to as if it were the complete NSR database.
@@ -162,10 +158,12 @@ N, T, P, G, R, S, M, D, C, X, A, or Z, which stand for nuclide, target, parent, 
 \end{quote}
 The value changes based on the type. The link variable is used to tie together multiple selectors.
 
+\subsection{Data Summarization}
 %Data Summarization
 Data summarization is necessary to begin to understand our data.
 Preliminary visualizations help in this task.
 A histogram of database entries per year is shown in figure \ref{fig:NSRyearly}.
+This very quickly demonstrates that the majority of documents in the NSR were published in the last 50 years.
 
 \begin{figure}[!hb]
     \label{fig:NSRyearly}
@@ -173,6 +171,9 @@ A histogram of database entries per year is shown in figure \ref{fig:NSRyearly}.
     \includegraphics[width=\linewidth]{NSRyearly.pdf}
     \caption{NSR Database documents per year from 1896 to 2014.}
 \end{figure}
+
+%Form data mining problems, questions, queries
+%Interpretation
 
 \subsection{Classification and Cluster Analysis}
 Classification and clustering are related approaches to organizing data elements into groups for further analysis.
@@ -188,6 +189,39 @@ K-means clustering is a cluster analysis technique that can group data objects i
 K-means is a partitional clustering algorithm.
 In text mining or document comparing we often use cosine similarity between term frequency vectors
 
+\subsubsection{K-means Clustering}
+K-means clustering is a cluster analysis technique that can group data objects in $K$ clusters based on minimizing their distances with respect to cluster centroids.
+K-means is a partitional clustering algorithm.
+
+Say we have a finite set of objects,  $X = {x_1, x_2, ..., x_n}$ where each is a data object in $d$ dimensions.
+We can create $k$ clusters $C = {c_1, c_2, ..., c_k}$ where $k <= n$.
+The process starts by randomly choosing $k$ points, ${x_1, ..., x_k}$ to be the centroids of a cluster.
+Iterate over each object $x$ and assign it to a cluster $c$ based on the minimization of some parameter, for now, Euclidean distance.
+The new centroids are now computed and the process is repeated until cluster stability is achieved.
+The goal is to minimize the total sum of squared errors between the centroids and all objects. 
+\begin{equation} \label{kmeans}
+J(C) = \sum^K_{k=1} \sum_{x_i \in c_k} \left| x_i - \mu_k \right| ^2
+\end{equation}
+
+\begin{figure}[!hb]
+    \centering
+    \includegraphics[width=\linewidth]{../literatureReview/kmeansJain.pdf}
+    \caption{Step by step illustration of K-means algorithm. (a) The initial input data. (b) Three seed points are chosen as the starting 'centroids' and the data points are assigned to the cluster with the closest seed point. (c) (d) The centroids of the new clusters are calculated, and data labels updated; (e) the iteration stops when the clusters converge.}
+    \label{fig:K-Means-Jain}
+\end{figure}
+
+Three parameters for K-means must be specified initially, the number of clusters, initial centroid guesses, and the distance metric.
+The metric is the function on a space that describes how two points differ from one another, i.e. distance.
+Euclidean distance is typically used, leading to ball or sphrer shaped clusters. \citep{Jain2010651}
+Other metrics maye have different results, like the Mahalanobis distance metric which leads to hyperellopsoidal clusters. \citep{MaoJain1996}
+The choice of metric may be domain specific; the Itakura-Saito distance represents the error between an auditory spectrum and its approximate, it is used in speech processing. \citep{chan2008advances}
+
+The chosen number of clusters has a huge impact on the data partitions.
+Some heuristics exist to aid in determining an optimal $k$. \citep{tibshirani2001estimating}
+However, in practice, K-means is normally run multiple times with varying $k$ values and the best is selected by a domain expert.
+
+
+
 \subsection{Text Mining}
 Text mining is an area of analysis that focuses on extracting useful information from unstructured plain text data.
 The data to analyze is often natural language text written by humans.
@@ -195,6 +229,59 @@ Examples of such data include user reviews of a product or service, customer fee
 
 A simple goal of text mining could be to summarize the input text.
 However, this can be abstracted further to 'numericizing' text data for use in an analysis model.
+
+\subsubsection{Cosine Similarity}
+%https://stackoverflow.com/questions/15173225/how-to-calculate-cosine-similarity-given-2-sentence-strings-python
+The K-means discussion above mentioned a few types of distance metrics for use in clustering.
+When dealing with text we often use the cosine similarity of two documents to compute their 'distance.
+We build a term vector for each document to be analyzed, this is a vector describing the amount of occurrences each word has in the document
+Say document one, $d1$, is "The quick brown fox jumped over the lazy dog" and document two, $d2$, is "The brown dog jumped over the brown fox".
+We create a term vector for each document, as seen in table \ref{termtable}. 
+Often in doing this, very common words like 'the' are omitted.
+Equations \ref{d1termvector} and \ref{d2termvector} are the term vectors for each document.
+The cosine similarity is the dot product of the two documents divided by the product of their magnitudes (\ref{cosinesimilarity}). \citep{huang2008similarity}
+
+\begin{table} \label{termtable}
+    \begin{tabular}{llllllll}
+    ~  & quick & brown & fox & jumped & over & lazy & dog \\
+    d1 & 1     & 1     & 1   & 1      & 1    & 1    & 1   \\
+    d2 & 0     & 2     & 1   & 1      & 1    & 0    & 1   \\
+    \end{tabular}
+\end{table}
+
+\begin{equation} \label{d1termvector}
+d1 = \left< 1, 1, 1, 1, 1, 1, 1 \right>
+\end{equation}
+
+\begin{equation} \label{d2termvector}
+d2 = \left< 0, 2, 1, 1, 1, 0, 1 \right>
+\end{equation}
+
+\begin{equation} \label{cosinesimilarity}
+\cos (d1,d1) = \frac{d1 \cdot d2 }{\left| d1 \right| \left| d2 \right|} 
+\end{equation}
+
+\begin{equation} \label{cosinesimilarity1}
+ d1 \cdot d2 = (1)(0) + (1)(2) + (1)(1) + (1)(1) + (1)(1) + (1)(0) + (1)(1) = 6.0 
+\end{equation}
+
+\begin{equation} \label{cosinesimilarity2}
+ \left| d1 \right| = \left( (1)^2 + (1)^2 + (1)^2 + (1)^2 + (1)^2 + (1)^2 + (1)^2 \right) ^{\frac{1}{2}} =  2.645751311
+\end{equation}
+
+\begin{equation} \label{cosinesimilarity3}
+ \left| d2 \right| = \left( (0)^2 + (2)^2 + (1)^2 + (1)^2 + (1)^2 + (0)^2 + (1)^2 \right) ^{\frac{1}{2}} =  2.828427125
+\end{equation}
+
+\begin{equation} \label{cosinesimilarityF}
+\cos (d1,d2) = \frac{d1 \cdot d2 }{\left| d1 \right| \left| d2 \right|} = \frac{6.0}{\left| 2.645751311 \right| \left| 2.828427125 \right|} = 0.8017837257
+\end{equation}
+
+As equation \ref{cosinesimilarityF} shows, the two documents are quite similar, and thus have a high cosine similarity.
+When $d1 = d2$ the similarity is 1.0.
+This technique is a simple way of numercizing text for further mathematical manipulation and treatment.
+
+
 
 \subsection{Sustainability} \label{sustainability}
 The analysis and visualizations produced for this work will be constantly updated.
