@@ -19,7 +19,7 @@
 \colorlet{numb}{magenta!60!black}
 
 \lstdefinelanguage{json}{
-    basicstyle=\normalfont\ttfamily,
+    basicstyle=\footnotesize\ttfamily,
     numbers=left,
     numberstyle=\scriptsize,
     stepnumber=1,
@@ -50,9 +50,10 @@
 \begin{document}
 \title{Research Proposal}
 \author{Andrew Valencik}
-\date{\today}
+\date{March 26, 2014}
 \maketitle
 \tableofcontents
+\listoffigures
 \begin{doublespacing}
 
 %What is the problem? 
@@ -64,6 +65,19 @@
 
 \pagebreak
 \section{Abstract}
+The National Nuclear Data Center prepares an evaluated database of nuclear science literature that poses a rich opportunity for knowledge discovery directed at the scientific work and study. 
+Identifying trends and patterns in the meta data of over 200,000 documents may reveal latent structures of the progress and collaboration among the scientific community. 
+This knowledge may have implications in other similar scientific fields, but most prominently it may provide predictive power within the nuclear science domain.
+
+All processing is done on a local copy of the Nuclear Science References database.
+At the present stage the data has been cleaned, formatted, and 212835 documents have been imported to a MongoDB database. 
+Preliminary visualizations and data summarization efforts are visible at http://pig.io.
+Current efforts are to finalize the data schema, and build a platform for handling objects created as the result of database queries.
+
+The methodology and analysis will, whenever possible, use modern web development practices with the goal of having a publicly accessible tool as the outcome. 
+This is a cross-disciplinary endeavor between physics and computing science. 
+The applied techniques and tool set will draw largely from the knowledge discovery and data mining fields of computer science. 
+Nuclear physics represents the domain knowledge of the data, and will thusly make up a large portion of discussion and research.
 %The problem and its setting
 %Proposed methodology to solve problem
 
@@ -71,56 +85,46 @@
 \section{Introduction}
 % 5 pages double spaced
 % A lot of this can got taken from literature review
-% Define reseach setting and sum-up what has been done
+% Define research setting and sum-up what has been done
 % Point towards what should be done, why?
 
 %What is the problem? What will I study?
 The academic field of nuclear science is over one hundred years old, starting with the discovery of radiation.
-This discovery is the first of many entries in the Nuclear Science References database, collected, catalogoued, distributed, and evaluated by the National Nuclear Data Center. \citep{Kurgan200603} 
+This discovery is the first of many entries in the Nuclear Science References database, collected, cataloged, distributed, and evaluated by the National Nuclear Data Center. \citep{Kurgan200603} 
 The NSR has over 210,000 entries documenting the body of nuclear science literature, which provides the opportunity for knowledge discovery on the literature's meta data.
-This work is a cross disciplinary work, combining data mining technique with domain knowledge in nuclear physics. 
 
+%What do we know already?
+%How will this advance our knowledge?
+%Explain your choice of model. Advantages? Suitability from theoretical point of view? practical reasons for using it?
+%Significance, timeliness, and importance of project.
+Information retrieval has been repeatedly improved by large search engines like Google.
+And while nuclear science literature is a specialized field, Google Scholar is capable of searching many peer reviewed journal articles.
+The NSR provides meta data that can be converted to semantic information for advanced querying capabilities.
+This work is a cross disciplinary work, combining data mining technique with domain knowledge in nuclear physics. 
 
 \subsection{Motivation}
 %Why is it an important question?
-The current search facilities of the NSR are limited to text matching against the NSR entries.
-This informatoin could be of more value to researchers if more complex queries could be run on the data.
+The current search facilities of the Nuclear Science References are limited to text matching against the NSR entries.
+This information could be of more value to researchers if more complex queries could be run on the data.
 
-This process should reveal trends in the collective scientific study of nuclear structure, processes, and detection.
+The knowledge discovery and data mining process should reveal trends in the collective scientific study of nuclear structure, processes, and detection.
 Additionally, categorizing trends may provide predictive power in determining a worthwhile area of study or application of a technique.
-We want to reveal patterns and understand connections in the body of nuclear science literature to predict worthwhile areas of research.
+The analysis outcomes of studying literature meta data may provide useful when analyzing bodies of work from other disciplines.
 
-To find unexplored areas.
-To quantify the growth in areas of research over time.
-To search for interesting structures in the body of literature. The structure of citations and contributions may provide interesting insight.
-
-To apply social mining tools to an academic dataset.
-To discover.
+This process will enable the quantification of growth in areas of research over time, as well as the contributions of authors or collaborations.
+These types of analytics will be useful in summarizing what the field of nuclear science as accomplished to date.
+Lastly there is the interest of applying social mining tools to an academic dataset.
 
 
-\subsection{Review}
-%What do we know already?
-Information retrieval has been repeatedly improved by large search engines like Google.
-And while nuclear science literature is a specialized field, Google Scholar is capable of searching many peer reviewed journal articles.
-
-Page rank algorithm.
-
-%How will this advance our knowledge?
-The NSR provides metadata that can be converted to semantic information for advanced querying capabilities.
-
-We can potentially use citation data as a proxy for PageRank
-
-%Explain your choice of model. Advantages? Suitability from theoretical point of view? practical reasons for using it?
-
-%Significance, timeliness, and importance of project.
-
-\pagebreak
-\section{Objectives}
+\subsection{Objectives}
 % 1-2 pages double spaced
 %Define specific goals of research (which part of general problem am I tackling?)
 %Expected outcome
-Determine the structure of the nuclear science literature.
-Quantify the areas of growth and contribution over time.
+The object of this work is to explore the Nuclear Science References database for latent structures in the body of nuclear science literature.
+This includes the quantification of areas of growth and contributions over time.
+
+A further goal is to make available all the resources necessary to repeat this analysis.
+All work will be online, open sourced, and publicly version controlled. 
 
 \pagebreak
 \section{Methodology}
@@ -132,21 +136,36 @@ Quantify the areas of growth and contribution over time.
 \subsection{Data Preparation}
 The most preliminary step is acquiring the Nuclear Science References from the National Nuclear Data Center.
 A full database dump was acquired on January 29th 2014.
-This dump of the NSR data will hereinafter be reffered to as if it were the complete NSR database.
+This dump of the NSR data will hereinafter be referred to as if it were the complete NSR database.
 All efforts will be taken to ensure the research procedures can very easily be extended and repeated on new NSR data.
 This is discussed in further detail in section \ref{sustainability}.
 
 %Data Cleaning
 Before the data can be imported into MongoDB it must be parsed into a JSON format.
-The NSR data is provided in a custom EXCHANGE format. \citep{NSRhandbook}
+The NSR data is provided in a custom EXCHANGE format. \citep{winchell2007nuclear}
 An example of the raw data for a single paper can be seen in figure !!! %%%%ADD FIGURE
 A series of simple search and replace commands using regular expressions can be applied to transform the data into a valid JSON structures.
-The JSON structure for the entry in figure \ref{exNSR} is shown in \ref{exJSON}. %Why JSON?
+The JSON structure for the entry in figure \ref{exNSR} is shown as an appendix. %Why JSON?
 
 In order to produce a good JSON schema, thought must be given to the data representation.
 Consideration should be given to the types of queries that will be made on the data.
 For example the author field is likely be represented as an array of strings, which each unique author being a separate element in the array.
 This attaches information about how many authors an entry has to our schema.
+
+\begin{figure}[!hb] \label{exNSR}
+\begin{lstlisting}[language=json,firstnumber=1]
+<KEYNO   >1988AB01                                                              &
+<HISTORY >A19880309 M19880315                                                   &
+<CODEN   >JOUR PRVCA 37 401                                                     &
+<REFRENCE>Phys.Rev. C37, 401 (1988)                                             &
+<AUTHORS >A.Abzouzi, M.S.Antony                                                 &
+<TITLE   >Calculation of Energy Levels of {+232}Th,{+232}{+-}{+238}U for K(|p) =&
+ 0{++} Ground State Bands                                                       &
+<KEYWORDS>NUCLEAR STRUCTURE {+232}Th,{+232},{+234},{+236},{+238}U; calculated le&
+vels,band features. Semi-empirical formalism.                                   &
+<SELECTRS>N:232TH;A. N:232U;A. N:234U;A. N:236U;A. N:238U;A. C:OTHER;A.         &
+<DOI     >10.1103/PhysRevC.37.401                                               &
+\end{lstlisting} \end{figure}
 
 %Data Representation
 The optimal schema for the SELECTRS field is not initially obvious.
@@ -182,12 +201,11 @@ Clustering is the grouping of multiple data points such that those belonging to 
 
 Clustering can be broken into two main groups, hierarchical and partitional.
 Both groups have applications in this study.
-The citation structure of the literature is likely to be hierarchical in nature.
+The citation structure or authorship of the literature is likely to be hierarchical in nature.
 Partitional clustering should prove useful in determining the sub genres and fields of study within the body of work.
 
-K-means clustering is a cluster analysis technique that can group data objects in $K$ clusters based on minimizes their distances with respect to cluster centroids.
-K-means is a partitional clustering algorithm.
-In text mining or document comparing we often use cosine similarity between term frequency vectors
+Various aspects of the data will be clustered with differing techniques based on the data type.
+The methodology for a basic clustering technique, K-means clustering is discussed.
 
 \subsubsection{K-means Clustering}
 K-means clustering is a cluster analysis technique that can group data objects in $K$ clusters based on minimizing their distances with respect to cluster centroids.
@@ -212,9 +230,7 @@ J(C) = \sum^K_{k=1} \sum_{x_i \in c_k} \left| x_i - \mu_k \right| ^2
 
 Three parameters for K-means must be specified initially, the number of clusters, initial centroid guesses, and the distance metric.
 The metric is the function on a space that describes how two points differ from one another, i.e. distance.
-Euclidean distance is typically used, leading to ball or sphrer shaped clusters. \citep{Jain2010651}
-Other metrics maye have different results, like the Mahalanobis distance metric which leads to hyperellopsoidal clusters. \citep{MaoJain1996}
-The choice of metric may be domain specific; the Itakura-Saito distance represents the error between an auditory spectrum and its approximate, it is used in speech processing. \citep{chan2008advances}
+Euclidean distance is typically used, leading to ball or sphere shaped clusters. \citep{Jain2010651}
 
 The chosen number of clusters has a huge impact on the data partitions.
 Some heuristics exist to aid in determining an optimal $k$. \citep{tibshirani2001estimating}
@@ -282,10 +298,12 @@ When $d1 = d2$ the similarity is 1.0.
 This technique is a simple way of numercizing text for further mathematical manipulation and treatment.
 
 
-
 \subsection{Sustainability} \label{sustainability}
 The analysis and visualizations produced for this work will be constantly updated.
 New data can be acquired from the NNDC and uploaded to the local database with relative ease.
+This is a result of all procedures being scripted for automation.
+As previously stated, an objective of this work is to make it easily repeatable and extensible.
+All scripts and source code will be open sourced and in a publicly available version control system.
 
 
 \pagebreak
@@ -294,12 +312,12 @@ New data can be acquired from the NNDC and uploaded to the local database with r
 %Demonstrate feasibility
 
 %Computing resources, hosting, database.
-The computing resources for this project will not be substaintial.
+The computing resources for this project will not be substantial.
 It is likely that all database queries will be able to complete in a timely manner on a MacBook Pro.
+The software systems used are scalable, so despite the low computational requirements of this current data set, the software will be capable of handling much larger data sets.
 
 The work will be hosted on equipment owned by the Mathematics and Computing Science department, and housed in the ITSS server room.
 
-\pagebreak
 \section{Budget}
 % 1 pages double spaced
 %Breakdown of expected expenses.
@@ -315,10 +333,76 @@ All software used in the completion of the work will be open source.
 %Expected date of completion for each major step in research project
 %Realistic for 2 year project
 
-%%% That's all folks
+The following is an outline for the project's schedule.
+It is worth noting that this is a part time Masters, so there is a possibility of delaying any unit by a semester.
+Furthermore, this research project is two months old at the time of writing.
+Any of the future analysis steps may reveal an area that warrants further investigation that consequently extends this timeline.
+That said, great effort will be given to not extend the Masters past January 2016.
+
+\begin{table}[hb]
+    \begin{tabular}{|p{6cm}|p{10cm}|}
+    Time                      & Work                                                                                                               \\
+    January 2014              & Acquired Nuclear Science References dataset from NNDC.                                                             \\
+    February 2014             & Cleaned and parsed NSR data into JSON schema.                                                                      \\
+    March 2014                & Early visualizations produced with d3.js for data summarization.                                                   \\
+    April 2014                & Finalize data representation, schema, and server side handling. Determine useful queries for probing 'structures'. \\
+    May - August 2014         & Enable searching and varying parameters of queries. Begin clustering and text mining analysis.                     \\
+    September - December 2014 & Further explore structures using KDD techniques, cluster analysis, social data mining tools.                       \\
+    January - April 2015      & Last topic course in Data Mining. Finalize cluster analysis, and text mining.                                      \\
+    May - August 2015         & Finalize thesis writing.                                                                                           \\
+    \end{tabular}
+\end{table}
+
 \pagebreak
+\section{Appendix: JSON Data Structure}
+
+
+\begin{figure}[!h] \label{exJSON}
+\begin{lstlisting}[language=json,firstnumber=1]
+{ "_id": "532f835bede9bfc2462f2aaa",
+  "keyNumber": {
+    "KEYNO": "1988AB01",
+    "yearPublication": 1988,
+    "HISTORY": "A19880309 M19880315" },
+  "CODEN": [ "JOUR", "PRVCA", "37", "401" ],
+  "REFRENCE": "Phys.Rev. C37, 401 (1988)",
+  "authors": [ "A.Abzouzi", "M.S.Antony" ],
+  "TITLE": "Calculation of Energy Levels of {+232}Th,{+232}{+-}{+238}U for K(|p) = 0{++} Ground State Bands",
+  "KEYWORDS": "NUCLEAR STRUCTURE {+232}Th,{+232},{+234},{+236},{+238}U; calculated levels,band features. Semi-empirical formalism.",
+  "SELECTRS": [
+    {
+      "paramType": "N",
+      "paramValue": "232TH",
+      "linkVar": "A"
+    }, {
+      "paramType": "N",
+      "paramValue": "232U",
+      "linkVar": "A"
+    }, {
+      "paramType": "N",
+      "paramValue": "234U",
+      "linkVar": "A"
+    }, {
+      "paramType": "N",
+      "paramValue": "236U",
+      "linkVar": "A"
+    }, {
+      "paramType": "N",
+      "paramValue": "238U",
+      "linkVar": "A"
+    }, {
+      "paramType": "C",
+      "paramValue": "OTHER",
+      "linkVar": "A"
+    }
+  ],
+  "DOI": "10.1103/PhysRevC.37.401" }
+\end{lstlisting} \end{figure}
+
 \end{doublespacing}
 
+%%% That's all folks
+\pagebreak
 \bibliography{../citationsAPSC.bib}
 
 \end{document}
