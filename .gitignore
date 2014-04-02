@@ -32,6 +32,7 @@ nulam.iml
 *.log
 *.out
 *.toc
+*.lof
 
 # mastersAPSC Specifc
 /data
