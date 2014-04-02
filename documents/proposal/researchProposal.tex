@@ -3,9 +3,49 @@
 \usepackage{hyperref}
 \usepackage{setspace}
 \usepackage[round]{natbib}
+\usepackage{graphicx}
+\usepackage{indentfirst}
 \bibliographystyle{plainnat}
 \newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
 \newcommand{\subscript}[1]{\ensuremath{_{\textrm{#1}}}}
+
+%\usepackage{bera}% optional: just to have a nice mono-spaced font
+\usepackage{listings}
+\usepackage{xcolor}
+
+\colorlet{punct}{red!60!black}
+\definecolor{background}{HTML}{EEEEEE}
+\definecolor{delim}{RGB}{20,105,176}
+\colorlet{numb}{magenta!60!black}
+
+\lstdefinelanguage{json}{
+    basicstyle=\normalfont\ttfamily,
+    numbers=left,
+    numberstyle=\scriptsize,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{background},
+    literate=
+     *{0}{{{\color{numb}0}}}{1}
+      {1}{{{\color{numb}1}}}{1}
+      {2}{{{\color{numb}2}}}{1}
+      {3}{{{\color{numb}3}}}{1}
+      {4}{{{\color{numb}4}}}{1}
+      {5}{{{\color{numb}5}}}{1}
+      {6}{{{\color{numb}6}}}{1}
+      {7}{{{\color{numb}7}}}{1}
+      {8}{{{\color{numb}8}}}{1}
+      {9}{{{\color{numb}9}}}{1}
+      {:}{{{\color{punct}{:}}}}{1}
+      {,}{{{\color{punct}{,}}}}{1}
+      {\{}{{{\color{delim}{\{}}}}{1}
+      {\}}{{{\color{delim}{\}}}}}{1}
+      {[}{{{\color{delim}{[}}}}{1}
+      {]}{{{\color{delim}{]}}}}{1},
+}
 
 \begin{document}
 \title{Research Proposal}
@@ -29,11 +69,26 @@
 
 \pagebreak
 \section{Introduction}
+% 5 pages double spaced
+% A lot of this can got taken from literature review
+% Define reseach setting and sum-up what has been done
+% Point towards what should be done, why?
+
 %What is the problem? What will I study?
+The academic field of nuclear science is over one hundred years old, starting with the discovery of radiation.
+This discovery is the first of many entries in the Nuclear Science References database, collected, catalogoued, distributed, and evaluated by the National Nuclear Data Center. \citep{Kurgan200603} 
+The NSR has over 210,000 entries documenting the body of nuclear science literature, which provides the opportunity for knowledge discovery on the literature's meta data.
+This process should reveal trends in the collective scientific study of nuclear structure, processes, and detection.
+Additionally, categorizing trends may provide predictive power in determining a worthwhile area of study or application of a technique.
 We want to reveal patterns and understand connections in the body of nuclear science literature to predict worthwhile areas of research.
+This work is a cross disciplinary work, combining data mining technique with domain knowledge in nuclear physics. 
+
 
 \subsection{Motivation}
 %Why is it an important question?
+The current search facilities of the NSR are limited to text matching against the NSR entries.
+This informatoin could be of more value to researchers if more complex queries could be run on the data.
+
 To find unexplored areas.
 To quantify the growth in areas of research over time.
 To search for interesting structures in the body of literature. The structure of citations and contributions may provide interesting insight.
@@ -44,16 +99,23 @@ To discover.
 
 \subsection{Review}
 %What do we know already?
-The body of nuclear science literature is extensive, mature, and well categorized by the National Nuclear Data Center \citep{Kurgan200603} which provides the opportunity for knowledge discovery on the literature's meta data.
-This process should reveal trends in the collective scientific study of nuclear structure, processes, and detection.
-Additionally, categorizing trends may provide predictive power in determining a worthwhile area of study or application of a technique.
+Information retrieval has been repeatedly improved by large search engines like Google.
+And while nuclear science literature is a specialized field, Google Scholar is capable of searching many peer reviewed journal articles.
+
+Page rank algorithm.
 
 %How will this advance our knowledge?
-%Explain your choice of model.
+The NSR provides metadata that can be converted to semantic information for advanced querying capabilities.
+
+We can potentially use citation data as a proxy for PageRank
+
+%Explain your choice of model. Advantages? Suitability from theoretical point of view? practical reasons for using it?
+
 %Significance, timeliness, and importance of project.
 
 \pagebreak
 \section{Objectives}
+% 1-2 pages double spaced
 %Define specific goals of research (which part of general problem am I tackling?)
 %Expected outcome
 Determine the structure of the nuclear science literature.
@@ -61,6 +123,7 @@ Quantify the areas of growth and contribution over time.
 
 \pagebreak
 \section{Methodology}
+% 5 pages double spaced. Most critical part. ~70 sentences
 %Critical. Define plan of action.
 %How to tackle problem? Why this way?
 
@@ -70,6 +133,48 @@ Quantify the areas of growth and contribution over time.
 %Queries
 %Interpretation
 
+%Creating the DB
+The most preliminary step is acquiring the Nuclear Science References from the National Nuclear Data Center.
+A full database dump was acquired on January 29th 2014.
+This dump of the NSR data will hereinafter be reffered to as if it were the complete NSR database.
+All efforts will be taken to ensure the research procedures can very easily be extended and repeated on new NSR data.
+This is discussed in further detail in section \ref{sustainability}.
+
+%Data Cleaning
+Before the data can be imported into MongoDB it must be parsed into a JSON format.
+The NSR data is provided in a custom EXCHANGE format. \citep{NSRhandbook}
+An example of the raw data for a single paper can be seen in figure !!! %%%%ADD FIGURE
+A series of simple search and replace commands using regular expressions can be applied to transform the data into a valid JSON structures.
+The JSON structure for the entry in figure \ref{exNSR} is shown in \ref{exJSON}. %Why JSON?
+
+In order to produce a good JSON schema, thought must be given to the data representation.
+Consideration should be given to the types of queries that will be made on the data.
+For example the author field is likely be represented as an array of strings, which each unique author being a separate element in the array.
+This attaches information about how many authors an entry has to our schema.
+
+%Data Representation
+The optimal schema for the SELECTRS field is not initially obvious.
+The current schema has SELECTRS parsed into a 3 dimensional array.
+Each 'selector' has a type, value, and a link variable.
+The following types are valid:
+\begin{quote}
+N, T, P, G, R, S, M, D, C, X, A, or Z, which stand for nuclide, target, parent, daughter, reaction, subject, measured, deduced, calculated, other subject, mass range, and charge range, respectively.
+\end{quote}
+The value changes based on the type. The link variable is used to tie together multiple selectors.
+
+%Data Summarization
+Data summarization is necessary to begin to understand our data.
+Preliminary visualizations help in this task.
+A histogram of database entries per year is shown in figure \ref{fig:NSRyearly}.
+
+\begin{figure}[!hb]
+    \label{fig:NSRyearly}
+    \centering
+    \includegraphics[width=\linewidth]{NSRyearly.pdf}
+    \caption{NSR Database documents per year from 1896 to 2014.}
+\end{figure}
+
+\subsection{Classification and Cluster Analysis}
 Classification and clustering are related approaches to organizing data elements into groups for further analysis.
 Classification is the process of deciding what group a particular datum should most optimally belong to.
 Clustering is the grouping of multiple data points such that those belonging to a group are more similar in some manner than those outside of that group.
@@ -78,7 +183,6 @@ Clustering can be broken into two main groups, hierarchical and partitional.
 Both groups have applications in this study.
 The citation structure of the literature is likely to be hierarchical in nature.
 Partitional clustering should prove useful in determining the sub genres and fields of study within the body of work.
-
 
 K-means clustering is a cluster analysis technique that can group data objects in $K$ clusters based on minimizes their distances with respect to cluster centroids.
 K-means is a partitional clustering algorithm.
@@ -92,25 +196,35 @@ Examples of such data include user reviews of a product or service, customer fee
 A simple goal of text mining could be to summarize the input text.
 However, this can be abstracted further to 'numericizing' text data for use in an analysis model.
 
-%https://stackoverflow.com/questions/15173225/how-to-calculate-cosine-similarity-given-2-sentence-strings-python
-
-\subsubsection{Sentiment Analysis}
-Sentiment analysis is the extraction of subjective information, like opinions, from text data.
-This can be accomplished by parsing natural language and quantifying the affectivity of keywords.
+\subsection{Sustainability} \label{sustainability}
+The analysis and visualizations produced for this work will be constantly updated.
+New data can be acquired from the NNDC and uploaded to the local database with relative ease.
 
 
 \pagebreak
 \section{Equipment and Research Materials}
+% 1 pages double spaced
 %Demonstrate feasibility
 
-Computing resources, hosting, database.
+%Computing resources, hosting, database.
+The computing resources for this project will not be substaintial.
+It is likely that all database queries will be able to complete in a timely manner on a MacBook Pro.
+
+The work will be hosted on equipment owned by the Mathematics and Computing Science department, and housed in the ITSS server room.
 
 \pagebreak
 \section{Budget}
+% 1 pages double spaced
 %Breakdown of expected expenses.
+The largest expense of this project would be in producing the original database.
+Thankfully the researchers at the NNDC have already done so and willing shared a copy.
+
+The computational and hosting requirements for this work, as outlined above, will be met by existing Saint Mary's resources.
+All software used in the completion of the work will be open source.
 
 \pagebreak
 \section{Timetable}
+% 1 pages double spaced
 %Expected date of completion for each major step in research project
 %Realistic for 2 year project
 
