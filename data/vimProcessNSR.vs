@@ -25,8 +25,8 @@
 
 "KEYNO parsing
 :let t = localtime()
-:%s/^<KEYNO   >\(\(\d\d\d\d\).*\)&$/{ "keyNumber": { "KEYNO": "\1", "yearPublication": \2,/g
-:%s/^<HISTORY >\(.*\)&$/"HISTORY": "\1" },/g
+:%s/^<KEYNO   >\(\(\d\d\d\d\).*\)&$/{ "year": \2, "KEYNO": "\1",/g
+:%s/^<HISTORY >\(.*\)&$/"HISTORY": "\1",/g
 :echo "Regex (keyno & history): ".(localtime()-t)." s"
 
 "Coden and Reference to JSON
