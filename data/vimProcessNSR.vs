@@ -38,6 +38,7 @@
 "Authors to an array
 :let t = localtime()
 :%s/^<AUTHORS >\(.*\)&$/"authors": ["\1"],/g
+:%s/\(^"authors": \[".*\)\@<=, Jr./ Jr./g
 :%s/\(^"authors": \[".*\)\@<=, /", "/g
 :echo "Regex (authors): ".(localtime()-t)." s"
 
