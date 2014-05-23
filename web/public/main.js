@@ -31,6 +31,12 @@ $(document).ready(function() {
                     case 'discreteBarChart':
                         nv.addGraph(discreteBarChart(selector, title, data, callback));
                         break;
+                    case 'multiBarChart':
+                        results.splice(0,1);
+                        results.splice(1,1);
+                        results.splice(5,1);
+                        nv.addGraph(multiBarChart(selector, title, results, callback));
+                        break;
                     case 'pieChart':
                         nv.addGraph(pieChart(selector, title, data, callback));
                         break;
@@ -98,23 +104,27 @@ $(document).ready(function() {
         return chart;
       };
 
+    //Define multiBarChart 
     multiBarChart = function(selector, title, data, callback) {
+        console.log("derping the results:");
+        console.log(data);
         var chart = nv.models.multiBarChart()
-          .transitionDuration(350)
+          //.transitionDuration(350)
           .reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
-          .rotateLabels(0)      //Angle to rotate x-axis labels.
+          .rotateLabels(90)      //Angle to rotate x-axis labels.
           .showControls(true)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
-          .groupSpacing(0.1)    //Distance between each group of bars.
+          .groupSpacing(0.01)    //Distance between each group of bars.
         ;
     
         chart.xAxis
             .tickFormat(d3.format(',f'));
     
         chart.yAxis
-            .tickFormat(d3.format(',.1f'));
-    
-        d3.select('#chart1 svg')
+            .tickFormat(d3.format(',f'));
+
+        d3.select(selector)
             .datum(data)
+            .transition().duration(1)
             .call(chart);
     
         nv.utils.windowResize(chart.update);
@@ -250,15 +260,16 @@ for (i=1950; i<=1970; i=i+10) {
     // Multi Bar Chart
     graphType = "multiBarChart";
     graph(
-        "#charts svg#multi", 
+        "#charts svg#yearlyMulti", 
         "NSR Data", 
         "NSR3", 
         [
-            {$group: { _id: {type: "$type", year: "$year"}, total: { $sum: 1} } },
-            {$sort: {"sum": -1}},
-            {$project: {_id: 0, type: "$_id.type", x: "$_id.year", y: "$total"}},
-            {$group: {_id: "$type", values: {$addToSet: {x: "$x", y: "$y"}}}},
-            {$project: {_id:0, key: "$_id", values: "$values"}}
+              {$match: {"year": {$gte: 1965, $lte: 1985}}},
+              {$group: { _id: {type: "$type", year: "$year"}, total: { $sum: 1} } }, 
+              {$sort: {"_id.year": 1}},
+              {$group: {_id: "$_id.type", values: {$push: {x: "$_id.year", y: "$total"}}}}, 
+              {$project: {_id:0, key: "$_id", values: "$values"}}
+
        ],
         {},
         graphType,
