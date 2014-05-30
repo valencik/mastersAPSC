@@ -35,6 +35,8 @@ $(document).ready(function() {
                         results.splice(0,1);
                         results.splice(1,1);
                         results.splice(5,1);
+                        console.log("value length:" +results[0].values.length);
+                        results.sort(function(a, b){return b.values[8].y-a.values[8].y});
                         nv.addGraph(multiBarChart(selector, title, results, callback));
                         break;
                     case 'pieChart':
@@ -110,17 +112,17 @@ $(document).ready(function() {
         console.log(data);
         var chart = nv.models.multiBarChart()
           //.transitionDuration(350)
-          .reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
+          .reduceXTicks(false)   //If 'false', every single x-axis tick label will be rendered.
           .rotateLabels(90)      //Angle to rotate x-axis labels.
           .showControls(true)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
-          .groupSpacing(0.01)    //Distance between each group of bars.
+          .groupSpacing(0.05)    //Distance between each group of bars.
         ;
     
         chart.xAxis
-            .tickFormat(d3.format(',f'));
+            .tickFormat(d3.format('f'));
     
         chart.yAxis
-            .tickFormat(d3.format(',f'));
+            .tickFormat(d3.format('f'));
 
         d3.select(selector)
             .datum(data)
@@ -224,37 +226,6 @@ for (i=1950; i<=1970; i=i+10) {
         }
     );
 }
-
-
-    // Yearly papers with View Finder
-    graphType = "lineWithFocusChart";
-    types = ["JOUR", "CONF", "REPT", "BOOK", "PC", "THESIS", "PREPRINT"];
-    types.forEach(function(i){graph(
-        "#charts svg#yearlyFinder", 
-        i, 
-        "NSR3", 
-        [
-            { $match: {"type": i}},
-            { $group: { _id: "$year", total: { $sum: 1} } },
-            { $sort: {_id: 1} },
-            { $project: {_id: 0, x: "$_id", y: "$total" } } 
-        ],
-        {},
-        graphType,
-        function(chart){
-            chart.xAxis
-              .tickFormat(d3.format(',f'));
-          
-            chart.yAxis
-              .tickFormat(d3.format(',.2f'));
-          
-            chart.y2Axis
-              .tickFormat(d3.format(',.2f'));
-            //chart.yAxis.tickFormat(d3.format('.0f'));
-            //chart.xAxis.tickValues([1899,1910,1920,1930,1940,1950,1960,1970,1980,1990,2000,2010]);
-        }
-    )}
-);
 
 
     // Multi Bar Chart
