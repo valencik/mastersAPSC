@@ -124,6 +124,26 @@ MongoClient.connect("mongodb://"+nconf.get('mongo:host')+":"+nconf.get('mongo:po
     });
     app.get('/api/v1/:collection/aggregate', aggregation);
 
+    // Search Queries
+    var search = basic(function(collection, query, callback) {
+        var searchterms = [
+
+              {$match: {$text: {$search: query.Omnipig}}},
+              {$group: { _id: {type: "$type", year: "$year"}, total: { $sum: 1} } }, 
+              {$sort: {"_id.year": 1}},
+              {$group: {_id: "$_id.type", values: {$push: {x: "$_id.year", y: "$total"}}}}, 
+              {$project: {_id:0, key: "$_id", values: "$values"}}
+
+       ]
+
+        var options = query.options || {};
+        collection.aggregate(searchterms, options, function(err, docs) {
+            return callback(docs);
+        });
+    });
+    app.get('/api/v1/:collection/search', search);
+
+
 
     // Start server
     app.listen(nconf.get('server:port'), function() {
