@@ -32,11 +32,8 @@ $(document).ready(function() {
                         nv.addGraph(discreteBarChart(selector, title, data, callback));
                         break;
                     case 'multiBarChart':
-                        results.splice(0,1);
-                        results.splice(1,1);
-                        results.splice(5,1);
                         console.log("value length:" +results[0].values.length);
-                        results.sort(function(a, b){return b.values[8].y-a.values[8].y});
+                        //results.sort(function(a, b){return b.values[8].y-a.values[8].y});
                         nv.addGraph(multiBarChart(selector, title, results, callback));
                         break;
                     case 'pieChart':
@@ -51,6 +48,42 @@ $(document).ready(function() {
 
             });
     };
+
+    var search = $("#omnisearchform");
+    console.log("main.js search grabbed?...");
+    search.submit(function(ev){
+
+        //Make a function with error checking
+        var searchterms = search.serializeArray();
+        var queryterm = searchterms[0].value;
+        console.log(queryterm);
+
+        //Remove old charts, put in new ids
+        $("#charts").empty();
+        $("#charts").append('<svg id="search"></svg>');
+
+        // Multi Bar Chart
+        graphType = "multiBarChart";
+        graph(
+            "#charts svg#search", 
+            "NSR Data", 
+            "NSR", 
+            [
+                  {$match: {$text: {$search: queryterm}}},
+                  {$group: { _id: {type: "$type", year: "$year"}, total: { $sum: 1} } }, 
+                  {$sort: {"_id.year": 1}},
+                  {$group: {_id: "$_id.type", values: {$push: {x: "$_id.year", y: "$total"}}}}, 
+                  {$project: {_id:0, key: "$_id", values: "$values"}}
+           ],
+            {},
+            graphType,
+            function(chart, data){
+            }
+        );//end multibar graph
+
+        ev.preventDefault();
+    });//end of search
+
 
 //
 //   GRAPH MODELS
@@ -143,7 +176,7 @@ $(document).ready(function() {
     graph(
         "#charts svg#yearly", 
         "NSR Data", 
-        "NSR3", 
+        "NSR", 
         [
             { $group: { _id: "$year", total: { $sum: 1} } },
             { $sort: {_id: 1} },
@@ -162,7 +195,7 @@ $(document).ready(function() {
     graph(
         "#charts svg#doctypes", 
         "NSR Data", 
-        "NSR3", 
+        "NSR", 
         [
              { $group: { _id: "$type", total: { $sum: 1} } },
              { $sort: {total: -1}},
@@ -183,7 +216,7 @@ $(document).ready(function() {
     graph(
         "#charts svg#doctypes2", 
         "NSR Data", 
-        "NSR3", 
+        "NSR", 
         [
              { $group: { _id: "$type", total: { $sum: 1} } },
              { $sort: {total: -1}},
@@ -204,7 +237,7 @@ $(document).ready(function() {
     // Prolific authors
     graphType = "pieChart";
 for (i=1950; i<=1970; i=i+10) {
-    graph("#charts svg#prolific"+(i-1900), "NSR Data", "NSR3", 
+    graph("#charts svg#prolific"+(i-1900), "NSR Data", "NSR", 
         [
              { $match: {"year": {$gt: i, $lte: i+10}}},
              { $unwind: "$authors"},
@@ -233,7 +266,7 @@ for (i=1950; i<=1970; i=i+10) {
     graph(
         "#charts svg#yearlyMulti", 
         "NSR Data", 
-        "NSR3", 
+        "NSR", 
         [
               {$match: {"year": {$gte: 1965, $lte: 1985}}},
               {$group: { _id: {type: "$type", year: "$year"}, total: { $sum: 1} } }, 
