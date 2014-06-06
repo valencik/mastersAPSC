@@ -21,7 +21,7 @@ $(document).ready(function() {
             options,
             function(results) {
                 console.log("Graph: %s", queryType.graph);
-                //console.log(data);
+                console.log("Returned array size="+results.length);
                 
                 switch(queryType.type){
                     case 'yearly':
@@ -37,19 +37,21 @@ $(document).ready(function() {
                         for (var i=0; i< types.length; i++) {
                             data[i] = {key: types[i], values: []};
                             for (var year=queryType.minYear; year<=queryType.maxYear; year++) {
-                                    var yi = year-queryType.minYear;
-                                    data[i].values[yi] = {x: year, y: 0}
+                                    data[i].values[year-queryType.minYear] = {x: year, y: 0}
                                 } 
                         }
 
                         //populate the data array with results
                         for (var i=0; i< types.length; i++) { //over all types
-                            var indexT = 0;
+                            var indexT = null;
                             for (var ti=0; ti < results.length; ti++) {
-                                if(results[ti].key === types[i]) {indexT =  ti;} 
-                            }
-                            
-                            console.log(types[i] +"--->"+ results[indexT].key);
+                                if(results[ti].key === types[i]) { //find a matching type in results[]
+                                    indexT =  ti;
+                                    //console.log(types[i] +"--->"+ results[indexT].key);
+                                    break;
+                                } 
+                            } //end of results.length matching
+                            if (indexT == null) {break;} //if we didn't find a match, move to new type
                             for (var year=queryType.minYear; year<=queryType.maxYear; year++) { //over all years
                                 for (var mi = 0; mi < results[indexT].values.length; mi++) { //over all returned years in results
                                     if(results[indexT].values[mi].x === year) {
@@ -70,9 +72,6 @@ $(document).ready(function() {
                         nv.addGraph(discreteBarChart(selector, title, data, callback));
                         break;
                     case 'multiBarChart':
-                        for (var i =0; i<data.length; i++) {
-                            data[i].values.sort(function(a, b){return a.x-b.x})
-                        }
                         nv.addGraph(multiBarChart(selector, title, data, callback));
                         break;
                     case 'pieChart':
@@ -89,7 +88,6 @@ $(document).ready(function() {
     };//end of graph function
 
     var search = $("#omnisearchform");
-    console.log("main.js search grabbed?...");
     search.submit(function(ev){
 
         //Make a function with error checking
@@ -116,7 +114,9 @@ $(document).ready(function() {
            ],
             {},
             queryType,
-            function(chart, data){
+            function(chart, data) {
+                //chart.xAxis.tickValues([1899,1910,1920,1930,1940,1950,1960,1970,1980,1990,2000,2010]);
+                chart.reduceXTicks(true);
             }
         );//end multibar graph
 
