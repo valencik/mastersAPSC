@@ -44,10 +44,16 @@ $(document).ready(function() {
 
                         //populate the data array with results
                         for (var i=0; i< types.length; i++) { //over all types
+                            var indexT = 0;
+                            for (var ti=0; ti < results.length; ti++) {
+                                if(results[ti].key === types[i]) {indexT =  ti;} 
+                            }
+                            
+                            console.log(types[i] +"--->"+ results[indexT].key);
                             for (var year=queryType.minYear; year<=queryType.maxYear; year++) { //over all years
-                                for (var mi = 0; mi < results[i].values.length; mi++) { //over all returned years in results
-                                    if(results[i].values[mi].x === year) {
-                                        data[i].values[year-queryType.minYear] = {x: year, y: results[i].values[mi].y} 
+                                for (var mi = 0; mi < results[indexT].values.length; mi++) { //over all returned years in results
+                                    if(results[indexT].values[mi].x === year) {
+                                        data[i].values[year-queryType.minYear] = {x: year, y: results[indexT].values[mi].y} 
                                     }
                                     else { continue; }
                                 }
