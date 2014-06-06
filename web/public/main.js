@@ -20,27 +20,54 @@ $(document).ready(function() {
             pipeline,
             options,
             function(results) {
-                var data = [{
-                    key: title,
-                    values: results
-                }];
                 console.log("Graph: %s", queryType.graph);
-                console.log(data);
+                //console.log(data);
                 
+                switch(queryType.type){
+                    case 'yearly':
+                        var data = [{
+                            key: title,
+                            values: results
+                        }];
+                        break;
+                    case 'yearlyMultiType':
+                        //initial the data array
+                        data = [];
+                        types = ["JOUR", "REPT", "CONF", "THESIS", "PC", "UNKNOWN", "PREPRINT", "BOOK"];
+                        for (var i=0; i< types.length; i++) {
+                            data[i] = {key: types[i], values: []};
+                            for (var year=queryType.minYear; year<=queryType.maxYear; year++) {
+                                    var yi = year-queryType.minYear;
+                                    data[i].values[yi] = {x: year, y: 0}
+                                } 
+                        }
+
+                        //populate the data array with results
+                        for (var i=0; i< types.length; i++) { //over all types
+                            for (var year=queryType.minYear; year<=queryType.maxYear; year++) { //over all years
+                                for (var mi = 0; mi < results[i].values.length; mi++) { //over all returned years in results
+                                    if(results[i].values[mi].x === year) {
+                                        data[i].values[year-queryType.minYear] = {x: year, y: results[i].values[mi].y} 
+                                    }
+                                    else { continue; }
+                                }
+
+                            } 
+                        }
+                        break;
+                    default:
+                        console.log("Error: No queryType.type detected.");
+                }//end of switch queryType.type
+        
                 switch(queryType.graph){
                     case 'discreteBarChart':
                         nv.addGraph(discreteBarChart(selector, title, data, callback));
                         break;
                     case 'multiBarChart':
-                        //minYear = results[0].values[0].x;
-                        //maxYear = results[0].values[results[0].values.length-1].x;
-                        for (var i =0; i<results.length; i++) {
-                            results[i].values.sort(function(a, b){return a.x-b.x})
-                            //minYear = Math.min(minYear,results[i].values[0].x);
-                            //maxYear = Math.max(maxYear,results[i].values[results[i].values.length-1].x);
+                        for (var i =0; i<data.length; i++) {
+                            data[i].values.sort(function(a, b){return a.x-b.x})
                         }
-                        //console.log("minYear:"+minYear+" maxYear:"+maxYear);
-                        nv.addGraph(multiBarChart(selector, title, results, callback));
+                        nv.addGraph(multiBarChart(selector, title, data, callback));
                         break;
                     case 'pieChart':
                         nv.addGraph(pieChart(selector, title, data, callback));
@@ -69,7 +96,7 @@ $(document).ready(function() {
         $("#charts").append('<svg id="search"></svg>');
 
         // Multi Bar Chart
-        queryType = {graph: "multiBarChart", minYear: 1896, maxYear: 2011}
+        queryType = {type: "yearlyMultiType", graph: "multiBarChart", minYear: 1896, maxYear: 2011}
         graph(
             "#charts svg#search", 
             "NSR Data", 
@@ -178,7 +205,7 @@ $(document).ready(function() {
 //
 
     // Graph yearly summary
-    queryType = {graph: "discreteBarChart", minYear: 1896, maxYear: 2011}
+    queryType = {type: "yearly", graph: "discreteBarChart", minYear: 1896, maxYear: 2011}
     graph(
         "#charts svg#yearly", 
         "NSR Data", 
@@ -197,7 +224,7 @@ $(document).ready(function() {
     );
 
     // Doctype Bar Chart
-    queryType = {graph: "discreteBarChart", minYear: 1896, maxYear: 2011}
+    queryType = {type: "yearly", graph: "discreteBarChart", minYear: 1896, maxYear: 2011}
     graph(
         "#charts svg#doctypes", 
         "NSR Data", 
@@ -218,7 +245,7 @@ $(document).ready(function() {
     );
 
     // Doctype Pie
-    queryType = {graph: "pieChart", minYear: 1896, maxYear: 2011}
+    queryType = {type: "yearly", graph: "pieChart", minYear: 1896, maxYear: 2011}
     graph(
         "#charts svg#doctypes2", 
         "NSR Data", 
@@ -241,7 +268,7 @@ $(document).ready(function() {
     );
 
     // Prolific authors
-    queryType = {graph: "pieChart", minYear: 1950, maxYear: 1980}
+    queryType = {type: "yearly", graph: "pieChart", minYear: 1950, maxYear: 1980}
 for (i=1950; i<=1970; i=i+10) {
     graph("#charts svg#prolific"+(i-1900), "NSR Data", "NSR", 
         [
@@ -268,7 +295,7 @@ for (i=1950; i<=1970; i=i+10) {
 
 
     // Multi Bar Chart
-    queryType = {graph: "multiBarChart", minYear: 1965, maxYear: 1985}
+    queryType = {type: "yearlyMultiType", graph: "multiBarChart", minYear: 1965, maxYear: 1985}
     graph(
         "#charts svg#yearlyMulti", 
         "NSR Data", 
