@@ -15,7 +15,7 @@ $(document).ready(function() {
         });
     };
 
-    var graph = function(selector, title, collection, pipeline, options, graphType, callback) {
+    var graph = function(selector, title, collection, pipeline, options, queryType, callback) {
         aggregate(collection, 
             pipeline,
             options,
@@ -24,16 +24,22 @@ $(document).ready(function() {
                     key: title,
                     values: results
                 }];
-                console.log("Graph: %s", graphType);
+                console.log("Graph: %s", queryType.graph);
                 console.log(data);
                 
-                switch(graphType){
+                switch(queryType.graph){
                     case 'discreteBarChart':
                         nv.addGraph(discreteBarChart(selector, title, data, callback));
                         break;
                     case 'multiBarChart':
-                        console.log("value length:" +results[0].values.length);
-                        //results.sort(function(a, b){return b.values[8].y-a.values[8].y});
+                        //minYear = results[0].values[0].x;
+                        //maxYear = results[0].values[results[0].values.length-1].x;
+                        for (var i =0; i<results.length; i++) {
+                            results[i].values.sort(function(a, b){return a.x-b.x})
+                            //minYear = Math.min(minYear,results[i].values[0].x);
+                            //maxYear = Math.max(maxYear,results[i].values[results[i].values.length-1].x);
+                        }
+                        //console.log("minYear:"+minYear+" maxYear:"+maxYear);
                         nv.addGraph(multiBarChart(selector, title, results, callback));
                         break;
                     case 'pieChart':
@@ -46,8 +52,8 @@ $(document).ready(function() {
                         console.log("# No valid graph type detected.")
                 }
 
-            });
-    };
+            });//end of aggregate callback
+    };//end of graph function
 
     var search = $("#omnisearchform");
     console.log("main.js search grabbed?...");
@@ -63,7 +69,7 @@ $(document).ready(function() {
         $("#charts").append('<svg id="search"></svg>');
 
         // Multi Bar Chart
-        graphType = "multiBarChart";
+        queryType = {graph: "multiBarChart", minYear: 1896, maxYear: 2011}
         graph(
             "#charts svg#search", 
             "NSR Data", 
@@ -76,7 +82,7 @@ $(document).ready(function() {
                   {$project: {_id:0, key: "$_id", values: "$values"}}
            ],
             {},
-            graphType,
+            queryType,
             function(chart, data){
             }
         );//end multibar graph
@@ -172,7 +178,7 @@ $(document).ready(function() {
 //
 
     // Graph yearly summary
-    graphType = "discreteBarChart";
+    queryType = {graph: "discreteBarChart", minYear: 1896, maxYear: 2011}
     graph(
         "#charts svg#yearly", 
         "NSR Data", 
@@ -183,7 +189,7 @@ $(document).ready(function() {
             {$project: {_id: 0, label: "$_id", value: "$total" } } 
         ],
         {},
-        graphType,
+        queryType,
         function(chart){
             chart.yAxis.tickFormat(d3.format('.0f'));
             chart.xAxis.tickValues([1899,1910,1920,1930,1940,1950,1960,1970,1980,1990,2000,2010]);
@@ -191,7 +197,7 @@ $(document).ready(function() {
     );
 
     // Doctype Bar Chart
-    graphType = "discreteBarChart";
+    queryType = {graph: "discreteBarChart", minYear: 1896, maxYear: 2011}
     graph(
         "#charts svg#doctypes", 
         "NSR Data", 
@@ -206,13 +212,13 @@ $(document).ready(function() {
              { $sort: {value: -1} }
         ],
         {},
-        graphType,
+        queryType,
         function(chart, data){
         }
     );
 
     // Doctype Pie
-    graphType = "pieChart";
+    queryType = {graph: "pieChart", minYear: 1896, maxYear: 2011}
     graph(
         "#charts svg#doctypes2", 
         "NSR Data", 
@@ -227,7 +233,7 @@ $(document).ready(function() {
              { $sort: {value: -1} }
         ],
         {},
-        graphType,
+        queryType,
         function(chart, data){
             chart.labelThreshold(.01)
             .donut(true).donutLabelsOutside(true).donutRatio(0.2);
@@ -235,7 +241,7 @@ $(document).ready(function() {
     );
 
     // Prolific authors
-    graphType = "pieChart";
+    queryType = {graph: "pieChart", minYear: 1950, maxYear: 1980}
 for (i=1950; i<=1970; i=i+10) {
     graph("#charts svg#prolific"+(i-1900), "NSR Data", "NSR", 
         [
@@ -245,7 +251,7 @@ for (i=1950; i<=1970; i=i+10) {
              { $match: {total: {$gt: i-1925} } },
              { $project: {_id: 0, label: "$_id", value: "$total" } }
         ], {},
-        graphType,
+        queryType,
         function(chart, data){
             chart.labelThreshold(.01)
             .donut(true).donutLabelsOutside(true).donutRatio(0.3)
@@ -262,7 +268,7 @@ for (i=1950; i<=1970; i=i+10) {
 
 
     // Multi Bar Chart
-    graphType = "multiBarChart";
+    queryType = {graph: "multiBarChart", minYear: 1965, maxYear: 1985}
     graph(
         "#charts svg#yearlyMulti", 
         "NSR Data", 
@@ -276,7 +282,7 @@ for (i=1950; i<=1970; i=i+10) {
 
        ],
         {},
-        graphType,
+        queryType,
         function(chart, data){
         }
     );
