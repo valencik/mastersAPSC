@@ -5,7 +5,7 @@
 "Remove trailing whitespace and tabs
 :let t = localtime()
 :%s/\t/  /g
-:%s/ \{2,}&$/\&/g 
+:%s/ \{2,}&$/\&/
 :echo "Regex (whitespace): ".(localtime()-t)." s"
 
 "Escape double quotes
@@ -20,39 +20,48 @@
 
 "Lines that start with lessthan
 :let t = localtime()
-:%s/&\n<\(KEYNO\)\@!\(HISTORY\)\@!\(CODEN\)\@!\(REFRENCE\)\@!\(AUTHORS\)\@!\(TITLE\)\@!\(KEYWORDS\)\@!\(SELECTRS\)\@!\(DOI\)\@!/</g 
+:%s/&\n<\(KEYNO\)\@!\(HISTORY\)\@!\(CODEN\)\@!\(REFRENCE\)\@!\(AUTHORS\)\@!\(TITLE\)\@!\(KEYWORDS\)\@!\(SELECTRS\)\@!\(DOI\)\@!/</ 
 :echo "Regex (less than): ".(localtime()-t)." s"
+
+
+" Start Scheme Building
+"
 
 "KEYNO parsing
 :let t = localtime()
-:%s/^<KEYNO   >\(\(\d\d\d\d\).*\)&$/{ "year": \2, "KEYNO": "\1",/g
-:%s/^<HISTORY >\(.*\)&$/"HISTORY": "\1",/g
-:echo "Regex (keyno & history): ".(localtime()-t)." s"
+:%s/^<KEYNO   >\(\(\d\d\d\d\).*\)&$/{ "_id": "\1", "year": "\2",/
+:echo "Regex (keyno): ".(localtime()-t)." s"
+
+"HISTORY parsing
+:let t = localtime()
+:%g/^<HISTORY >/ s/^<HISTORY >/"history":["/ | s/ \(\w\)/", "\1/g | s/&$/"],/
+:echo "Regex (history): ".(localtime()-t)." s"
 
 "Coden and Reference to JSON
 :let t = localtime()
-:%s/^<CODEN   >\(\(\w*\).*\)&$/"code": "\1", "type": "\2",/g
-:%s/^<REFRENCE>\(.*\)&$/"REFRENCE": "\1",/g
+:%s/^<CODEN   >\(\(\w*\).*\)&$/"code": "\1", "type": "\2",/
+:%s/^<REFRENCE>\(.*\)&$/"REFRENCE": "\1",/
 :echo "Regex (coden & reference): ".(localtime()-t)." s"
 
 "Authors to an array
 :let t = localtime()
-:%s/^<AUTHORS >\(.*\)&$/"authors": ["\1"],/g
-:%s/\(^"authors": \[".*\)\@<=, Jr./ Jr./g
-:%s/\(^"authors": \[".*\)\@<=, /", "/g
+:%g/^<AUTHORS >/ s/^<AUTHORS >/"authors":["/ | s/, \(\w\)/", "\1/g | s/&$/"],/ | s/", "Jr."/, Jr."/g
+":%s/^<AUTHORS >\(.*\)&$/"authors": ["\1"],/
+":%s/\(^"authors": \[".*\)\@<=, Jr./ Jr./g
+":%s/\(^"authors": \[".*\)\@<=, /", "/g
 :echo "Regex (authors): ".(localtime()-t)." s"
 
 "Title, Keywords, Selectors, DOI
 :let t = localtime()
-:%s/^<TITLE   >\(.*\)&$/"TITLE": "\1",/g
-:%s/^<KEYWORDS>\(.*\)&$/"KEYWORDS": "\1",/g
-:%s/^<SELECTRS>\(.*\)&$/"SELECTRS": "\1",/g
-:%s/^<DOI     >\(.*\)&$/"DOI": "\1",/g
+:%s/^<TITLE   >\(.*\)&$/"TITLE": "\1",/
+:%s/^<KEYWORDS>\(.*\)&$/"KEYWORDS": "\1",/
+:%s/^<SELECTRS>\(.*\)&$/"SELECTRS": "\1",/
+:%s/^<DOI     >\(.*\)&$/"DOI": "\1",/
 :echo "Regex (title, keywords, selectrs, DOI): ".(localtime()-t)." s"
 
 "End JSON structures
 :let t = localtime()
-:%s/,\n{/ }\r{/g 
+:%s/,\n{/ }\r{/ 
 :echo "Regex (end json): ".(localtime()-t)." s"
 
 "Make JSON structures one big line
@@ -69,7 +78,7 @@
 :normal G$F,cw }
 
 "Save and quit
-:w output.dat
+:w! output.dat
 :q!
 
 " ---- TIME TO RUN ----
