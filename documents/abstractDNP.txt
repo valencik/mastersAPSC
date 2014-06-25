@@ -1,0 +1,25 @@
+The NNDC's Nuclear Science References database catalogues Nuclear Physics journals, theses, conferences and other contributions since 1896. A new data representation for the NSR has been developed with natural language searches and cluster analysis in mind. This enables an easier to use interface, more advanced queries of the data, and queries against the relationships between documents in the NSR. Using techniques from linguistics and text mining we determine popular experimental areas and methods that form trends over the decades. Data driven visualizations help illustrate the behaviour of various trends. The presentation will demonstrate the capability of the knowledge base along with the web interface. Historical insight from the physics community is desired and greatly appreciated. All technology used and created has been done so under an open source license. 
+
+
+---
+
+Methods from linguistics research have been applied to build a text corpus for the NSR database.
+Additionally, a thesaurus is constructed to enhance the usability of querying the knowledge base
+
+specific goals in mind. USer friendly text queries,
+
+A new JSON based data representation has been developed and is used as the schema for the document-oriented database MongoDB. //too specific?
+.
+
+//Mention the algorithms used in text mining.
+Roby://Be general about text mining details
+compare contrast what NSr offers
+
+hook nuclear data sorting to data mining. looking in big data for patterns
+technique - how. why what i am doing makes a difference compared to what already exists.
+punchline - something about physics in last century they didn't know about.
+
+phrases:
+demonstrate capability
+open source
+attract: history buffs / cs tech folks / 
