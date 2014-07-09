@@ -29,7 +29,7 @@
 
 "KEYNO parsing
 :let t = localtime()
-:%s/^<KEYNO   >\(\(\d\d\d\d\).*\)&$/{ "_id": "\1", "year": "\2",/
+:%s/^<KEYNO   >\(\(\d\d\d\d\).*\)&$/{ "_id": "\1", "year": \2,/
 :echo "Regex (keyno): ".(localtime()-t)." s"
 
 "HISTORY parsing
