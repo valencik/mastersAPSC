@@ -46,18 +46,18 @@
 "Authors to an array
 :let t = localtime()
 :%g/^<AUTHORS >/ s/^<AUTHORS >/"authors":["/ | s/, \(\w\)/", "\1/g | s/&$/"],/ | s/", "Jr."/, Jr."/g
-":%s/^<AUTHORS >\(.*\)&$/"authors": ["\1"],/
-":%s/\(^"authors": \[".*\)\@<=, Jr./ Jr./g
-":%s/\(^"authors": \[".*\)\@<=, /", "/g
 :echo "Regex (authors): ".(localtime()-t)." s"
 
-"Title, Keywords, Selectors, DOI
+"Title, DOI
 :let t = localtime()
-:%s/^<TITLE   >\(.*\)&$/"TITLE": "\1",/
-:%s/^<KEYWORDS>\(.*\)&$/"KEYWORDS": "\1",/
-:%s/^<SELECTRS>\(.*\)&$/"SELECTRS": "\1",/
+:%s/^<TITLE   >\(.*\)&$/"title": "\1",/
 :%s/^<DOI     >\(.*\)&$/"DOI": "\1",/
-:echo "Regex (title, keywords, selectrs, DOI): ".(localtime()-t)." s"
+:echo "Regex (title, DOI): ".(localtime()-t)." s"
+
+"Keywords
+:let t = localtime()
+:%g/^<KEYWORDS>/ s/<KEYWORDS>\([NRAC]\u\{4,} [RSMP]\u\{4,}\|[NRAC]\u\{4,}\)[ ,]\(.*\)&\n<SELECTRS>\(.*\)&$/"\L\1\E": {"sentence": "\2", "selector": "\3"},/ | s/^"\(\w\+\s\)\=\(\w\+\)": {/"\2": {/
+:echo "Regex (keywords, selectrs): ".(localtime()-t)." s"
 
 "End JSON structures
 :let t = localtime()
@@ -78,7 +78,7 @@
 :normal G$F,cw }
 
 "Save and quit
-:w! output.dat
+:w xoutput.dat
 :q!
 
 " ---- TIME TO RUN ----
