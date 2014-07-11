@@ -1,12 +1,5 @@
-//Make collection for flattening.
-db.NSR3.aggregate(
-   {$match: {year: 1971}},
-   {$project: {year: 1, type: 1, authors: 1, reactions: 1, structure: 1, radioactivity: 1, physics: 1, moments: 1, compilation: 1, masses: 1}},
-   {$out: "cluster"}
-)
-
 //Flatten data for clustering in python
-db.cluster.find({}).forEach(function (x) {
+db.NSR3.aggregate({$match: {year: {$lt: 1971}}}, {$project: {year: 1, type: 1, authors: 1, reactions: 1, structure: 1, radioactivity: 1, physics: 1, moments: 1, compilation: 1, masses: 1}}).forEach(function (x) {
     switch(x["type"]){
         case 'JOUR': x["type"] = 1; break;
         case 'CONF': x["type"] = 2; break;
@@ -18,8 +11,7 @@ db.cluster.find({}).forEach(function (x) {
         default: x["type"] = 8;
     }
 
-    x["authors"] = x["authors"].length;
-
+    (typeof x["authors"] != 'undefined') ? x["authors"]=x["authors"].length : x["authors"]=0;
     (typeof x["reactions"] != 'undefined') ? x["reactions"]=1 : x["reactions"]=0;
     (typeof x["structure"] != 'undefined') ? x["structure"]=1 : x["structure"]=0;
     (typeof x["radioactivity"] != 'undefined') ? x["radioactivity"]=1 : x["radioactivity"]=0;
@@ -27,7 +19,7 @@ db.cluster.find({}).forEach(function (x) {
     (typeof x["moments"] != 'undefined') ? x["moments"]=1 : x["moments"]=0;
     (typeof x["compilation"] != 'undefined') ? x["compilation"]=1 : x["compilation"]=0;
     (typeof x["masses"] != 'undefined') ? x["masses"]=1 : x["masses"]=0;
-    db.cluster1.save(x);
+    db.j11cluster.save(x);
 });
 
 //Split SELECTRS into paramType, paramValue, and linkVar
