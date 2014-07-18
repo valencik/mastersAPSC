@@ -1,7 +1,8 @@
 #TODO Import only the minimum modules necessary
 import numpy
 import pymongo
-import pylab as pl
+#import pylab as pl
+import matplotlib.pyplot as pl
 
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.decomposition import PCA
@@ -9,14 +10,14 @@ from sklearn import cluster
 
 #Connect to MongoDB and get data to cluster
 c = pymongo.Connection("localhost")
-collection = c.masters.j11clusterNorm
+collection = c.masters.j11clusterB
 clusterCursor = collection.find({},{"_id": 0})
 
 #Feature Extraction with sklearn on MongoDB cursor
 #http://scikit-learn.org/stable/modules/feature_extraction.html
 #vec.fit_transform returns sparse data, we use toarray() to convert to dense.
-#vec = DictVectorizer(dtype=int)
-vec = DictVectorizer()
+vec = DictVectorizer(dtype=int)
+#vec = DictVectorizer()
 denseData = vec.fit_transform(clusterCursor).toarray()
 
 #Output some data attributes
@@ -43,9 +44,10 @@ k_means.fit(denseData)
 
 
 #coincidence testing
-cmat = numpy.array([[0, 0, 0, 1], [0, 0, 1, 0], [0, 0, 1, 1], [0, 1, 0, 0], [0, 1, 0, 1]])
+#cmat = numpy.array([[0, 0, 0, 1], [0, 0, 1, 0], [0, 0, 1, 1], [0, 1, 0, 0], [0, 1, 0, 1]])
+cmat = denseData[:,[1,2,3,4,5,6,7]]
 cdim = numpy.shape(cmat)[1]
-print("Making coincidence matrix with", cdim, "rows")
+print("Making coincidence matrix with", cdim, "rows and columns")
 coinMat = numpy.zeros(shape=(cdim,cdim), dtype=numpy.int)
 
 for row in cmat:
@@ -60,10 +62,18 @@ for row in cmat:
         coinMat[i1][i2] += 1
         coinMat[i2][i1] += 1
 
-print("Original Matrix (cmat)")
-print(cmat)
-print("Coincidence Matrix")
-print(coinMat)
+#print("Original Matrix (cmat)")
+#print(cmat)
+#print("Coincidence Matrix")
+#print(coinMat)
+labels = ['compilation', 'masses', 'moments', 'physics', 'radioactivity', 'reactions', 'structure']
 
-pl.matshow(coinMat, fignum=1, cmap=pl.cm.gray)
+fig = pl.figure()
+ax = fig.add_subplot(111)
+cax = ax.matshow(numpy.log(coinMat), cmap=pl.cm.Spectral_r, interpolation='nearest')
+fig.colorbar(cax)
+
+ax.set_xticklabels(['']+labels)
+ax.set_yticklabels(['']+labels)
+
 pl.show()
