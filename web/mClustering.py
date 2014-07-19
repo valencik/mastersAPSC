@@ -2,6 +2,7 @@
 import numpy
 import pymongo
 #import pylab as pl
+import matplotlib
 import matplotlib.pyplot as pl
 
 from sklearn.feature_extraction import DictVectorizer
@@ -15,9 +16,8 @@ clusterCursor = collection.find({},{"_id": 0})
 
 #Feature Extraction with sklearn on MongoDB cursor
 #http://scikit-learn.org/stable/modules/feature_extraction.html
-#vec.fit_transform returns sparse data, we use toarray() to convert to dense.
 vec = DictVectorizer(dtype=int)
-#vec = DictVectorizer()
+#We use toarray() to convert sparse data to dense.
 denseData = vec.fit_transform(clusterCursor).toarray()
 
 #Output some data attributes
@@ -29,9 +29,9 @@ print("Data has", denseData.shape[1], "dimensions")
 #pca.fit(denseData)
 #reducedData = pca.transform(denseData)
 
-#Clustering
-k_means = cluster.KMeans(n_clusters=3)
-k_means.fit(denseData)
+##Clustering
+#k_means = cluster.KMeans(n_clusters=3)
+#k_means.fit(denseData)
 
 #Plotting
 
@@ -42,38 +42,37 @@ k_means.fit(denseData)
 #pl.scatter(denseData[:, 9], denseData[:, 0], c=k_means.predict(denseData))
 #pl.show()
 
-
-#coincidence testing
-#cmat = numpy.array([[0, 0, 0, 1], [0, 0, 1, 0], [0, 0, 1, 1], [0, 1, 0, 0], [0, 1, 0, 1]])
-cmat = denseData[:,[1,2,3,4,5,6,7]]
+#Build Coincidence Matrix coinMat
+cmat = denseData[:,1:7]
 cdim = numpy.shape(cmat)[1]
-print("Making coincidence matrix with", cdim, "rows and columns")
 coinMat = numpy.zeros(shape=(cdim,cdim), dtype=numpy.int)
+clarge = []
+print("Made coincidence matrix with", cdim, "rows and columns")
 
+#Read through data and check for coincidences
 for row in cmat:
-    if row.sum() == 1:
-        i1 = numpy.where(row==1)[0][0]
-        i2 = i1
-        #print("i1:", i1, " i2:", i2)
-        coinMat[i1][i2] += 1
-    if row.sum() == 2:
+    rowSum = row.sum()
+#    if rowSum == 1:
+#        i1 = numpy.where(row==1)[0][0]
+#        i2 = i1
+#        coinMat[i1][i2] += 1
+    if rowSum == 2:
         i1, i2 = numpy.where(row==1)[0]
-        #print("i1:", i1, " i2:", i2)
         coinMat[i1][i2] += 1
-        coinMat[i2][i1] += 1
+#        coinMat[i2][i1] += 1
+    if rowSum >= 3:
+        clarge.append(row)
 
-#print("Original Matrix (cmat)")
-#print(cmat)
-#print("Coincidence Matrix")
-#print(coinMat)
+#Construct plots
 labels = ['compilation', 'masses', 'moments', 'physics', 'radioactivity', 'reactions', 'structure']
 
 fig = pl.figure()
 ax = fig.add_subplot(111)
-cax = ax.matshow(numpy.log(coinMat), cmap=pl.cm.Spectral_r, interpolation='nearest')
+#Override matplotlib normalization function to use log colours.
+cax = ax.matshow(coinMat, cmap=pl.cm.Spectral_r, norm=matplotlib.colors.LogNorm())
 fig.colorbar(cax)
 
 ax.set_xticklabels(['']+labels)
 ax.set_yticklabels(['']+labels)
-
+pl.title('Coincidence Matrix for Keyword Abstracts')
 pl.show()
