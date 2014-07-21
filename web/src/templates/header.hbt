@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>{{ title }} | Metalsmith Blog</title>
+</head>
+<body>
+    <header>
+        <h1 class="logo"><a href="/">Blogium</a></h1>
+    </header>
+
+    <div class="main-wrapper">
