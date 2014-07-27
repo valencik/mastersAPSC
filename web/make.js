@@ -30,7 +30,8 @@ Metalsmith(__dirname)
        engine: 'handlebars',
        directory: 'src/templates'
     }))
-    .destination('./public/blog')
+    .destination('./public')
+    .clean(false)
     .build(function(err,files){
         if (err){ console.log(err); }
     });
