@@ -1,8 +1,8 @@
     </div>
 
-
+      <br>
       <div class="container">
-        <p class="muted credit">Queries passed over <a href="https://github.com/Glavin001/MongoViewer" target="_blank">MongoViewer-Server</a> a RESTful API for nvd3 and Mongodb.</p>
+      Created by Andrew Valencik.
       </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
