@@ -44,3 +44,4 @@ __pycache__/
 /documents/annotatedBibliography/*.pdf
 /documents/literatureReview/*.pdf
 /documents/proposal/*.pdf
+/web/public
