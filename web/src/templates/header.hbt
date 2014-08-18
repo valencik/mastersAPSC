@@ -42,7 +42,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">NSR Data</a>
+          <a class="navbar-brand" href="/">NSR Data</a>
         </div><!--/.navbar-header -->
 
         <div class="navbar-collapse collapse" id="searchbar">
@@ -52,10 +52,10 @@
               <ul class="dropdown-menu">
                 <li><a href="/pages/about">About</a></li>
                 <li><a href="/pages/blog">Blog</a></li>
-                <li><a href="#">GitHub</a></li>
+                <li><a href="https://github.com/valencik">GitHub</a></li>
                 <li class="divider"></li>
                 <li class="dropdown-header">Nav header</li>
-                <li><a href="#">SMU</a></li>
+                <li><a href="http://cs.smu.ca/~andrew/">SMU (old)</a></li>
               </ul>
             </li><!--/.dropdown -->
           </ul>
