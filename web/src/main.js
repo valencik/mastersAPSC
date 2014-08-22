@@ -93,32 +93,66 @@ $(document).ready(function() {
         //Make a function with error checking
         var searchterms = search.serializeArray();
         var queryterm = searchterms[0].value;
-        console.log(queryterm);
+        console.log("queryterm:"+queryterm);
 
-        //Remove old charts, put in new ids
+        //Remove old charts
         $("#charts").empty();
-        $("#charts").append('<svg id="search"></svg>');
 
-        // Multi Bar Chart
-        queryType = {type: "yearlyMultiType", graph: "multiBarChart", minYear: 1896, maxYear: 2011}
-        graph(
-            "#charts svg#search", 
-            "NSR Data", 
-            "NSR", 
-            [
-                  {$match: {$text: {$search: queryterm}}},
-                  {$group: { _id: {type: "$type", year: "$year"}, total: { $sum: 1} } }, 
-                  {$sort: {"_id.year": 1}},
-                  {$group: {_id: "$_id.type", values: {$push: {x: "$_id.year", y: "$total"}}}}, 
-                  {$project: {_id:0, key: "$_id", values: "$values"}}
-           ],
-            {},
-            queryType,
-            function(chart, data) {
-                //chart.xAxis.tickValues([1899,1910,1920,1930,1940,1950,1960,1970,1980,1990,2000,2010]);
-                chart.reduceXTicks(true);
-            }
-        );//end multibar graph
+        switch (queryterm.split(":")[0]){
+            case 'author':
+                authorName = queryterm.split(":")[1]
+                console.log("Searching for author "+authorName);
+                $("#charts").append('<svg id="authorSearch"></svg>');
+
+                // Prolific authors
+                queryType = {type: "yearly", graph: "pieChart", minYear: 1896, maxYear: 2014}
+                graph("#charts svg#authorSearch", "NSR Data", "NSR", 
+                    [
+                         {$match: {authors: authorName}},
+                         { $unwind: "$authors"},
+                         { $group: { _id: "$authors", total: { $sum: 1} } },
+                         { $project: {_id: 0, label: "$_id", value: "$total" } }
+                    ], {},
+                    queryType,
+                    function(chart, data){
+                        chart.labelThreshold(.01)
+                        .donut(true).donutLabelsOutside(true).donutRatio(0.3)
+                        .showLabels(false).showLegend(false);
+                        //function isBigEnough(value) {
+                        //  return function(element, index, array) {
+                        //    return (element.value >= value);
+                        //  }
+                        //}
+                        //d3.select("#charts svg#prolific70").datum(data[0].values.filter(isBigEnough(40))).transition().duration(350).call(chart);
+                    }
+                );
+                break;
+                
+            default:
+                //Remove old charts, put in new ids
+                $("#charts").append('<svg id="search"></svg>');
+
+                // Multi Bar Chart
+                queryType = {type: "yearlyMultiType", graph: "multiBarChart", minYear: 1896, maxYear: 2011}
+                graph(
+                    "#charts svg#search", 
+                    "NSR Data", 
+                    "NSR", 
+                    [
+                          {$match: {$text: {$search: queryterm}}},
+                          {$group: { _id: {type: "$type", year: "$year"}, total: { $sum: 1} } }, 
+                          {$sort: {"_id.year": 1}},
+                          {$group: {_id: "$_id.type", values: {$push: {x: "$_id.year", y: "$total"}}}}, 
+                          {$project: {_id:0, key: "$_id", values: "$values"}}
+                   ],
+                    {},
+                    queryType,
+                    function(chart, data) {
+                        //chart.xAxis.tickValues([1899,1910,1920,1930,1940,1950,1960,1970,1980,1990,2000,2010]);
+                        chart.reduceXTicks(true);
+                    }
+                );//end multibar graph
+        }
 
         ev.preventDefault();
     });//end of search
