@@ -1,3 +1,13 @@
+---
+title: "Research Journal"
+date: 2014-08-18
+template: posts.hbt
+preview: A journal of notes and thoughts.
+---
+
+## This single large page will eventually turn into many separate pages.
+
+
 # May 19-23 2014
 
 Goals for Friday May 23rd 2014:— Some information, an answer for preference, regarding the 1970’s peak in publication rate
