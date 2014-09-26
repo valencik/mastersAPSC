@@ -1,0 +1,338 @@
+\documentclass{beamer}
+%\usetheme{Antibes}
+%\usetheme{Montpellier}
+%\usetheme{Singapore}
+%\usetheme{Hannover}
+%\usetheme{Malmoe}
+\usetheme{Copenhagen}
+%\usetheme{Berkeley}
+
+\usecolortheme{beaver}
+%\usecolortheme{rose}
+%\usecolortheme{dolphin}
+
+ %\usepackage{beamerthemesplit} // Activate for custom appearance
+ \setlength{\unitlength}{\textwidth}  % measure in textwidths
+ \usepackage{graphicx}
+
+\title{An Improved Vacuum System}
+\subtitle{\Large{for Storing Highly Charged Ions in a Penning Trap}}
+\author{Damien Robertson - TITAN Summer 2011}
+\date{August 24, 2011}
+
+\begin{document}
+\frame
+{
+\titlepage
+%\begin{picture}(0.0,0.0)
+%     \put(0.0,0.0){\includegraphics[width=0.75\textwidth]{/Users/Damo/Documents/SMU/Year3.2/PHYS3210/assign03/q2b.pdf}}
+%\end{picture}
+}
+
+\frame
+{
+  \frametitle{Agenda}
+  \begin{itemize}
+  \item<1> Introduction to TITAN
+  \item<1> Ion Pump Baking and Testing
+  \item<1> EIGB Design and Testing
+  \item<1> Conclusions
+  \end{itemize}
+}
+%\frame{\tableofcontents}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%INTRODUCTION%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+\subsection{The Motivation}
+\frame
+{
+  \frametitle{Motivation}
+  \begin{columns}[T]
+    \begin{column}{0.450\textwidth}
+      \begin{itemize}
+        \item<1> Gave valves provide safety in event of vacuum failure.
+        \item<1> Interlocks - gave valves close, high voltage power shut off.
+        \item<1> Compartments rely on ionization and convection gauges.
+        \item<1> Convection gauge operates in mtorr range.
+        \item<1> Ion gauge interferes with MCP.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.550\textwidth}
+    \includegraphics[width=1.0\textwidth]{/Users/Damo/Documents/TRIUMF/mpetBeamlineCurrent.pdf}
+    \end{column}
+  \end{columns}
+}
+\frame
+{
+  \frametitle{Ion Gauge Interference}
+  \begin{table}[htdp]
+  \centering
+  \begin{tabular}{cc}
+  \includegraphics[width=0.42\textwidth]{/Users/Damo/Documents/TRIUMF/tofSpecIGon.pdf}&\includegraphics[width=0.42\textwidth]{/Users/Damo/Documents/TRIUMF/resonance757.pdf}\\
+  \includegraphics[width=0.42\textwidth]{/Users/Damo/Documents/TRIUMF/tofSpecIGoff.pdf}&\includegraphics[width=0.42\textwidth]{/Users/Damo/Documents/TRIUMF/resonance758.pdf} 
+  \end{tabular}
+  \end{table}%
+}
+\frame
+{
+  \frametitle{Charge Exchange}
+  \begin{itemize}
+  \item<1>Higher pressure translates into greater likelihood that ions may interact with stray molecules.
+  \item<1>Changing the charge state of ions is problematic especially for HCI.
+  \item<1>Low vacuum and ion gauges can contribute to charge exchange by making the vacuum worse.
+  \item<1>Critical that UHV is achieved for mass measurement, MPET.
+  \end{itemize}
+}
+%%Ion Pump Baking and Testing%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Ion Pump Baking and Testing}
+\subsection{Ion Pump Baking}
+\frame
+{
+  \frametitle{Ion Pump Baking Preparation}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+    \includegraphics[width=0.90\textwidth]{/Users/Damo/Documents/TRIUMF/bakingsetup.jpg}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+    \includegraphics[width=0.85\textwidth]{/Users/Damo/Documents/TRIUMF/IMG_0262.jpg}
+    \end{column}
+  \end{columns}
+}
+\frame
+{
+  \frametitle{Ion Pump Baking}
+  \begin{table}[htdp]
+  \centering
+  \begin{tabular}{cc}
+  \includegraphics[width=0.47\textwidth]{/Users/Damo/Documents/TRIUMF/bakeTemp3.pdf}&\includegraphics[width=0.47\textwidth]{/Users/Damo/Documents/TRIUMF/bakePressure2.pdf}\\
+  \end{tabular}
+  \end{table}%
+  \begin{itemize}
+  \item<1>Start pressure $1.78\times10^{-10}$ torr, end pressure $5.43\times10^{-11}$ torr.
+  \end{itemize}
+}
+\subsection{Ion Pump Testing}
+\frame
+{
+  \frametitle{Ion Pump Operation}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \begin{itemize}
+        \item<1>Large permanent magnets, HV cathode plates.
+        \item<1>Honeycombed cylinders maintain plasma that ionizes air molecules.
+        \item<1>Ions are accelerated towards cathode plates, are buried or sputter.
+        \item<1>Ion pump has three HV settings, 3 kV, 5 kV and 7 kV.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.50\textwidth}
+    \includegraphics[width=1.0\textwidth]{/Users/Damo/Documents/TRIUMF/IonPumpLesker.jpg}
+    \end{column}
+  \end{columns}
+}
+\frame
+{
+  \frametitle{Testing Procedure}
+  \begin{itemize}
+  \item<1>Ion Pump had not been activated for two years.
+  \item<1>Correct starting procedure was observed.
+  \item<1>All three settings were tried while manual gate valve was both open and closed.
+  \item<1>Pressure allowed to stabilize after setting changed and recorded.
+  \item<1>Ran through twice to ensure reproducibility.
+  \end{itemize}
+}
+\frame
+{
+  \frametitle{Testing Results}
+  \begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+&Gate valve open (torr) &Gate valve closed (torr) \\
+\hline
+7 kV&$1.0\pm 0.1\times 10^{-10}$&$1.1\pm0.1\times 10^{-10}$\\
+5 kV&$5.4\pm0.2\times 10^{-11}$&$9.2\pm0.3\times 10^{-11}$\\
+3 kV&$3.8\pm0.1\times 10^{-11}$&$7.2\pm0.2\times 10^{-11}$\\
+\hline
+\end{tabular}
+\end{center}
+\label{Table 1}
+\end{table}%
+  \begin{itemize}
+  \item<1> All trials showed ion pump performed better with manual gate valve open.
+  \item<1> Based on present test, optimum setting is: Manual gate valve open, HV set to 3 kV.
+  \item<1> Optimum setting was used and allowed to pump a further two days, pressure went off scale, $<1.0\times10^{-11}$ torr.
+  \end{itemize}
+}
+%%EIGB Design and Testing%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{EIGB Design and Testing}
+\subsection{Concept and Design}
+\frame
+{
+  \frametitle{Theory}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \begin{itemize}
+        \item<1>Ion gauge produces charged particles
+        \item<1>Through the use of electrostatic barrier, charged particles can be contained.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.50\textwidth}
+    \includegraphics[width=1.0\textwidth]{/Users/Damo/Documents/TRIUMF/elecPot.pdf}
+    \end{column}
+  \end{columns}
+}
+\frame
+{
+  \frametitle{Design}
+  \begin{table}[htdp]
+  \centering
+  \begin{tabular}{cc}
+  \includegraphics[width=0.47\textwidth]{/Users/Damo/Documents/TRIUMF/innerApparatusV5b.pdf}&\includegraphics[width=0.47\textwidth]{/Users/Damo/Documents/TRIUMF/fullApparatusV5bb.pdf}\\
+  \end{tabular}
+  \end{table}%
+  \begin{itemize}
+  \item<1>SolidWorks design (EIGB) Electrostatic Ion Gauge Barrier.
+  \item<1>Conductive screens act as electrostatic barrier.
+  \item<1>Insulating spheres, BalSeal spring maintain electrical continuity.
+  \end{itemize}
+}
+\frame
+{
+\frametitle{Design}
+  \begin{table}[htdp]
+  \centering
+  \begin{tabular}{cc}
+  \includegraphics[width=0.45\textwidth]{/Users/Damo/Documents/TRIUMF/IMG_0177.jpg}&\includegraphics[width=0.45\textwidth]{/Users/Damo/Documents/TRIUMF/IMG_0183.jpg}\\
+  \end{tabular}
+  \end{table}%
+  }
+\subsection{Testing}
+\frame
+{
+  \frametitle{Test Setup and Procedure}
+  \begin{itemize}
+  \item<1> Intended to test in baking station in ISAC 1 Hall.
+  \item<1> Test setup would involve multiple scenarios involving ion gauge placement and an MCP. 
+  \item<1> The EIGB and ion gauge would be within line of sight of each other, and multiple scenarios in which they would not be within line of sight of each other.
+  \item<1>Aim would determine if EIGB is necessary to create barrier for ions or if simply placing the ion gauge around a simple bend, thus eliminating line of sight, would tame the unwanted background noise on the MCP.
+  \item<1> Time did not allow such tests.
+  \end{itemize}
+}
+\frame
+{
+  \frametitle{Testing EIGB in MPET}
+  \begin{itemize}
+  \item<1>MCP biased to $\approx 1950$ V.
+  \item<1>Various scenarios using barrier voltage from $0\--3000$ V.
+  \end{itemize}
+  \begin{table}[htdp]
+\begin{tabular}{|c|c|}
+\hline
+&MCP count rate (Hz)\\
+\hline
+Ion gauge in original position&$\approx$15000\\
+Ion gauge in EIGB, barrier potentials off&$\approx450$\\
+Ion gauge in EIGB, barrier potentials on&$\approx300$\\
+\hline
+\end{tabular}
+\end{table}%
+\begin{itemize}
+\item<1>Barriers set to $\pm500$ V.
+\item<1>EIGB's best performance; middle screen biased to 200 V or higher, front screen biased to $-150$ V or lower.
+\item<1>Strange phenomena at 150 V.
+\end{itemize}
+}
+\frame
+{
+  \frametitle{Results of EIGB in MPET}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \begin{itemize}
+        \item<1>Performance of EIGB was not as expected but new phenomena discovered.
+        \item<1>Testing found that ion pump/IG1 can contribute to MCP interference as well.
+        \item<1>This interference was thought to be unavoidable background noise.
+        \item<1>Raises new questions about filtering interference.
+        \item<1>Proper test setup should identify new problems.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.50\textwidth}
+    \includegraphics[width=0.9\textwidth]{/Users/Damo/Documents/TRIUMF/IMG_0261.jpg}
+    \end{column}
+  \end{columns}
+}
+%%CONCLUSIONS%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusions}
+\subsection{Ion Pump}
+\frame
+{
+  \frametitle{Ion Pump Implementation}
+  \begin{columns}[T]
+    \begin{column}{0.450\textwidth}
+      \begin{itemize}
+        \item<1> Given the success of the ion pump, second pump should be added, shown in light grey.
+        \item<1> May provide the lowest pressure for the MPET.
+        \item<1> Ion gauge, IG3, added to monitor pressure in MPET, outside of mag field.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.550\textwidth}
+    \includegraphics[width=1.0\textwidth]{/Users/Damo/Documents/TRIUMF/mpetBeamlineBeta2.pdf}
+    \end{column}
+  \end{columns}
+}
+\subsection{Electrostatic Ion Gauge Barrier}
+\frame
+{
+  \frametitle{Limitations}
+  \begin{itemize}
+  \item<1> Removing ion gauge from line of sight showed improvement by a factor of $\approx$ 33.
+  \item<1> Activating EIGB showed improvement by a factor of $\approx$ 1.3.
+  \item<1> May be other effects of charged particle creation from ion gauge EIGB is missing.
+  \item<1> Possible that EIGB is missing charged particles due to convex conductive screens.
+  \item<1> Further study needed to improve design of EIGB to activate IG2.
+  \end{itemize}
+}
+% CLOSING-----------------------------------------------------
+\subsection{Closing}
+\frame
+{
+  \frametitle{Closing}
+  \begin{itemize}
+  \item<1> Thank you to Stephan Ettenauer, Usman Chowdhury and Mel Good for their help and the rest of the TITAN team for allowing me to "try" stuff out on MPET.
+  \end{itemize}
+}
+%%END%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+%TWO COLUMN FRAME W/IMAGE%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+\frametitle{A frame}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item<1-> Normal LaTeX class.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+    \includegraphics[width=1.0\textwidth]{/Users/Damo/Documents/SMU/Year3.2/PHYS3210/assign03/q2c.pdf}
+    \end{column}
+  \end{columns}
+}
+%TWO COLUMN FRAME W/IMAGE%%%%%%%%%%%%%%%%%%%%%
+%THREE IMAGE FRAME%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{
+%\frametitle{A frame}
+  \begin{picture}(0.0,0.5)
+     \put(-0.1,-0.05){\includegraphics[width=0.75\textwidth]{/Users/Damo/Documents/SMU/Year3.2/PHYS3210/project/presentation/HC1proj.pdf}}
+  \end{picture}
+  \begin{picture}(0.0,0.5)
+     \put(0.54,0.23){\includegraphics[width=0.475\textwidth]{/Users/Damo/Documents/SMU/Year3.2/PHYS3210/project/presentation/HC1top.pdf}}
+  \end{picture}
+  \begin{picture}(0.0,0.5)
+     \put(0.529,-0.08){\includegraphics[width=0.475\textwidth]{/Users/Damo/Documents/SMU/Year3.2/PHYS3210/project/presentation/HC1side.pdf}}
+  \end{picture}
+} 
+%THREE IMAGE FRAME%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
