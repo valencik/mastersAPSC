@@ -119,7 +119,7 @@ $(document).ready(function() {
                     function(chart, data){
                         chart.labelThreshold(.01)
                         .donut(true).donutLabelsOutside(true).donutRatio(0.3)
-                        .showLabels(false).showLegend(false);
+                        .showLabels(true).showLegend(true);
                         //function isBigEnough(value) {
                         //  return function(element, index, array) {
                         //    return (element.value >= value);
