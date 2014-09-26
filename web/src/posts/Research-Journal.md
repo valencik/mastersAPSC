@@ -395,3 +395,106 @@ Ideas taken from June 16-20 week:
 - Demonstrate capability
 - Why what I am doing makes a difference compared to what already exists.
 - Punchline: Something about physics in last century they didn't know about.
+
+GOAL: Come up with search for common term-term searches
+Search "Austin" see what other authors often occur with Austin.
+author to look into as well: Chair of session
+author that publishes with Roby: Sarantites
+
+author-author pair strength
+see all the strengths in the database, is there any separation/clustering?
+keywords associated with any strength pair
+
+
+# August 25-29 2014
+
+A simple author search has been constructed to show what coauthors a given author has.
+Currently the view is a pie, and displays relatively little information.
+This view could be enhanced by making it into a graph, and enabling some form of 'browsing' the data.
+
+I need to consider how this can turn into an analysis tool.
+We want to search for the strengths of these relationships for every author.
+Can I construct/predict collaboration groups?
+
+Apply simple author search from last week to whole DB.
+(The idea here is to come up with a tool for individual searches, and then the following week turn it into and analysis tool.)
+
+I should be able to categorize authors into publishing trends similar to the following:  
+1. Frequently publishes with few authors
+2. Frequently publishes with many authors
+3. Rarely publishes with few authors
+4. Rarely publishes with many authors
+
+##Collaboration Analysis
+
+###Changing over time
+Person used to collab with Group A and then moved to B or left.
+Need to handle collaborative strength rating thing changing over time.
+The norm for collaboration size will change over time.
+40 years ago no one published with 50 people.
+
+There may be existing research in sociology that suggests what collaborative community looks like.
+
+Cluster separatly: 
+what authors were popular in year range
+what topics where hot in a year range
+
+(Year ranges don't need to be calendar years.
+Could do a moving average of 5 years or so.)
+
+We can later link these ideas (in an application of metaclustering) and see what authors were publishing in what topics during what times in the topic's popularity cycle. And then categorize trends in these relationships.
+i.e.:
+- Authors that always publish on hot topics during their peak (followers)
+- Authors that publish in hot topics after their peak (late commers)
+- Authors that publish with authors who publish in hot topics at the start of their peaks (following founders)
+
+
+# September 1-5 2014
+
+This week was a bad week for research.
+
+Meeting with Roby:
+- Wrap up any course registration / payment issues.
+Andrew will email Jeremy and Roby requesting form/whatever to retro sign up for Thesis I and II
+- Discuss making/scheduling a committee meeting.
+Andrew will email adam, paul, roby regarding scheduling a meeting
+- Discuss the applications of clustering (this is the big idea breakthrough I had Thursday-Friday).
+- Discuss new ideas regarding tracking things over time.
+- Demonstrate some working steps towards this breakthrough.
+- Revisiting my projected masters timeline.
+
+
+Clustering on the shape/profile of any X vs time query/data
+
+
+# September 8-12 2014
+
+First full week of classes. Lots of lecture preping, little research.
+
+##Clustering the NSR
+
+The Nuclear Science References (NSR) is a hand curated database from the National Nuclear Data Center (NNDC).
+Each entry in the NSR represents a journal article, conference proceedings, report, book, private communication, PhD thesis, or a preprint from the field of nuclear science with an emphasis on nuclear structure data.
+
+Not every entry is tagged with information specifying if the work was done in a collaboration or not.
+However, using techniques in knowledge discovery and data mining we can track a proxy for collaborative efforts in the NSR.
+If two or more authors publish appear in an author entry together more than once, they may be part of a collaboration of scientists.
+
+
+
+#thoughts
+3 author search, then look at other authors, we could see a 4th other with a similar number of publications, they should perhaps be included in the collaboration.
+
+If i was to make a viz that drew links between papers based on number of common authors... very strong links might imply papers on the same experiment. 
+And then from that group of strongly linked nodes we might see a split
+
+3 dimensional information: who, what, when
+This could be sparse in different dimensions for different groups of entries
+
+##Next week
+-reenable partial text search indexes
+-continue working on text description of cluster analysis
+-enable a N-author search with partial strengths
+-enable any kind of programatic search, really, a search that runs more than one query (aggregation pipeline)
+
+
