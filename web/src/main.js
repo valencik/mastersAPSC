@@ -111,6 +111,8 @@ $(document).ready(function() {
                          {$match: {authors: authorName}},
                          { $unwind: "$authors"},
                          { $group: { _id: "$authors", total: { $sum: 1} } },
+                         { $sort: {total: -1} },
+                         { $limit: 20 },
                          { $project: {_id: 0, label: "$_id", value: "$total" } }
                     ], {},
                     queryType,
