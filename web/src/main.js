@@ -104,11 +104,12 @@ $(document).ready(function() {
                 console.log("Searching for author "+authorName);
                 $("#charts").append('<svg id="authorSearch"></svg>');
 
-                // Prolific authors
+                // Copy of prolific authors
                 queryType = {type: "yearly", graph: "pieChart", minYear: 1896, maxYear: 2014}
                 graph("#charts svg#authorSearch", "NSR Data", "NSR", 
                     [
-                         {$match: {authors: authorName}},
+                         //Broken: {$match: {$text: {$search: authorName}},
+                         { $match: {authors: authorName}},
                          { $unwind: "$authors"},
                          { $group: { _id: "$authors", total: { $sum: 1} } },
                          { $sort: {total: -1} },
@@ -120,12 +121,6 @@ $(document).ready(function() {
                         chart.labelThreshold(.01)
                         .donut(true).donutLabelsOutside(true).donutRatio(0.3)
                         .showLabels(true).showLegend(true);
-                        //function isBigEnough(value) {
-                        //  return function(element, index, array) {
-                        //    return (element.value >= value);
-                        //  }
-                        //}
-                        //d3.select("#charts svg#prolific70").datum(data[0].values.filter(isBigEnough(40))).transition().duration(350).call(chart);
                     }
                 );
                 break;
