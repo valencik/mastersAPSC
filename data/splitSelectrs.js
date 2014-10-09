@@ -45,3 +45,14 @@ db.NSR2.find({}).forEach(function (x) {
     // save to a new one
     db.NSR3.save(x);
 });
+
+
+//Split author names into last names
+db.NSR.aggregate({$unwind: "$authors"}, {$group: {_id: "$authors", count: {$sum: 1}}}, {$out: "NSRauthors"})
+db.NSRauthors.find({}).forEach(function (x) {
+    var fullname = x["_id"] || "";
+    var sname = fullname.split('.');
+    var lastname = sname[sname.length-1];
+    x["lastname"] = lastname;
+    db.NSRauthors.save(x);
+});
