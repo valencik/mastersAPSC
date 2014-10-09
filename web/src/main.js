@@ -125,6 +125,32 @@ $(document).ready(function() {
                 );
                 break;
                 
+            case 'collab':
+                collabYear = parseInt(queryterm.split(":")[1])
+                console.log("Searching for collaboration in year "+collabYear);
+                $("#charts").append('<svg id="collabSearch"></svg>');
+
+                // Copy of prolific authors
+                queryType = {type: "yearly", graph: "pieChart", minYear: 1896, maxYear: 2014}
+                graph("#charts svg#collabSearch", "NSR Data", "NSR", 
+                    [
+                         { $match: {year: collabYear}},
+                         { $unwind: "$authors"},
+                         { $group: { _id: "$authors", total: { $sum: 1} } },
+                         { $sort: {total: -1} },
+                         { $limit: 20 },
+                         { $project: {_id: 0, label: "$_id", value: "$total" } }
+                    ], {},
+                    queryType,
+                    function(chart, data){
+                        chart.labelThreshold(.01)
+                        .donut(true).donutLabelsOutside(true).donutRatio(0.3)
+                        .showLabels(true).showLegend(true);
+                    }
+                );
+                console.log("Line after graph()");
+                break;
+                
             default:
                 //Remove old charts, put in new ids
                 $("#charts").append('<svg id="search"></svg>');
