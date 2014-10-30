@@ -467,7 +467,7 @@ Andrew will email adam, paul, roby regarding scheduling a meeting
 Clustering on the shape/profile of any X vs time query/data
 
 
-# September 8-12 2014
+# September 2014
 
 First full week of classes. Lots of lecture preping, little research.
 
@@ -479,7 +479,6 @@ Each entry in the NSR represents a journal article, conference proceedings, repo
 Not every entry is tagged with information specifying if the work was done in a collaboration or not.
 However, using techniques in knowledge discovery and data mining we can track a proxy for collaborative efforts in the NSR.
 If two or more authors publish appear in an author entry together more than once, they may be part of a collaboration of scientists.
-
 
 
 #thoughts
@@ -498,3 +497,8 @@ This could be sparse in different dimensions for different groups of entries
 -enable any kind of programatic search, really, a search that runs more than one query (aggregation pipeline)
 
 
+Created a NSRauthors collection to help identify unique authors.
+Each entry in the NSRauthors collection was created by unique csv elements in the NSR authors field.
+
+Discussed how to weight very simple author collab
+Built prototype for collaboration search
