@@ -97,17 +97,20 @@ $(document).ready(function() {
     var search = $("#omnisearchform");
     search.submit(function(ev){
 
-        //Make a function with error checking
+        //queryterm is the user inputted search text
         var searchterms = search.serializeArray();
         var queryterm = searchterms[0].value;
         console.log("queryterm:"+queryterm);
 
+        //Break the queryterm into key:value pairs
+        queryItems = queryterm.split(/ (?=\w+:)/);
+
         //Remove old charts
         $("#charts").empty();
 
-        switch (queryterm.split(":")[0]){
+        switch (queryItems[0].split(":")[0]){
             case 'author':
-                authorName = queryterm.split(":")[1]
+                authorName = queryItems[0].split(":")[1]
                 console.log("Searching for author "+authorName);
                 $("#charts").append('<svg id="authorSearch"></svg>');
 
@@ -133,7 +136,7 @@ $(document).ready(function() {
                 break;
                 
             case 'collab':
-                collabYear = parseInt(queryterm.split(":")[1])
+                collabYear = parseInt(queryItems[0].split(":")[1])
                 console.log("Searching for collaboration in year "+collabYear);
                 //$("#charts").append('<svg id="collabSearch"></svg>');
 
@@ -174,6 +177,7 @@ $(document).ready(function() {
                         }
                         //makeDiag(null, JSON.stringify(nodes), JSON.stringify(links));
                         makeDiag(null, nodes, links, {labels:0});
+                        //makeDiag(null, nodes, links, JSON.parse(JSON.stringify(queryItems.slice(1, queryItems.length))));
 
                     }//end of function(results)
                 );
@@ -191,7 +195,7 @@ $(document).ready(function() {
                     "NSR Data", 
                     "NSR", 
                     [
-                          {$match: {$text: {$search: queryterm}}},
+                          {$match: {$text: {$search: queryItems[0]}}},
                           {$group: { _id: {type: "$type", year: "$year"}, total: { $sum: 1} } }, 
                           {$sort: {"_id.year": 1}},
                           {$group: {_id: "$_id.type", values: {$push: {x: "$_id.year", y: "$total"}}}}, 
