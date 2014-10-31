@@ -502,3 +502,37 @@ Each entry in the NSRauthors collection was created by unique csv elements in th
 
 Discussed how to weight very simple author collab
 Built prototype for collaboration search
+
+##Force Direct Graph
+
+- Get an array of author lists:
+jQuery.get("http://localhost:8080/api/v1/NSR/aggregate?pipeline=[{%22$match%22:%20{%22year%22:%201934}},%20{%22$project%22:%20{%22_id%22:0,%20%22authors%22:%20%22$authors%22}}]", function(data){ lerp = data;})
+
+- unique the array code:
+http://www.shamasis.net/2009/09/fast-algorithm-to-find-unique-items-in-javascript-array/
+```js
+Array.prototype.unique = function() {
+    var o = {}, i, l = this.length, r = [];
+    for(i=0; i<l;i+=1) o[this[i]] = this[i];
+    for(i in o) r.push(o[i]);
+    return r;
+};
+```
+
+- flatten the author names
+var nodes = [];
+nodes = nodes.concat.apply(nodes, sresults).unique();
+
+//Loop over returned array and build links to nodes
+for (i=0; i<results.length; i++){
+    //Only multi element arrays will have links
+    if(results[i].length > 1){ 
+        //Link each element to each other element
+        for(j=0; j<results[i].length; j++){
+            for(k=j+1; k<results[i].length; k++){
+                links.push({"source": flat.indexOf(results[i][j]), "target": flat.indexOf(results[i][k])})
+            } 
+        } 
+    }
+}
+

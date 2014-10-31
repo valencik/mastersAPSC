@@ -137,25 +137,47 @@ $(document).ready(function() {
                 console.log("Searching for collaboration in year "+collabYear);
                 $("#charts").append('<svg id="collabSearch"></svg>');
 
-                // Copy of prolific authors
-                queryType = {type: "yearly", graph: "pieChart", minYear: 1896, maxYear: 2014}
-                graph("#charts svg#collabSearch", "NSR Data", "NSR", 
+                // Building force-directed graph
+                aggregate("NSR", 
                     [
                          { $match: {year: collabYear}},
-                         { $unwind: "$authors"},
-                         { $group: { _id: "$authors", total: { $sum: 1} } },
-                         { $sort: {total: -1} },
-                         { $limit: 20 },
-                         { $project: {_id: 0, label: "$_id", value: "$total" } }
+                         { $project: {_id: 0, authors: "$authors"}}
                     ], {},
-                    queryType,
-                    function(chart, data){
-                        chart.labelThreshold(.01)
-                        .donut(true).donutLabelsOutside(true).donutRatio(0.3)
-                        .showLabels(true).showLegend(true);
-                    }
+                    function(results){
+                        //console.log("CF:", results)
+
+                        var arrays = [];
+                        var authors = [];
+                        var nodes = [];
+                        var links = [];
+                        for(i=0; i<results.length; i++){arrays.push(results[i].authors)}
+                        console.log("CF2:", arrays)
+                        authors = authors.concat.apply(authors, arrays).unique();
+                        console.log("CF3:", authors)
+                        for(i=0; i<authors.length; i++){nodes.push({"name": authors[i]})}
+                        console.log("CFnode:", nodes)
+
+                        //Loop over returned array and build links to nodes
+                        for (i=0; i<arrays.length; i++){
+                            //Only multi element arrays will have links
+                            if(arrays[i].length > 1){ 
+                                //console.log("CF4 array[i]:", arrays[i]);
+                                //Link each element to each other element
+                                for(j=0; j<arrays[i].length; j++){
+                                    //console.log("CF5 array[i][j]:", arrays[i][j]);
+                                    for(k=j+1; k<arrays[i].length; k++){
+                                        //console.log("CF6 array[i][k]:", arrays[i][k]);
+                                        links.push({"source": authors.indexOf(arrays[i][j]), "target": authors.indexOf(arrays[i][k])})
+                                    } 
+                                } 
+                            }
+                        }
+                        //makeDiag(null, JSON.stringify(nodes), JSON.stringify(links));
+                        makeDiag(null, nodes, links);
+
+                    }//end of function(results)
                 );
-                console.log("Line after graph()");
+                console.log("Line after FDG aggregate()");
                 break;
                 
             default:
