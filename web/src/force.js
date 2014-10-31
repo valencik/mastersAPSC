@@ -38,16 +38,17 @@ function makeDiag(error, nodes, links) {
                     .nodes(nodes)
                     .links(links)
                     .size([w,h])
-                    .linkDistance([150])
-                    .charge([-700])
-                    .gravity(0.3)
+                    .linkDistance([40])
+                    .charge([-100])
+                    //.gravity(0.3)
                     .start();
     /* Draw the edges/links between the nodes */
     var edges = svg.selectAll("line")
                     .data(links)
                     .enter()
                     .append("line")
-                    .style("stroke", "#ccc")
+                    .style("stroke", "#999")
+                    .style("stroke-opacity", ".6")
                     .style("stroke-width", 1);
                     //.attr("marker-end", "url(#end)"); //add arrow ends
     /* Draw the nodes themselves */                
@@ -58,6 +59,8 @@ function makeDiag(error, nodes, links) {
                     .attr("r", 8)
                     .attr("opacity", 0.5)
                     .style("fill", function(d,i) { return color(i); })
+                    .style("stroke", "#fff")
+                    .style("stroke-width", "1.5px")
                     .call(force.drag);
     /* Run the Force effect */
     force.on("tick", function() {
