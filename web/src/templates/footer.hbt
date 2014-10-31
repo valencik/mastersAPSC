@@ -2,7 +2,8 @@
 
       <br>
       <div class="container">
-      Created by Andrew Valencik.
+      Created by Andrew Valencik. <br>
+      <p>Visualizations built with <a href="http://nvd3.org/">nvd3</a> which is powered by <a href="http://d3js.org/">d3.js</a>.
       </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
