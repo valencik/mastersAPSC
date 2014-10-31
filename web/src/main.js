@@ -153,12 +153,20 @@ $(document).ready(function() {
                         var authors = [];
                         var nodes = [];
                         var links = [];
-                        for(i=0; i<results.length; i++){arrays.push(results[i].authors)}
-                        console.log("CF2:", arrays)
+                        var authorArray = [];
+
+                        for(i=0; i<results.length; i++){
+                            authorArray = results[i].authors;
+                            //Do not include invalid author arrays
+                            if(typeof  authorArray !== "undefined"){
+                                arrays.push(authorArray)
+                            }
+                        }
+                        //console.log("CF2:", arrays)
                         authors = authors.concat.apply(authors, arrays).unique();
-                        console.log("CF3:", authors)
+                        //console.log("CF3:", authors)
                         for(i=0; i<authors.length; i++){nodes.push({"name": authors[i]})}
-                        console.log("CFnode:", nodes)
+                        //console.log("CFnode:", nodes)
 
                         //Loop over returned array and build links to nodes
                         for (i=0; i<arrays.length; i++){
