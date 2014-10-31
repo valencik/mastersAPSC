@@ -7,20 +7,20 @@
                     .append("svg")
                     .attr("height",h)
                     .attr("width",w);
-/* Build the directional arrows for the links/edges */
-        svg.append("svg:defs")
-                    .selectAll("marker")
-                    .data(["end"]) 
-                    .enter().append("svg:marker")
-                    .attr("id", String)
-                    .attr("viewBox", "0 -5 10 10")
-                    .attr("refX", 15)
-                    .attr("refY", -1.5)
-                    .attr("markerWidth", 6)
-                    .attr("markerHeight", 6)
-                    .attr("orient", "auto")
-                    .append("svg:path")
-                    .attr("d", "M0,-5L10,0L0,5");
+// /* Build the directional arrows for the links/edges */
+//         svg.append("svg:defs")
+//                     .selectAll("marker")
+//                     .data(["end"]) 
+//                     .enter().append("svg:marker")
+//                     .attr("id", String)
+//                     .attr("viewBox", "0 -5 10 10")
+//                     .attr("refX", 15)
+//                     .attr("refY", -1.5)
+//                     .attr("markerWidth", 6)
+//                     .attr("markerHeight", 6)
+//                     .attr("orient", "auto")
+//                     .append("svg:path")
+//                     .attr("d", "M0,-5L10,0L0,5");
 
 /* Define the main worker or execution function */
 function makeDiag(error, nodes, links) {
@@ -48,8 +48,8 @@ function makeDiag(error, nodes, links) {
                     .enter()
                     .append("line")
                     .style("stroke", "#ccc")
-                    .style("stroke-width", 1)
-                    .attr("marker-end", "url(#end)");
+                    .style("stroke-width", 1);
+                    //.attr("marker-end", "url(#end)"); //add arrow ends
     /* Draw the nodes themselves */                
     var nodes = svg.selectAll("circle")
                     .data(nodes)
