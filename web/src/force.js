@@ -1,5 +1,5 @@
 /* Set the diagrams Height & Width */
-    var h = 700, w = 950;
+    var h = 800, w = 1000;
 /* Set the color scale we want to use */
     var color = d3.scale.category20();
 // /* Build the directional arrows for the links/edges */
@@ -17,13 +17,37 @@
 //                     .append("svg:path")
 //                     .attr("d", "M0,-5L10,0L0,5");
 
+
+
 /* Define the main worker or execution function */
 function makeDiag(error, nodes, links, options) {
 /* Establish/instantiate an SVG container object */
-    var svg = d3.select("#charts")
-                    .append("svg")
+    //console.log(options.labels);
+    //console.log(options);
+    var margin = {top: -5, right: -5, bottom: -5, left: -5},
+        width = 960 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+
+    var zoom = d3.behavior.zoom()
+        .scaleExtent([1, 10])
+        .on("zoom", zoomed);
+
+//    var drag = d3.behavior.drag()
+//        .origin(function(d) { return d; })
+//        .on("dragstart", dragstarted)
+//        .on("drag", dragged)
+//        .on("dragend", dragended);
+
+    var svg = d3.select("#charts") .append("svg")
                     .attr("height",h)
-                    .attr("width",w);
+                    .attr("width",w)
+         .append("g")
+         .attr("transform", "translate(" + margin.left + "," + margin.right + ")")
+                    .call(zoom);
+
+    var container = svg.append("g");
+    container.append("g");
+
     if (options.labels) {
         /* Draw the node labels first */
         var texts = svg.selectAll("text")
@@ -45,7 +69,7 @@ function makeDiag(error, nodes, links, options) {
                     //.gravity(0.3)
                     .start();
     /* Draw the edges/links between the nodes */
-    var edges = svg.selectAll("line")
+    var edges = container.selectAll("line")
                     .data(links)
                     .enter()
                     .append("line")
@@ -54,7 +78,7 @@ function makeDiag(error, nodes, links, options) {
                     .style("stroke-width", 1);
                     //.attr("marker-end", "url(#end)"); //add arrow ends
     /* Draw the nodes themselves */                
-    var nodes = svg.selectAll("circle")
+    var nodes = container.selectAll("circle")
                     .data(nodes)
                     .enter()
                     .append("circle")
@@ -78,4 +102,7 @@ function makeDiag(error, nodes, links, options) {
                             });
                }
                }); // End tick func
+function zoomed() {
+  container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+}
 }; // End makeDiag worker func
