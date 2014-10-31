@@ -2,11 +2,6 @@
     var h = 700, w = 950;
 /* Set the color scale we want to use */
     var color = d3.scale.category20();
-/* Establish/instantiate an SVG container object */
-    var svg = d3.select("body")
-                    .append("svg")
-                    .attr("height",h)
-                    .attr("width",w);
 // /* Build the directional arrows for the links/edges */
 //         svg.append("svg:defs")
 //                     .selectAll("marker")
@@ -24,6 +19,11 @@
 
 /* Define the main worker or execution function */
 function makeDiag(error, nodes, links) {
+/* Establish/instantiate an SVG container object */
+    var svg = d3.select("#charts")
+                    .append("svg")
+                    .attr("height",h)
+                    .attr("width",w);
     /* Draw the node labels first */
    var texts = svg.selectAll("text")
                     .data(nodes)

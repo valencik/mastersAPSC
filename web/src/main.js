@@ -135,7 +135,7 @@ $(document).ready(function() {
             case 'collab':
                 collabYear = parseInt(queryterm.split(":")[1])
                 console.log("Searching for collaboration in year "+collabYear);
-                $("#charts").append('<svg id="collabSearch"></svg>');
+                //$("#charts").append('<svg id="collabSearch"></svg>');
 
                 // Building force-directed graph
                 aggregate("NSR", 
