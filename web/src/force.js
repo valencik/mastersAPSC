@@ -18,14 +18,15 @@
 //                     .attr("d", "M0,-5L10,0L0,5");
 
 /* Define the main worker or execution function */
-function makeDiag(error, nodes, links) {
+function makeDiag(error, nodes, links, options) {
 /* Establish/instantiate an SVG container object */
     var svg = d3.select("#charts")
                     .append("svg")
                     .attr("height",h)
                     .attr("width",w);
-    /* Draw the node labels first */
-   var texts = svg.selectAll("text")
+    if (options.labels) {
+        /* Draw the node labels first */
+        var texts = svg.selectAll("text")
                     .data(nodes)
                     .enter()
                     .append("text")
@@ -33,6 +34,7 @@ function makeDiag(error, nodes, links) {
                     .attr("font-family", "sans-serif")
                     .attr("font-size", "12px")
                     .text(function(d) { return d.name; }); 
+    }
     /* Establish the dynamic force behavor of the nodes */
     var force = d3.layout.force()
                     .nodes(nodes)
@@ -70,8 +72,10 @@ function makeDiag(error, nodes, links) {
                     .attr("y2", function(d) { return d.target.y; });
                nodes.attr("cx", function(d) { return d.x; })
                     .attr("cy", function(d) { return d.y; })
-               texts.attr("transform", function(d) {
-                        return "translate(" + d.x + "," + d.y + ")";
-                        });
+               if(options.labels){
+                   texts.attr("transform", function(d) {
+                            return "translate(" + d.x + "," + d.y + ")";
+                            });
+               }
                }); // End tick func
 }; // End makeDiag worker func

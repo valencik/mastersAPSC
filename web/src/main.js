@@ -173,7 +173,7 @@ $(document).ready(function() {
                             }
                         }
                         //makeDiag(null, JSON.stringify(nodes), JSON.stringify(links));
-                        makeDiag(null, nodes, links);
+                        makeDiag(null, nodes, links, {labels:0});
 
                     }//end of function(results)
                 );
