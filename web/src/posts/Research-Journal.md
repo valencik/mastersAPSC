@@ -536,3 +536,16 @@ for (i=0; i<results.length; i++){
     }
 }
 
+
+##Ideas
+- How many little guys are there? histogram of graph types
+- need to filter on just a sgle graph
+- tooltips for better inspection
+- line widths or darkness for multiple instances of same link
+- longest single chain
+- time evolution of triangles to penatgons
+- keyword distribution of big guys
+- compare to total distributions
+- colour: heat map for total papers
+- colour: how many papers in N years
+
