@@ -1,5 +1,5 @@
 /* Set the diagrams Height & Width */
-    var h = 500, w = 950;
+    var h = 700, w = 950;
 /* Set the color scale we want to use */
     var color = d3.scale.category20();
 /* Establish/instantiate an SVG container object */
@@ -21,19 +21,9 @@
                     .attr("orient", "auto")
                     .append("svg:path")
                     .attr("d", "M0,-5L10,0L0,5");
-/* Pre-Load the json data using the queue library */
-//queue()
-//    .defer(d3.json, "nodes.json")
-//    .defer(d3.json, "links.json")
-//    .await(makeDiag); 
 
-
-jQuery.get("http://localhost:8080/api/v1/NSR3/find?query={%22year%22:%201896}", function(data){
-    console.log(data); });
 /* Define the main worker or execution function */
 function makeDiag(error, nodes, links) {
-   console.log("makeDiag:", nodes);
-   console.log("makeDiag:", links);
     /* Draw the node labels first */
    var texts = svg.selectAll("text")
                     .data(nodes)
@@ -41,15 +31,15 @@ function makeDiag(error, nodes, links) {
                     .append("text")
                     .attr("fill", "black")
                     .attr("font-family", "sans-serif")
-                    .attr("font-size", "10px")
+                    .attr("font-size", "12px")
                     .text(function(d) { return d.name; }); 
     /* Establish the dynamic force behavor of the nodes */
     var force = d3.layout.force()
                     .nodes(nodes)
                     .links(links)
                     .size([w,h])
-                    .linkDistance([250])
-                    .charge([-1500])
+                    .linkDistance([150])
+                    .charge([-700])
                     .gravity(0.3)
                     .start();
     /* Draw the edges/links between the nodes */
@@ -65,7 +55,7 @@ function makeDiag(error, nodes, links) {
                     .data(nodes)
                     .enter()
                     .append("circle")
-                    .attr("r", 5)
+                    .attr("r", 8)
                     .attr("opacity", 0.5)
                     .style("fill", function(d,i) { return color(i); })
                     .call(force.drag);
