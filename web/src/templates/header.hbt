@@ -28,48 +28,62 @@
         #charts svg {
             height: 500px;
         }
+        .navbar-input-group {
+        width: 60%;
+        }
+        .navbar-input-group .input-group {
+        width: 100%;
+        }
+        .navbar-input-group .input-group .input-group-addon {
+        width: 1%;
+        }
     </style>
 
   </head>
   <body>
 
-    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/">NSR Data</a>
-        </div><!--/.navbar-header -->
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">NSR</a>
+    </div>
 
-        <div class="navbar-collapse collapse" id="searchbar">
-          <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Menu <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="/pages/about">About</a></li>
-                <li><a href="/pages/blog">Blog</a></li>
-                <li><a href="https://github.com/valencik">GitHub</a></li>
-                <li class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="http://cs.smu.ca/~andrew/">SMU (old)</a></li>
-              </ul>
-            </li><!--/.dropdown -->
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="https://github.com/valencik">GitHub</a></li>
+      </ul>
+      <form class="navbar-form navbar-left navbar-input-group" id="omnisearchform" role="search">
+        <div class="input-group">
+          <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+          <input type="text" class="form-control" placeholder="NSR Database Search" name="omnisearchform" autofocus="autofocus">
+        </div>
+        <!-- <button type="submit" class="btn btn-default">Submit</button> -->
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/pages/about">About</a></li>
+            <li><a href="/pages/blog">Blog</a></li>
+            <li><a href="https://github.com/valencik">GitHub</a></li>
+            <li class="divider"></li>
+            <li class="dropdown-header">Nav header</li>
+            <li><a href="http://cs.smu.ca/~andrew/">SMU (old)</a></li>
           </ul>
-          <form id="omnisearchform" class="navbar-form">
-             <div class="form-group" style="display:inline;">
-               <div class="input-group">
-                 <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
-                 <input class="form-control" name="Omnipig" placeholder="Search Here" autocomplete="off" autofocus="autofocus" type="text">
-               </div>
-             </div>
-          </form>
-        </div><!--/.nav-collapse -->
-      </div>
-    </div><!--/.navbar -->
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
     
     <br> <br> <br>
     <div class="container">
