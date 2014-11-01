@@ -183,9 +183,9 @@ $(document).ready(function() {
                                 } 
                             }
                         }
-                        //makeDiag(null, JSON.stringify(nodes), JSON.stringify(links));
-                        makeDiag(null, nodes, links, {labels:0});
-                        //makeDiag(null, nodes, links, JSON.parse(JSON.stringify(queryItems.slice(1, queryItems.length))));
+                        //forceDirectedGraph(null, JSON.stringify(nodes), JSON.stringify(links));
+                        forceDirectedGraph(null, nodes, links, {labels:0});
+                        //forceDirectedGraph(null, nodes, links, JSON.parse(JSON.stringify(queryItems.slice(1, queryItems.length))));
 
                     }//end of function(results)
                 );
