@@ -186,7 +186,7 @@ $(document).ready(function() {
                         //Create options object from queryItems
                         var options = {};
                         for (i=1; i<queryItems.length; i++){
-                            options[queryItems[i].split(":")[0]] = queryItems[i].split(":")[1];
+                            options[queryItems[i].split(":")[0]] = JSON.parse(queryItems[i].split(":")[1]);
                         }
 
                         //Graph force-direct graph from force.js
