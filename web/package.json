@@ -15,7 +15,7 @@
     "metalsmith-markdown": "^0.2.1",
     "metalsmith-permalinks": "^0.3.2",
     "metalsmith-templates": "^0.5.1"
-  }
+  },
   "dependencies": {
     "express": "3.4.3",
     "less-middleware": "*",
