@@ -183,9 +183,14 @@ $(document).ready(function() {
                                 } 
                             }
                         }
-                        //forceDirectedGraph(null, JSON.stringify(nodes), JSON.stringify(links));
-                        forceDirectedGraph(null, nodes, links, {labels:0});
-                        //forceDirectedGraph(null, nodes, links, JSON.parse(JSON.stringify(queryItems.slice(1, queryItems.length))));
+                        //Create options object from queryItems
+                        var options = {};
+                        for (i=1; i<queryItems.length; i++){
+                            options[queryItems[i].split(":")[0]] = queryItems[i].split(":")[1];
+                        }
+
+                        //Graph force-direct graph from force.js
+                        forceDirectedGraph(null, nodes, links, options);
 
                     }//end of function(results)
                 );
