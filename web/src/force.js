@@ -10,6 +10,7 @@ function forceDirectedGraph(error, nodes, links, options) {
     // Set the color scale we want to use
     var color = d3.scale.category20();
 
+    // Set the zoom minimum and maximum levels
     var zoom = d3.behavior.zoom()
         .scaleExtent([0.5, 5])
         .on("zoom", zoomed);
@@ -33,8 +34,8 @@ function forceDirectedGraph(error, nodes, links, options) {
     var container = svg.append("g");
     container.append("g");
 
+    // Draw the node labels if option is set
     if (options.labels) {
-        // Draw the node labels
         var texts = container.selectAll("text")
             .data(nodes)
             .enter()
