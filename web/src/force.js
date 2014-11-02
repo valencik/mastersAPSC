@@ -11,7 +11,7 @@ function forceDirectedGraph(error, nodes, links, options) {
     var color = d3.scale.category20();
 
     var zoom = d3.behavior.zoom()
-        .scaleExtent([1, 10])
+        .scaleExtent([0.5, 5])
         .on("zoom", zoomed);
 
     // Establish/instantiate an SVG container object
