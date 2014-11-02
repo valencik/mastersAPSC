@@ -106,6 +106,7 @@ $(document).ready(function() {
         queryItems = queryterm.split(/ (?=\w+:)/);
 
         //Remove old charts
+        $("#billboard").remove();
         $("#charts").empty();
 
         switch (queryItems[0].split(":")[0]){
