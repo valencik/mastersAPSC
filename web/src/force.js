@@ -35,7 +35,7 @@ function forceDirectedGraph(error, nodes, links, options) {
 
     if (options.labels) {
         // Draw the node labels
-        var texts = svg.selectAll("text")
+        var texts = container.selectAll("text")
             .data(nodes)
             .enter()
             .append("text")
