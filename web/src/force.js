@@ -63,7 +63,7 @@ function forceDirectedGraph(error, nodes, links, options) {
         .enter()
         .append("line")
         .style("stroke", "#999")
-        .style("stroke-opacity", ".6")
+        .style("stroke-opacity", ".8")
         .style("stroke-width", 1);
         //.attr("marker-end", "url(#end)"); //add arrow ends
 
@@ -72,8 +72,7 @@ function forceDirectedGraph(error, nodes, links, options) {
         .data(nodes)
         .enter()
         .append("circle")
-        .attr("r", 4)
-        .attr("opacity", 0.5)
+        .attr("r", 5)
         .style("fill", function(d,i) { return color(i); })
         .style("stroke", "#fff")
         .style("stroke-width", "1.5px")
