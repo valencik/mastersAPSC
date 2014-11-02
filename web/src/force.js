@@ -50,9 +50,10 @@ function forceDirectedGraph(error, nodes, links, options) {
         .nodes(nodes)
         .links(links)
         .size([width,height])
-        .linkDistance([20])
-        .charge([-20])
-        //.gravity(0.3)
+        .linkDistance(options.links || 30)
+        .charge(options.charge || -120)
+        .friction(options.friction || 0.8)
+        .gravity(options.gravity || 0.1)
         .start();
 
     // Draw the edges/links between the nodes
