@@ -12,6 +12,7 @@
     <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <!-- Custom JavaScripts -->
+    <script src="/seedrandom/seedrandom.js"></script>
     <script src="/d3/d3.js"></script>
     <script src="/nvd3/nv.d3.js"></script>
     <script src="/main.js"></script>

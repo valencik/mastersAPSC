@@ -1,5 +1,10 @@
 /* Define the main worker or execution function */
 function forceDirectedGraph(error, nodes, links, options) {
+
+    // Set up seeded random number generator
+    Math.seedrandom('hello.');
+    console.log(Math.random());
+
     // Setup spacing
     var margin = {top: -5, right: -5, bottom: -5, left: -5};
     var width = self.frameElement ? 960 : innerWidth;
