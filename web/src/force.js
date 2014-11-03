@@ -43,18 +43,6 @@ function forceDirectedGraph(error, nodes, links, options) {
     var container = svg.append("g");
     container.append("g");
 
-    // Draw the node labels if option is set
-    if (options.labels) {
-        var texts = container.selectAll("text")
-            .data(nodes)
-            .enter()
-            .append("text")
-            .attr("fill", "black")
-            .attr("font-family", "sans-serif")
-            .attr("font-size", "12px")
-            .text(function(d) { return d.name; }); 
-    }
-
     // Establish the dynamic force behavor of the nodes
     var force = d3.layout.force()
         .on("tick", tick)
@@ -75,6 +63,18 @@ function forceDirectedGraph(error, nodes, links, options) {
         .style("stroke", "#999")
         .style("stroke-opacity", ".8")
         .style("stroke-width", 1);
+
+    // Options node labels
+    if (options.labels) {
+        var texts = container.selectAll("text")
+            .data(nodes)
+            .enter()
+            .append("text")
+            .attr("fill", "black")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "12px")
+            .text(function(d) { return d.name; });
+    }
 
     // Draw the nodes themselves
     var nodes = container.selectAll("circle")
