@@ -1,8 +1,10 @@
 // Wait for DOM to finish loading.
 $(document).ready(function() {
-    // Ready!
-    console.log('READY!');
 
+    //Enable debugging output
+    var verbose = true;
+
+    //Create a unique() function on all arrays
     Array.prototype.unique = function() {
         var o = {}, i, l = this.length, r = [];
         for(i=0; i<l;i+=1) o[this[i]] = this[i];
@@ -10,6 +12,7 @@ $(document).ready(function() {
         return r;
     };
 
+    //Server aggregation requests
     var aggregate = function(collection, pipeline, options, callback) {
         $.get(
             "/api/v1/"+collection+"/aggregate",
@@ -22,13 +25,14 @@ $(document).ready(function() {
         });
     };
 
+    //Aggregation and nvd3 graph generation
     var graph = function(selector, title, collection, pipeline, options, queryType, callback) {
         aggregate(collection, 
             pipeline,
             options,
             function(results) {
-                console.log("Graph: %s", queryType.graph);
-                console.log("Returned array size="+results.length);
+                if(verbose){console.log("Graph: %s", queryType.graph);};
+                if(verbose){console.log("Returned array size="+results.length);};
                 
                 switch(queryType.type){
                     case 'yearly':
@@ -54,7 +58,7 @@ $(document).ready(function() {
                             for (var ti=0; ti < results.length; ti++) {
                                 if(results[ti].key === types[i]) { //find a matching type in results[]
                                     indexT =  ti;
-                                    //console.log(types[i] +"--->"+ results[indexT].key);
+                                    //if(verbose){console.log(types[i] +"--->"+ results[indexT].key);};
                                     break;
                                 } 
                             } //end of results.length matching
@@ -100,7 +104,7 @@ $(document).ready(function() {
         //queryterm is the user inputted search text
         var searchterms = search.serializeArray();
         var queryterm = searchterms[0].value;
-        console.log("queryterm:"+queryterm);
+        if(verbose){console.log("queryterm:"+queryterm);};
 
         //Break the queryterm into key:value pairs
         queryItems = queryterm.split(/ (?=\w+:)/);
@@ -112,7 +116,7 @@ $(document).ready(function() {
         switch (queryItems[0].split(":")[0]){
             case 'author':
                 authorName = queryItems[0].split(":")[1]
-                console.log("Searching for author "+authorName);
+                if(verbose){console.log("Searching for author "+authorName);};
                 $("#charts").append('<svg id="authorSearch"></svg>');
 
                 // Copy of prolific authors
@@ -138,8 +142,7 @@ $(document).ready(function() {
                 
             case 'collab':
                 collabYear = parseInt(queryItems[0].split(":")[1])
-                console.log("Searching for collaboration in year "+collabYear);
-                //$("#charts").append('<svg id="collabSearch"></svg>');
+                if(verbose){console.log("Searching for collaboration in year "+collabYear);};
 
                 // Building force-directed graph
                 aggregate("NSR", 
@@ -239,8 +242,6 @@ $(document).ready(function() {
 
     //Define multiBarChart 
     multiBarChart = function(selector, title, data, callback) {
-        console.log("derping the results:");
-        console.log(data);
         var chart = nv.models.multiBarChart()
           //.transitionDuration(350)
           .reduceXTicks(false)   //If 'false', every single x-axis tick label will be rendered.
