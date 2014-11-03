@@ -52,6 +52,7 @@ function forceDirectedGraph(error, nodes, links, options) {
 
     // Establish the dynamic force behavor of the nodes
     var force = d3.layout.force()
+        .on("tick", tick)
         .nodes(nodes)
         .links(links)
         .size([width,height])
@@ -82,25 +83,22 @@ function forceDirectedGraph(error, nodes, links, options) {
         .style("stroke-width", "1.5px")
         .call(force.drag);
 
-    // Run the Force effect
-    force.on("tick", function() {
+    // Set positions of elements
+    function tick() {
         edges.attr("x1", function(d) { return translation[0] + scaleFactor*d.source.x; })
              .attr("y1", function(d) { return translation[1] + scaleFactor*d.source.y; })
              .attr("x2", function(d) { return translation[0] + scaleFactor*d.target.x; })
              .attr("y2", function(d) { return translation[1] + scaleFactor*d.target.y; });
         nodes.attr("cx", function(d) { return translation[0] + scaleFactor*d.x; })
-             .attr("cy", function(d) { return translation[1] + scaleFactor*d.y; })
+             .attr("cy", function(d) { return translation[1] + scaleFactor*d.y; });
         if(options.labels){
-            texts.attr("transform", function(d) {
-                     return "translate(" + d.x + "," + d.y + ")";
-                     });
+             texts.attr("x", function(d) { return translation[0] + scaleFactor*d.x; })
+                  .attr("y", function(d) { return translation[1] + scaleFactor*d.y; });
         }
-    }); // End tick func
+    } // End tick func
 
     // Zooming function
     function zoomed() {
-      //container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-      console.log("zoom", d3.event.translate, d3.event.scale);
       scaleFactor = d3.event.scale;
       translation = d3.event.translate;
       tick(); //update positions
