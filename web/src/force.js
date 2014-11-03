@@ -70,7 +70,6 @@ function forceDirectedGraph(error, nodes, links, options) {
         .style("stroke", "#999")
         .style("stroke-opacity", ".8")
         .style("stroke-width", 1);
-        //.attr("marker-end", "url(#end)"); //add arrow ends
 
     // Draw the nodes themselves
     var nodes = container.selectAll("circle")
