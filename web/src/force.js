@@ -16,6 +16,8 @@ function forceDirectedGraph(error, nodes, links, options) {
     var scaleFactor = 1;
     var translation = [0,0];
 
+    // Optional radius customization or set default
+    var radius = options.radius || 5;
     // Set the color scale we want to use
     var color = d3.scale.category20();
 
@@ -81,7 +83,7 @@ function forceDirectedGraph(error, nodes, links, options) {
         .data(nodes)
         .enter()
         .append("circle")
-        .attr("r", 5)
+        .attr("r", radius)
         .style("fill", function(d,i) { return color(i); })
         .style("stroke", "#fff")
         .style("stroke-width", "1.5px")
@@ -98,8 +100,8 @@ function forceDirectedGraph(error, nodes, links, options) {
         nodes.attr("cx", function(d) { return translation[0] + scaleFactor*d.x; })
              .attr("cy", function(d) { return translation[1] + scaleFactor*d.y; });
         if(options.labels){
-             texts.attr("x", function(d) { return translation[0] + scaleFactor*d.x; })
-                  .attr("y", function(d) { return translation[1] + scaleFactor*d.y; });
+             texts.attr("x", function(d) { return translation[0]+ radius + scaleFactor*d.x; })
+                  .attr("y", function(d) { return translation[1]+ radius + scaleFactor*d.y; });
         }
     } // End tick func
 
