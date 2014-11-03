@@ -141,13 +141,26 @@ $(document).ready(function() {
                 break;
                 
             case 'collab':
-                collabYear = parseInt(queryItems[0].split(":")[1])
-                if(verbose){console.log("Searching for collaboration in year "+collabYear);};
+                collabType = queryItems[0].split(":")[1]
+                if(verbose){console.log("Search collabType: "+collabType);};
+
+                var reYearArray = /(?:^(\d{4})-(\d{4})$)|(?:^(\d{4}))/.exec(collabType);
+                if (reYearArray){
+                    if(reYearArray[3]){
+                        var matchObject = { "$match": {"year": parseInt(reYearArray[3])}};
+                    }
+                    if(reYearArray[1] && reYearArray[2]){
+                        var matchObject = { "$match": {"year": {"$gte": parseInt(reYearArray[1]), "$lte": parseInt(reYearArray[2])}}};
+                    }
+                }
+                if(verbose){console.log(reYearArray);};
+                if(verbose){console.log(matchObject);};
+
 
                 // Building force-directed graph
                 aggregate("NSR", 
                     [
-                         { $match: {year: collabYear}},
+                         matchObject,
                          { $project: {_id: 0, authors: "$authors"}}
                     ], {},
                     function(results){
