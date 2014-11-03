@@ -148,54 +148,9 @@ $(document).ready(function() {
                          { $project: {_id: 0, authors: "$authors"}}
                     ], {},
                     function(results){
-                        //console.log("CF:", results)
-
-                        var arrays = [];
-                        var authors = [];
-                        var nodes = [];
-                        var links = [];
-                        var authorArray = [];
-
-                        for(i=0; i<results.length; i++){
-                            authorArray = results[i].authors;
-                            //Do not include invalid author arrays
-                            if(typeof  authorArray !== "undefined"){
-                                arrays.push(authorArray)
-                            }
-                        }
-                        //console.log("CF2:", arrays)
-                        authors = authors.concat.apply(authors, arrays).unique();
-                        //console.log("CF3:", authors)
-                        for(i=0; i<authors.length; i++){nodes.push({"name": authors[i]})}
-                        //console.log("CFnode:", nodes)
-
-                        //Loop over returned array and build links to nodes
-                        for (i=0; i<arrays.length; i++){
-                            //Only multi element arrays will have links
-                            if(arrays[i].length > 1){ 
-                                //console.log("CF4 array[i]:", arrays[i]);
-                                //Link each element to each other element
-                                for(j=0; j<arrays[i].length; j++){
-                                    //console.log("CF5 array[i][j]:", arrays[i][j]);
-                                    for(k=j+1; k<arrays[i].length; k++){
-                                        //console.log("CF6 array[i][k]:", arrays[i][k]);
-                                        links.push({"source": authors.indexOf(arrays[i][j]), "target": authors.indexOf(arrays[i][k])})
-                                    } 
-                                } 
-                            }
-                        }
-                        //Create options object from queryItems
-                        var options = {};
-                        for (i=1; i<queryItems.length; i++){
-                            options[queryItems[i].split(":")[0]] = JSON.parse(queryItems[i].split(":")[1]);
-                        }
-
-                        //Graph force-direct graph from force.js
-                        forceDirectedGraph(null, nodes, links, options);
-
-                    }//end of function(results)
-                );
-                console.log("Line after FDG aggregate()");
+                        authorArrayFDG(results);
+                    }
+                ); //end of aggregate
                 break;
                 
             default:
@@ -309,6 +264,54 @@ $(document).ready(function() {
         return chart;
     };
 
+    //Make a force-directed graph with an array of author lists in results
+    var authorArrayFDG = function(results){
+	//console.log("CF:", results)
+
+	var arrays = [];
+	var authors = [];
+	var nodes = [];
+	var links = [];
+	var authorArray = [];
+
+	for(i=0; i<results.length; i++){
+	    authorArray = results[i].authors;
+	    //Do not include invalid author arrays
+	    if(typeof  authorArray !== "undefined"){
+		arrays.push(authorArray)
+	    }
+	}
+	//console.log("CF2:", arrays)
+	authors = authors.concat.apply(authors, arrays).unique();
+	//console.log("CF3:", authors)
+	for(i=0; i<authors.length; i++){nodes.push({"name": authors[i]})}
+	//console.log("CFnode:", nodes)
+
+	//Loop over returned array and build links to nodes
+	for (i=0; i<arrays.length; i++){
+	    //Only multi element arrays will have links
+	    if(arrays[i].length > 1){
+		//if(verbose){console.log("CF4 array[i]:", arrays[i]);};
+		//Link each element to each other element
+		for(j=0; j<arrays[i].length; j++){
+		    //if(verbose){console.log("CF5 array[i][j]:", arrays[i][j]);};
+		    for(k=j+1; k<arrays[i].length; k++){
+			//if(verbose){console.log("CF6 array[i][k]:", arrays[i][k]);};
+			links.push({"source": authors.indexOf(arrays[i][j]), "target": authors.indexOf(arrays[i][k])})
+		    }
+		}
+	    }
+	}
+	//Create options object from queryItems
+	var options = {};
+	for (i=1; i<queryItems.length; i++){
+	    options[queryItems[i].split(":")[0]] = JSON.parse(queryItems[i].split(":")[1]);
+	}
+
+	//Graph force-direct graph from force.js
+	forceDirectedGraph(null, nodes, links, options);
+
+    }//end of function(results)
 
 //
 //   GRAPH VIEWS
