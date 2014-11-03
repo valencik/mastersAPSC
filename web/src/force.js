@@ -85,7 +85,9 @@ function forceDirectedGraph(error, nodes, links, options) {
         .style("fill", function(d,i) { return color(i); })
         .style("stroke", "#fff")
         .style("stroke-width", "1.5px")
-        .call(force.drag);
+
+    // Optional dragging
+    if (options.drag){nodes.call(force.drag);}
 
     // Set positions of elements
     function tick() {
