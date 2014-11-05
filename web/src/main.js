@@ -4,10 +4,10 @@ $(document).ready(function() {
     //Enable debugging output
     var verbose = true;
 
-    //Create a unique() function on all arrays
-    Array.prototype.unique = function() {
-        var o = {}, i, l = this.length, r = [];
-        for(i=0; i<l;i+=1) o[this[i]] = this[i];
+    //Create the unique() function using a set
+    var unique = function(array) {
+        var o = {}, i, l = array.length, r = [];
+        for(i=0; i<l;i+=1) o[array[i]] = array[i];
         for(i in o) r.push(o[i]);
         return r;
     };
@@ -295,9 +295,12 @@ $(document).ready(function() {
 		arrays.push(authorArray)
 	    }
 	}
-	//console.log("CF2:", arrays)
-	authors = authors.concat.apply(authors, arrays).unique();
-	//console.log("CF3:", authors)
+
+	//Flatten the array and then unique it
+        //https://stackoverflow.com/questions/10865025/merge-flatten-an-array-of-arrays-in-javascript/10865042#10865042
+	authors = unique(authors.concat.apply(authors, arrays));
+
+        //Push author-name objects into nodes array
 	for(i=0; i<authors.length; i++){nodes.push({"name": authors[i]})}
 	//console.log("CFnode:", nodes)
 
