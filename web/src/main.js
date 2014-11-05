@@ -2,7 +2,7 @@
 $(document).ready(function() {
 
     //Enable debugging output
-    var verbose = true;
+    var verbose = false;
 
     //Create the unique() function using a set
     var unique = function(array) {
@@ -278,9 +278,8 @@ $(document).ready(function() {
         return chart;
     };
 
-    //Make a force-directed graph with an array of author lists in results
+    //Make a force-directed graph. 'results' is an array of author lists
     var authorArrayFDG = function(results){
-	//console.log("CF:", results)
 
 	var arrays = [];
 	var authors = [];
@@ -288,12 +287,11 @@ $(document).ready(function() {
 	var links = [];
 	var authorArray = [];
 
+        //Put valid author lists into an array
 	for(i=0; i<results.length; i++){
 	    authorArray = results[i].authors;
-	    //Do not include invalid author arrays
-	    if(typeof  authorArray !== "undefined"){
+	    if(typeof  authorArray !== "undefined")
 		arrays.push(authorArray)
-	    }
 	}
 
 	//Flatten the array and then unique it
@@ -302,7 +300,6 @@ $(document).ready(function() {
 
         //Push author-name objects into nodes array
 	for(i=0; i<authors.length; i++){nodes.push({"name": authors[i]})}
-	//console.log("CFnode:", nodes)
 
 	//Loop over returned array and build links to nodes
 	for (i=0; i<arrays.length; i++){
