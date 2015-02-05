@@ -543,9 +543,29 @@ for (i=0; i<results.length; i++){
 - tooltips for better inspection
 - line widths or darkness for multiple instances of same link
 - longest single chain
-- time evolution of triangles to penatgons
+- time evolution of triangles to pentagons
 - keyword distribution of big guys
 - compare to total distributions
 - colour: heat map for total papers
 - colour: how many papers in N years
 
+
+#January meeting
+- this what i have done, tools i have made, analyis i have completed
+- i propose the ending is here...
+
+#TODO / Features
+- filtering (dealing with large data sets)
+- reproducability (easily generate graphs from scripts for doc prep)
+- different node/link rules (iterating what a collaboration is)
+- plugin to cluster analysis (python, r, etc)
+
+
+#Second Committee Meeting
+
+# Important things
+fill out and sign a Committee meeting form
+Bibliographic data mining
+Bibliographic information retrieval, database research
+End of Feb Schedule 3rd meaning
+- What do people in this field do?
