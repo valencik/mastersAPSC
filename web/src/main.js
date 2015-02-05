@@ -42,42 +42,46 @@ $(document).ready(function() {
                         }];
                         break;
                     case 'yearlyMultiType':
-                        //initial the data array
-                        data = [];
-                        types = ["JOUR", "REPT", "CONF", "THESIS", "PC", "UNKNOWN", "PREPRINT", "BOOK"];
-                        for (var i=0; i< types.length; i++) {
-                            data[i] = {key: types[i], values: []};
-                            for (var year=queryType.minYear; year<=queryType.maxYear; year++) {
-                                    data[i].values[year-queryType.minYear] = {x: year, y: 0}
-                                } 
-                        }
-
-                        //populate the data array with results
-                        for (var i=0; i< types.length; i++) { //over all types
-                            var indexT = null;
-                            for (var ti=0; ti < results.length; ti++) {
-                                if(results[ti].key === types[i]) { //find a matching type in results[]
-                                    indexT =  ti;
-                                    //if(verbose){console.log(types[i] +"--->"+ results[indexT].key);};
-                                    break;
-                                } 
-                            } //end of results.length matching
-                            if (indexT == null) {break;} //if we didn't find a match, move to new type
-                            for (var year=queryType.minYear; year<=queryType.maxYear; year++) { //over all years
-                                for (var mi = 0; mi < results[indexT].values.length; mi++) { //over all returned years in results
-                                    if(results[indexT].values[mi].x === year) {
-                                        data[i].values[year-queryType.minYear] = {x: year, y: results[indexT].values[mi].y} 
+                        //initialize the year data with zeros to 'fill holes'
+                        var data = [];
+		        function dataPrepYearlyMultiType(results, data){
+                            var types = ["JOUR", "REPT", "CONF", "THESIS", "PC", "UNKNOWN", "PREPRINT", "BOOK"];
+                            for (var i=0; i< types.length; i++) {
+                                data[i] = {key: types[i], values: []};
+                                for (var year=queryType.minYear; year<=queryType.maxYear; year++) {
+                                        data[i].values[year-queryType.minYear] = {x: year, y: 0}
+                                    } 
+                            }
+    
+                            //populate the data array with results
+                            for (var i=0; i< types.length; i++) { //over all types
+                                var indexT = null;
+                                for (var ti=0; ti < results.length; ti++) {
+                                    if(results[ti].key === types[i]) { //find a matching type in results[]
+                                        indexT =  ti;
+                                        //if(verbose){console.log(types[i] +"--->"+ results[indexT].key);};
+                                        break;
+                                    } 
+                                } //end of results.length matching
+                                if (indexT == null) {break;} //if we didn't find a match, move to new type
+                                for (var year=queryType.minYear; year<=queryType.maxYear; year++) { //over all years
+                                    for (var mi = 0; mi < results[indexT].values.length; mi++) { //over all returned years in results
+                                        if(results[indexT].values[mi].x === year) {
+                                            data[i].values[year-queryType.minYear] = {x: year, y: results[indexT].values[mi].y} 
+                                        }
+                                        else { continue; }
                                     }
-                                    else { continue; }
-                                }
-
-                            } 
+    
+                                } 
+                            }
                         }
+		        dataPrepYearlyMultiType(results, data);
                         break;
                     default:
                         console.log("Error: No queryType.type detected.");
                 }//end of switch queryType.type
         
+		//Call nvd3 graph function
                 switch(queryType.graph){
                     case 'discreteBarChart':
                         nv.addGraph(discreteBarChart(selector, title, data, callback));
@@ -113,6 +117,7 @@ $(document).ready(function() {
         $("#billboard").remove();
         $("#charts").empty();
 
+	//Handle search command was passed.
         switch (queryItems[0].split(":")[0]){
             case 'author':
                 authorName = queryItems[0].split(":")[1]
@@ -144,6 +149,7 @@ $(document).ready(function() {
                 collabType = queryItems[0].split(":")[1]
                 if(verbose){console.log("Search collabType: "+collabType);};
 
+		// Parse collab: input for single year or range
                 var reYearArray = /(?:^(\d{4})-(\d{4})$)|(?:^(\d{4}))/.exec(collabType);
                 if (reYearArray){
                     if(reYearArray[3]){
@@ -157,10 +163,10 @@ $(document).ready(function() {
                 if(verbose){console.log(matchObject);};
 
 
-                // Building force-directed graph
+                // Query database and build force-directed graph
                 aggregate("NSR", 
                     [
-                         matchObject,
+                         matchObject,  //determined from parsing above
                          { $project: {_id: 0, authors: "$authors"}}
                     ], {},
                     function(results){
