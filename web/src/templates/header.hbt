@@ -74,7 +74,7 @@
           <ul class="dropdown-menu" role="menu">
             <li><a href="/pages/about">About</a></li>
             <li><a href="/pages/blog">Blog</a></li>
-            <li><a href="https://github.com/valencik">GitHub</a></li>
+            <li><a href="/pages/example-api">API Examples</a></li>
             <li class="divider"></li>
             <li class="dropdown-header">Nav header</li>
             <li><a href="http://cs.smu.ca/~andrew/">SMU (old)</a></li>
