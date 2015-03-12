@@ -25,4 +25,4 @@ def find_year(year_id):
 
 # If executed directly from python interpreter, run local server
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
