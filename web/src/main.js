@@ -293,10 +293,17 @@ $(document).ready(function() {
 	var links = [];
 	var authorArray = [];
 
+	//Create options object from queryItems
+	var options = {};
+	for (i=1; i<queryItems.length; i++){
+	    options[queryItems[i].split(":")[0]] = JSON.parse(queryItems[i].split(":")[1]);
+	}
+
         //Put valid author lists into an array
+        var authorMinimum = options.authormin || 0;
 	for(i=0; i<results.length; i++){
 	    authorArray = results[i].authors;
-	    if(typeof  authorArray !== "undefined")
+	    if(typeof authorArray !== "undefined" && authorArray.length > authorMinimum)
 		arrays.push(authorArray)
 	}
 
@@ -321,11 +328,6 @@ $(document).ready(function() {
 		    }
 		}
 	    }
-	}
-	//Create options object from queryItems
-	var options = {};
-	for (i=1; i<queryItems.length; i++){
-	    options[queryItems[i].split(":")[0]] = JSON.parse(queryItems[i].split(":")[1]);
 	}
 
 	//Graph force-direct graph from force.js
