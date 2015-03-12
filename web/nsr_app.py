@@ -9,9 +9,19 @@ nsr = db.NSR
 # Create our instance of the Flask class
 app = Flask(__name__)
 
+
+# Root site route
 @app.route('/')
 def hello_world():
-    return 'First result: %s' % str(nsr.find_one())
+    return 'Hello World!'
+
+# Route for find_one(year)
+@app.route('/year/<int:year_id>')
+def find_year(year_id):
+    first_doc = nsr.find_one({"year": year_id})
+    title = first_doc['title']
+    return "The first title in {year} is: {title}".format(year=year_id, title=title)
+
 
 # If executed directly from python interpreter, run local server
 if __name__ == '__main__':
