@@ -1,5 +1,8 @@
 from pymongo import MongoClient
 from flask import Flask, jsonify, request
+import networkx as nx
+from networkx.readwrite import json_graph
+from itertools import combinations
 
 # Setup the connection to MongoDB and get the NSR collection
 client = MongoClient('localhost', 27017)
@@ -40,6 +43,26 @@ def aggregate():
     ]
     results = jsonify(nsr.aggregate(topauthors_pipeline))
     return results
+
+# API: authornetwork
+# returns a network of authors
+@app.route('/api/authornetwork/<int:year_id>')
+def authornetwork(year_id):
+    authornetwork_params = request.args
+    authornetwork_pipeline = [
+        {"$match": {"year": year_id}},
+        {"$project": {"_id": 0, "authors": "$authors"}}
+    ]
+    results = nsr.aggregate(authornetwork_pipeline)['result']
+    G = nx.Graph()
+    nodes = set()
+    for author_list in results:
+        nodes.update(author_list['authors'])
+        for i in combinations(author_list['authors'], 2):
+            G.add_edge(i[0], i[1])
+    G.add_nodes_from(nodes)
+    data = json_graph.node_link_data(G)
+    return jsonify(data)
 
 
 # If executed directly from python interpreter, run local server
