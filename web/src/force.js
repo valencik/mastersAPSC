@@ -1,4 +1,13 @@
 /* Define the main worker or execution function */
+// Possible options for the force graph are:
+// radius [5]
+// links [30]
+// charge [-120]
+// friction [0.8]
+// gravity [0.1]
+// labels [off]
+// drag [off]
+
 function forceDirectedGraph(error, nodes, links, options) {
 
     // Set up seeded random number generator
