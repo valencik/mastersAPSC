@@ -149,30 +149,26 @@ $(document).ready(function() {
                 collabType = queryItems[0].split(":")[1]
                 if(verbose){console.log("Search collabType: "+collabType);};
 
+                //Create options object from queryItems
+                var options = {};
+                for (i=1; i<queryItems.length; i++){
+                    options[queryItems[i].split(":")[0]] = JSON.parse(queryItems[i].split(":")[1]);
+                }
+
 		// Parse collab: input for single year or range
                 var reYearArray = /(?:^(\d{4})-(\d{4})$)|(?:^(\d{4}))/.exec(collabType);
                 if (reYearArray){
                     if(reYearArray[3]){
-                        var matchObject = { "$match": {"year": parseInt(reYearArray[3])}};
+                        d3.xhr("/api/authornetwork/"+parseInt(reYearArray[3]))
+                        .get(function(error, data){
+                            graphData = JSON.parse(data.response)
+        	            forceDirectedGraph(null, graphData.nodes, graphData.links, options);
+                        })
                     }
                     if(reYearArray[1] && reYearArray[2]){
-                        var matchObject = { "$match": {"year": {"$gte": parseInt(reYearArray[1]), "$lte": parseInt(reYearArray[2])}}};
+                        console.log("Ranges not yet supported");
                     }
                 }
-                if(verbose){console.log(reYearArray);};
-                if(verbose){console.log(matchObject);};
-
-
-                // Query database and build force-directed graph
-                aggregate("NSR", 
-                    [
-                         matchObject,  //determined from parsing above
-                         { $project: {_id: 0, authors: "$authors"}}
-                    ], {},
-                    function(results){
-                        authorArrayFDG(results);
-                    }
-                ); //end of aggregate
                 break;
                 
             default:
@@ -284,56 +280,6 @@ $(document).ready(function() {
         return chart;
     };
 
-    //Make a force-directed graph. 'results' is an array of author lists
-    var authorArrayFDG = function(results){
-
-	var arrays = [];
-	var authors = [];
-	var nodes = [];
-	var links = [];
-	var authorArray = [];
-
-	//Create options object from queryItems
-	var options = {};
-	for (i=1; i<queryItems.length; i++){
-	    options[queryItems[i].split(":")[0]] = JSON.parse(queryItems[i].split(":")[1]);
-	}
-
-        //Filter author lists, put remaining lists into an array
-        var authorMinimum = options.authormin || 0;
-	for(i=0; i<results.length; i++){
-	    authorArray = results[i].authors;
-	    if(typeof authorArray !== "undefined" && authorArray.length > authorMinimum)
-		arrays.push(authorArray)
-	}
-
-	//Flatten the array and then unique it
-        //https://stackoverflow.com/questions/10865025/merge-flatten-an-array-of-arrays-in-javascript/10865042#10865042
-	authors = unique(authors.concat.apply(authors, arrays));
-
-        //Push author-name objects into nodes array
-	for(i=0; i<authors.length; i++){nodes.push({"name": authors[i]})}
-
-	//Loop over returned array and build links to nodes
-	for (i=0; i<arrays.length; i++){
-	    //Only multi element arrays will have links
-	    if(arrays[i].length > 1){
-		//if(verbose){console.log("CF4 array[i]:", arrays[i]);};
-		//Link each element to each other element
-		for(j=0; j<arrays[i].length; j++){
-		    //if(verbose){console.log("CF5 array[i][j]:", arrays[i][j]);};
-		    for(k=j+1; k<arrays[i].length; k++){
-			//if(verbose){console.log("CF6 array[i][k]:", arrays[i][k]);};
-			links.push({"source": authors.indexOf(arrays[i][j]), "target": authors.indexOf(arrays[i][k])})
-		    }
-		}
-	    }
-	}
-
-	//Graph force-direct graph from force.js
-	forceDirectedGraph(null, nodes, links, options);
-
-    }//end of function(results)
 
 //
 //   GRAPH VIEWS
