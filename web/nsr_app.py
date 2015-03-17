@@ -39,10 +39,9 @@ def find_year(year_id):
 
 # API: topauthors
 # returns an array of authors in given year sorted by publication number
-@app.route('/api/topauthors')
-def aggregate():
+@app.route('/api/topauthors/<int:year_id>')
+def topauthors(year_id):
     topauthors_params = request.args
-    year_id = int(topauthors_params['year'])
     limit_id = 2
     if 'limit' in topauthors_params:
         limit_id = int(topauthors_params['limit'])
@@ -53,7 +52,7 @@ def aggregate():
         {"$sort": {"total": -1} },
         {"$limit": limit_id}
     ]
-    results = jsonify(nsr.aggregate(topauthors_pipeline))
+    results = jsonify(nsr.aggregate(topauthors_pipeline)['result'])
     return results
 
 # API: authornetwork
