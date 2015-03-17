@@ -31,7 +31,7 @@ def hello_world():
     return render_template('index.html', header='NSR Data Visuals')
 
 # Route for find_one(year)
-@app.route('/year/<int:year_id>')
+@app.route('/api/year/<int:year_id>')
 def find_year(year_id):
     first_doc = nsr.find_one({"year": year_id})
     title = first_doc['title']
