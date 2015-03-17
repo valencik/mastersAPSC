@@ -299,7 +299,7 @@ $(document).ready(function() {
 	    options[queryItems[i].split(":")[0]] = JSON.parse(queryItems[i].split(":")[1]);
 	}
 
-        //Put valid author lists into an array
+        //Filter author lists, put remaining lists into an array
         var authorMinimum = options.authormin || 0;
 	for(i=0; i<results.length; i++){
 	    authorArray = results[i].authors;
