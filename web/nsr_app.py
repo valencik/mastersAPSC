@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 import networkx as nx
 from networkx.readwrite import json_graph
 from itertools import combinations
@@ -27,7 +27,7 @@ app.after_request(add_cors_headers)
 # Root site route
 @app.route('/')
 def hello_world():
-    return 'Hello World!'
+    return render_template('index.html', header='NSR Data Visuals')
 
 # Route for find_one(year)
 @app.route('/year/<int:year_id>')
