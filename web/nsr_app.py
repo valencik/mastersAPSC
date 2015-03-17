@@ -28,7 +28,7 @@ app.after_request(add_cors_headers)
 # Root site route
 @app.route('/')
 def hello_world():
-    return render_template('index.html', header='NSR Data Visuals')
+    return render_template('summary-homepage.html', header='NSR Data Visuals')
 
 # Route for find_one(year)
 @app.route('/api/year/<int:year_id>')
