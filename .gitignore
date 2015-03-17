@@ -1,3 +1,7 @@
+# iPython Notebooks
+.ipynb_checkpoints/
+*.ipynb
+
 # Node
 node_modules/
 node_output.log
