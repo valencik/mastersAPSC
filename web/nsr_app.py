@@ -14,6 +14,7 @@ app = Flask(__name__)
 
 # Enable CORS
 # https://gist.github.com/blixt/54d0a8bf9f64ce2ec6b8
+# This should be investigated for security concerns
 def add_cors_headers(response):
     response.headers['Access-Control-Allow-Origin'] = '*'
     if request.method == 'OPTIONS':
