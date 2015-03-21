@@ -146,8 +146,8 @@ $(document).ready(function() {
                 break;
                 
             case 'collab':
-                collabType = queryItems[0].split(":")[1]
-                if(verbose){console.log("Search collabType: "+collabType);};
+                collabParam = queryItems[0].split(":")[1]
+                if(verbose){console.log("Search collabParam: "+collabParam);};
 
                 //Create options object from queryItems
                 var options = {};
@@ -156,14 +156,22 @@ $(document).ready(function() {
                 }
 
 		// Parse collab: input for single year or range
-                var reYearArray = /(?:^(\d{4})-(\d{4})$)|(?:^(\d{4}))/.exec(collabType);
+                var reYearArray = /(?:^(\d{4})-(\d{4})$)|(?:^(\d{4}))/.exec(collabParam);
                 if (reYearArray){
                     if(reYearArray[3]){
-                        d3.xhr("/api/authornetwork/"+parseInt(reYearArray[3]))
-                        .get(function(error, data){
-                            graphData = JSON.parse(data.response)
-        	            forceDirectedGraph(null, graphData.nodes, graphData.links, options);
-                        })
+                        if(options.topnetwork){
+                            d3.xhr("/api/topnetwork/"+parseInt(reYearArray[3]))
+                            .get(function(error, data){
+                                graphData = JSON.parse(data.response)
+            	            forceDirectedGraph(null, graphData.nodes, graphData.links, options);
+                            })
+                        } else {
+                            d3.xhr("/api/authornetwork/"+parseInt(reYearArray[3]))
+                            .get(function(error, data){
+                                graphData = JSON.parse(data.response)
+            	            forceDirectedGraph(null, graphData.nodes, graphData.links, options);
+                            })
+                        }
                     }
                     if(reYearArray[1] && reYearArray[2]){
                         console.log("Ranges not yet supported");

@@ -68,11 +68,39 @@ def authornetwork(year_id):
     G = nx.Graph()
     nodes = set()
     for author_list in results:
-        nodes.update(author_list['authors'])
-        for i in combinations(author_list['authors'], 2):
-            G.add_edge(i[0], i[1])
+        if 'authors' in author_list:
+            nodes.update(author_list['authors'])
+            for i in combinations(author_list['authors'], 2):
+                G.add_edge(i[0], i[1])
     G.add_nodes_from(nodes)
-    data = json_graph.node_link_data(G)
+    graphs = list(nx.connected_component_subgraphs(G))
+    graphs.sort(key = lambda x: -x.number_of_edges())
+    if 'top' in authornetwork_params:
+        data = json_graph.node_link_data(graphs[0])
+    else:
+        data = json_graph.node_link_data(G)
+    return jsonify(data)
+
+# API: topnetwork
+# returns the largest subgraph of a network of authors
+@app.route('/api/topnetwork/<int:year_id>')
+def topnetwork(year_id):
+    topnetwork_params = request.args
+    topnetwork_pipeline = [
+        {"$match": {"year": year_id}},
+        {"$project": {"_id": 0, "authors": "$authors"}}
+    ]
+    results = nsr.aggregate(topnetwork_pipeline)['result']
+    G = nx.Graph()
+    nodes = set()
+    for author_list in results:
+        if 'authors' in author_list:
+            nodes.update(author_list['authors'])
+            for i in combinations(author_list['authors'], 2):
+                G.add_edge(i[0], i[1])
+    graphs = list(nx.connected_component_subgraphs(G))
+    graphs.sort(key = lambda x: -x.number_of_edges())
+    data = json_graph.node_link_data(graphs[0])
     return jsonify(data)
 
 
