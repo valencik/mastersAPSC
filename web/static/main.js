@@ -4,104 +4,6 @@ $(document).ready(function() {
     //Enable debugging output
     var verbose = false;
 
-    //Create the unique() function using a set
-    var unique = function(array) {
-        var o = {}, i, l = array.length, r = [];
-        for(i=0; i<l;i+=1) o[array[i]] = array[i];
-        for(i in o) r.push(o[i]);
-        return r;
-    };
-
-    //Server aggregation requests
-    var aggregate = function(collection, pipeline, options, callback) {
-        $.get(
-            "/api/v1/"+collection+"/aggregate",
-            {
-                "pipeline": JSON.stringify(pipeline || []),
-                "options": JSON.stringify(options || {})
-            }
-        ).done(function(results) {
-            return callback && callback(results);
-        });
-    };
-
-    //Aggregation and nvd3 graph generation
-    var graph = function(selector, title, collection, pipeline, options, queryType, callback) {
-        aggregate(collection, 
-            pipeline,
-            options,
-            function(results) {
-                if(verbose){console.log("Graph: %s", queryType.graph);};
-                if(verbose){console.log("Returned array size="+results.length);};
-                
-                switch(queryType.type){
-                    case 'yearly':
-                        var data = [{
-                            key: title,
-                            values: results
-                        }];
-                        break;
-                    case 'yearlyMultiType':
-                        //initialize the year data with zeros to 'fill holes'
-                        var data = [];
-		        function dataPrepYearlyMultiType(results, data){
-                            var types = ["JOUR", "REPT", "CONF", "THESIS", "PC", "UNKNOWN", "PREPRINT", "BOOK"];
-                            for (var i=0; i< types.length; i++) {
-                                data[i] = {key: types[i], values: []};
-                                for (var year=queryType.minYear; year<=queryType.maxYear; year++) {
-                                        data[i].values[year-queryType.minYear] = {x: year, y: 0}
-                                    } 
-                            }
-    
-                            //populate the data array with results
-                            for (var i=0; i< types.length; i++) { //over all types
-                                var indexT = null;
-                                for (var ti=0; ti < results.length; ti++) {
-                                    if(results[ti].key === types[i]) { //find a matching type in results[]
-                                        indexT =  ti;
-                                        //if(verbose){console.log(types[i] +"--->"+ results[indexT].key);};
-                                        break;
-                                    } 
-                                } //end of results.length matching
-                                if (indexT == null) {break;} //if we didn't find a match, move to new type
-                                for (var year=queryType.minYear; year<=queryType.maxYear; year++) { //over all years
-                                    for (var mi = 0; mi < results[indexT].values.length; mi++) { //over all returned years in results
-                                        if(results[indexT].values[mi].x === year) {
-                                            data[i].values[year-queryType.minYear] = {x: year, y: results[indexT].values[mi].y} 
-                                        }
-                                        else { continue; }
-                                    }
-    
-                                } 
-                            }
-                        }
-		        dataPrepYearlyMultiType(results, data);
-                        break;
-                    default:
-                        console.log("Error: No queryType.type detected.");
-                }//end of switch queryType.type
-        
-		//Call nvd3 graph function
-                switch(queryType.graph){
-                    case 'discreteBarChart':
-                        nv.addGraph(discreteBarChart(selector, title, data, callback));
-                        break;
-                    case 'multiBarChart':
-                        nv.addGraph(multiBarChart(selector, title, data, callback));
-                        break;
-                    case 'pieChart':
-                        nv.addGraph(pieChart(selector, title, data, callback));
-                        break;
-                    case 'lineWithFocusChart':
-                        nv.addGraph(lineWithFocusChart(selector, title, data, callback));
-                        break;
-                    default:
-                        console.log("# No valid graph type detected.")
-                }
-
-            });//end of aggregate callback
-    };//end of graph function
-
     var search = $("#omnisearchform");
     search.submit(function(ev){
 
@@ -128,7 +30,6 @@ $(document).ready(function() {
                 queryType = {type: "yearly", graph: "pieChart", minYear: 1896, maxYear: 2014}
                 graph("#charts svg#authorSearch", "NSR Data", "NSR", 
                     [
-                         //Broken: {$match: {$text: {$search: authorName}},
                          { $match: {authors: authorName}},
                          { $unwind: "$authors"},
                          { $group: { _id: "$authors", total: { $sum: 1} } },
