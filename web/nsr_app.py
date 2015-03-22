@@ -37,6 +37,18 @@ def find_year(year_id):
     title = first_doc['title']
     return "The first title in {year} is: {title}".format(year=year_id, title=title)
 
+# API: author report
+# returns a report on the authors statistics
+@app.route('/api/author/<author_id>')
+def author_report(author_id):
+    return render_template('authorReport.html',
+        author='Andrew',
+        author_num=30,
+        paper_num=65,
+        first_doc_year=1993,
+        last_doc_year=2014
+    )
+
 # API: topauthors
 # returns an array of authors in given year sorted by publication number
 @app.route('/api/topauthors/<int:year_id>')
