@@ -41,12 +41,21 @@ def find_year(year_id):
 # returns a report on the authors statistics
 @app.route('/api/author/<author_id>')
 def author_report(author_id):
+    results = nsr.find({"authors": author_id})
+    docs = []
+    nodes = set()
+    for document in results:
+        docs.append(document)
+        if 'authors' in document:
+            nodes.update(document['authors'])
+
     return render_template('authorReport.html',
-        author='Andrew',
-        author_num=30,
-        paper_num=65,
-        first_doc_year=1993,
-        last_doc_year=2014
+        author=author_id,
+        author_num=len(nodes)-1,
+        paper_num=len(docs),
+        first_doc_year=docs[0]['year'],
+        last_doc_year=docs[-1]['year'],
+        docs=docs
     )
 
 # API: topauthors
