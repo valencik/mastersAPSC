@@ -7,14 +7,14 @@ use warnings;
 BEGIN {undef $/;}
 
 # Cleaning up the CODEN's
-s/^<CODEN   >(JOYR|JUOUR|JOur|PRVCA|Nature|J\{OUR) /<CODEN   >JOUR /g;
-s/^<CODEN   >Conf /<CODEN   >CONF /g;
-s/^<CODEN   >(REPR|REP>T|REPTT|Rept) /<CODEN   >REPT /g;
-s/^<CODEN   >Book /<CODEN   >BOOK /g;
-s/^<CODEN   >(THE{SIS|Thesis,) /<CODEN   >THESIS /g;
+s/^<CODEN   >(JOYR|JUOUR|JOur|PRVCA|Nature|J\{OUR) /<CODEN   >JOUR /mg;
+s/^<CODEN   >Conf /<CODEN   >CONF /mg;
+s/^<CODEN   >(REPR|REP>T|REPTT|Rept) /<CODEN   >REPT /mg;
+s/^<CODEN   >Book /<CODEN   >BOOK /mg;
+s/^<CODEN   >(THE{SIS|Thesis,) /<CODEN   >THESIS /mg;
 
 # Force any remaining problems to simply be type UNKNOWN
-s/^<CODEN   >(?!JOUR)(?!REPT)(?!CONF)(?!THESIS)(?!PC)(?!PREPRINT)/<CODEN   >UNKNOWN /g;
+s/^<CODEN   >(?!JOUR)(?!REPT)(?!CONF)(?!THESIS)(?!PC)(?!PREPRINT)/<CODEN   >UNKNOWN /mg;
 
 # Remove tailing whitespace and tabs
 s/\t/  /g;
@@ -38,5 +38,5 @@ s/^<KEYWORDS>(.*)&$/"keywords":["$1"],/mg;
 s/^<SELECTRS>(.*)&$/"selectors":["$1"],/mg;
 
 # End JSON structures
-s/,\n{/\n}\n\n{/mg; 
+s/,\n{/\n}\n{/mg; 
 s/$/\n}/;
