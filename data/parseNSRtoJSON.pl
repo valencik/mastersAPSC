@@ -26,10 +26,8 @@ s/"/\\"/g;
 # Collapse all multiline entries to single line
 s/&\n(.)(?!KEYNO)(?!HISTORY)(?!CODEN)(?!REFRENCE)(?!AUTHORS)(?!TITLE)(?!KEYWORDS)(?!SELECTRS)(?!DOI)/$1/mg;
 
-# Convert KEYNO to _id and year
-s/^<KEYNO   >((\d\d\d\d).*)&$/{\n"_id":"$1", "year":$2,/mg;
-
 # Basic parsing
+s/^<KEYNO   >(.*)&$/{\n"_id":"$1",/mg;
 s/^<HISTORY >(.*)&$/"history":["$1"],/mg;
 s/^<CODEN   >(.*)&$/"code":"$1",/mg;
 s/^<REFRENCE>(.*)&$/"reference":"$1",/mg;
