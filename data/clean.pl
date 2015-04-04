@@ -26,41 +26,19 @@ s/"/\\"/g;
 # Collapse all multiline entries to single line
 s/&\n(.)(?!KEYNO)(?!HISTORY)(?!CODEN)(?!REFRENCE)(?!AUTHORS)(?!TITLE)(?!KEYWORDS)(?!SELECTRS)(?!DOI)/$1/mg;
 
-# KEYNO parsing
-s/^<KEYNO   >((\d\d\d\d).*)&$/{ "_id": "$1", "year": $2,/mg;
+# Convert KEYNO to _id and year
+s/^<KEYNO   >((\d\d\d\d).*)&$/{\n"_id":"$1", "year":$2,/mg;
 
-# HISTORY parsing
-s/^<HISTORY >(\w+)\s*&/"history":["$1"],/mg;
-s/^<HISTORY >(\w+)\s+(\w+)\s*&/"history":["$1", "$2"],/mg;
-
-# CODEN parsing
-s/^<CODEN   >((\w*).*)&$/"code": "$1", "type": "$2",/mg;
-
-# REFRENCE parsing
-s/^<REFRENCE>(.*)&$/"reference": "$1",/mg;
- 
-# Authors to an array
+# Basic parsing
+s/^<HISTORY >(.*)&$/"history":["$1"],/mg;
+s/^<CODEN   >(.*)&$/"code":"$1",/mg;
+s/^<REFRENCE>(.*)&$/"reference":"$1",/mg;
 s/^<AUTHORS >(.*)&$/"authors":["$1"],/mg;
-#The follow never runs with /m, and it runs everywhere with it
-#s/[^]], /", "/g if /^"authors":\[/m;
-#s/[^]], /", "/g if /"authors":/m;
-#s/[^]], /", "/g if /"authors":/;
- 
-# Title, DOI
-s/^<TITLE   >(.*)&$/"title": "$1",/mg;
-s/^<DOI     >(.*)&$/"DOI": "$1",/mg;
-### 
-### # Keywords
-### :%g/^<KEYWORDS>/ s/<KEYWORDS>([NRAC]\u\{4,} [RSMP]\u\{4,}\|[NRAC]\u\{4,})[ ,](.*)&\n<SELECTRS>(.*)&$/"\L$1\E": {"sentence": "$2", "selector": "$3"},/ | s/^"(\w\+\s)\=(\w\+)": {/"$2": {/
-### 
-### # End JSON structures
-### s/,\n{/ }\r{/ 
-### 
-### # Make JSON structures one big line
-### s/,\n/, /g 
-### 
-### # Field values ending in \
-### s/\\", "/\\ ", "/g 
-### 
-### # End the very last JSON doc
-### :normal G$F,cw }
+s/^<TITLE   >(.*)&$/"title":"$1",/mg;
+s/^<DOI     >(.*)&$/"DOI":"$1",/mg;
+s/^<KEYWORDS>(.*)&$/"keywords":["$1"],/mg;
+s/^<SELECTRS>(.*)&$/"selectors":["$1"],/mg;
+
+# End JSON structures
+s/,\n{/\n}\n\n{/mg; 
+s/$/\n}/;
