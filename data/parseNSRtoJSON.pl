@@ -14,7 +14,7 @@ s/^<CODEN   >Book /<CODEN   >BOOK /mg;
 s/^<CODEN   >(THE{SIS|Thesis,) /<CODEN   >THESIS /mg;
 
 # Force any remaining problems to simply be type UNKNOWN
-s/^<CODEN   >(?!JOUR)(?!REPT)(?!CONF)(?!THESIS)(?!PC)(?!PREPRINT)/<CODEN   >UNKNOWN /mg;
+s/^<CODEN   >(?!JOUR)(?!REPT)(?!CONF)(?!THESIS)(?!PC)(?!PREPRINT)(?!BOOK)/<CODEN   >UNKNOWN /mg;
 
 # Remove tailing whitespace and tabs
 s/\t/  /g;
