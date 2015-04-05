@@ -20,4 +20,4 @@ s/ /", "/g if /^"history":\[/;
 #    "T:241AM;A. R:(N,2N);A. N:240AM;A. 
 s/([A-Z]):(.*?);(.*?)\./{"type":"$1", "value":"$2", "subkey":"$3"},/g if /^"selectors":\[/;
 s/^"selectors":\["/"selectors":\[/g;
-s/},"],$/}],/ if /^"selectors":\[/;
+s/},"]/}]/ if /^"selectors":\[/;
