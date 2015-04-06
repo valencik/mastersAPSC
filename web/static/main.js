@@ -37,7 +37,7 @@ $(document).ready(function() {
                 if (reYearArray){
                     if(reYearArray[3]){
                         if(options.topnetwork){
-                            d3.xhr("/api/topnetwork/"+parseInt(reYearArray[3]))
+                            d3.xhr("/api/authornetwork/"+parseInt(reYearArray[3])+"?topnetwork="+options.topnetwork)
                             .get(function(error, data){
                                 graphData = JSON.parse(data.response)
             	            forceDirectedGraph(null, graphData.nodes, graphData.links, options);
