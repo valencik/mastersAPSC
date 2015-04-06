@@ -6,6 +6,14 @@ use warnings;
 # This helps with multiline regex
 BEGIN {undef $/;}
 
+#Fix erroneous verticle bars
+s/\(\|\|\)/\\leftrightarrow/mg; # 2006VO15 and 2007EL04
+s/\|\|V{-tb}\|\|/\\vert |V{-tb} \\vert/; # 2007AB22
+s/\|\|g/\|g/mg; #2009RE20 2011KU10 2012KR07
+#s/measured E\|g,I\|\|g\. Data/measured E|g,I|g. Data/; #2007MIZO
+s/the \(\\{\+3\\}He,t\) Reaction/the ({+3}He,t) Reaction/; #1984VAZR
+s/A\\\|'/\\AA/; #1996RA31
+
 # Cleaning up the CODEN's
 s/^<CODEN   >(JOYR|JUOUR|JOur|PRVCA|Nature|J\{OUR) /<CODEN   >JOUR /mg;
 s/^<CODEN   >Conf /<CODEN   >CONF /mg;
@@ -39,4 +47,4 @@ s/^<SELECTRS>(.*)&$/"selectors":["$1"],/mg;
 
 # End JSON structures
 s/,\n{/\n}\n{/mg; 
-s/$/\n}/;
+s/,$/\n}/;
