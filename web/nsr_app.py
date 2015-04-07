@@ -82,10 +82,28 @@ def topauthors(year_id):
 def authornetwork(year_id):
     authornetwork_params = request.args
     authornetwork_pipeline = [
-        {"$match": {"year": year_id}},
-        {"$project": {"_id": 0, "authors": "$authors"}}
+        {"$match": {"year": year_id}}
     ]
-    results = nsr.aggregate(authornetwork_pipeline)['result']
+    data = authorgraph(authornetwork_pipeline, authornetwork_params)
+    return jsonify(data)
+
+# API: searchnetwork
+# returns a network of authors
+@app.route('/api/searchnetwork')
+def searchnetwork():
+    searchnetwork_params = request.args
+    if 'nuclide' in searchnetwork_params:
+        search_nuclide = searchnetwork_params['nuclide']
+        searchnetwork_pipeline = [
+            {"$match": {"selectors.type":"N", "selectors.value":search_nuclide}}
+        ]
+    data = authorgraph(searchnetwork_pipeline, searchnetwork_params)
+    return jsonify(data)
+
+# Author graph function
+def authorgraph(pipeline, options):
+    pipeline.append({"$project": {"_id": 0, "authors": "$authors"}})
+    results = nsr.aggregate(pipeline)['result']
     G = nx.Graph()
     nodes = set()
     for author_list in results:
@@ -96,12 +114,12 @@ def authornetwork(year_id):
     G.add_nodes_from(nodes)
     graphs = list(nx.connected_component_subgraphs(G))
     graphs.sort(key = lambda x: -x.number_of_edges())
-    if 'topnetwork' in authornetwork_params:
-        top_num = int(authornetwork_params['topnetwork'])
+    if 'topnetwork' in options:
+        top_num = int(options['topnetwork'])
         data = json_graph.node_link_data(graphs[top_num-1])
     else:
         data = json_graph.node_link_data(G)
-    return jsonify(data)
+    return data
 
 
 # If executed directly from python interpreter, run local server
