@@ -4,13 +4,16 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ title }} | pig.io</title>
+    <title>Main Page</title>
 
-    <!-- Bootstrap -->
-    <link href="/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <!-- Latest compiled and minified Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
     <!-- NVD3 -->
-    <link href="/nvd3/nv.d3.min.css" rel="stylesheet">
+    <link href="/static/nvd3/nv.d3.min.css" rel="stylesheet">
+
+    <!-- custom CSS -->
+    <link href="/static/custom.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -18,26 +21,6 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
-    <!-- Styles -->
-    <style>
-        #charts {
-            height: 100%;
-            overflow: visible;
-        }
-        #charts svg {
-            height: 500px;
-        }
-        .navbar-input-group {
-        width: 60%;
-        }
-        .navbar-input-group .input-group {
-        width: 100%;
-        }
-        .navbar-input-group .input-group .input-group-addon {
-        width: 1%;
-        }
-    </style>
 
   </head>
   <body>
@@ -84,6 +67,30 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-    
-    <br> <br> <br>
+
     <div class="container">
+
+    {% block content %}{% endblock %}
+
+    </div>
+
+      <br>
+      <div class="container">
+      Created by Andrew Valencik. <br>
+      <p>Visualizations built with <a href="http://nvd3.org/">nvd3</a> which is powered by <a href="http://d3js.org/">d3.js</a>.
+      </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <!-- Latest compiled and minified Bootstrap JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScripts -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.11/seedrandom.min.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="/static/nvd3/nv.d3.js"></script>
+    <script src="/static/main.js"></script>
+    <script src="/static/force-graph.js"></script>
+
+  </body>
+</html>

@@ -84,7 +84,7 @@ function forceDirectedGraph(error, nodes, links, options) {
             .attr("fill", "black")
             .attr("font-family", "sans-serif")
             .attr("font-size", "12px")
-            .text(function(d) { return d.name; });
+            .text(function(d) { return d.id; });
     }
 
     // Draw the nodes themselves

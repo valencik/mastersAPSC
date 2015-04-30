@@ -28,7 +28,7 @@ app.after_request(add_cors_headers)
 # Root site route
 @app.route('/')
 def hello_world():
-    return render_template('index.html', header='NSR Data Visuals')
+    return render_template('summary-homepage.html', header='NSR Data Visuals')
 
 # Route for find_one(year)
 @app.route('/api/year/<int:year_id>')
@@ -36,6 +36,27 @@ def find_year(year_id):
     first_doc = nsr.find_one({"year": year_id})
     title = first_doc['title']
     return "The first title in {year} is: {title}".format(year=year_id, title=title)
+
+# API: author report
+# returns a report on the authors statistics
+@app.route('/api/author/<author_id>')
+def author_report(author_id):
+    results = nsr.find({"authors": author_id})
+    docs = []
+    nodes = set()
+    for document in results:
+        docs.append(document)
+        if 'authors' in document:
+            nodes.update(document['authors'])
+
+    return render_template('authorReport.html',
+        author=author_id,
+        author_num=len(nodes)-1,
+        paper_num=len(docs),
+        first_doc_year=docs[0]['year'],
+        last_doc_year=docs[-1]['year'],
+        docs=docs
+    )
 
 # API: topauthors
 # returns an array of authors in given year sorted by publication number
@@ -61,19 +82,44 @@ def topauthors(year_id):
 def authornetwork(year_id):
     authornetwork_params = request.args
     authornetwork_pipeline = [
-        {"$match": {"year": year_id}},
-        {"$project": {"_id": 0, "authors": "$authors"}}
+        {"$match": {"year": year_id}}
     ]
-    results = nsr.aggregate(authornetwork_pipeline)['result']
+    data = authorgraph(authornetwork_pipeline, authornetwork_params)
+    return jsonify(data)
+
+# API: searchnetwork
+# returns a network of authors
+@app.route('/api/searchnetwork')
+def searchnetwork():
+    searchnetwork_params = request.args
+    if 'nuclide' in searchnetwork_params:
+        search_nuclide = searchnetwork_params['nuclide']
+        searchnetwork_pipeline = [
+            {"$match": {"selectors.type":"N", "selectors.value":search_nuclide}}
+        ]
+    data = authorgraph(searchnetwork_pipeline, searchnetwork_params)
+    return jsonify(data)
+
+# Author graph function
+def authorgraph(pipeline, options):
+    pipeline.append({"$project": {"_id": 0, "authors": "$authors"}})
+    results = nsr.aggregate(pipeline)['result']
     G = nx.Graph()
     nodes = set()
     for author_list in results:
-        nodes.update(author_list['authors'])
-        for i in combinations(author_list['authors'], 2):
-            G.add_edge(i[0], i[1])
+        if 'authors' in author_list:
+            nodes.update(author_list['authors'])
+            for i in combinations(author_list['authors'], 2):
+                G.add_edge(i[0], i[1])
     G.add_nodes_from(nodes)
-    data = json_graph.node_link_data(G)
-    return jsonify(data)
+    graphs = list(nx.connected_component_subgraphs(G))
+    graphs.sort(key = lambda x: -x.number_of_edges())
+    if 'topnetwork' in options:
+        top_num = int(options['topnetwork'])
+        data = json_graph.node_link_data(graphs[top_num-1])
+    else:
+        data = json_graph.node_link_data(G)
+    return data
 
 
 # If executed directly from python interpreter, run local server
