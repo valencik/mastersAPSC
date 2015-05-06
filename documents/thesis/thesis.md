@@ -22,12 +22,38 @@ Furthermore the app presents new types of analysis for the user.
 Starting with some of the naive algorithms, and then going to graph theory.
 A review of graph theoretic concepts and piecing them together for the application on hand.
 
+### The Data and Database
+The data from the NSR is in a custom format.
+I developed a schema that would work well with the queries in mind and the MongoDB database software.
+The data needed to be cleaned and transformed into the desired scheme before being imported into MongoDB.
+
+With the data representation complete and the data formatted correctly and imported to MongoDB, we can consider the database operations.
+The most common operation will be some sort of search or lookup.
+To optimize this process we instruct MongoDB to index our data on various fields.
+Indexing speeds up search queries in a manner similar to sorting a series of data elements.
+MongoDB allows for many different types of indexes.
+We create a single field indexes on the id, year, authors, selectors type, selectors value, and type fields.
+This enables very fast lookups for documents according to the indexed fields.
+For example it would be very quick to find all the documents with type 'Journal' and year '1983'.
+Where as the search for all documents with keyword "fisson" has not been optimized by the previously mentioned indexes.
+
+We can create an index of the document years at the mongo shell with the following command:
+```javascipt
+db.NSR.createIndex({year: 1})
+```
+
+Since our author field is really an array of string elements, we can use a single field index on it without issue.
+However, on field like the title or keywords a single field index will fall short of helping up find partial matches.
+For example, search for documents with the word "neutron" in the title will not be sped up by a single field index.
+For this task we leverage MongoDB's text indexes.
+
 
 ## Implementation
 >Introduce and discuss the various technologies used.
 
 Advantages and disadvantages of these technologies and justification of final choices.
-
+- Perl parsing, regular expressions and speed
+- MongoDB, schema and aggregation framework
 - Gephi analysis, modularity, average shortest path
 
 
