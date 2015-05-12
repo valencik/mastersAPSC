@@ -8,6 +8,8 @@ The NNDC maintains the [NSR website](http://www.nndc.bnl.gov/nsr/) with simple s
 They offer a quick search, and searching via text, keynumber, and various indexed key fields.
 Each search function is hidden in either a separate interface or a drop down menu.
 
+See proposal and similar introduction texts.
+
 
 ## Application
 >Designing an interface for such an application
@@ -15,6 +17,7 @@ Each search function is hidden in either a separate interface or a drop down men
 The proposed application attempts to unify the various search functions into a single web app interface.
 Furthermore the app presents new types of analysis for the user.
 
+Perhaps write this after the demonstration section. (We build/propose the tool that does the things demonstrated.)
 
 ## Algorithmic development
 >Introduce and discuss the algorithms used in various application features
@@ -43,8 +46,8 @@ db.NSR.createIndex({year: 1})
 ```
 
 Since our author field is really an array of string elements, we can use a single field index on it without issue.
-However, on field like the title or keywords a single field index will fall short of helping up find partial matches.
-For example, search for documents with the word "neutron" in the title will not be sped up by a single field index.
+However, on field like the title or keywords a single field index will fall short of helping us find partial matches.
+For example, searching for documents with the word "neutron" in the title will not be sped up by a single field index.
 For this task we leverage MongoDB's text indexes.
 
 
@@ -63,6 +66,21 @@ Advantages and disadvantages of these technologies and justification of final ch
 Demonstration of the application.
 How everything that was promised is delivered.
 If certain things could not be delivered, why not.
+Discrete list of features I want to advertise to users.
+A use case of answering a question with this tool.
+Additionally, it might be useful to show that this is more difficult using the old NSR website.
+
+### Author Fingerprinting
+Author search has been improved by implementing a suggestion system for partial author name searches.
+When we search for "Svenne" we can see there are both J.P.Svenne and J.Svenne.
+In the original NSR application it would be a manual task to discern the two author names.
+Our improvement is to had an author clustering scheme that show's us the similarity of authors.
+Here we can see that JP Svenne and J Svenne are likely to be the same author.
+> Also use "Austin" S.M.Austin, Sam.Austin
+
+
+## Miscellaneous
+> A section for all the lonely topics out there.
 
 
 ## Results
@@ -81,3 +99,10 @@ Annotated Bibliography
 A good overview of the process
 
 - Medical clusters and MDS paper
+
+
+
+References to Investigate
+=========================
+
+[Graph Node Similarity](http://argo.matf.bg.ac.rs/publications/2011/similarity.pdf)
