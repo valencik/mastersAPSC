@@ -81,9 +81,21 @@ Additionally, it might be useful to show that this is more difficult using the o
 Author search has been improved by implementing a suggestion system for partial author name searches.
 When we search for "Svenne" we can see there are both J.P.Svenne and J.Svenne.
 In the original NSR application it would be a manual task to discern the two author names.
-Our improvement is to had an author clustering scheme that show's us the similarity of authors.
+Our improvement is to add an author clustering scheme that show's us the similarity of authors.
 Here we can see that JP Svenne and J Svenne are likely to be the same author.
 > Also use "Austin" S.M.Austin, Sam.Austin
+When a similarity measure is above a certain threshold the matching grouping of authors is automatic.
+
+This similarlity measurement could happen either online (immediately after the user submits a query) or offline (before the app is presented to users).
+Because our database is static and manually updated with new entries periodically, the offline approach makes sense.
+And additional benefit to the offline approach is that it can be easily moderated and tweaked with user submitted suggestions.
+A possible example being an author name misspelling that only happen once. (not enough times to measure similarity against)
+
+### Author Fingerprinting - implementation notes
+build collection of all unique author names (101095)
+calculate the edit distances of all the author names (more than 5 billion calculations...)
+There are 41254 "authors" that appear once
+
 
 
 ## Miscellaneous
