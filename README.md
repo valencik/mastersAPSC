@@ -6,10 +6,7 @@ Masters of Science in Applied Science
 Schedule
 ========
 
-April 30 -   
-May  7 - Meet off campus, have parcel of text  
-May 14 - Thesis at least 75% completed  
-May 21 -   
+May 21 -  Outlined Application and Algorithmic development
 May 28 -   
 June  4 -   
 June 11 -   
