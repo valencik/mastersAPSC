@@ -59,6 +59,13 @@ Advantages and disadvantages of these technologies and justification of final ch
 - MongoDB, schema and aggregation framework
 - Gephi analysis, modularity, average shortest path
 
+### Python
+
+Python has a strong following and support in the scientific community.
+There are numerous scientific libraries that are freely available and easy to setup.
+So while python may not be the obvious choice for a web application today, its abundance of available libraries pays off quickly.
+
+[Flask](http://flask.pocoo.org) a small web framework used to power the web application.
 
 ## Demonstration
 >Demonstrate how the application can be used to perform analysis of the NSR.
