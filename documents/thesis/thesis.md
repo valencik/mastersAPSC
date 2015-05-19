@@ -1,8 +1,11 @@
-Thesis
-======
+Thesis Introduction
+===================
 
-## System analysis
->Description of the application domain, existing tools, and functional analysis of a comprehensive application that will be helpful to the physicists.
+The introduction will be written later.
+
+System analysis
+===============
+> Description of the application domain, existing tools, and functional analysis of a comprehensive application that will be helpful to the physicists.
 
 The NNDC maintains the [NSR website](http://www.nndc.bnl.gov/nsr/) with simple search features.
 They offer a quick search, and searching via text, keynumber, and various indexed key fields.
@@ -11,21 +14,24 @@ Each search function is hidden in either a separate interface or a drop down men
 See proposal and similar introduction texts.
 
 
-## Application
->Designing an interface for such an application
+Application
+===========
+> Designing an interface for such an application
 
 The proposed application attempts to unify the various search functions into a single web app interface.
 Furthermore the app presents new types of analysis for the user.
 
 Perhaps write this after the demonstration section. (We build/propose the tool that does the things demonstrated.)
 
-## Algorithmic development
->Introduce and discuss the algorithms used in various application features
+
+Algorithmic development
+=======================
+> Introduce and discuss the algorithms used in various application features
 
 Starting with some of the naive algorithms, and then going to graph theory.
 A review of graph theoretic concepts and piecing them together for the application on hand.
 
-### The Data and Database
+## The Data and Database
 The data from the NSR is in a custom format.
 I developed a schema that would work well with the queries in mind and the MongoDB database software.
 The data needed to be cleaned and transformed into the desired scheme before being imported into MongoDB.
@@ -51,15 +57,16 @@ For example, searching for documents with the word "neutron" in the title will n
 For this task we leverage MongoDB's text indexes.
 
 
-## Implementation
->Introduce and discuss the various technologies used.
+Implementation
+==============
+> Introduce and discuss the various technologies used.
 
 Advantages and disadvantages of these technologies and justification of final choices.
 - Perl parsing, regular expressions and speed
 - MongoDB, schema and aggregation framework
 - Gephi analysis, modularity, average shortest path
 
-### Python
+## Python
 
 Python has a strong following and support in the scientific community.
 There are numerous scientific libraries that are freely available and easy to setup.
@@ -67,8 +74,10 @@ So while python may not be the obvious choice for a web application today, its a
 
 [Flask](http://flask.pocoo.org) a small web framework used to power the web application.
 
-## Demonstration
->Demonstrate how the application can be used to perform analysis of the NSR.
+
+Demonstration
+=============
+> Demonstrate how the application can be used to perform analysis of the NSR.
 
 Demonstration of the application.
 How everything that was promised is delivered.
@@ -77,7 +86,7 @@ Discrete list of features I want to advertise to users.
 A use case of answering a question with this tool.
 Additionally, it might be useful to show that this is more difficult using the old NSR website.
 
-### Author Fingerprinting
+## Author Fingerprinting
 Author search has been improved by implementing a suggestion system for partial author name searches.
 When we search for "Svenne" we can see there are both J.P.Svenne and J.Svenne.
 In the original NSR application it would be a manual task to discern the two author names.
@@ -98,12 +107,14 @@ There are 41254 "authors" that appear once
 
 
 
-## Miscellaneous
+Miscellaneous
+=============
 > A section for all the lonely topics out there.
 
 
-## Results
->Conclude with discussion of contributions.
+Results
+=======
+> Conclude with discussion of contributions.
 
 How the application uncovers some of the previously unknown and interesting results.
 
