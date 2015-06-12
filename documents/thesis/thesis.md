@@ -139,6 +139,21 @@ Miscellaneous
 =============
 > A section for all the lonely topics out there.
 
+## Future work?
+Does it make sense to think about a future work section now?
+If yes:
+
+- Time series profile clustering. Show me other objects that evolved like this one.
+- Chart of nuclides, table of elements visualizations
+- Research predictions, suggestions
+- Author/Group/Journal profiling (innovative, follower, prolific...)
+
+## Contributions
+
+- Data parsing and cleaning
+- Visualization and summarization
+- Exploration
+
 
 Results
 =======
