@@ -114,6 +114,25 @@ build collection of all unique author names (101095)
 calculate the edit distances of all the author names (more than 5 billion calculations...)
 There are 41254 "authors" that appear once
 
+## Similar "Objects"
+Is the process of finding similar authors different enough from the process of finding similar papers to warrant separate treatment?
+This could be somewhat related to the author fingerprinting, in terms of implementation details
+
+## Time series visualizations
+How does an "object" evolve over time?
+This could be an author, keyword, group of authors, etc.
+
+## Simplified, unified search
+The present interface requires the specification of types of searches, we can infer this.
+If the user typed an author's name, then we can search for papers of that author.
+Similarly if the user typed a keyword or phrase like "nuclear halo" we can search for papers involving that keyword.
+
+## Network visualization and exploration
+Treating the data as a network or graph is unique to our application.
+This is a feature that warrants a lot of attention.
+
+## Data exporting?
+Being able to save the current visualizations, graph data structures, or flat csv data could be of use.
 
 
 Miscellaneous
