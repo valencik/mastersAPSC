@@ -11,7 +11,16 @@ The NNDC maintains the [NSR website](http://www.nndc.bnl.gov/nsr/) with simple s
 They offer a quick search, and searching via text, keynumber, and various indexed key fields.
 Each search function is hidden in either a separate interface or a drop down menu.
 
-See proposal and similar introduction texts.
+
+Research Proposal
+=================
+> Examining the usage of the previously written research proposal.
+
+The proposal was written when I thought the majority of my contribution would be analysis (not application development).
+Analysis discussion from the proposal could be useful in the demonstration section of the thesis.
+The 'Data Preparation' subsection of Methodology is still applicable.
+However, it is rather brief and could be expanded to include discussion.
+Cluster analysis is still useful in author fingerprinting discussion.
 
 
 Application
