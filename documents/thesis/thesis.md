@@ -118,21 +118,47 @@ There are 41254 "authors" that appear once
 Is the process of finding similar authors different enough from the process of finding similar papers to warrant separate treatment?
 This could be somewhat related to the author fingerprinting, in terms of implementation details
 
+This is a task where we want the analysis done offline, and just simple lookups done when the app is being used.
+I need to come up with a metric for simularity for these documents/objects.
+Similar authors could be authors who publish together, but should certainly include authors who do not publish together but publish with similar keywords.
+This is likely more interesting to users, as it could suggest similar authors they are unaware of.
+It would also be neat to see how time affects this.
+Was there a similar author 20 years prior?
+
+Spoke to Pawan about this, he suggests it can be done quite easily with association mining.
+So the work ahead would likely be to perform association mining on the entire dataset offline and then construct an API in the web application to connect user input to the results of the mining.
+
+An easy first approach could be to use Apriori on authors and selector values (essentially isotopes)
+
+I have used the apriori algorithm on selector.values.
+I think the results are not that valuable.
+They are really just descirbing which selector values appear often together in the same paper, and that is not particularly illuminating domain knowledge.
+
+### Running Apriori on Selector Values or Authors
+As a preliminary test with association rule learning, we prepare our data for use with the Apriori algorithm in the *arules* package in R.
+It is pretty easily to flatten our data as needed using the MongoDB aggregation framework.
+Getting the data for finding association rules among the authors is rather trivial and involves only a $project stage to simplify the documents to only include the fields we want.
+Because the R packages for interacting with mongo are not official, we made a new collection of the data we wanted to analyze and then exported that to csv.
+And in fact, because our data fields contain commas, we massage this csv data into tab separated values, tsv.
+
+
 ## Time series visualizations
 How does an "object" evolve over time?
 This could be an author, keyword, group of authors, etc.
-
-## Simplified, unified search
-The present interface requires the specification of types of searches, we can infer this.
-If the user typed an author's name, then we can search for papers of that author.
-Similarly if the user typed a keyword or phrase like "nuclear halo" we can search for papers involving that keyword.
 
 ## Network visualization and exploration
 Treating the data as a network or graph is unique to our application.
 This is a feature that warrants a lot of attention.
 
+## Simplified, unified search
+The present interface requires the specification of types of searches, we can infer this.
+If the user typed an author's name, then we can search for papers of that author.
+Similarly if the user typed a keyword or phrase like "nuclear halo" we can search for papers involving that keyword.
+> Check how possible this is currently!
+
 ## Data exporting?
 Being able to save the current visualizations, graph data structures, or flat csv data could be of use.
+> Check how possible this is currently!
 
 
 Miscellaneous
