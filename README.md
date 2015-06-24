@@ -1,38 +1,30 @@
 Masters of Science in Applied Science
 =====================================
  
-###Andrew Valencik  
 
-Schedule
+Timeline
 ========
 
 May 21 -  Outlined Application and Algorithmic development
-May 28 -   
-June  4 -   
-June 11 -   
-June 18 - Planned finish date (150 pages)  
-June 25 - Final draft to Roby  
-July  2 - Thesis submitted to committee  
-July 16 - 
-July 30 - 
-August  6 - 
-August 13 - Defend
-August 20 - Submit corrections  
-August 27 -
-September  3 - 
-September 10 - 
+June 11 - Planned features
+June 18 - Began association mining
+June 25 - Finishing association mining 
+July  2 - Clustering data
+July 16 - Connecting app to KDD results
+July 26 - Prepare rough draft?
+July 30 - Away
+August  6 - Away
+September - Finish
+October  - Submit to committee
+November - Defend
 
 
 Tasks to complete
 =================
 
-#Highest level
-+ Mine the data (CS), come up with a statement (physics)
-+ Label, thesis necessary and wants
-
 ## Writing
 + Begin introduction and theory section
-  - Use literature review from APSC course as guideline
++ Use literature review from APSC course as guideline
 + Write out parts of the thesis in jot notes and goals
 
 ## Analysis
@@ -40,7 +32,6 @@ Tasks to complete
   - Authors with similar keywords that the original author has not already published with
 + What keyword pairs have the highest author correlation
 + Waveforms of a datatype's occurrences wrt time
-+ Cluster waveforms
 
 ## Testing
 + Test different index types, perhaps composite has advantages
@@ -65,12 +56,9 @@ Tasks to complete
 + Cluster the authors using the similarity results
 
 ## Maintenance (low priority)
-+ Remove dependencies on metalsmith
 + Remove the dependency on nvd3
-+ Remove vim dependency for data cleaning/parsing/formatting
-  - Look into node modules for regex and parsing
 + Create a script for mongo importing and index creation
 
 ## Wishlist
-+ Data overlayed on chart of nuclides
-  - built a heatmap of search results
++ Data overlay on chart of nuclides (heatmap)
++ Cluster waveforms of time series data
