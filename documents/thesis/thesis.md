@@ -113,10 +113,15 @@ A possible example being an author name misspelling that only happen once. (not 
 build collection of all unique author names (101095)
 calculate the edit distances of all the author names (more than 5 billion calculations...)
 There are 41254 "authors" that appear once
+(I would like to not actually write that number in the thesis, but instead compute and reference it.)
 
 ## Similar "Objects"
-Is the process of finding similar authors different enough from the process of finding similar papers to warrant separate treatment?
-This could be somewhat related to the author fingerprinting, in terms of implementation details
+
+The ultimate goal of the Similar Objects feature is to provide a flexible recommender system that supports recommending different types of objects within the database.
+The most obvious usecase of this feature is to find similar authors to those the user is currently inspecting or searching.
+However the system should be extendable to also recommend similar keywords or periods in time, for example.
+Implementing this feature requires a significant amount of offline data mining and analysis.
+Once the analysis is done, the runtime of the application need only do quick lookups in tables to find the desired results.
 
 This is a task where we want the analysis done offline, and just simple lookups done when the app is being used.
 I need to come up with a metric for simularity for these documents/objects.
@@ -149,14 +154,16 @@ In the case of nuclides found in selector values, we often see multiple rules in
 Now I have a list of association rules, and I want to filter them to see only rules that involve authors who have not published together.
 Specifically I want authors who have published using the same keyword in different papers, and have never authored a paper together.
 
-In an attempt to do this:
 I could make a list of the total coauthors for any given author.
 Then I could cheaply lookup an author in an association rule (perhaps the rhs author) and see if i find the other authors in the rule.
 If not, then this is an interesting rule. If so, it is likely considerably less interesting.
 
 Pawan has suggested another method: taking the difference of two sets of rules.
 One produced using any initial criteria as long as the rules are associations of authors, and the second rules produced from coauthorship data.
+Testing both methods could be interesting and should not be terribly difficult.
 
+A small python script has been written to parse the arules apriori output rules into python lists.
+From here we can use the data for analysis such has database queries, or simply produce more standard csv/tsv records.
 
 
 ## Time series visualizations
