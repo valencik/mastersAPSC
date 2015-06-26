@@ -141,6 +141,23 @@ Getting the data for finding association rules among the authors is rather trivi
 Because the R packages for interacting with mongo are not official, we made a new collection of the data we wanted to analyze and then exported that to csv.
 And in fact, because our data fields contain commas, we massage this csv data into tab separated values, tsv.
 
+The Apriori algorithm returns list of association rules that have support and confidence values above the minimum amount specified.
+This list almost certainly contains duplicate information.
+Sometimes of the form A->B and B->A
+In the case of nuclides found in selector values, we often see multiple rules involving various different permutations of a list of common isotopes.
+
+Now I have a list of association rules, and I want to filter them to see only rules that involve authors who have not published together.
+Specifically I want authors who have published using the same keyword in different papers, and have never authored a paper together.
+
+In an attempt to do this:
+I could make a list of the total coauthors for any given author.
+Then I could cheaply lookup an author in an association rule (perhaps the rhs author) and see if i find the other authors in the rule.
+If not, then this is an interesting rule. If so, it is likely considerably less interesting.
+
+Pawan has suggested another method: taking the difference of two sets of rules.
+One produced using any initial criteria as long as the rules are associations of authors, and the second rules produced from coauthorship data.
+
+
 
 ## Time series visualizations
 How does an "object" evolve over time?
@@ -172,7 +189,8 @@ If yes:
 - Time series profile clustering. Show me other objects that evolved like this one.
 - Chart of nuclides, table of elements visualizations
 - Research predictions, suggestions
-- Author/Group/Journal profiling (innovative, follower, prolific...)
+- Author/Group/Journal profiling (innovative, follower, prolific...) (likely better done with citation info)
+- Anything involving other data like citations
 
 ## Contributions
 
