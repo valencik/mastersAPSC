@@ -1,3 +1,8 @@
+%-    Research Proposal
+%- The 'Data Preparation' subsection of Methodology is still applicable.
+%- However, it is rather brief and could be expanded to include discussion.
+
+
 Thesis Introduction
 ===================
 
@@ -50,17 +55,6 @@ Interactive visualizations are used to encourage exploring the data.
 The hope is that this work will spawn future works either with the NSR data or similar databases of information.
 
 
-Research Proposal
-=================
-> Examining the usage of the previously written research proposal.
-
-The proposal was written when I thought the majority of my contribution would be analysis (not application development).
-Analysis discussion from the proposal could be useful in the demonstration section of the thesis.
-The 'Data Preparation' subsection of Methodology is still applicable.
-However, it is rather brief and could be expanded to include discussion.
-Cluster analysis is still useful in author fingerprinting discussion.
-
-
 Application
 ===========
 > Designing an interface for such an application
@@ -74,6 +68,7 @@ Perhaps write this after the demonstration section. (We build/propose the tool t
 Algorithmic development
 =======================
 > Introduce and discuss the algorithms used in various application features
+%- Cluster analysis in research proposal is still useful.
 
 Starting with some of the naive algorithms, and then going to graph theory.
 A review of graph theoretic concepts and piecing them together for the application on hand.
@@ -125,6 +120,7 @@ So while python may not be the obvious choice for a web application today, its a
 Demonstration
 =============
 > Demonstrate how the application can be used to perform analysis of the NSR.
+%- Analysis discussion from the proposal could be useful in the demonstration section of the thesis.
 
 Demonstration of the application.
 How everything that was promised is delivered.
