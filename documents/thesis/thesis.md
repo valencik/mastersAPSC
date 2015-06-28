@@ -1,7 +1,29 @@
 Thesis Introduction
 ===================
 
-The introduction will be written later.
+%- The problem and its setting
+%- Proposed methodology to solve problem
+The National Nuclear Data Center prepares an evaluated database of nuclear science literature that poses a rich opportunity for knowledge discovery directed at the scientific work and study.
+Identifying trends and patterns in the meta data of over 200,000 documents may reveal latent structures of the progress and collaboration among the scientific community.
+This knowledge may have implications in other similar scientific fields, but most prominently it may provide predictive power within the nuclear science domain.
+
+%- Define research setting and sum-up what has been done
+%- Point towards what should be done, why?
+%- What is the problem? What will I study?
+The academic field of nuclear science is over one hundred years old, starting with the discovery of radiation.
+This discovery is the first of many entries in the Nuclear Science References database, collected, cataloged, distributed, and evaluated by the National Nuclear Data Center. \citep{Kurgan200603}
+The NSR has over 210,000 entries documenting the body of nuclear science literature, which provides the opportunity for knowledge discovery on the literature's meta data.
+
+
+%- What do we know already?
+%- How will this advance our knowledge?
+%- Explain your choice of model. Advantages? Suitability from theoretical point of view? practical reasons for using it?
+%- Significance, timeliness, and importance of project.
+Information retrieval has been repeatedly improved by large search engines like Google.
+And while nuclear science literature is a specialized field, Google Scholar is capable of searching many peer reviewed journal articles.
+The NSR provides meta data that can be converted to semantic information for advanced querying capabilities.
+This work is a cross disciplinary work, combining data mining technique with domain knowledge in nuclear physics.
+
 
 System analysis
 ===============
