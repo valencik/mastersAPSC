@@ -7,9 +7,25 @@ System analysis
 ===============
 > Description of the application domain, existing tools, and functional analysis of a comprehensive application that will be helpful to the physicists.
 
-The NNDC maintains the [NSR website](http://www.nndc.bnl.gov/nsr/) with simple search features.
+The NNDC maintains the [NSR website](http://www.nndc.bnl.gov/nsr/) which serves a simple interface to the Nuclear Science References database.
 They offer a quick search, and searching via text, keynumber, and various indexed key fields.
-Each search function is hidden in either a separate interface or a drop down menu.
+The various search functions are separated in either different pages or different text boxes.
+Some options and customizations are set through drop down menus.
+For example the searching of indexed fields, including the selector values, is separate from the text search.
+
+![The main interface for the NNDC's NSR website. Captured June 28th 2015](images/web-NSR-main-June-28-2015.png)
+
+- Get some screenshots of the NSR website. (automate?)
+- Does the NSR website offer visualizations?
+- Easy method of exporting data?
+- Links to papers?
+- How capable is it as a tool to explore further work?
+
+The primary function of the developed application is increased accessibility to exploration of the Nuclear Science References data.
+The authors documented, the papers recorded and keyworded, their links, and all available metadata for the nearly 120 years.
+The application makes use of a web interface as the browser is the most widely available runtime environment.
+Interactive visualizations are used to encourage exploring the data.
+The hope is that this work will spawn future works either with the NSR data or similar databases of information.
 
 
 Research Proposal
