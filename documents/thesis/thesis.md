@@ -78,8 +78,49 @@ The data from the NSR is in a custom format.
 I developed a schema that would work well with the queries in mind and the MongoDB database software.
 The data needed to be cleaned and transformed into the desired scheme before being imported into MongoDB.
 
+~~~ {#rawNSRentry caption="An example NSR entry showing the raw NSR data format."}
+<KEYNO   >1988AB01                                                              &
+<HISTORY >A19880309 M19880315                                                   &
+<CODEN   >JOUR PRVCA 37 401                                                     &
+<REFRENCE>Phys.Rev. C37, 401 (1988)                                             &
+<AUTHORS >A.Abzouzi, M.S.Antony                                                 &
+<TITLE   >Calculation of Energy Levels of {+232}Th,{+232}{+-}{+238}U for K(|p) =&
+ 0{++} Ground State Bands                                                       &
+<KEYWORDS>NUCLEAR STRUCTURE {+232}Th,{+232},{+234},{+236},{+238}U; calculated le&
+vels,band features. Semi-empirical formalism.                                   &
+<SELECTRS>N:232TH;A. N:232U;A. N:234U;A. N:236U;A. N:238U;A. C:OTHER;A.         &
+<DOI     >10.1103/PhysRevC.37.401                                               &
+~~~
+
 With the data representation complete and the data formatted correctly and imported to MongoDB, we can consider the database operations.
 The most common operation will be some sort of search or lookup.
+A small python program is shown in figure ??? that saves the results of a MongoDB aggregation query to a tsv file.
+
+~~~ {#pymongotrans .python caption="Saving the results of an eggregate query to file"}
+from pymongo import MongoClient
+import csv
+
+client = MongoClient('localhost', 27017)
+db = client.masters
+nsr = db.NSR
+
+selectorAuthors_pipeline = [
+    {"$match": {"selectors.type":"N"}},
+    {"$unwind": "$selectors"},
+    {"$unwind": "$authors"},
+    {"$group": {"_id": "$selectors.value", "authors": {"$addToSet": "$authors"}}}
+]
+results = nsr.aggregate(selectorAuthors_pipeline, allowDiskUse=True)
+
+with open('tsa.tsv', 'w', newline='') as tsvfile:
+    transaction_writer = csv.writer(tsvfile, delimiter='\t')
+    for document in results:
+        transaction_list = document['authors']
+        transaction_list.insert(0, document['_id'])
+        transaction_writer.writerow(transaction_list)
+~~~
+
+
 To optimize this process we instruct MongoDB to index our data on various fields.
 Indexing speeds up search queries in a manner similar to sorting a series of data elements.
 MongoDB allows for many different types of indexes.
@@ -89,9 +130,10 @@ For example it would be very quick to find all the documents with type 'Journal'
 Where as the search for all documents with keyword "fisson" has not been optimized by the previously mentioned indexes.
 
 We can create an index of the document years at the mongo shell with the following command:
-```javascipt
+
+~~~ {.javascript caption="Create an index on the 'year' field in Mongo Shell"}
 db.NSR.createIndex({year: 1})
-```
+~~~
 
 Since our author field is really an array of string elements, we can use a single field index on it without issue.
 However, on field like the title or keywords a single field index will fall short of helping us find partial matches.
