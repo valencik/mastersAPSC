@@ -1,3 +1,13 @@
+---
+title:  'Masters of Science in Applied Science Thesis'
+author:
+- name: Andrew Valencik
+  affiliation: Saint Mary\'s University
+author: Andrew Valencik
+date: June 29th 2015
+...
+
+\listoflistings
 %-    Research Proposal
 %- The 'Data Preparation' subsection of Methodology is still applicable.
 %- However, it is rather brief and could be expanded to include discussion.

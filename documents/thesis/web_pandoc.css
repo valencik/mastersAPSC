@@ -1,0 +1,52 @@
+/* Pandoc header DIV. Contains .title, .author and .date. Comes before div#TOC. 
+   Only appears if one of those three are in the document.
+   Put border on bottom. Separates it from TOC or body that comes after it.
+*/
+div#header, header {
+  border-bottom: 1px solid #aaa;
+  margin-bottom: 0.5em;
+}
+
+/* Pandoc title header (h1.title) */
+.title {
+  text-align: center;
+}
+
+/* Pandoc author(s) and date headers (h2.author and h3.date) */
+.author, .date {
+  text-align: center;
+}
+
+/* Pandoc table of contents DIV when using the --toc option.
+   NOTE: this doesn't support Pandoc's --id-prefix option for #TOC and #header. 
+   Probably would need to use div[id$='TOC'] and div[id$='header'] as selectors.
+*/
+div#TOC, nav#TOC
+{
+  /* Put border on bottom to separate it from body. */
+  border-bottom: 1px solid #aaa;
+  margin-bottom: 0.5em;
+}
+
+body {
+  max-width:750px;
+  line-height:1.6;
+  font-size:18px;
+  color:#444;
+  margin:40px auto;
+  padding:0 10px;
+}
+
+h1,h2,h3 {
+  line-height:1.2;
+}
+
+p img{
+  width:100%;
+  max-width:700px;
+}
+
+pre {
+  font-size: 14px;
+  padding-bottom: 10px;
+}
