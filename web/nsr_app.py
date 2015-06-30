@@ -73,7 +73,7 @@ def topauthors(year_id):
         {"$sort": {"total": -1} },
         {"$limit": limit_id}
     ]
-    results = jsonify(nsr.aggregate(topauthors_pipeline)['result'])
+    results = jsonify(nsr.aggregate(topauthors_pipeline))
     return results
 
 # API: authornetwork
@@ -103,7 +103,7 @@ def searchnetwork():
 # Author graph function
 def authorgraph(pipeline, options):
     pipeline.append({"$project": {"_id": 0, "authors": "$authors"}})
-    results = nsr.aggregate(pipeline)['result']
+    results = nsr.aggregate(pipeline)
     G = nx.Graph()
     nodes = set()
     for author_list in results:
