@@ -9,6 +9,7 @@ pandoc --table-of-contents --number-sections --standalone \
   thesis_no_comments.md --output Thesis.tex
 
 pdflatex -shell-escape Thesis.tex
+pdflatex -shell-escape Thesis.tex
 
 pandoc --table-of-contents --number-sections --standalone \
   --css=web_pandoc.css \
