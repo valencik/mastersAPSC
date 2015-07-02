@@ -43,26 +43,61 @@ This work is a cross disciplinary work, combining data mining technique with dom
 System analysis
 ===============
 > Description of the application domain, existing tools, and functional analysis of a comprehensive application that will be helpful to the physicists.
+%- Get some screenshots of the NSR website. (automate?)
+%- Does the NSR website offer visualizations?
+%- Easy method of exporting data?
+%- Links to papers? Yes, DOI when available.
+%- How capable is it as a tool to explore further work?
 
+%- Introduction to NSR data?
+
+## The Nuclear Science References Website
 The NNDC maintains the [NSR website](http://www.nndc.bnl.gov/nsr/) which serves a simple interface to the Nuclear Science References database.
-They offer a quick search, and searching via text, keynumber, and various indexed key fields.
+They offer four primary search interfaces, a quick search, text search, indexed search, and keynumber search.
+The quick search interface is shown in the provided screenshot.
+![The main interface for the NNDC's NSR website. Captured June 28th 2015](images/web-NSR-main-June-28-2015.png)
+
 The various search functions are separated in either different pages or different text boxes.
 Some options and customizations are set through drop down menus.
 For example the searching of indexed fields, including the selector values, is separate from the text search.
 
-![The main interface for the NNDC's NSR website. Captured June 28th 2015](images/web-NSR-main-June-28-2015.png)
+### Quick Search
+The quick search functionality is shown on the NSR homepage, it is likely the most commonly used interface.
+It enables searching by author name, nuclide, or reaction.
+Two types of filters are available to limit the results: a year range, and reference type which can return only experimental or theory entries.
+Each of the search fields show examples of the type of search as well.
+For example the author field shows you can search for an author using their first initials and their last name, or simply just their last name.
 
-- Get some screenshots of the NSR website. (automate?)
-- Does the NSR website offer visualizations?
-- Easy method of exporting data?
-- Links to papers?
-- How capable is it as a tool to explore further work?
+### Text Search
+The text search interface enables text searching in the title, keywords, or both fields.
+The search is not case sensitive and requires a search string of at least three characters in length.
+Phrases can be used by enclosing them in quotes.
+The user can specify a publication year range, or choose a date to filter when the entries were added to the database.
+Additionally the user can enable 'primary only' or 'require measured quantity' flags.
+The results can be sorted in ascending or descending order and presented in HTML, BibTex, Text, Keynum, or Exchange formats.
+%- The quick search results do not offer these output customizations.
 
+### Indexed Search
+%- Author fingerprinting will improve the author 'browse' button
+The interface for indexed searching is quite similar to the Text search.
+The most important difference is the functionality offered by the browse buttons for the search parameters.
+The user can select a parameter of the following types:
+Author, FirstAuthor, Nuclide, Target, Parent, Daughter, Subject, Measured, Deduced, Calculated, Reaction, Incident, Outgoing, Journal, Topic, Z(range)
+For each of the types available the browser button will redirect to another page that either details the possible values or provides another search through the possible values.
+For example, Author and First Author direct to a simple search interface that allows some partial matches againsts the list of known authors.
+
+### Result Analysis
+Search queries are remembered and presented in the 'Combine View' tab.
+You can combine the results of recent queries with various boolean logic.
+Analysis is offered on the search queries which displays how many nuclides, authors, journals, and publication years the query invovled.
+
+## Proposed Improvements
 The primary function of the developed application is increased accessibility to exploration of the Nuclear Science References data.
-The authors documented, the papers recorded and keyworded, their links, and all available metadata for the nearly 120 years.
-The application makes use of a web interface as the browser is the most widely available runtime environment.
+This includes the authors documented, the papers recorded and keyworded, their links, and all available metadata for the nearly 120 years.
+The application makes use of a web interface to aid in increasing accessibility.
+All one needs in order to use the application is a modern web browser.
 Interactive visualizations are used to encourage exploring the data.
-The hope is that this work will spawn future works either with the NSR data or similar databases of information.
+The hope is that this work will enable and encourage future works either with the NSR data or similar databases of information.
 
 
 Application
