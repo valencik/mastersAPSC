@@ -10,11 +10,11 @@ s/^"_id":"((\d\d\d\d).*)",$/"_id":"$1",\n"year":$2,/g;
 s/^"code":"((\w*).*)",$/"code":"$1",\n"type":"$2",/g;
 
 # Turn author names into array elements
-s/[^]], /", "/g if /^"authors":\[/;
+s/([^]]), /$1", "/g if /^"authors":\[/;
 s/", "Jr."/, Jr."/g if /^"authors":\[/; #Fix the Jr's
 
 # Turn history stamps into array elements
-s/ /", "/g if /^"history":\[/;
+s/(\b) (\b)/$1", "$2/g if /^"history":\[/;
 
 # Split selectors
 s/([A-Z]):(.*?);(.*?)\./{"type":"$1", "value":"$2", "subkey":"$3"},/g if /^"selectors":\[/;
@@ -98,3 +98,6 @@ s/\|\\/\\vert /g;
 s/\|\]/\\} /g;
 s/\|^/\\uparrow /g;
 s/\|_/\\downarrow /g;
+
+# Remove double whitespace
+s/ {2,}/ /g;

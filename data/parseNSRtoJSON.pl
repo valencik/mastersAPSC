@@ -24,15 +24,15 @@ s/^<CODEN   >(THE{SIS|Thesis,) /<CODEN   >THESIS /mg;
 # Force any remaining problems to simply be type UNKNOWN
 s/^<CODEN   >(?!JOUR)(?!REPT)(?!CONF)(?!THESIS)(?!PC)(?!PREPRINT)(?!BOOK)/<CODEN   >UNKNOWN /mg;
 
-# Remove tailing whitespace and tabs
-s/\t/  /g;
-s/ {2,}&$/&/mg;
-
 # Escape double quotes
 s/"/\\"/g;
 
 # Collapse all multiline entries to single line
 s/&\n(.)(?!KEYNO)(?!HISTORY)(?!CODEN)(?!REFRENCE)(?!AUTHORS)(?!TITLE)(?!KEYWORDS)(?!SELECTRS)(?!DOI)/$1/mg;
+
+# Remove tailing whitespace and tabs
+s/ +&$/&/mg;
+s/\t/ /mg;
 
 # Basic parsing
 s/^<KEYNO   >(.*)&$/{\n"_id":"$1",/mg;
@@ -44,6 +44,9 @@ s/^<TITLE   >(.*)&$/"title":"$1",/mg;
 s/^<DOI     >(.*)&$/"DOI":"$1",/mg;
 s/^<KEYWORDS>(.*)&$/"keywords":["$1"],/mg;
 s/^<SELECTRS>(.*)&$/"selectors":["$1"],/mg;
+
+# Remove double whitespace
+s/ {2,}/ /g;
 
 # End JSON structures
 s/,\n{/\n}\n{/mg; 
