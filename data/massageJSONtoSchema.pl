@@ -12,6 +12,7 @@ s/^"code":"((\w*).*)",$/"code":"$1",\n"type":"$2",/g;
 # Turn author names into array elements
 s/([^]]), /$1", "/g if /^"authors":\[/;
 s/", "Jr."/, Jr."/g if /^"authors":\[/; #Fix the Jr's
+s/"authors":\[""\],/"authors":["UNKNOWN"],/g if /^"authors":\[/; #Fix empty fields
 
 # Turn history stamps into array elements
 s/(\b) (\b)/$1", "$2/g if /^"history":\[/;

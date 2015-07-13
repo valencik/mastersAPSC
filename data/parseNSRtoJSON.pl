@@ -33,6 +33,7 @@ s/&\n(.)(?!KEYNO)(?!HISTORY)(?!CODEN)(?!REFRENCE)(?!AUTHORS)(?!TITLE)(?!KEYWORDS
 # Remove tailing whitespace and tabs
 s/ +&$/&/mg;
 s/\t/ /mg;
+s/, ,/, /g; #Fix empty separated values
 
 # Basic parsing
 s/^<KEYNO   >(.*)&$/{\n"_id":"$1",/mg;
