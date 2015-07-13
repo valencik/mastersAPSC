@@ -57,19 +57,20 @@ if not 'authorSummary' in db.collection_names():
 # Generate authorSummary tsv for clustering
 print("Aggregating authorSummary data...")
 authorSummary_pipeline = [
-    {"$project": {"_id": 1, "numCoauthors": {"$size": "$coauthors"}, "numYears": {"$size": "$years"},
-        "numEntries": {"$size": "$papers"}}}
+    {"$project": {"_id": 0, "author": "$_id", "numCoauthors": {"$size": "$coauthors"},
+                  "numYears": {"$size": "$years"}, "numEntries": {"$size": "$papers"}}}
     ]
 results = db.authorSummary.aggregate(authorSummary_pipeline, allowDiskUse=True)
 with open('author-cluster-input.tsv', 'w', newline='') as tsvfile:
     print("Writing authorSummary data to file...")
-    transaction_writer = csv.writer(tsvfile, delimiter='\t')
+    cluster_writer = csv.writer(tsvfile, delimiter='\t')
+    cluster_writer.writerow(["author", "numCoauthors", "numYears", "numEntries"])
     for document in results:
-        transaction_list = [document['_id']]
-        transaction_list.append(document['numCoauthors'])
-        transaction_list.append(document['numYears'])
-        transaction_list.append(document['numEntries'])
-        transaction_writer.writerow(transaction_list)
+        cluster_list = [document['author']]
+        cluster_list.append(document['numCoauthors'])
+        cluster_list.append(document['numYears'])
+        cluster_list.append(document['numEntries'])
+        cluster_writer.writerow(cluster_list)
 
 # Generate transactions tsv for association rule learning
 print("Aggregating transaction data...")
