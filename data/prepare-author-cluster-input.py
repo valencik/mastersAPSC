@@ -70,3 +70,20 @@ with open('author-cluster-input.tsv', 'w', newline='') as tsvfile:
         transaction_list.append(document['numYears'])
         transaction_list.append(document['numEntries'])
         transaction_writer.writerow(transaction_list)
+
+# Generate transactions tsv for association rule learning
+print("Aggregating transaction data...")
+selectorAuthors_pipeline = [
+    {"$match": {"selectors.type":"N"}},
+    {"$unwind": "$selectors"},
+    {"$unwind": "$authors"},
+    {"$group": {"_id": "$selectors.value", "authors": {"$addToSet": "$authors"}}}
+]
+results = db.NSR.aggregate(selectorAuthors_pipeline, allowDiskUse=True)
+with open('transactionsSelectorAuthors.tsv', 'w', newline='') as tsvfile:
+    print("Writing transaction data to file...")
+    transaction_writer = csv.writer(tsvfile, delimiter='\t')
+    for document in results:
+        transaction_list = document['authors']
+        transaction_list.insert(0, document['_id'])
+        transaction_writer.writerow(transaction_list)
