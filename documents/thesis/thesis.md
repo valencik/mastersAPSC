@@ -177,15 +177,28 @@ Where as the search for all documents with keyword "fisson" has not been optimiz
 
 We can create an index of the document years at the mongo shell with the following command:
 
-~~~ {.javascript caption="Create an index on the 'year' field in Mongo Shell"}
+``` {.javascript caption="Create an index on the 'year' field in Mongo Shell"}
 db.NSR.createIndex({year: 1})
-~~~
+```
 
 Since our author field is really an array of string elements, we can use a single field index on it without issue.
 However, on field like the title or keywords a single field index will fall short of helping us find partial matches.
 For example, searching for documents with the word "neutron" in the title will not be sped up by a single field index.
 For this task we leverage MongoDB's text indexes.
+%- TODO Confirm that this is true, perhaps even demonstrate it
 
+## Clustering
+%- Cluster with author, numCoauthors, numEntries, numYears first
+%- Then develope more advanced clusterings by increasing the number of parameters used to describe these points.
+%- e.g. Use values at a range of different percentiles.
+Clustering is a important part of the knowledge discovery process.
+With it we can separate objects within the data.
+This is best explained through an example.
+
+We use an aggregation query to summarize our data in preparation for clusting.
+This query saves, for each author, their total number of coauthors, their total number of years publishing, and their total number of publications.
+This serves as a good first characterization of author types.
+We should be able to see very prolific authors with high numbers of entries.
 
 Implementation
 ==============
