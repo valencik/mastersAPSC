@@ -33,6 +33,12 @@ col=ncol(data)
 # Cluster data using K-Means
 writeLines("Starting K-Means...")
 for (numCenters in numCentersMin:numCentersMax) {
+    if (numCenters == numCentersMin){
+        analysisAppend = FALSE
+    } else {
+        analysisAppend = TRUE
+    }
+
     writeLines("Clustering...")
     km = kmeans(x=data, centers=numCenters, iter.max=1000, nstart=20)
     
@@ -45,7 +51,7 @@ for (numCenters in numCentersMin:numCentersMax) {
     # Record cluster analysis measurements to file
     writeLines("Recording clustering results to file...")
     clusterIndexes = rbind(numCenters, km$betweenss, km$tot.withinss, km$totss, dbi$DB, g1i)
-    write(clusterIndexes, file=paste0(outDir, numCenters,"cluster-analysis.csv"), ncolumns=6, sep=',')
+    write(clusterIndexes, file=paste0(outDir, "cluster-analysis.csv"), append=analysisAppend, ncolumns=6, sep=',')
 
     # Write cluster centers to a file
     write(t(km$centers), file=paste0(outDir, numCenters,"cluster-centers.csv"), ncolumns=col, sep=',')
