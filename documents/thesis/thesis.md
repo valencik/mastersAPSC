@@ -112,18 +112,19 @@ Perhaps write this after the demonstration section. (We build/propose the tool t
 
 Algorithmic development
 =======================
-> Introduce and discuss the algorithms used in various application features
+%- Introduce and discuss the algorithms used in various application features
 %- Cluster analysis in research proposal is still useful.
-
-Starting with some of the naive algorithms, and then going to graph theory.
-A review of graph theoretic concepts and piecing them together for the application on hand.
+%- Starting with some of the naive algorithms, and then going to graph theory.
+%- A review of graph theoretic concepts and piecing them together for the application on hand.
 
 ## The Data and Database
-The data from the NSR is in a custom format.
+%- TODO expand
+The data from the NSR is in a custom format, which is documented extensively in !!!.
+An example of a raw NSR entry is shown in figure !!!.
 I developed a schema that would work well with the queries in mind and the MongoDB database software.
 The data needed to be cleaned and transformed into the desired scheme before being imported into MongoDB.
 
-~~~ {#rawNSRentry caption="An example NSR entry showing the raw NSR data format."}
+``` {#rawNSRentry caption="An example NSR entry showing the raw NSR data format."}
 <KEYNO   >1988AB01                                                              &
 <HISTORY >A19880309 M19880315                                                   &
 <CODEN   >JOUR PRVCA 37 401                                                     &
@@ -135,13 +136,13 @@ The data needed to be cleaned and transformed into the desired scheme before bei
 vels,band features. Semi-empirical formalism.                                   &
 <SELECTRS>N:232TH;A. N:232U;A. N:234U;A. N:236U;A. N:238U;A. C:OTHER;A.         &
 <DOI     >10.1103/PhysRevC.37.401                                               &
-~~~
+```
 
 With the data representation complete and the data formatted correctly and imported to MongoDB, we can consider the database operations.
 The most common operation will be some sort of search or lookup.
 A small python program is shown in figure ??? that saves the results of a MongoDB aggregation query to a tsv file.
 
-~~~ {#pymongotrans .python caption="Saving the results of an eggregate query to file"}
+``` {#pymongotrans .python caption="Saving the results of an eggregate query to file"}
 from pymongo import MongoClient
 import csv
 
@@ -163,7 +164,7 @@ with open('tsa.tsv', 'w', newline='') as tsvfile:
         transaction_list = document['authors']
         transaction_list.insert(0, document['_id'])
         transaction_writer.writerow(transaction_list)
-~~~
+```
 
 
 To optimize this process we instruct MongoDB to index our data on various fields.
