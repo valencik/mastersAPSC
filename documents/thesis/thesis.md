@@ -276,12 +276,8 @@ The goal is to minimize the total sum of squared errors between the centroids an
 J(C) = \sum^K_{k=1} \sum_{x_i \in c_k} \left| x_i - \mu_k \right| ^2
 \end{equation}
 
-%- \begin{figure}[!hb]
-%-     \centering
-%-     \includegraphics[width=\linewidth]{../literatureReview/kmeansJain.pdf}
-%-     \caption{Step by step illustration of K-means algorithm. (a) The initial input data. (b) Three seed points are chosen as the starting 'centroids' and the data points are assigned to the cluster with the closest seed point. (c) (d) The centroids of the new clusters are calculated, and data labels updated; (e) the iteration stops when the clusters converge.}
-%-     \label{fig:K-Means-Jain}
-%- \end{figure}
+%- Kmeans step by step from "Data clustering: 50 years beyond K-means" by Anil K. Jain
+![Step by step illustration of K-means algorithm. (a) The initial input data. (b) Three seed points are chosen as the starting 'centroids' and the data points are assigned to the cluster with the closest seed point. (c) (d) The centroids of the new clusters are calculated, and data labels updated; (e) the iteration stops when the clusters converge.](images/Kmeans-iterations-Jain09.pdf){#fig:kmeansJain}
 
 Three parameters for K-means must be specified initially, the number of clusters, initial centroid guesses, and the distance metric.
 The metric is the function on a space that describes how two points differ from one another, i.e. distance.
