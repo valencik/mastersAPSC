@@ -1,16 +1,17 @@
+%- TODO Fix citations
+%- TODO Add equation numbers, figure number (pandoc filters)
+%- TODO Make double spaced, set margins somewhere
+%- Text mining?
 ---
 title:  'Masters of Science in Applied Science Thesis'
 author:
 - name: Andrew Valencik
   affiliation: Saint Mary\'s University
 author: Andrew Valencik
-date: June 29th 2015
+date: July 15th 2015
 ...
 
 \listoflistings
-%-    Research Proposal
-%- The 'Data Preparation' subsection of Methodology is still applicable.
-%- However, it is rather brief and could be expanded to include discussion.
 
 
 Thesis Introduction
@@ -20,13 +21,19 @@ Thesis Introduction
 %- Proposed methodology to solve problem
 The National Nuclear Data Center prepares an evaluated database of nuclear science literature that poses a rich opportunity for knowledge discovery directed at the scientific work and study.
 Identifying trends and patterns in the meta data of over 200,000 documents may reveal latent structures of the progress and collaboration among the scientific community.
-This knowledge may have implications in other similar scientific fields, but most prominently it may provide predictive power within the nuclear science domain.
+The knowledge discovery and data mining process should reveal trends in the collective scientific study of nuclear structure, processes, and detection.
+Additionally, categorizing trends may provide predictive power in determining a worthwhile area of study or application of a technique.
+The analysis outcomes of studying literature meta data may provide useful when analyzing bodies of work from other disciplines.
+This knowledge may have implications in other similar scientific fields.
+%- We are building an application for users to use
+The ultimate goal is to enable further analysis on the body of nuclear science literature.
 
 %- Define research setting and sum-up what has been done
 %- Point towards what should be done, why?
 %- What is the problem? What will I study?
 The academic field of nuclear science is over one hundred years old, starting with the discovery of radiation.
 This discovery is the first of many entries in the Nuclear Science References database, collected, cataloged, distributed, and evaluated by the National Nuclear Data Center. \\citep{Kurgan200603}
+%- TODO this ending is insufficient
 The NSR has over 210,000 entries documenting the body of nuclear science literature, which provides the opportunity for knowledge discovery on the literature's meta data.
 
 
@@ -40,7 +47,7 @@ The NSR provides meta data that can be converted to semantic information for adv
 This work is a cross disciplinary work, combining data mining technique with domain knowledge in nuclear physics.
 
 
-System analysis
+System Analysis
 ===============
 > Description of the application domain, existing tools, and functional analysis of a comprehensive application that will be helpful to the physicists.
 %- Get some screenshots of the NSR website. (automate?)
@@ -102,12 +109,15 @@ The hope is that this work will enable and encourage future works either with th
 
 Application
 ===========
-> Designing an interface for such an application
+%- Designing an interface for such an application
+%- Perhaps write this after the demonstration section.
+%- (We build/propose the tool that does the things demonstrated.)
 
 The proposed application attempts to unify the various search functions into a single web app interface.
 Furthermore the app presents new types of analysis for the user.
+At a high level, the interface is composed of a search area that takes in user input and then generates a database query to retrieve the relevant data.
+This data is then presented with a number of visualization options.
 
-Perhaps write this after the demonstration section. (We build/propose the tool that does the things demonstrated.)
 
 
 Algorithmic development
@@ -119,10 +129,41 @@ Algorithmic development
 
 ## The Data and Database
 %- TODO expand
-The data from the NSR is in a custom format, which is documented extensively in !!!.
-An example of a raw NSR entry is shown in figure !!!.
-I developed a schema that would work well with the queries in mind and the MongoDB database software.
-The data needed to be cleaned and transformed into the desired scheme before being imported into MongoDB.
+The most preliminary step is acquiring the Nuclear Science References from the National Nuclear Data Center.
+A full database dump was acquired on January 29th 2014.
+This dump of the NSR data will hereinafter be referred to as if it were the complete NSR database.
+All efforts have been taken to ensure the research procedures can very easily be extended and repeated on new NSR data.
+
+Before the data can be imported into MongoDB it must be parsed into a JSON format.
+The NSR data is provided in a custom EXCHANGE format. \\citep{winchell2007nuclear}
+%- TODO add figure reference
+An example of the raw data for a single paper can be seen in figure !!!
+A series of simple search and replace commands using regular expressions can be applied to transform the data into a different structure more compatible with our database.
+
+In particular, this work uses a series of simple perl scripts to apply the regular expression transformations.
+%- FOOTNOTE Perl is used here as it remains one of the best regex tools, and allowed for scripts that read as a list of regexs to apply.
+The result a valid JavaScript Object Notation, or JSON, structure for each NSR entry.
+
+%- TODO Show/reference the JSON format of example raw NSR data
+
+%- Data Representation
+%- TODO discuss the NSR format. *Each* field on the newly created JSON
+In order to produce a good data schema, thought must be given to the data representation.
+Consideration should be given to the types of queries that will be made on the data.
+%- year as int allows <, >, and =
+%- author array has first, last, size, unwind
+For example the author field is likely best represented as an array of strings, with each unique author being a separate element in the array.
+This attaches information about how many authors an entry has to our schema.
+
+The optimal schema for the SELECTRS field is not initially obvious.
+The current schema has SELECTRS parsed into a 3 dimensional array.
+Each 'selector' has a type, value, and a link variable.
+The following types are valid:
+\begin{quote}
+N, T, P, G, R, S, M, D, C, X, A, or Z, which stand for nuclide, target, parent, daughter, reaction, subject, measured, deduced, calculated, other subject, mass range, and charge range, respectively.
+\end{quote}
+The value changes based on the type. The link variable is used to tie together multiple selectors.
+%- TODO Provide an example
 
 ``` {#rawNSRentry caption="An example NSR entry showing the raw NSR data format."}
 <KEYNO   >1988AB01                                                              &
@@ -138,6 +179,7 @@ vels,band features. Semi-empirical formalism.                                   
 <DOI     >10.1103/PhysRevC.37.401                                               &
 ```
 
+%- Data imported into MongoDB
 With the data representation complete and the data formatted correctly and imported to MongoDB, we can consider the database operations.
 The most common operation will be some sort of search or lookup.
 A small python program is shown in figure ??? that saves the results of a MongoDB aggregation query to a tsv file.
@@ -166,7 +208,7 @@ with open('tsa.tsv', 'w', newline='') as tsvfile:
         transaction_writer.writerow(transaction_list)
 ```
 
-
+%- MongoDB Indexes
 To optimize this process we instruct MongoDB to index our data on various fields.
 Indexing speeds up search queries in a manner similar to sorting a series of data elements.
 MongoDB allows for many different types of indexes.
@@ -187,18 +229,71 @@ For example, searching for documents with the word "neutron" in the title will n
 For this task we leverage MongoDB's text indexes.
 %- TODO Confirm that this is true, perhaps even demonstrate it
 
-## Clustering
+## Data Summarization
+%- Form data mining problems, questions, queries
+%- Interpretation
+Data summarization is necessary to begin to understand our data.
+Preliminary visualizations help in this task.
+A histogram of database entries per year is shown in figure !!!.
+This very quickly demonstrates that the majority of documents in the NSR were published in the last 50 years.
+
+%- TODO histogram of papers per year
+
+## Classification and Cluster Analysis
+Classification and clustering are related approaches to organizing data elements into groups for further analysis.
+Classification is the process of deciding what group a particular datum should most optimally belong to.
+Clustering is the grouping of multiple data points such that those belonging to a group are more similar in some manner than those outside of that group.
+
+Clustering can be broken into two main groups, hierarchical and partitional.
+Both groups have applications in this study.
+The citation structure or authorship of the literature is likely to be hierarchical in nature.
+%- TODO expand on hierarchical bit or remove it
+Partitional clustering should prove useful in determining the sub genres and fields of study within the body of work.
+
+Various aspects of the data will be clustered with differing techniques based on the data type.
+The methodology for a basic clustering technique, K-means clustering is discussed.
+
+### K-means Clustering
+K-means clustering is a cluster analysis technique that can group data objects in $K$ clusters based on minimizing their distances with respect to cluster centroids.
+K-means is a partitional clustering algorithm.
+
+Say we have a finite set of objects,  $X = {x_1, x_2, ..., x_n}$ where each is a data object in $d$ dimensions.
+We can create $k$ clusters $C = {c_1, c_2, ..., c_k}$ where $k <= n$.
+The process starts by randomly choosing $k$ points, ${x_1, ..., x_k}$ to be the centroids of a cluster.
+Iterate over each object $x$ and assign it to a cluster $c$ based on the minimization of some parameter, for now, Euclidean distance.
+The new centroids are now computed and the process is repeated until cluster stability is achieved.
+The goal is to minimize the total sum of squared errors between the centroids and all objects. 
+\begin{equation} \label{kmeans}
+J(C) = \sum^K_{k=1} \sum_{x_i \in c_k} \left| x_i - \mu_k \right| ^2
+\end{equation}
+
+%- \begin{figure}[!hb]
+%-     \centering
+%-     \includegraphics[width=\linewidth]{../literatureReview/kmeansJain.pdf}
+%-     \caption{Step by step illustration of K-means algorithm. (a) The initial input data. (b) Three seed points are chosen as the starting 'centroids' and the data points are assigned to the cluster with the closest seed point. (c) (d) The centroids of the new clusters are calculated, and data labels updated; (e) the iteration stops when the clusters converge.}
+%-     \label{fig:K-Means-Jain}
+%- \end{figure}
+
+Three parameters for K-means must be specified initially, the number of clusters, initial centroid guesses, and the distance metric.
+The metric is the function on a space that describes how two points differ from one another, i.e. distance.
+Euclidean distance is typically used, leading to ball or sphere shaped clusters. \\citep{Jain2010651}
+
+The chosen number of clusters has a huge impact on the data partitions.
+Some heuristics exist to aid in determining an optimal $k$. \\citep{tibshirani2001estimating}
+In practice, K-means is normally run multiple times with varying $k$ values and the best is selected by a domain expert.
+However, measurements of cluster effectiveness will be shown.
+%- TODO DB index, G1 index
+
+### Initial Author Clustering
 %- Cluster with author, numCoauthors, numEntries, numYears first
 %- Then develope more advanced clusterings by increasing the number of parameters used to describe these points.
 %- e.g. Use values at a range of different percentiles.
-Clustering is a important part of the knowledge discovery process.
-With it we can separate objects within the data.
-This is best explained through an example.
 
 We use an aggregation query to summarize our data in preparation for clusting.
 This query saves, for each author, their total number of coauthors, their total number of years publishing, and their total number of publications.
 This serves as a good first characterization of author types.
 We should be able to see very prolific authors with high numbers of entries.
+
 
 Implementation
 ==============
