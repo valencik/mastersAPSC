@@ -6,6 +6,7 @@ sed '/^%- .*$/d' thesis.md > thesis_no_comments.md
 pandoc --table-of-contents --number-sections --standalone \
   --include-in-header=header.tex --include-before-body=beforebody.tex \
   --filter ./minted.py \
+  --filter pandoc-fignos \
   thesis_no_comments.md --output Thesis.tex
 
 pdflatex -shell-escape Thesis.tex

@@ -61,8 +61,9 @@ System Analysis
 ## The Nuclear Science References Website
 The NNDC maintains the [NSR website](http://www.nndc.bnl.gov/nsr/) which serves a simple interface to the Nuclear Science References database.
 They offer four primary search interfaces, a quick search, text search, indexed search, and keynumber search.
-The quick search interface is shown in the provided screenshot.
-![The main interface for the NNDC's NSR website. Captured June 28th 2015](images/web-NSR-main-June-28-2015.png)
+The quick search interface is shown in figure {@fig:nsrweb1}.
+
+![The main interface for the NNDC's NSR website. Captured June 28th 2015](images/web-NSR-main-June-28-2015.png) {#fig:nsrweb1}
 
 The various search functions are separated in either different pages or different text boxes.
 Some options and customizations are set through drop down menus.
