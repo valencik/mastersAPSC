@@ -14,7 +14,9 @@ csl: american-physics-society.csl
 link-citations: true
 ...
 
+\listoffigures
 \listoflistings
+\listoftables
 
 
 Thesis Introduction
