@@ -119,21 +119,15 @@ At a high level, the interface is composed of a search area that takes in user i
 This data is then presented with a number of visualization options.
 
 
-
-Algorithmic development
-=======================
-%- Introduce and discuss the algorithms used in various application features
-%- Cluster analysis in research proposal is still useful.
-%- Starting with some of the naive algorithms, and then going to graph theory.
-%- A review of graph theoretic concepts and piecing them together for the application on hand.
-
-## The Data and Database
+The Data and Database
+=====================
 %- TODO expand
 The most preliminary step is acquiring the Nuclear Science References from the National Nuclear Data Center.
 A full database dump was acquired on January 29th 2014.
 This dump of the NSR data will hereinafter be referred to as if it were the complete NSR database.
 All efforts have been taken to ensure the research procedures can very easily be extended and repeated on new NSR data.
 
+## Data Preparation
 Before the data can be imported into MongoDB it must be parsed into a JSON format.
 The NSR data is provided in a custom EXCHANGE format. \\citep{winchell2007nuclear}
 %- TODO add figure reference
@@ -146,7 +140,7 @@ The result a valid JavaScript Object Notation, or JSON, structure for each NSR e
 
 %- TODO Show/reference the JSON format of example raw NSR data
 
-%- Data Representation
+## Data Representation
 %- TODO discuss the NSR format. *Each* field on the newly created JSON
 In order to produce a good data schema, thought must be given to the data representation.
 Consideration should be given to the types of queries that will be made on the data.
@@ -179,6 +173,7 @@ vels,band features. Semi-empirical formalism.                                   
 <DOI     >10.1103/PhysRevC.37.401                                               &
 ```
 
+## The Database - MongoDB
 %- Data imported into MongoDB
 With the data representation complete and the data formatted correctly and imported to MongoDB, we can consider the database operations.
 The most common operation will be some sort of search or lookup.
@@ -239,6 +234,14 @@ This very quickly demonstrates that the majority of documents in the NSR were pu
 
 %- TODO histogram of papers per year
 
+
+Algorithmic development
+=======================
+%- Introduce and discuss the algorithms used in various application features
+%- Cluster analysis in research proposal is still useful.
+%- Starting with some of the naive algorithms, and then going to graph theory.
+%- A review of graph theoretic concepts and piecing them together for the application on hand.
+
 ## Classification and Cluster Analysis
 Classification and clustering are related approaches to organizing data elements into groups for further analysis.
 Classification is the process of deciding what group a particular datum should most optimally belong to.
@@ -284,7 +287,7 @@ In practice, K-means is normally run multiple times with varying $k$ values and 
 However, measurements of cluster effectiveness will be shown.
 %- TODO DB index, G1 index
 
-### Initial Author Clustering
+## Initial Author Clustering
 %- Cluster with author, numCoauthors, numEntries, numYears first
 %- Then develope more advanced clusterings by increasing the number of parameters used to describe these points.
 %- e.g. Use values at a range of different percentiles.
