@@ -9,6 +9,9 @@ author:
   affiliation: Saint Mary\'s University
 author: Andrew Valencik
 date: July 15th 2015
+bibliography: bibliography.yaml
+csl: american-physics-society.csl
+link-citations: true
 ...
 
 \listoflistings
@@ -32,7 +35,7 @@ The ultimate goal is to enable further analysis on the body of nuclear science l
 %- Point towards what should be done, why?
 %- What is the problem? What will I study?
 The academic field of nuclear science is over one hundred years old, starting with the discovery of radiation.
-This discovery is the first of many entries in the Nuclear Science References database, collected, cataloged, distributed, and evaluated by the National Nuclear Data Center. \\citep{Kurgan200603}
+This discovery is the first of many entries in the Nuclear Science References database, collected, cataloged, distributed, and evaluated by the National Nuclear Data Center. [@Kurgan200603]
 %- TODO this ending is insufficient
 The NSR has over 210,000 entries documenting the body of nuclear science literature, which provides the opportunity for knowledge discovery on the literature's meta data.
 
@@ -130,7 +133,7 @@ All efforts have been taken to ensure the research procedures can very easily be
 
 ## Data Preparation
 Before the data can be imported into MongoDB it must be parsed into a JSON format.
-The NSR data is provided in a custom EXCHANGE format. \\citep{winchell2007nuclear}
+The NSR data is provided in a custom EXCHANGE format. @winchell2007nuclear
 %- TODO add figure reference
 An example of the raw data for a single paper can be seen in figure !!!
 A series of simple search and replace commands using regular expressions can be applied to transform the data into a different structure more compatible with our database.
@@ -280,10 +283,10 @@ J(C) = \sum^K_{k=1} \sum_{x_i \in c_k} \left| x_i - \mu_k \right| ^2
 
 Three parameters for K-means must be specified initially, the number of clusters, initial centroid guesses, and the distance metric.
 The metric is the function on a space that describes how two points differ from one another, i.e. distance.
-Euclidean distance is typically used, leading to ball or sphere shaped clusters. \\citep{Jain2010651}
+Euclidean distance is typically used, leading to ball or sphere shaped clusters. @Jain2010651
 
 The chosen number of clusters has a huge impact on the data partitions.
-Some heuristics exist to aid in determining an optimal $k$. \\citep{tibshirani2001estimating}
+Some heuristics exist to aid in determining an optimal $k$. @tibshirani2001estimating
 In practice, K-means is normally run multiple times with varying $k$ values and the best is selected by a domain expert.
 However, measurements of cluster effectiveness will be shown.
 %- TODO DB index, G1 index
@@ -464,3 +467,7 @@ References to Investigate
 =========================
 
 [Graph Node Similarity](http://argo.matf.bg.ac.rs/publications/2011/similarity.pdf)
+
+
+Bibliography
+============
