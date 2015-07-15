@@ -1,2 +1,8 @@
+\usepackage{setspace}
+\doublespacing
+
 \usepackage{minted}
 \renewcommand{\listoflistingscaption}{List of Code Snippets}
+
+\let\stdsection\section
+\renewcommand\section{\newpage\stdsection}
