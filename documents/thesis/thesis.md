@@ -298,7 +298,57 @@ However, measurements of cluster effectiveness will be shown.
 We use an aggregation query to summarize our data in preparation for clusting.
 This query saves, for each author, their total number of coauthors, their total number of years publishing, and their total number of publications.
 This serves as a good first characterization of author types.
-We should be able to see very prolific authors with high numbers of entries.
+To help evaluate this summarization of authors, three heatmaps are presented.
+Figure @fig:nync shows...
+
+![Number of coauthors an author has given the number of years they have published.](../../data/images/nync-heatmap.png){#fig:nync}
+
+Figure @fig:nyne shows...
+
+![Number of entries an author has given the number of years they have published.](../../data/images/nyne-heatmap.png){#fig:nyne}
+
+Figure @fig:nenc shows...
+
+![Number of coauthors an author has given the number of entries they have published.](../../data/images/nenc-heatmap.png){#fig:nenc}
+
+The three heatmaps show that the 3 dimensional data is not very segmented and is instead rather continuous.
+This is a result of our input data being continuous in nature.
+Clustering more categorical data could lead to more discrete or separated clusters.
+Nevertheless the cluster results of this data could be used to aid in classifing authors.
+
+%- Want data with more dimensionality
+The numEntries and numCoauthors data presented in the heatmaps is not the whole story.
+And author could have publish 20 papers in 1995 and only 1 paper in 1996, their resulting numYears value for that range would be 2.
+Let's try clustering with more dimensionality to our data.
+Instead of a single number representing an authors number of publications, a parameter of their distribution of publications over time could be used.
+How many papers has a given author published in the beginning of their career?
+The end of their career, or most recently?
+
+%- Need authors with many publications
+In order to break up the number of entries over time like this, each author needs to have multiple entries over multiple years.
+This excludes a lot of authors.
+Recall their are !!! 45511 !!! authors with only a single publication in the database.
+That is 40445 out of 100147, roughly $40\%$ of the total unique authors.
+
+%- Demonstrate that removing all single publication authors is not as harmful as it might seem
+How much of the database is affected if every author who has only published once is removed?
+This question can be answered directly with the MongoDB database.
+First every paper is taken and duplicated for every single author in that paper's author list.
+There is now a database object for each author in each paper.
+Every time an author's name appears that is one publication count for that author.
+Next, each database object that has an author that has a publication of one is erased.
+Finally the unique remaining papers are the ones that have authors with more than one publication count.
+In table @tbl:papersWithoutNAuthors the number of papers that remain once all the authors with a publication count of one are removed is shown.
+
+Entry Number Cutoff   Papers Remaing
+-------------------   --------------
+0                     212835
+1                     187741
+2                     185404
+3                     183410
+4                     181315
+
+Table: Papers affected by removal of authors with N or less papers. {#tbl:papersWithoutNAuthors}
 
 
 Implementation
