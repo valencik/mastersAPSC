@@ -21,18 +21,19 @@ data = read.csv(file="author-cluster-input.tsv", sep='\t', header=TRUE, row.name
 # Plot heat maps
 rf = colorRampPalette(rev(brewer.pal(11,'Spectral')))
 r = rf(32)
+heatLayer = scale_fill_gradientn(colours=r, trans="log", breaks=c(1,10,100,1000,10000))
 
 nyne = ggplot(data, aes(numYears,numEntries))
 png("images/nyne-heatmap.png", width=800, height=800)
-nyne + stat_bin2d(bins=50) +  scale_fill_gradientn(colours=r, trans="log")
+nyne + stat_bin2d(binwidth=c(1,10)) +  heatLayer
 
 nync = ggplot(data, aes(numYears,numCoauthors))
 png("images/nync-heatmap.png", width=800, height=800)
-nync + stat_bin2d(bins=50) +  scale_fill_gradientn(colours=r, trans="log")
+nync + stat_bin2d(binwidth=c(1,10)) +  heatLayer
 
 nenc = ggplot(data, aes(numEntries,numCoauthors))
 png("images/nenc-heatmap.png", width=800, height=800)
-nenc + stat_bin2d(bins=50) +  scale_fill_gradientn(colours=r, trans="log")
+nenc + stat_bin2d(binwidth=c(10,10)) + heatLayer
 
 
 # Plot Cluster Images
