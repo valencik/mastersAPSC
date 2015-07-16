@@ -271,10 +271,11 @@ We can create $k$ clusters $C = {c_1, c_2, ..., c_k}$ where $k <= n$.
 The process starts by randomly choosing $k$ points, ${x_1, ..., x_k}$ to be the centroids of a cluster.
 Iterate over each object $x$ and assign it to a cluster $c$ based on the minimization of some parameter, for now, Euclidean distance.
 The new centroids are now computed and the process is repeated until cluster stability is achieved.
-The goal is to minimize the total sum of squared errors between the centroids and all objects. 
-\begin{equation} \label{kmeans}
+The goal is to minimize the total sum of squared errors between the centroids and all objects (see equation {@eq:kmeans}). 
+
+$$
 J(C) = \sum^K_{k=1} \sum_{x_i \in c_k} \left| x_i - \mu_k \right| ^2
-\end{equation}
+$$ {#eq:kmeans}
 
 %- Kmeans step by step from "Data clustering: 50 years beyond K-means" by Anil K. Jain
 ![Step by step illustration of K-means algorithm. (a) The initial input data. (b) Three seed points are chosen as the starting 'centroids' and the data points are assigned to the cluster with the closest seed point. (c) (d) The centroids of the new clusters are calculated, and data labels updated; (e) the iteration stops when the clusters converge.](images/Kmeans-iterations-Jain09.pdf){#fig:kmeansJain}
