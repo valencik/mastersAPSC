@@ -45,7 +45,7 @@ print("Found NSR collection...")
 if not 'authorSummary' in db.collection_names():
     print("Collection authorSummary not found, creating...")
     db.NSR.aggregate([
-        {"$project": {"_id": 1, "copyauthors": "$authors", "authors": 1, "year": 1, "selectors": 1}},
+        {"$project": {"_id": 1, "copyauthors": "$authors", "authors": 1, "year": 1}},
         {"$unwind": "$authors"},
         {"$unwind": "$copyauthors"},
         {"$group": {"_id": "$authors", "coauthors": {"$addToSet": "$copyauthors"}, "years": {"$addToSet": "$year"},
