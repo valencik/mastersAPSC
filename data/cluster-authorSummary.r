@@ -61,4 +61,8 @@ for (numCenters in numCentersMin:numCentersMax) {
     
     # Write the sizes of the clusters to a file
     write((km$size), file=paste0(outDir, numCenters,"cluster-sizes.csv"), ncolumns=numCenters, sep=',')
+
+    # Some plotting
+    png(filename=paste0("images/", numCenters, "clusters.png"), width=1200, height=1200)
+    plot(data, col=km$cluster)
 }
