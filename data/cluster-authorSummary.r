@@ -27,7 +27,7 @@ library("clusterSim")
 # Read input file into transaction object
 writeLines("Reading in data file...")
 # Read input file into data frame
-data=read.table(inputFile, header=TRUE, sep='\t', row.names=1)
+data=read.table(inputFile, header=TRUE, sep='\t', row.names=1, quote="")
 col=ncol(data)
 
 # Cluster data using K-Means
