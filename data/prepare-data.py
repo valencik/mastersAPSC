@@ -3,6 +3,7 @@ import os.path
 import pymongo
 import subprocess
 import sys
+import statistics
 
 ## {{{ http://code.activestate.com/recipes/511478/ (r1)
 import math
@@ -115,14 +116,18 @@ with open('author-cluster-input.tsv', 'w', newline='') as tsvfile:
 # Generate authorSummaryByYear tsv for clustering
 print("Aggregating authorSummaryByYear data...")
 authorSummaryByYear_pipeline = [
-    {"$group": {"_id": "$_id.author", "yearData": {"$push": {"year": "$_id.year",
-                "numCoauthors": {"$size": "$coauthors"}, "numEntries": {"$size": "$papers"}}}}}
+    {"$group": {"_id": "$_id.author", "yearData":
+        {"$push": {"year": "$_id.year", "numCoauthors": {"$size": "$coauthors"}, "numEntries": {"$size": "$papers"}}}
+    }},
+    {"$project": {"author": "$_id", "yearData": 1, "numYears": {"$size": "$yearData"}}},
+    {"$match": {"numYears": {"$gt": 3}}}
     ]
 results = db.authorSummaryByYear.aggregate(authorSummaryByYear_pipeline, allowDiskUse=True)
 with open('author-cluster-entry-quartiles-input.tsv', 'w', newline='') as tsvfile:
     print("Writing authorSummaryByYear data to file...")
     cluster_writer = csv.writer(tsvfile, delimiter='\t')
-    cluster_writer.writerow(["author", "numCoauthors", "numYears", "numEntries025", "numEntries050", "numEntries075", "numEntries100"])
+    cluster_writer.writerow(["author", "numYears", "meanCoauthors",
+                             "numEntries025", "numEntries050", "numEntries075", "numEntries100"])
     for document in results:
         years = []
         entries = []
@@ -131,6 +136,7 @@ with open('author-cluster-entry-quartiles-input.tsv', 'w', newline='') as tsvfil
             years.append(yearDatum['year'])
             coauthors.append(yearDatum['numCoauthors'])
             entries.append(yearDatum['numEntries'])
+        assert int(len(years)) == int(document['numYears']), "len(years) should be equal to numYears"
         sumEntries = entries.copy()
         for i, entry in enumerate(sumEntries):
             if i >= 1:
@@ -139,9 +145,9 @@ with open('author-cluster-entry-quartiles-input.tsv', 'w', newline='') as tsvfil
         numEntries050 = math.floor(percentile(sumEntries, 0.50))
         numEntries075 = math.floor(percentile(sumEntries, 0.75))
         numEntries100 = sumEntries[-1]
-        cluster_list = [document['_id']]
-        cluster_list.append(len(coauthors))
-        cluster_list.append(len(years))
+        cluster_list = [document['author']]
+        cluster_list.append(document['numYears'])
+        cluster_list.append(statistics.mean(coauthors))
         cluster_list.append(numEntries025)
         cluster_list.append(numEntries050)
         cluster_list.append(numEntries075)
