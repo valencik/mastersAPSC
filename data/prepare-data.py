@@ -64,7 +64,8 @@ if not 'NSR' in db.collection_names():
             subprocess.call(["perl", "flattenJSONforMongo.pl", "NSR.json"])
     if os.path.isfile("NSR.json"):
         print("NSR collection not found, importing NSR.json with mongoimport...")
-        subprocess.call(["mongoimport",  "--db",  "masters",  "--collection",  "NSR",  "--type",  "json",  "--file",  "NSR.json"])
+        subprocess.call(["mongoimport", "--db", "masters", "--collection", "NSR",
+                         "--type", "json", "--file", "NSR.json"])
     else:
         sys.exit("ERROR: Could not find data files NSR.json or mastersNSRDataDump.tbz2")
 print("Found NSR collection...")
