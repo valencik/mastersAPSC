@@ -139,10 +139,10 @@ The NSR data is provided in a custom EXCHANGE format. @winchell2007nuclear
 %- TODO add figure reference
 An example of the raw data for a single paper can be seen in figure !!!
 A series of simple search and replace commands using regular expressions can be applied to transform the data into a different structure more compatible with our database.
-
-In particular, this work uses a series of simple perl scripts to apply the regular expression transformations.
-%- FOOTNOTE Perl is used here as it remains one of the best regex tools, and allowed for scripts that read as a list of regexs to apply.
+In particular, this work uses a series of simple perl[^why-perl] scripts to apply the regular expression transformations.
 The result a valid JavaScript Object Notation, or JSON, structure for each NSR entry.
+
+[^why-perl]: Perl is used here as it remains one of the best regex tools, and allowed for scripts that read as a simple list of regex transformations to apply one after the other.
 
 %- TODO Show/reference the JSON format of example raw NSR data
 
