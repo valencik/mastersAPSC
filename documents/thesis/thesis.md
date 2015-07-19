@@ -378,7 +378,7 @@ This is result means that filtering out low publication authors in additional an
 
 Implementation
 ==============
-> Introduce and discuss the various technologies used.
+%- Introduce and discuss the various technologies used.
 
 Advantages and disadvantages of these technologies and justification of final choices.
 - Perl parsing, regular expressions and speed
@@ -396,7 +396,7 @@ So while python may not be the obvious choice for a web application today, its a
 
 Demonstration
 =============
-> Demonstrate how the application can be used to perform analysis of the NSR.
+%- Demonstrate how the application can be used to perform analysis of the NSR.
 %- Analysis discussion from the proposal could be useful in the demonstration section of the thesis.
 
 Demonstration of the application.
@@ -407,6 +407,10 @@ A use case of answering a question with this tool.
 Additionally, it might be useful to show that this is more difficult using the old NSR website.
 
 ## Author Fingerprinting
+%- build collection of all unique author names (101095)
+%- calculate the edit distances of all the author names (more than 5 billion calculations...)
+%- There are 41254 "authors" that appear once
+%- I would like to not actually write that number in the thesis, but instead compute and reference it.
 Author search has been improved by implementing a suggestion system for partial author name searches.
 When we search for "Svenne" we can see there are both J.P.Svenne and J.Svenne.
 In the original NSR application it would be a manual task to discern the two author names.
@@ -420,14 +424,7 @@ Because our database is static and manually updated with new entries periodicall
 And additional benefit to the offline approach is that it can be easily moderated and tweaked with user submitted suggestions.
 A possible example being an author name misspelling that only happen once. (not enough times to measure similarity against)
 
-### Author Fingerprinting - implementation notes
-build collection of all unique author names (101095)
-calculate the edit distances of all the author names (more than 5 billion calculations...)
-There are 41254 "authors" that appear once
-(I would like to not actually write that number in the thesis, but instead compute and reference it.)
-
 ## Similar "Objects"
-
 The ultimate goal of the Similar Objects feature is to provide a flexible recommender system that supports recommending different types of objects within the database.
 The most obvious usecase of this feature is to find similar authors to those the user is currently inspecting or searching.
 However the system should be extendable to also recommend similar keywords or periods in time, for example.
@@ -477,44 +474,24 @@ A small python script has been written to parse the arules apriori output rules 
 From here we can use the data for analysis such has database queries, or simply produce more standard csv/tsv records.
 
 
-## Time series visualizations
+## Time Series Visualizations
+%- Distribution sampling and clustering (percentiles) could be useful here
 How does an "object" evolve over time?
 This could be an author, keyword, group of authors, etc.
 
-## Network visualization and exploration
+## Network Visualization and Exploration
 Treating the data as a network or graph is unique to our application.
 This is a feature that warrants a lot of attention.
 
-## Simplified, unified search
+## Unified Search
 The present interface requires the specification of types of searches, we can infer this.
 If the user typed an author's name, then we can search for papers of that author.
 Similarly if the user typed a keyword or phrase like "nuclear halo" we can search for papers involving that keyword.
-> Check how possible this is currently!
+%- Check how possible this is currently!
 
-## Data exporting?
+## Data Exporting
 Being able to save the current visualizations, graph data structures, or flat csv data could be of use.
-> Check how possible this is currently!
-
-
-Miscellaneous
-=============
-> A section for all the lonely topics out there.
-
-## Future work?
-Does it make sense to think about a future work section now?
-If yes:
-
-- Time series profile clustering. Show me other objects that evolved like this one.
-- Chart of nuclides, table of elements visualizations
-- Research predictions, suggestions
-- Author/Group/Journal profiling (innovative, follower, prolific...) (likely better done with citation info)
-- Anything involving other data like citations
-
-## Contributions
-
-- Data parsing and cleaning
-- Visualization and summarization
-- Exploration
+%- Check how possible this is currently!
 
 
 Results
@@ -524,17 +501,26 @@ Results
 How the application uncovers some of the previously unknown and interesting results.
 
 
+Miscellaneous
+=============
+> A section for all the lonely topics out there.
 
-Annotated Bibliography
-======================
+## Future Work
+- Time series profile clustering. Show me other objects that evolved like this one.
+- Chart of nuclides, table of elements visualizations
+- Research predictions, suggestions
+- Author/Group/Journal profiling (innovative, follower, prolific...) (likely better done with citation info)
+- Anything involving other data like citations
 
+## Contributions
+- Data parsing and cleaning
+- Visualization and summarization
+- Exploration
+
+## References to cite
 - 50 years of kmeans
-
-- Facebook paper
-A good overview of the process
-
+- Facebook paper A good overview of the process
 - Medical clusters and MDS paper
-
 [Graph Node Similarity](http://argo.matf.bg.ac.rs/publications/2011/similarity.pdf)
 
 
