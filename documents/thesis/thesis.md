@@ -295,30 +295,49 @@ However, measurements of cluster effectiveness will be shown.
 %- Then develope more advanced clusterings by increasing the number of parameters used to describe these points.
 %- e.g. Use values at a range of different percentiles.
 
-We use an aggregation query to summarize our data in preparation for clusting.
+There is a considerable amount of multivariate data in the NSR database.
+In order to gain insight from this data, only a section or slice should be considered initially.
+In this section, the authors will be analyzed with the attempt to identify groups or clusters of authors who behave similarly.
+
+An aggregation query is used to summarize our data in preparation for clusting.
 This query saves, for each author, their total number of coauthors, their total number of years publishing, and their total number of publications.
-This serves as a good first characterization of author types.
-To help evaluate this summarization of authors, three heatmaps are presented.
-Figure @fig:nync shows...
+To help evaluate this summarization of authors, three heatmaps of this data are presented in figures @fig:nyne-log, @fig:nync-log, and @fig:nenc-log.
 
-![Number of coauthors an author has given the number of years they have published.](../../data/images/nync-heatmap.png){#fig:nync}
+Figure @fig:nyne-log shows an expected trend; authors who publish over more years tend to have more publications overall.
+Each of these figures shows that there are a very large number of authors that have published only a few times.
+Additionally, there are comparitively few authors who have published many times.
+In anticipation of this result, the heatmap coloring is on a logarithmic scale, while the axes are linear.
+Without the log color scale, the plots would be washed out by the incredibly many author who have published only once.
+(To appease the curious, linearly coloured heatmaps are shown in the Appendix, figures @fig:nyne-linear, @fig:nync-linear, and @fig:nenc-linear.)
 
-Figure @fig:nyne shows...
+![Number of entries an author has given the number of years they have published.](../../data/images/nyne-log-heatmap.png){#fig:nyne-log}
 
-![Number of entries an author has given the number of years they have published.](../../data/images/nyne-heatmap.png){#fig:nyne}
+![Number of coauthors an author has given the number of years they have published.](../../data/images/nync-log-heatmap.png){#fig:nync-log}
 
-Figure @fig:nenc shows...
+![Number of coauthors an author has given the number of entries they have published.](../../data/images/nenc-log-heatmap.png){#fig:nenc-log}
 
-![Number of coauthors an author has given the number of entries they have published.](../../data/images/nenc-heatmap.png){#fig:nenc}
-
-The three heatmaps show that the 3 dimensional data is not very segmented and is instead rather continuous.
+The three heatmaps show that the 3 dimensional data is not well segmented and is instead rather continuous.
 This is a result of our input data being continuous in nature.
 Clustering more categorical data could lead to more discrete or separated clusters.
-Nevertheless the cluster results of this data could be used to aid in classifing authors.
+Nevertheless the cluster results of this data could be used to aid in classifying authors.
+
+The same data points from figures @fig:nyne-linear, @fig:nync-linear, and @fig:nenc-linear are shown in the various subplots of figure @fig:kmeans-authors1.
+The color of each data point in figure @fig:kmeans-authors1 represent which cluster that author belongs to.
+This cluster membership was determined through the K-means algorithm set to find 5 centers (see [K-means Clustering](#k-means-clustering)).
+
+![Initial clustering on authors with Kmeans](../../data/images/5clusters-kmeans-authors1.png){#fig:kmeans-authors1}
+
+%- Get citation!
+Determining the ideal number of clusters is a difficult problem. !!!
+Figure @fig:kmeans-authors1 uses 5 clusters and demonstrates again that the data is continuous.
+As a result the clusters function as segmentations along a continuous spectrum.
+As the number of clusters increases, the size of the segmentations decrease.
+%- Clustering segmentation is all happening on one axis up to a certian point.
+%- Eventually the segmentations partition the data with respect to other variables.
 
 %- Want data with more dimensionality
 The numEntries and numCoauthors data presented in the heatmaps is not the whole story.
-And author could have publish 20 papers in 1995 and only 1 paper in 1996, their resulting numYears value for that range would be 2.
+An author could have published 20 papers in 1995 and only 1 paper in 1996, their resulting numYears value for that range would be 2.
 Let's try clustering with more dimensionality to our data.
 Instead of a single number representing an authors number of publications, a parameter of their distribution of publications over time could be used.
 How many papers has a given author published in the beginning of their career?
@@ -336,10 +355,11 @@ This question can be answered directly with the MongoDB database.
 First every paper is taken and duplicated for every single author in that paper's author list.
 There is now a database object for each author in each paper.
 Every time an author's name appears that is one publication count for that author.
-Next, each database object that has an author that has a publication of one is erased.
+Next, each database object that has an author that has a publication count of one is erased.
 Finally the unique remaining papers are the ones that have authors with more than one publication count.
-In table @tbl:papersWithoutNAuthors the number of papers that remain once all the authors with a publication count of one are removed is shown.
+Table @tbl:papersWithoutNAuthors show the number of papers that remain once all the authors with a specified publication count are removed.
 
+%- TODO develop a better (continuous) way to calculate these numbers
 Entry Number Cutoff   Papers Remaing
 -------------------   --------------
 0                     212835
@@ -349,6 +369,11 @@ Entry Number Cutoff   Papers Remaing
 4                     181315
 
 Table: Papers affected by removal of authors with N or less papers. {#tbl:papersWithoutNAuthors}
+
+%- Summarize the Author cut off results
+The values presented in Table @tbl:papersWithoutNAuthors suggest that the bulk of the papers in the NSR are associated with authors who publish more than just a few times.
+This is result means that filtering out low publication authors in additional analysus does not affect the majority of the NSR entries.
+%- Demonstrate that 1993JA17 and 1996JA24 disappear correctly
 
 
 Implementation
@@ -510,12 +535,18 @@ A good overview of the process
 
 - Medical clusters and MDS paper
 
-
-
-References to Investigate
-=========================
-
 [Graph Node Similarity](http://argo.matf.bg.ac.rs/publications/2011/similarity.pdf)
+
+
+Appendix
+========
+
+
+![Number of entries an author has given the number of years they have published.](../../data/images/nyne-heatmap.png){#fig:nyne-linear}
+
+![Number of coauthors an author has given the number of years they have published.](../../data/images/nync-heatmap.png){#fig:nync-linear}
+
+![Number of coauthors an author has given the number of entries they have published.](../../data/images/nenc-heatmap.png){#fig:nenc-linear}
 
 
 Bibliography
