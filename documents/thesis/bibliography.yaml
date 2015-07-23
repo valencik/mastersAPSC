@@ -1,0 +1,72 @@
+---
+references:
+- id: Kurgan200603
+  type: article-journal
+  author:
+  - family: Kurgan
+    given: Lukasz
+  - family: Musilek
+    given: Petr
+  issued:
+  - year: 2006
+    month: 03
+  title: A survey of knowledge discovery and data mining process models
+  container-title: The Knowledge Engineering Review
+  page: 1-24
+  volume: 21
+  issue: 1
+  note: Copyright - 2006 Cambridge University Press; Last updated - 2010-06-09
+  keyword: Computers–Computer Systems
+  URL: http://search.proquest.com/docview/217510215?accountid=13908
+  ISBN: 02698889
+
+- id: winchell2007nuclear
+  type: article-journal
+  author:
+  - family: Winchell
+    given: David F
+  issued:
+  - year: 2007
+  title: Nuclear science references coding manual
+  container-title: Science
+  page: 3
+
+- id: Jain2010651
+  type: article-journal
+  author:
+  - family: Jain
+    given: Anil K.
+  issued:
+  - year: 2010
+  title: 'Data clustering: 50 years beyond k-means'
+  title-short: Data clustering
+  container-title: Pattern Recognition Letters
+  page: 651 - 666
+  volume: 31
+  issue: 8
+  note: Award winning papers from the 19th International Conference on Pattern Recognition
+    (ICPR) 19th International Conference in Pattern Recognition (ICPR)
+  keyword: Data clustering
+  URL: http://www.sciencedirect.com/science/article/pii/S0167865509002323
+  DOI: http://dx.doi.org/10.1016/j.patrec.2009.09.011
+  ISSN: 0167-8655
+
+- id: tibshirani2001estimating
+  type: article-journal
+  author:
+  - family: Tibshirani
+    given: Robert
+  - family: Walther
+    given: Guenther
+  - family: Hastie
+    given: Trevor
+  issued:
+  - year: 2001
+  title: Estimating the number of clusters in a data set via the gap statistic
+  container-title: 'Journal of the Royal Statistical Society: Series B (Statistical
+    Methodology)'
+  publisher: Wiley Online Library
+  page: 411-423
+  volume: 63
+  issue: 2
+...
