@@ -1,6 +1,3 @@
-%- TODO Fix citations
-%- TODO Add equation numbers, figure number (pandoc filters)
-%- TODO Make double spaced, set margins somewhere
 %- Text mining?
 ---
 title:  'Masters of Science in Applied Science Thesis'
@@ -134,10 +131,11 @@ This dump of the NSR data will hereinafter be referred to as if it were the comp
 All efforts have been taken to ensure the research procedures can very easily be extended and repeated on new NSR data.
 
 ## Data Preparation
+%- TODO get reference for JSON format
 Before the data can be imported into MongoDB it must be parsed into a JSON format.
 The NSR data is provided in a custom EXCHANGE format. @winchell2007nuclear
 %- TODO add figure reference
-An example of the raw data for a single paper can be seen in figure !!!
+An example of the raw data for a single paper can be seen in Snippet @rawNSRentry.
 A series of simple search and replace commands using regular expressions can be applied to transform the data into a different structure more compatible with our database.
 In particular, this work uses a series of simple perl[^why-perl] scripts to apply the regular expression transformations.
 The result a valid JavaScript Object Notation, or JSON, structure for each NSR entry.
@@ -163,7 +161,7 @@ The following types are valid:
 N, T, P, G, R, S, M, D, C, X, A, or Z, which stand for nuclide, target, parent, daughter, reaction, subject, measured, deduced, calculated, other subject, mass range, and charge range, respectively.
 \end{quote}
 The value changes based on the type. The link variable is used to tie together multiple selectors.
-%- TODO Provide an example
+%- TODO Provide an example of multiple selectors being connected
 
 ``` {#rawNSRentry caption="An example NSR entry showing the raw NSR data format."}
 <KEYNO   >1988AB01                                                              &
@@ -263,7 +261,7 @@ Various aspects of the data will be clustered with differing techniques based on
 The methodology for a basic clustering technique, K-means clustering is discussed.
 
 ### K-means Clustering
-K-means clustering is a cluster analysis technique that can group data objects in $K$ clusters based on minimizing their distances with respect to cluster centroids.
+K-means clustering is a cluster analysis technique that can group data objects in $k$ clusters based on minimizing their distances with respect to cluster centroids.
 K-means is a partitional clustering algorithm.
 
 Say we have a finite set of objects,  $X = {x_1, x_2, ..., x_n}$ where each is a data object in $d$ dimensions.
@@ -375,12 +373,13 @@ The values presented in Table @tbl:papersWithoutNAuthors suggest that the bulk o
 This is result means that filtering out low publication authors in additional analysus does not affect the majority of the NSR entries.
 %- Demonstrate that 1993JA17 and 1996JA24 disappear correctly
 
+%- TODO present the results from limited author clustering
 
 Implementation
 ==============
 %- Introduce and discuss the various technologies used.
-
-Advantages and disadvantages of these technologies and justification of final choices.
+%- Advantages and disadvantages of these technologies and justification of final choices.
+%- TODO Expand each piece of technology into a subsection and discuss
 - Perl parsing, regular expressions and speed
 - MongoDB, schema and aggregation framework
 - Gephi analysis, modularity, average shortest path
@@ -398,6 +397,7 @@ Demonstration
 =============
 %- Demonstrate how the application can be used to perform analysis of the NSR.
 %- Analysis discussion from the proposal could be useful in the demonstration section of the thesis.
+%- TODO Rewrite this section to be less informal
 
 Demonstration of the application.
 How everything that was promised is delivered.
@@ -425,6 +425,7 @@ And additional benefit to the offline approach is that it can be easily moderate
 A possible example being an author name misspelling that only happen once. (not enough times to measure similarity against)
 
 ## Similar "Objects"
+%- TODO Determine which parts of the following discussion should be in algorithmic development
 The ultimate goal of the Similar Objects feature is to provide a flexible recommender system that supports recommending different types of objects within the database.
 The most obvious usecase of this feature is to find similar authors to those the user is currently inspecting or searching.
 However the system should be extendable to also recommend similar keywords or periods in time, for example.
@@ -496,9 +497,8 @@ Being able to save the current visualizations, graph data structures, or flat cs
 
 Results
 =======
-> Conclude with discussion of contributions.
-
-How the application uncovers some of the previously unknown and interesting results.
+%- Conclude with discussion of contributions.
+%- How the application uncovers some of the previously unknown and interesting results.
 
 
 Miscellaneous
