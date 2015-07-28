@@ -449,7 +449,31 @@ This analysis reveals over 20 million author pairs for further analysis.
 
 > TODO Discuss pairs with a distance of 4
 
-%- TODO Discuss limitations of "non informed" string edit distances.
+> TODO Discuss limitations of "non informed" string edit distances.
+
+### Extending the String Metric
+"Adam Sarty" and "A.Sarty" should actually have a small distance in our application.
+This type of analysis would require a significant modification to the existing string metrics.
+There are many open source implementations of string distance functions, so a modification is not out of the question.
+
+Another approach could be simplfy the list of authors while accepting potential loss of information.
+The current number of unique authors after perl parsing is $100147$, if we remove all authors that include *" the "* in their name we reduce to $98788$ authors.
+This has the effect of removing collaborations from the author list.
+This may or may not be desired for some analysis.
+In attempting to find author with typos and similar data entry mistakes in their names this filtering is unlikely to have significant impact.
+Author name fields representing collaborations are often long and have small string distances to one another as they informative part of their name is typically an acronym.
+
+Continuing this approach of throwing away some data to narrow our results, removing all spaces returns on $97411$ unique authors.
+And removing all characters but alphabetical ones returns $95366$ unique authors.
+It is worth recalling that Borris reports 96200 unique authors in his 2014 paper.
+
+> TODO Evaluate how much more detail I should go into on 'futher tools'
+
+There are other more advanced tools from the field of information and language theory that could be used as well.
+Simple transducers could be specified to calculate the author name abbreviations in an efficient manner.
+However this presents a significant departure from the rest of the work.
+
+
 
 
 ## Similar "Objects"
