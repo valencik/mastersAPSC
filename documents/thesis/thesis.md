@@ -484,47 +484,44 @@ However the system should be extendable to also recommend similar keywords or pe
 Implementing this feature requires a significant amount of offline data mining and analysis.
 Once the analysis is done, the runtime of the application need only do quick lookups in tables to find the desired results.
 
-This is a task where we want the analysis done offline, and just simple lookups done when the app is being used.
-I need to come up with a metric for simularity for these documents/objects.
-Similar authors could be authors who publish together, but should certainly include authors who do not publish together but publish with similar keywords.
-This is likely more interesting to users, as it could suggest similar authors they are unaware of.
-It would also be neat to see how time affects this.
-Was there a similar author 20 years prior?
+With this in mind, the high level summary of this analysis stage is to build data object classifiers and labels and then enable the user inferface to search and display those labels.
 
-Spoke to Pawan about this, he suggests it can be done quite easily with association mining.
-So the work ahead would likely be to perform association mining on the entire dataset offline and then construct an API in the web application to connect user input to the results of the mining.
+There are a number of metrics used in producing the data object labels.
+Similar authors could be authors who publish together, or authors who do not publish together but publish with similar keywords.
+The later is likely more interesting to users, as it could suggest similar authors they are unaware of.
 
-An easy first approach could be to use Apriori on authors and selector values (essentially isotopes)
+As the NSR database spans several decades, each data object presents time series information.
+Finding similar authors separated in time could be interesting.
 
-I have used the apriori algorithm on selector.values.
-I think the results are not that valuable.
-They are really just descirbing which selector values appear often together in the same paper, and that is not particularly illuminating domain knowledge.
-
-### Running Apriori on Selector Values or Authors
+### Association Mining with Apriori
+%- They are really just descirbing which selector values appear often together in the same paper, and that is not particularly illuminating domain knowledge.
+%- TODO cite the arules package
 As a preliminary test with association rule learning, we prepare our data for use with the Apriori algorithm in the *arules* package in R.
-It is pretty easily to flatten our data as needed using the MongoDB aggregation framework.
-Getting the data for finding association rules among the authors is rather trivial and involves only a $project stage to simplify the documents to only include the fields we want.
-Because the R packages for interacting with mongo are not official, we made a new collection of the data we wanted to analyze and then exported that to csv.
-And in fact, because our data fields contain commas, we massage this csv data into tab separated values, tsv.
+
+> TODO Work through an example and explain the algorithm.
 
 The Apriori algorithm returns list of association rules that have support and confidence values above the minimum amount specified.
 This list almost certainly contains duplicate information.
 Sometimes of the form A->B and B->A
 In the case of nuclides found in selector values, we often see multiple rules involving various different permutations of a list of common isotopes.
 
-Now I have a list of association rules, and I want to filter them to see only rules that involve authors who have not published together.
-Specifically I want authors who have published using the same keyword in different papers, and have never authored a paper together.
+%- Program workflow
+It is pretty easily to flatten our data as needed using the MongoDB aggregation framework.
+A python script *prepare-data.py* has been developed to prepare the data for analysis.
+The resulting data is then handled by the R script *apriori-dedup.r*.
+The R script writes the output of the apriori algorithm to a file.
+Another python script, *parse-arules-output.py*, then parses the R apriori output to be in a more usable csv format.
 
-I could make a list of the total coauthors for any given author.
-Then I could cheaply lookup an author in an association rule (perhaps the rhs author) and see if i find the other authors in the rule.
-If not, then this is an interesting rule. If so, it is likely considerably less interesting.
+At this stage, there is a list association rules relating authors through their use of keywords.
+Most of these rules likely involve authors that have published together.
+However, finding the rules with authors who have not published together would present very interesting information.
+Specifically, a filter is created to return authors who have published using the same keyword in different papers, and have never authored a paper together.
 
-Pawan has suggested another method: taking the difference of two sets of rules.
-One produced using any initial criteria as long as the rules are associations of authors, and the second rules produced from coauthorship data.
-Testing both methods could be interesting and should not be terribly difficult.
-
-A small python script has been written to parse the arules apriori output rules into python lists.
-From here we can use the data for analysis such has database queries, or simply produce more standard csv/tsv records.
+%- I could make a list of the total coauthors for any given author.
+%- Then I could cheaply lookup an author in an association rule (perhaps the rhs author) and see if i find the other authors in the rule.
+%- Pawan has suggested another method: taking the difference of two sets of rules.
+%- One produced using any initial criteria as long as the rules are associations of authors, and the second rules produced from coauthorship data.
+%- Testing both methods could be interesting and should not be terribly difficult.
 
 
 ## Time Series Visualizations
