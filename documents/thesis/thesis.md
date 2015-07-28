@@ -411,6 +411,8 @@ Additionally, it might be useful to show that this is more difficult using the o
 %- calculate the edit distances of all the author names (more than 5 billion calculations...)
 %- There are 41254 "authors" that appear once
 %- I would like to not actually write that number in the thesis, but instead compute and reference it.
+A 2014 paper from Boris report a total of 96200 unique authors.
+
 Author search has been improved by implementing a suggestion system for partial author name searches.
 When we search for "Svenne" we can see there are both J.P.Svenne and J.Svenne.
 In the original NSR application it would be a manual task to discern the two author names.
@@ -423,6 +425,32 @@ This similarlity measurement could happen either online (immediately after the u
 Because our database is static and manually updated with new entries periodically, the offline approach makes sense.
 And additional benefit to the offline approach is that it can be easily moderated and tweaked with user submitted suggestions.
 A possible example being an author name misspelling that only happen once. (not enough times to measure similarity against)
+
+### Levenshtein Distance
+String edit distance measures like the Levenshtein Distance offer an easy first approach to analyzing the author names.
+The Levenshtein distance is one type of string metric to evaluate the difference between two sequences of characters.
+A distance of 1 is attributed to ever single character edit necessary to transform one of the input strings into the other.
+Single character edits include an insertion of a character, a deletion, or a substitution.
+
+> TODO Present an example (for each: insertion, deletion, substitution) using actual author names from the NSR.
+
+The Python library Jellyfish makes it quite easy to use a few different distance metrics.
+Nevertheless, calculating any measure for all pairs of authors is a large task.
+A quick estimate of $100,000$ authors means $5,000,000,000$ unique (unordered) pairs to calculate.
+Thankfully this is not entirely prohibitive to calculate on modest hardware.
+It does however, produce a very large amount of data, so filtering is absolutely necessary.
+
+A small Python script, using Jellyfish, was prepared to calculate the Levenshtein Distance for each author name pair.
+Only pair with a distance less than 4 were written to file.
+%- 3 is higher than necessary
+This analysis reveals over 20 million author pairs for further analysis.
+
+> TODO Discuss pairs with a distance of 1
+
+> TODO Discuss pairs with a distance of 4
+
+%- TODO Discuss limitations of "non informed" string edit distances.
+
 
 ## Similar "Objects"
 %- TODO Determine which parts of the following discussion should be in algorithmic development
