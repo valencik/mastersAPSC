@@ -124,44 +124,54 @@ This data is then presented with a number of visualization options.
 
 The Data and Database
 =====================
-%- TODO expand
-The most preliminary step is acquiring the Nuclear Science References from the National Nuclear Data Center.
-A full database dump was acquired on January 29th 2014.
-This dump of the NSR data will hereinafter be referred to as if it were the complete NSR database.
+An early and difficult stage in any data science project is data aquisition.
+Thankfully the National Nuclear Data Center has composed the Nuclear Science References database already.
+For this work, a full database dump of the NSR was acquired on January 29th 2014.
+For simplicity, the data acquired from the NNDC on January 29th will be referred to as if it were the complete NSR database.
 All efforts have been taken to ensure the research procedures can very easily be extended and repeated on new NSR data.
 
 ## Data Preparation
+The NSR data was provided in a custom EXCHANGE format @winchell2007nuclear.
+This format is flat text that is not suitable for direct analysis.
+The data needs to be easily parseable so data can be separated.
+The easiest approach is to transform the data into a common format for which parsers already exist.
+%- TODO refresh what the difference is between parsing and text searching
+
 %- TODO get reference for JSON format
-Before the data can be imported into MongoDB it must be parsed into a JSON format.
-The NSR data is provided in a custom EXCHANGE format. @winchell2007nuclear
+JavaScript Object Notation, or JSON, was chosen as the final data format.
+This choice was almost entirely motivated by the author's familiarity with JSON.
+While other data formats could have sufficed (perhaps YAML, for example) certain common data formats like comma separated values (csv) would have been more difficult.
+This is primarily because of the requirement for arrays in the data.
+This requirement is discussed further in the [Data Representation](#data-representation) section.
+
+%- NSR EXCHANGE format discussion
 %- TODO add figure reference
-An example of the raw data for a single paper can be seen in Snippet @rawNSRentry.
-A series of simple search and replace commands using regular expressions can be applied to transform the data into a different structure more compatible with our database.
-In particular, this work uses a series of simple perl[^why-perl] scripts to apply the regular expression transformations.
-The result a valid JavaScript Object Notation, or JSON, structure for each NSR entry.
+An example of the raw data for a single paper can be seen in snippet @rawNSRentry.
+The NSR has 9 possible types of fields which are shown in Table @tbl:NSRidentifiers.
+Each entry can only have one of each field type except for `<KEYWORDS>` and `<SELECTRS>` which exist as a pair and an entry can have multiple pairs of them.
 
-[^why-perl]: Perl is used here as it remains one of the best regex tools, and allowed for scripts that read as a simple list of regex transformations to apply one after the other.
+Identifiers   Description
+-----------   -----------
+`<KEYNO   >`  Reference keynumber
+`<HISTORY >`  Administrative record
+`<CODEN   >`  Standard form reference
+`<REFRENCE>`  Free text reference
+`<AUTHORS >`  Author names
+`<TITLE   >`  Reference title
+`<KEYWORDS>`  Keyword abstract
+`<SELECTRS>`  Indexing parameter list
+`<DOI     >`  Digital object identifier
 
-%- TODO Show/reference the JSON format of example raw NSR data
+Table: The nine legal record identifiers from the Nuclear Science References Coding Manual @winchell2007nuclear. {#tbl:NSRidentifiers}
 
-## Data Representation
-%- TODO discuss the NSR format. *Each* field on the newly created JSON
-In order to produce a good data schema, thought must be given to the data representation.
-Consideration should be given to the types of queries that will be made on the data.
-%- year as int allows <, >, and =
-%- author array has first, last, size, unwind
-For example the author field is likely best represented as an array of strings, with each unique author being a separate element in the array.
-This attaches information about how many authors an entry has to our schema.
-
-The optimal schema for the SELECTRS field is not initially obvious.
-The current schema has SELECTRS parsed into a 3 dimensional array.
-Each 'selector' has a type, value, and a link variable.
-The following types are valid:
-\begin{quote}
-N, T, P, G, R, S, M, D, C, X, A, or Z, which stand for nuclide, target, parent, daughter, reaction, subject, measured, deduced, calculated, other subject, mass range, and charge range, respectively.
-\end{quote}
-The value changes based on the type. The link variable is used to tie together multiple selectors.
-%- TODO Provide an example of multiple selectors being connected
+The `<KEYNO   >` field is a unique key number assigned to each NSR entry.
+When a particular entry was added to the database or last modified is encoded in the `<HISTORY >` field.
+The `<CODEN   >` and `<REFRENCE>` fields contain information about the journal or other type of resource the document came from.
+The `<AUTHORS >` field is a comma separated list of author names.
+The author list is the key component in doing any sort of graph analysis of the data.
+The `<TITLE   >` field is a free text field representing the title of the reference with a custom set of abbreviations for special characters like Greek letters.
+Temporarily jumping ahead, the `<DOI     >` field contains the digital object identifier code that uniquely links to the source document.
+%- Write about the KEYWORDS and SELECTRS
 
 ``` {#rawNSRentry caption="An example NSR entry showing the raw NSR data format."}
 <KEYNO   >1988AB01                                                              &
@@ -176,6 +186,41 @@ vels,band features. Semi-empirical formalism.                                   
 <SELECTRS>N:232TH;A. N:232U;A. N:234U;A. N:236U;A. N:238U;A. C:OTHER;A.         &
 <DOI     >10.1103/PhysRevC.37.401                                               &
 ```
+%- ROBY explain this in a caption
+
+%- NSR to JSON
+Transforming the NSR data to JSON is possible with a series of search and replace commands using regular expressions.
+This series of search and replace commands are recorded in the Perl[^why-perl] script parseNSRtoJSON.pl in the data directory.
+The result of the scripts is a file with a valid JSON structure for each NSR entry.
+
+[^why-perl]: Perl is used here as it remains one of the best RegEx implementations, and allowed for scripts that read as a simple ordered list of transformations to apply.
+%- TODO Show/reference the JSON format of example raw NSR data
+
+## Data Representation
+%- TODO discuss the NSR format. *Each* field on the newly created JSON
+%- ROBY discuss NSR format from NNDC
+%- ROBy write a paragraph that factually states your final representation
+In order to produce a good data schema, thought must be given to the data representation.
+Consideration should be given to the types of queries that will be made on the data.
+%- year as int allows <, >, and =
+%- author array has first, last, size, unwind
+For example the author field is likely best represented as an array of strings, with each unique author being a separate element in the array.
+This attaches information about how many authors an entry has to our schema.
+
+%- Getting into SQL vs NoSQL here...
+An early requirement of the data representation was to handle the author list as an array.
+An author is a type of entity in the data.
+In a relational database the authors would have their own tables, separate from papers, as they are separate entities.
+
+The optimal schema for the SELECTRS field is not initially obvious.
+The current schema has SELECTRS parsed into a 3 dimensional array.
+Each 'selector' has a type, value, and a link variable.
+The following types are valid:
+\begin{quote}
+N, T, P, G, R, S, M, D, C, X, A, or Z, which stand for nuclide, target, parent, daughter, reaction, subject, measured, deduced, calculated, other subject, mass range, and charge range, respectively.
+\end{quote}
+The value changes based on the type. The link variable is used to tie together multiple selectors.
+%- TODO Provide an example of multiple selectors being connected
 
 ## The Database - MongoDB
 %- Data imported into MongoDB
