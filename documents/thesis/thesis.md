@@ -16,8 +16,8 @@ link-citations: true
 \listoftables
 
 
-Thesis Introduction
-===================
+Introduction
+============
 
 %- The problem and its setting
 %- Proposed methodology to solve problem
