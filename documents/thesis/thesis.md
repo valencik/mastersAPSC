@@ -210,6 +210,11 @@ This attaches information about how many authors an entry has to our schema.
 An early requirement of the data representation was to handle the author list as an array.
 An author is a type of entity in the data.
 In a relational database the authors would have their own tables, separate from papers, as they are separate entities.
+This means a table and data scheme would need to be created for the papers and then a separate table and scheme for the authors, and similarly for keywords, selectors, and history.
+It is certainly possible to store the NSR data in a relational model.
+It was however much less work to convert the original data into a data scheme that used arrays.
+This is the primary motivator for not using a standard relational database.
+
 
 The optimal schema for the SELECTRS field is not initially obvious.
 The current schema has SELECTRS parsed into a 3 dimensional array.
@@ -297,11 +302,8 @@ Additionally it has nice features such as JSON support, an aggregation framework
 Other NoSQL databases like CouchDB support JSON and would likely work just as well.
 It is worth mentioning that MongoDB and CouchDB are comparatively new database systems.
 Postgres also supports JSON and is a very mature database system.
-
 Because MySQL is so prevalent it is worth mentioning explicitly why it was not chosen.
-Relationship all Databases Management Systems (RDBMS) do not support the data scheme produced at the end of the Data Preparion process in this work.
-Arrays must be unraveled and each element should be its own entity.
-This means a table and data scheme would need to be created for the papers and then a separate table and scheme for the authors.
+MySQL is a relation database and would thus not support the arrays in the data scheme as outline in the previous section.
 
 ### MongoDB
 %- Data imported into MongoDB
