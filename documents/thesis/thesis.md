@@ -34,7 +34,7 @@ The ultimate goal is to enable further analysis on the body of nuclear science l
 %- Point towards what should be done, why?
 %- What is the problem? What will I study?
 The academic field of nuclear science is over one hundred years old, starting with the discovery of radiation.
-This discovery is the first of many entries in the Nuclear Science References database, collected, cataloged, distributed, and evaluated by the National Nuclear Data Center. [@Kurgan200603]
+This discovery is the first of many entries in the Nuclear Science References database, collected, cataloged, distributed, and evaluated by the National Nuclear Data Center [@Kurgan200603].
 %- TODO this ending is insufficient
 The NSR has over 210,000 entries documenting the body of nuclear science literature, which provides the opportunity for knowledge discovery on the literature's meta data.
 
@@ -229,7 +229,7 @@ The value changes based on the type. The link variable is used to tie together m
 %- ROBY write a paragraph that factually states your final representation
 An example of the final data representation used by the work is shown in figure ???.
 The `_id` is used as the unique identifier in the MongoDB collection.
-`year` is an interger and represents the year the resource was published.
+`year` is an integer and represents the year the resource was published.
 `history` is an array that contains encoded information representing dates when the original NSR document was added and/or modified.
 `code` is a copy of `CODEN` from the NSR data.
 `type` describes what publication type (journal, thesis, conference paper, etc) the resource is.
