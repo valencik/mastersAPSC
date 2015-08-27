@@ -226,32 +226,6 @@ The value changes based on the type. The link variable is used to tie together m
 %- Data imported into MongoDB
 With the data representation complete and the data formatted correctly and imported to MongoDB, we can consider the database operations.
 The most common operation will be some sort of search or lookup.
-A small python program is shown in figure ??? that saves the results of a MongoDB aggregation query to a tsv file.
-
-``` {#pymongotrans .python caption="Saving the results of an eggregate query to file"}
-from pymongo import MongoClient
-import csv
-
-client = MongoClient('localhost', 27017)
-db = client.masters
-nsr = db.NSR
-
-selectorAuthors_pipeline = [
-    {"$match": {"selectors.type":"N"}},
-    {"$unwind": "$selectors"},
-    {"$unwind": "$authors"},
-    {"$group": {"_id": "$selectors.value", "authors": {"$addToSet": "$authors"}}}
-]
-results = nsr.aggregate(selectorAuthors_pipeline, allowDiskUse=True)
-
-with open('tsa.tsv', 'w', newline='') as tsvfile:
-    transaction_writer = csv.writer(tsvfile, delimiter='\t')
-    for document in results:
-        transaction_list = document['authors']
-        transaction_list.insert(0, document['_id'])
-        transaction_writer.writerow(transaction_list)
-```
-
 %- MongoDB Indexes
 To optimize this process we instruct MongoDB to index our data on various fields.
 Indexing speeds up search queries in a manner similar to sorting a series of data elements.
@@ -260,12 +234,6 @@ We create a single field indexes on the id, year, authors, selectors type, selec
 This enables very fast lookups for documents according to the indexed fields.
 For example it would be very quick to find all the documents with type 'Journal' and year '1983'.
 Where as the search for all documents with keyword "fisson" has not been optimized by the previously mentioned indexes.
-
-We can create an index of the document years at the mongo shell with the following command:
-
-``` {.javascript caption="Create an index on the 'year' field in Mongo Shell"}
-db.NSR.createIndex({year: 1})
-```
 
 Since our author field is really an array of string elements, we can use a single field index on it without issue.
 However, on field like the title or keywords a single field index will fall short of helping us find partial matches.
