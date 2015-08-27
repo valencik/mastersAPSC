@@ -657,16 +657,6 @@ This could be an author, keyword, group of authors, etc.
 Treating the data as a network or graph is unique to our application.
 This is a feature that warrants a lot of attention.
 
-## Unified Search
-The present interface requires the specification of types of searches, we can infer this.
-If the user typed an author's name, then we can search for papers of that author.
-Similarly if the user typed a keyword or phrase like "nuclear halo" we can search for papers involving that keyword.
-%- Check how possible this is currently!
-
-## Data Exporting
-Being able to save the current visualizations, graph data structures, or flat csv data could be of use.
-%- Check how possible this is currently!
-
 
 Results
 =======
