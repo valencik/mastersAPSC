@@ -222,7 +222,20 @@ N, T, P, G, R, S, M, D, C, X, A, or Z, which stand for nuclide, target, parent, 
 The value changes based on the type. The link variable is used to tie together multiple selectors.
 %- TODO Provide an example of multiple selectors being connected
 
-## The Database - MongoDB
+## The Database
+
+MongoDB was chosen primarily because of the authors familiarity with it.
+Additionally it has nice features such as JSON support, an aggregation framework, and is easy to setup.
+Other NoSQL databases like CouchDB support JSON and would likely work just as well.
+It is worth mentioning that MongoDB and CouchDB are comparatively new database systems.
+Postgres also supports JSON and is a very mature database system.
+
+Because MySQL is so prevalent it is worth mentioning explicitly why it was not chosen.
+Relationship all Databases Management Systems (RDBMS) do not support the data scheme produced at the end of the Data Preparion process in this work.
+Arrays must be unraveled and each element should be its own entity.
+This means a table and data scheme would need to be created for the papers and then a separate table and scheme for the authors.
+
+### MongoDB
 %- Data imported into MongoDB
 With the data representation complete and the data formatted correctly and imported to MongoDB, we can consider the database operations.
 The most common operation will be some sort of search or lookup.
@@ -240,6 +253,36 @@ However, on field like the title or keywords a single field index will fall shor
 For example, searching for documents with the word "neutron" in the title will not be sped up by a single field index.
 For this task we leverage MongoDB's text indexes.
 %- TODO Confirm that this is true, perhaps even demonstrate it
+
+### MongoDB Aggregation Framework
+The MongoDB Aggregation Framework is powerful and enables a lot of data manipulation.
+There are a handful of simple aggregation operations that can be piped together to build complex queries.
+All aggregation operations take in a list of data documents, manipulate them in some way, and then emit the results to the next operation.
+
+**match** The `match` operation acts as a filter, returning only the documents that meet the specified criteria.
+```
+Insert simple example here
+```
+
+**project** The `project` operation manipulates each individual document renaming, omitting, or changing each field according to the input parameters.
+```
+Insert simple example here
+```
+
+**unwind** The `unwind` operation acts on an array field of the input documents.
+It creates a new document for each element in the array, with all fields duplicated exist the array field which is equal to the element.
+```
+Insert simple example here
+```
+
+**group** The `group` operation can combine similar documents and can perform calculations based on that combination.
+A common usage is to sum a value, perhaps price, of all the input documents.
+```
+Insert simple example here
+```
+
+There are some additional, more straightforward operations such as `sort`, `limit`, `skip`, and `redact`.
+The final results form an aggregation query can be saved to a collection using the `out` operation, or can be returned to the calling application through the many MongoDB APIs.
 
 ## Data Summarization
 %- Form data mining problems, questions, queries
