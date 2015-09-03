@@ -30,7 +30,7 @@ else:
 db = client['masters']
 
 
-# Create collection authorSummary
+# Update collection authorSummary
 if 'authorSummary' not in db.collection_names():
     sys.exit("ERROR: Collection 'authorSummary' was not found. Inspect database and run 'prepare-data.py' if needed.")
 else:

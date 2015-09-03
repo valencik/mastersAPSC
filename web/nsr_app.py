@@ -41,13 +41,17 @@ def find_year(year_id):
 # returns a report on the authors statistics
 @app.route('/api/author/<author_id>')
 def author_report(author_id):
-    results = nsr.find({"authors": author_id})
+    nsr_results = nsr.find({"authors": author_id})
     docs = []
     nodes = set()
-    for document in results:
+    for document in nsr_results:
         docs.append(document)
         if 'authors' in document:
             nodes.update(document['authors'])
+
+    summary_results = db.authorSummary.find_one({"_id": author_id})
+    if 'cluster' in summary_results:
+        cluster_id=summary_results['cluster']
 
     return render_template('authorReport.html',
         author=author_id,
@@ -55,7 +59,8 @@ def author_report(author_id):
         paper_num=len(docs),
         first_doc_year=docs[0]['year'],
         last_doc_year=docs[-1]['year'],
-        docs=docs
+        docs=docs,
+        cluster=cluster_id
     )
 
 # API: topauthors
