@@ -110,18 +110,6 @@ Interactive visualizations are used to encourage exploring the data.
 The hope is that this work will enable and encourage future works either with the NSR data or similar databases of information.
 
 
-Application
-===========
-%- Designing an interface for such an application
-%- Perhaps write this after the demonstration section.
-%- (We build/propose the tool that does the things demonstrated.)
-
-The proposed application attempts to unify the various search functions into a single web app interface.
-Furthermore the app presents new types of analysis for the user.
-At a high level, the interface is composed of a search area that takes in user input and then generates a database query to retrieve the relevant data.
-This data is then presented with a number of visualization options.
-
-
 The Data and Database
 =====================
 An early and difficult stage in any data science project is data aquisition.
@@ -365,8 +353,8 @@ This very quickly demonstrates that the majority of documents in the NSR were pu
 %- TODO histogram of papers per year
 
 
-Algorithmic development
-=======================
+Cluster Analysis
+================
 %- Introduce and discuss the algorithms used in various application features
 %- Cluster analysis in research proposal is still useful.
 %- Starting with some of the naive algorithms, and then going to graph theory.
@@ -501,36 +489,9 @@ This is result means that filtering out low publication authors in additional an
 
 %- TODO present the results from limited author clustering
 
-Implementation
-==============
-%- Introduce and discuss the various technologies used.
-%- Advantages and disadvantages of these technologies and justification of final choices.
-%- TODO Expand each piece of technology into a subsection and discuss
-- Perl parsing, regular expressions and speed
-- MongoDB, schema and aggregation framework
-- Gephi analysis, modularity, average shortest path
 
-## Python
-
-Python has a strong following and support in the scientific community.
-There are numerous scientific libraries that are freely available and easy to setup.
-So while python may not be the obvious choice for a web application today, its abundance of available libraries pays off quickly.
-
-[Flask](http://flask.pocoo.org) a small web framework used to power the web application.
-
-
-Demonstration
-=============
-%- Demonstrate how the application can be used to perform analysis of the NSR.
-%- Analysis discussion from the proposal could be useful in the demonstration section of the thesis.
-%- TODO Rewrite this section to be less informal
-
-Demonstration of the application.
-How everything that was promised is delivered.
-If certain things could not be delivered, why not.
-Discrete list of features I want to advertise to users.
-A use case of answering a question with this tool.
-Additionally, it might be useful to show that this is more difficult using the old NSR website.
+Author Name Analysis
+====================
 
 ## Author Fingerprinting
 %- build collection of all unique author names (101095)
@@ -600,7 +561,8 @@ Simple transducers could be specified to calculate the author name abbreviations
 However this presents a significant departure from the rest of the work.
 
 
-
+Associating Mining
+==================
 
 ## Similar "Objects"
 %- TODO Determine which parts of the following discussion should be in algorithmic development
@@ -649,6 +611,8 @@ Specifically, a filter is created to return authors who have published using the
 %- One produced using any initial criteria as long as the rules are associations of authors, and the second rules produced from coauthorship data.
 %- Testing both methods could be interesting and should not be terribly difficult.
 
+Visualizations
+==============
 
 ## Time Series Visualizations
 %- Distribution sampling and clustering (percentiles) could be useful here
@@ -660,8 +624,9 @@ Treating the data as a network or graph is unique to our application.
 This is a feature that warrants a lot of attention.
 
 
-Results
-=======
+
+Conclusions
+===========
 %- Conclude with discussion of contributions.
 %- How the application uncovers some of the previously unknown and interesting results.
 
