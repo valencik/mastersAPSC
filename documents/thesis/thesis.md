@@ -49,9 +49,7 @@ The NSR provides meta data that can be converted to semantic information for adv
 This work is a cross disciplinary work, combining data mining technique with domain knowledge in nuclear physics.
 
 
-System Analysis
-===============
-> Description of the application domain, existing tools, and functional analysis of a comprehensive application that will be helpful to the physicists.
+%- Description of the application domain, existing tools, and functional analysis of a comprehensive application that will be helpful to the physicists.
 %- Get some screenshots of the NSR website. (automate?)
 %- Does the NSR website offer visualizations?
 %- Easy method of exporting data?
