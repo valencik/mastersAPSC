@@ -340,15 +340,35 @@ Insert simple example here
 There are some additional, more straightforward operations such as `sort`, `limit`, `skip`, and `redact`.
 The final results form an aggregation query can be saved to a collection using the `out` operation, or can be returned to the calling application through the many MongoDB APIs.
 
-## Data Summarization
-%- Form data mining problems, questions, queries
-%- Interpretation
+
+Data Summarization
+==================
+%- What? Created summaries and ranked info in a web app.
+%- Why? Visualizations are important in understanding data. As are summaries and rankings.
+%- How? MongoDB aggregations to D3 charts.
 Data summarization is necessary to begin to understand our data.
 Preliminary visualizations help in this task.
 A histogram of database entries per year is shown in figure !!!.
 This very quickly demonstrates that the majority of documents in the NSR were published in the last 50 years.
 
 %- TODO histogram of papers per year
+Early stages in data visualization were used to learn about the dataset as a whole.
+Answering simple questions like how many papers are in the database?
+When were those papers written?
+
+## Visualizations
+
+There are two primary visual methods for displaying summary information in this application.
+The histograms show how a particular slice of the database evolves over time.
+The pie charts demonstrate the relative sizes of portions of the data.
+For example, out of a slice of data, perhaps all of the data, how many entries are papers and journals?
+
+![A histogram of papers publish from 1896 to 2014](/Users/andrew/Dropbox/Masters/roughFigures/NSRyearlyhistogram.pdf){#fig:nsrhisto}
+
+## Rankings
+
+For a particular selection of NSR data, it can be useful to know the ranks of various types of data.
+For example, if a user searches an author on the application they are presented with a ranking of their most frequent coauthors, keywords, and nuclides.
 
 
 Cluster Analysis
