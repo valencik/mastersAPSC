@@ -380,6 +380,128 @@ Treating the data as a network or graph is unique to our application.
 This is a feature that warrants a lot of attention.
 
 
+Author Name Analysis
+====================
+
+## Author Fingerprinting
+%- build collection of all unique author names (101095)
+%- calculate the edit distances of all the author names (more than 5 billion calculations...)
+%- There are 41254 "authors" that appear once
+%- I would like to not actually write that number in the thesis, but instead compute and reference it.
+A 2014 paper from Boris report a total of 96200 unique authors.
+
+Author search has been improved by implementing a suggestion system for partial author name searches.
+When we search for "Svenne" we can see there are both J.P.Svenne and J.Svenne.
+In the original NSR application it would be a manual task to discern the two author names.
+Our improvement is to add an author clustering scheme that show's us the similarity of authors.
+Here we can see that JP Svenne and J Svenne are likely to be the same author.
+> Also use "Austin" S.M.Austin, Sam.Austin
+When a similarity measure is above a certain threshold the matching grouping of authors is automatic.
+
+This similarlity measurement could happen either online (immediately after the user submits a query) or offline (before the app is presented to users).
+Because our database is static and manually updated with new entries periodically, the offline approach makes sense.
+And additional benefit to the offline approach is that it can be easily moderated and tweaked with user submitted suggestions.
+A possible example being an author name misspelling that only happen once. (not enough times to measure similarity against)
+
+### Levenshtein Distance
+String edit distance measures like the Levenshtein Distance offer an easy first approach to analyzing the author names.
+The Levenshtein distance is one type of string metric to evaluate the difference between two sequences of characters.
+A distance of 1 is attributed to ever single character edit necessary to transform one of the input strings into the other.
+Single character edits include an insertion of a character, a deletion, or a substitution.
+
+> TODO Present an example (for each: insertion, deletion, substitution) using actual author names from the NSR.
+
+The Python library Jellyfish makes it quite easy to use a few different distance metrics.
+Nevertheless, calculating any measure for all pairs of authors is a large task.
+A quick estimate of $100,000$ authors means $5,000,000,000$ unique (unordered) pairs to calculate.
+Thankfully this is not entirely prohibitive to calculate on modest hardware.
+It does however, produce a very large amount of data, so filtering is absolutely necessary.
+
+A small Python script, using Jellyfish, was prepared to calculate the Levenshtein Distance for each author name pair.
+Only pair with a distance less than 4 were written to file.
+%- 3 is higher than necessary
+This analysis reveals over 20 million author pairs for further analysis.
+
+> TODO Discuss pairs with a distance of 1
+
+> TODO Discuss pairs with a distance of 4
+
+> TODO Discuss limitations of "non informed" string edit distances.
+
+### Extending the String Metric
+"Adam Sarty" and "A.Sarty" should actually have a small distance in our application.
+This type of analysis would require a significant modification to the existing string metrics.
+There are many open source implementations of string distance functions, so a modification is not out of the question.
+
+Another approach could be simplfy the list of authors while accepting potential loss of information.
+The current number of unique authors after perl parsing is $100147$, if we remove all authors that include *" the "* in their name we reduce to $98788$ authors.
+This has the effect of removing collaborations from the author list.
+This may or may not be desired for some analysis.
+In attempting to find author with typos and similar data entry mistakes in their names this filtering is unlikely to have significant impact.
+Author name fields representing collaborations are often long and have small string distances to one another as they informative part of their name is typically an acronym.
+
+Continuing this approach of throwing away some data to narrow our results, removing all spaces returns on $97411$ unique authors.
+And removing all characters but alphabetical ones returns $95366$ unique authors.
+It is worth recalling that Borris reports 96200 unique authors in his 2014 paper.
+
+> TODO Evaluate how much more detail I should go into on 'futher tools'
+
+There are other more advanced tools from the field of information and language theory that could be used as well.
+Simple transducers could be specified to calculate the author name abbreviations in an efficient manner.
+However this presents a significant departure from the rest of the work.
+
+
+Associating Mining
+==================
+
+## Similar "Objects"
+%- TODO Determine which parts of the following discussion should be in algorithmic development
+The ultimate goal of the Similar Objects feature is to provide a flexible recommender system that supports recommending different types of objects within the database.
+The most obvious usecase of this feature is to find similar authors to those the user is currently inspecting or searching.
+However the system should be extendable to also recommend similar keywords or periods in time, for example.
+Implementing this feature requires a significant amount of offline data mining and analysis.
+Once the analysis is done, the runtime of the application need only do quick lookups in tables to find the desired results.
+
+With this in mind, the high level summary of this analysis stage is to build data object classifiers and labels and then enable the user inferface to search and display those labels.
+
+There are a number of metrics used in producing the data object labels.
+Similar authors could be authors who publish together, or authors who do not publish together but publish with similar keywords.
+The later is likely more interesting to users, as it could suggest similar authors they are unaware of.
+
+As the NSR database spans several decades, each data object presents time series information.
+Finding similar authors separated in time could be interesting.
+
+### Association Mining with Apriori
+%- They are really just descirbing which selector values appear often together in the same paper, and that is not particularly illuminating domain knowledge.
+%- TODO cite the arules package
+As a preliminary test with association rule learning, we prepare our data for use with the Apriori algorithm in the *arules* package in R.
+
+> TODO Work through an example and explain the algorithm.
+
+The Apriori algorithm returns list of association rules that have support and confidence values above the minimum amount specified.
+This list almost certainly contains duplicate information.
+Sometimes of the form A->B and B->A
+In the case of nuclides found in selector values, we often see multiple rules involving various different permutations of a list of common isotopes.
+
+%- Program workflow
+It is pretty easily to flatten our data as needed using the MongoDB aggregation framework.
+A python script *prepare-data.py* has been developed to prepare the data for analysis.
+The resulting data is then handled by the R script *apriori-dedup.r*.
+The R script writes the output of the apriori algorithm to a file.
+Another python script, *parse-arules-output.py*, then parses the R apriori output to be in a more usable csv format.
+
+At this stage, there is a list association rules relating authors through their use of keywords.
+Most of these rules likely involve authors that have published together.
+However, finding the rules with authors who have not published together would present very interesting information.
+Specifically, a filter is created to return authors who have published using the same keyword in different papers, and have never authored a paper together.
+
+%- I could make a list of the total coauthors for any given author.
+%- Then I could cheaply lookup an author in an association rule (perhaps the rhs author) and see if i find the other authors in the rule.
+%- Pawan has suggested another method: taking the difference of two sets of rules.
+%- One produced using any initial criteria as long as the rules are associations of authors, and the second rules produced from coauthorship data.
+%- Testing both methods could be interesting and should not be terribly difficult.
+
+
 Cluster Analysis
 ================
 %- Introduce and discuss the algorithms used in various application features
@@ -515,128 +637,6 @@ This is result means that filtering out low publication authors in additional an
 %- Demonstrate that 1993JA17 and 1996JA24 disappear correctly
 
 %- TODO present the results from limited author clustering
-
-
-Author Name Analysis
-====================
-
-## Author Fingerprinting
-%- build collection of all unique author names (101095)
-%- calculate the edit distances of all the author names (more than 5 billion calculations...)
-%- There are 41254 "authors" that appear once
-%- I would like to not actually write that number in the thesis, but instead compute and reference it.
-A 2014 paper from Boris report a total of 96200 unique authors.
-
-Author search has been improved by implementing a suggestion system for partial author name searches.
-When we search for "Svenne" we can see there are both J.P.Svenne and J.Svenne.
-In the original NSR application it would be a manual task to discern the two author names.
-Our improvement is to add an author clustering scheme that show's us the similarity of authors.
-Here we can see that JP Svenne and J Svenne are likely to be the same author.
-> Also use "Austin" S.M.Austin, Sam.Austin
-When a similarity measure is above a certain threshold the matching grouping of authors is automatic.
-
-This similarlity measurement could happen either online (immediately after the user submits a query) or offline (before the app is presented to users).
-Because our database is static and manually updated with new entries periodically, the offline approach makes sense.
-And additional benefit to the offline approach is that it can be easily moderated and tweaked with user submitted suggestions.
-A possible example being an author name misspelling that only happen once. (not enough times to measure similarity against)
-
-### Levenshtein Distance
-String edit distance measures like the Levenshtein Distance offer an easy first approach to analyzing the author names.
-The Levenshtein distance is one type of string metric to evaluate the difference between two sequences of characters.
-A distance of 1 is attributed to ever single character edit necessary to transform one of the input strings into the other.
-Single character edits include an insertion of a character, a deletion, or a substitution.
-
-> TODO Present an example (for each: insertion, deletion, substitution) using actual author names from the NSR.
-
-The Python library Jellyfish makes it quite easy to use a few different distance metrics.
-Nevertheless, calculating any measure for all pairs of authors is a large task.
-A quick estimate of $100,000$ authors means $5,000,000,000$ unique (unordered) pairs to calculate.
-Thankfully this is not entirely prohibitive to calculate on modest hardware.
-It does however, produce a very large amount of data, so filtering is absolutely necessary.
-
-A small Python script, using Jellyfish, was prepared to calculate the Levenshtein Distance for each author name pair.
-Only pair with a distance less than 4 were written to file.
-%- 3 is higher than necessary
-This analysis reveals over 20 million author pairs for further analysis.
-
-> TODO Discuss pairs with a distance of 1
-
-> TODO Discuss pairs with a distance of 4
-
-> TODO Discuss limitations of "non informed" string edit distances.
-
-### Extending the String Metric
-"Adam Sarty" and "A.Sarty" should actually have a small distance in our application.
-This type of analysis would require a significant modification to the existing string metrics.
-There are many open source implementations of string distance functions, so a modification is not out of the question.
-
-Another approach could be simplfy the list of authors while accepting potential loss of information.
-The current number of unique authors after perl parsing is $100147$, if we remove all authors that include *" the "* in their name we reduce to $98788$ authors.
-This has the effect of removing collaborations from the author list.
-This may or may not be desired for some analysis.
-In attempting to find author with typos and similar data entry mistakes in their names this filtering is unlikely to have significant impact.
-Author name fields representing collaborations are often long and have small string distances to one another as they informative part of their name is typically an acronym.
-
-Continuing this approach of throwing away some data to narrow our results, removing all spaces returns on $97411$ unique authors.
-And removing all characters but alphabetical ones returns $95366$ unique authors.
-It is worth recalling that Borris reports 96200 unique authors in his 2014 paper.
-
-> TODO Evaluate how much more detail I should go into on 'futher tools'
-
-There are other more advanced tools from the field of information and language theory that could be used as well.
-Simple transducers could be specified to calculate the author name abbreviations in an efficient manner.
-However this presents a significant departure from the rest of the work.
-
-
-Associating Mining
-==================
-
-## Similar "Objects"
-%- TODO Determine which parts of the following discussion should be in algorithmic development
-The ultimate goal of the Similar Objects feature is to provide a flexible recommender system that supports recommending different types of objects within the database.
-The most obvious usecase of this feature is to find similar authors to those the user is currently inspecting or searching.
-However the system should be extendable to also recommend similar keywords or periods in time, for example.
-Implementing this feature requires a significant amount of offline data mining and analysis.
-Once the analysis is done, the runtime of the application need only do quick lookups in tables to find the desired results.
-
-With this in mind, the high level summary of this analysis stage is to build data object classifiers and labels and then enable the user inferface to search and display those labels.
-
-There are a number of metrics used in producing the data object labels.
-Similar authors could be authors who publish together, or authors who do not publish together but publish with similar keywords.
-The later is likely more interesting to users, as it could suggest similar authors they are unaware of.
-
-As the NSR database spans several decades, each data object presents time series information.
-Finding similar authors separated in time could be interesting.
-
-### Association Mining with Apriori
-%- They are really just descirbing which selector values appear often together in the same paper, and that is not particularly illuminating domain knowledge.
-%- TODO cite the arules package
-As a preliminary test with association rule learning, we prepare our data for use with the Apriori algorithm in the *arules* package in R.
-
-> TODO Work through an example and explain the algorithm.
-
-The Apriori algorithm returns list of association rules that have support and confidence values above the minimum amount specified.
-This list almost certainly contains duplicate information.
-Sometimes of the form A->B and B->A
-In the case of nuclides found in selector values, we often see multiple rules involving various different permutations of a list of common isotopes.
-
-%- Program workflow
-It is pretty easily to flatten our data as needed using the MongoDB aggregation framework.
-A python script *prepare-data.py* has been developed to prepare the data for analysis.
-The resulting data is then handled by the R script *apriori-dedup.r*.
-The R script writes the output of the apriori algorithm to a file.
-Another python script, *parse-arules-output.py*, then parses the R apriori output to be in a more usable csv format.
-
-At this stage, there is a list association rules relating authors through their use of keywords.
-Most of these rules likely involve authors that have published together.
-However, finding the rules with authors who have not published together would present very interesting information.
-Specifically, a filter is created to return authors who have published using the same keyword in different papers, and have never authored a paper together.
-
-%- I could make a list of the total coauthors for any given author.
-%- Then I could cheaply lookup an author in an association rule (perhaps the rhs author) and see if i find the other authors in the rule.
-%- Pawan has suggested another method: taking the difference of two sets of rules.
-%- One produced using any initial criteria as long as the rules are associations of authors, and the second rules produced from coauthorship data.
-%- Testing both methods could be interesting and should not be terribly difficult.
 
 
 Conclusions
