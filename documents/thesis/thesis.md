@@ -371,6 +371,15 @@ For a particular selection of NSR data, it can be useful to know the ranks of va
 For example, if a user searches an author on the application they are presented with a ranking of their most frequent coauthors, keywords, and nuclides.
 
 
+Network Analysis and Visualization
+==================================
+%- What? Enabled graph data structure operations on NSR author data.
+%- Why? This is not possible with existing NSR data... Why useful?
+%- How? Using python library Networkx to build graph datastructures. D3 and Gephi for visualizations
+Treating the data as a network or graph is unique to our application.
+This is a feature that warrants a lot of attention.
+
+
 Cluster Analysis
 ================
 %- Introduce and discuss the algorithms used in various application features
@@ -628,19 +637,6 @@ Specifically, a filter is created to return authors who have published using the
 %- Pawan has suggested another method: taking the difference of two sets of rules.
 %- One produced using any initial criteria as long as the rules are associations of authors, and the second rules produced from coauthorship data.
 %- Testing both methods could be interesting and should not be terribly difficult.
-
-Visualizations
-==============
-
-## Time Series Visualizations
-%- Distribution sampling and clustering (percentiles) could be useful here
-How does an "object" evolve over time?
-This could be an author, keyword, group of authors, etc.
-
-## Network Visualization and Exploration
-Treating the data as a network or graph is unique to our application.
-This is a feature that warrants a lot of attention.
-
 
 
 Conclusions
