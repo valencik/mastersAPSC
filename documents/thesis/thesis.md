@@ -376,8 +376,44 @@ Network Analysis and Visualization
 %- What? Enabled graph data structure operations on NSR author data.
 %- Why? This is not possible with existing NSR data... Why useful?
 %- How? Using python library Networkx to build graph datastructures. D3 and Gephi for visualizations
-Treating the data as a network or graph is unique to our application.
-This is a feature that warrants a lot of attention.
+All previous analysis of the NSR data has focused on the content of each entry in a flat manner.
+However, the list of authors of a paper can be used to build a network or graph of the authors.
+It is worth noting in this thesis, the word 'graph' will always refer to the mathematical representation of a set of objects and their links.
+The first graph constructed in this app was a graph where each node represents an author, and each edge or link represents a coauthorship.
+
+## Graph Layout Algorithms
+The visualization of large graphs is computational intensive and produces complex images.
+These images are perhaps of questionable usefulness.
+The resulting shape or 'layout' of a graph is dependent on the graph layout algorithm used.
+Figures @fig:nsr1989graphyifanhu and @fig:nsr1989graph use the exact same input data but two different layout algorithms (Yifan Hu ML and Atlas 2 respectively).
+
+![Network Graph of 1989. Nodes are authors coloured by modularity, and edges are a common publication.](/Users/andrew/Dropbox/Masters/gephi/images/NSR-1989-biggest-modularity-degree-yifanhuML.pdf){#fig:nsr1989graphyifanhu}
+
+![Network Graph of 1989. Nodes are authors coloured by modularity, and edges are a common publication.](/Users/andrew/Dropbox/Masters/gephi/images/NSR-1989-biggest-modularity-degree.png){#fig:nsr1989graph}
+
+%- D3 force graphs? citations, layout algorithm, what forces?
+The D3 graphs produced in the web application use the D3.js Force directed graph routines.
+
+## Nuclide Graphs
+Almost any parameter can be used as a filter to produce an author network graph.
+The selector values present an interesting oppurtunity in this case.
+
+## Implementation
+%- Citation
+The Python library Networkx is used to create the graph data structures, which can then be sent to our visualization code, or be exported for analysis with other tools.
+Networkx has a collection of algorithms and functions used to analyze and manipulate the graphs.
+Such manipulations include identifying and sorting disconnected subgraphs within a slice of data.
+For example, figures @fig:nsr1989graphyifanhu and @fig:nsr1989graph are use only the largest connected graph of all the NSR entries in the year 1989.
+There were ??? other smallers graphs disconnected from the largest graph in 1989.
+
+## Future Work
+Treating the NSR database as a graph data structure opens up a lot of avenues for future work.
+With a graph with authors as nodes and their publications determining the edges, the result is a social network of collaborating scientists.
+This opens up the data to future work in other fields such the social sciences or large network analysis.
+
+### Exporting Graph Data
+The Networkx library has support for writing the graph datastructures to multiple file types.
+Example code for exporting the 1989 data to `gexf` format for analysis in Gephi or similar tools is available ???.
 
 
 Author Name Analysis
