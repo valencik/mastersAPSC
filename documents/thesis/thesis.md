@@ -551,15 +551,6 @@ Classification and clustering are related approaches to organizing data elements
 Classification is the process of deciding what group a particular datum should most optimally belong to.
 Clustering is the grouping of multiple data points such that those belonging to a group are more similar in some manner than those outside of that group.
 
-Clustering can be broken into two main groups, hierarchical and partitional.
-Both groups have applications in this study.
-The citation structure or authorship of the literature is likely to be hierarchical in nature.
-%- TODO expand on hierarchical bit or remove it
-Partitional clustering should prove useful in determining the sub genres and fields of study within the body of work.
-
-Various aspects of the data will be clustered with differing techniques based on the data type.
-The methodology for a basic clustering technique, K-means clustering is discussed.
-
 ### K-means Clustering
 K-means clustering is a cluster analysis technique that can group data objects in $k$ clusters based on minimizing their distances with respect to cluster centroids.
 K-means is a partitional clustering algorithm.
