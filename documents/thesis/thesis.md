@@ -649,13 +649,13 @@ Finally the unique remaining papers are the ones that have authors with more tha
 Table @tbl:papersWithoutNAuthors show the number of papers that remain once all the authors with a specified publication count are removed.
 
 %- TODO develop a better (continuous) way to calculate these numbers
-Entry Number Cutoff   Papers Remaing
--------------------   --------------
+Entry Number Cutoff   Papers Remaining   Difference
+-------------------   ----------------   ----------
 0                     212835
-1                     187741
-2                     185404
-3                     183410
-4                     181315
+1                     187741             25094
+2                     185404             2337
+3                     183410             1994
+4                     181315             2095
 
 Table: Papers affected by removal of authors with N or less papers. {#tbl:papersWithoutNAuthors}
 
