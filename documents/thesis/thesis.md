@@ -360,20 +360,13 @@ PC         14
 CONF       331
 REPT       732
 JOUR       2892
-UNKNOWN    0
 
 Table: Different types of NSR entries in 1989. {#tbl:types1989}
 
 Type       Amount
 ----       ------
-THESIS     0
 PREPRINT   1
-BOOK       0
-PC         0
-CONF       0
-REPT       0
 JOUR       21
-UNKNOWN    0
 
 Table: Different types of NSR entries for author A.J.Sarty. {#tbl:typesAJSarty}
 
