@@ -343,17 +343,46 @@ Data Summarization
 %- What? Created summaries and ranked info in a web app.
 %- Why? Visualizations are important in understanding data. As are summaries and rankings.
 %- How? MongoDB aggregations to D3 charts.
-Data summarization is necessary to begin to understand our data.
+Through data summarization we can learn the first-order characteristics of the data set.
+We are provided answers to questions like "What percentage of all entries are journal articles?"
+"When were those journal articles written?"
+
+The summarization analysis can conveniently be applied to subsets of the data.
+For example, we may answer the question: "What percentage of 1989 entries are journal articles?"
+Or "what percentage of A.J.Sarty's contributions were journal articles?"
+
+Type       Amount
+----       ------
+THESIS     16
+PREPRINT   21
+BOOK       7
+PC         14
+CONF       331
+REPT       732
+JOUR       2892
+UNKNOWN    0
+
+Table: Different types of NSR entries in 1989. {#tbl:types1989}
+
+Type       Amount
+----       ------
+THESIS     0
+PREPRINT   1
+BOOK       0
+PC         0
+CONF       0
+REPT       0
+JOUR       21
+UNKNOWN    0
+
+Table: Different types of NSR entries for author A.J.Sarty. {#tbl:typesAJSarty}
+
 Preliminary visualizations help in this task.
 A histogram of database entries per year is shown in figure !!!.
 This quickly demonstrates that the majority of documents in the NSR were published in the last 50 years.
 
 This property of the dataset has permitted testing data analysis code on years pre 1950, before applying the code to the full dataset.
 This was particularly useful in developing the network analysis code and visualizations, as post 1950 the networks can be too large to process quickly.
-
-Early stages in data visualization were used to learn about the dataset as a whole.
-Answering simple questions like how many papers are in the database?
-When were those papers written?
 
 ## Visualizations
 
