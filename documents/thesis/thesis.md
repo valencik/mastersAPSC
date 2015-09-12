@@ -333,6 +333,10 @@ Insert simple example here
 There are some additional, more straightforward operations such as `sort`, `limit`, `skip`, and `redact`.
 The final results form an aggregation query can be saved to a collection using the `out` operation, or can be returned to the calling application through the many MongoDB APIs.
 
+Thankfully, MongoDB is currently a popular database and there exists lots of tutorials and example applications.
+The MongoDB documentation is available at ???.
+All MongoDB interactions in this work use the python driver, `pymongo`.
+You can find the `pymongo` documentation at ???.
 
 Data Summarization
 ==================
