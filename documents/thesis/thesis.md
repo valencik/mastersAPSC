@@ -8,6 +8,7 @@ date: September 8th 2015
 bibliography: bibliography.yaml
 csl: american-physics-society.csl
 link-citations: true
+linestretch: 1.5
 ...
 
 \listoffigures
