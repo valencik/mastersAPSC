@@ -14,7 +14,7 @@ sed '/^%- .*$/d' thesis.md > thesis_no_comments.md
 echo "Invoking Pandoc for TeX file creation..."
 pandoc --table-of-contents --number-sections --standalone \
   --include-in-header=header.tex --include-before-body=beforebody.tex \
-  --filter ./minted.py \
+  --filter ./minted-listings.py \
   --filter pandoc-fignos \
   --filter pandoc-tablenos \
   --filter pandoc-eqnos \
