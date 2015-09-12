@@ -346,7 +346,10 @@ Data Summarization
 Data summarization is necessary to begin to understand our data.
 Preliminary visualizations help in this task.
 A histogram of database entries per year is shown in figure !!!.
-This very quickly demonstrates that the majority of documents in the NSR were published in the last 50 years.
+This quickly demonstrates that the majority of documents in the NSR were published in the last 50 years.
+
+This property of the dataset has permitted testing data analysis code on years pre 1950, before applying the code to the full dataset.
+This was particularly useful in developing the network analysis code and visualizations, as post 1950 the networks can be too large to process quickly.
 
 Early stages in data visualization were used to learn about the dataset as a whole.
 Answering simple questions like how many papers are in the database?
