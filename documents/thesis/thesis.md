@@ -1,11 +1,10 @@
-%- Text mining?
 ---
 title:  'Masters of Science in Applied Science Thesis'
 author:
 - name: Andrew Valencik
   affiliation: Saint Mary\'s University
 author: Andrew Valencik
-date: July 15th 2015
+date: September 8th 2015
 bibliography: bibliography.yaml
 csl: american-physics-society.csl
 link-citations: true
@@ -21,7 +20,7 @@ Introduction
 
 %- The problem and its setting
 %- Proposed methodology to solve problem
-The National Nuclear Data Center prepares an evaluated database of nuclear science literature that poses a rich opportunity for knowledge discovery directed at the scientific work and study.
+The United States National Nuclear Data Center prepares an evaluated database of nuclear science literature that poses a rich opportunity for knowledge discovery directed at the scientific work and study.
 Identifying trends and patterns in the meta data of over 200,000 documents may reveal latent structures of the progress and collaboration among the scientific community.
 The knowledge discovery and data mining process should reveal trends in the collective scientific study of nuclear structure, processes, and detection.
 Additionally, categorizing trends may provide predictive power in determining a worthwhile area of study or application of a technique.
@@ -53,11 +52,7 @@ This work is a cross disciplinary work, combining data mining technique with dom
 %- Get some screenshots of the NSR website. (automate?)
 %- Does the NSR website offer visualizations?
 %- Easy method of exporting data?
-%- Links to papers? Yes, DOI when available.
 %- How capable is it as a tool to explore further work?
-
-%- Introduction to NSR data?
-
 ## The Nuclear Science References Website
 The NNDC maintains the [NSR website](http://www.nndc.bnl.gov/nsr/) which serves a simple interface to the Nuclear Science References database.
 They offer four primary search interfaces, a quick search, text search, indexed search, and keynumber search.
@@ -65,7 +60,7 @@ The quick search interface is shown in figure {@fig:nsrweb1}.
 
 ![The main interface for the NNDC's NSR website. Captured June 28th 2015](images/web-NSR-main-June-28-2015.png) {#fig:nsrweb1}
 
-The various search functions are separated in either different pages or different text boxes.
+The search functions are separated in either different pages or different text boxes.
 Some options and customizations are set through drop down menus.
 For example the searching of indexed fields, including the selector values, is separate from the text search.
 
@@ -92,12 +87,12 @@ The most important difference is the functionality offered by the browse buttons
 The user can select a parameter of the following types:
 Author, FirstAuthor, Nuclide, Target, Parent, Daughter, Subject, Measured, Deduced, Calculated, Reaction, Incident, Outgoing, Journal, Topic, Z(range)
 For each of the types available the browser button will redirect to another page that either details the possible values or provides another search through the possible values.
-For example, Author and First Author direct to a simple search interface that allows some partial matches againsts the list of known authors.
+For example, Author and First Author direct to a simple search interface that allows some partial matches against the list of known authors.
 
 ### Result Analysis
 Search queries are remembered and presented in the 'Combine View' tab.
-You can combine the results of recent queries with various boolean logic.
-Analysis is offered on the search queries which displays how many nuclides, authors, journals, and publication years the query invovled.
+You can combine the results of recent queries with boolean logic.
+Analysis is offered on the search queries which displays how many nuclides, authors, journals, and publication years the query involved.
 
 ## Proposed Improvements
 The primary function of the developed application is increased accessibility to exploration of the Nuclear Science References data.
@@ -105,16 +100,17 @@ This includes the authors documented, the papers recorded and keyworded, their l
 The application makes use of a web interface to aid in increasing accessibility.
 All one needs in order to use the application is a modern web browser.
 Interactive visualizations are used to encourage exploring the data.
-The hope is that this work will enable and encourage future works either with the NSR data or similar databases of information.
+Additionally, the new database structure that is developed in this work enables searches that were previously cumbersome or impossible.
 
 
 The Data and Database
 =====================
-An early and difficult stage in any data science project is data aquisition.
+%- Data Structure and Representation?
+An early and difficult stage in any data science project is data acquisition.
 Thankfully the National Nuclear Data Center has composed the Nuclear Science References database already.
 For this work, a full database dump of the NSR was acquired on January 29th 2014.
 For simplicity, the data acquired from the NNDC on January 29th will be referred to as if it were the complete NSR database.
-All efforts have been taken to ensure the research procedures can very easily be extended and repeated on new NSR data.
+All efforts have been taken to ensure the research procedures can easily be extended and repeated on new NSR data.
 
 ## Data Preparation
 The NSR data was provided in a custom EXCHANGE format @winchell2007nuclear.
@@ -183,8 +179,6 @@ The result of the scripts is a file with a valid JSON structure for each NSR ent
 %- TODO Show/reference the JSON format of example raw NSR data
 
 ## Data Representation
-%- TODO discuss the NSR format. *Each* field on the newly created JSON
-%- ROBY discuss NSR format from NNDC
 In order to produce a good data schema, thought must be given to the data representation.
 Consideration should be given to the types of queries that will be made on the data.
 %- year as int allows <, >, and =
@@ -287,21 +281,20 @@ MongoDB was chosen primarily because of the authors familiarity with it.
 Additionally it has nice features such as JSON support, an aggregation framework, and is easy to setup.
 Other NoSQL databases like CouchDB support JSON and would likely work just as well.
 It is worth mentioning that MongoDB and CouchDB are comparatively new database systems.
-Postgres also supports JSON and is a very mature database system.
+Postgres also supports JSON and is a mature database system.
 Because MySQL is so prevalent it is worth mentioning explicitly why it was not chosen.
-MySQL is a relation database and would thus not support the arrays in the data scheme as outline in the previous section.
+MySQL is a relational database and would thus not support the arrays in the data scheme as outline in the previous section.
 
 ### MongoDB
-%- Data imported into MongoDB
 With the data representation complete and the data formatted correctly and imported to MongoDB, we can consider the database operations.
 The most common operation will be some sort of search or lookup.
 %- MongoDB Indexes
-To optimize this process we instruct MongoDB to index our data on various fields.
+To optimize this process we instruct MongoDB to index our data on important or frequently referenced fields such as "authors" and "year".
 Indexing speeds up search queries in a manner similar to sorting a series of data elements.
 MongoDB allows for many different types of indexes.
 We create a single field indexes on the id, year, authors, selectors type, selectors value, and type fields.
-This enables very fast lookups for documents according to the indexed fields.
-For example it would be very quick to find all the documents with type 'Journal' and year '1983'.
+This enables fast lookups for documents according to the indexed fields.
+For example it would be quick to find all the documents with type 'Journal' and year '1983'.
 Where as the search for all documents with keyword "fisson" has not been optimized by the previously mentioned indexes.
 
 Since our author field is really an array of string elements, we can use a single field index on it without issue.
@@ -313,7 +306,7 @@ For this task we leverage MongoDB's text indexes.
 ### MongoDB Aggregation Framework
 The MongoDB Aggregation Framework is powerful and enables a lot of data manipulation.
 There are a handful of simple aggregation operations that can be piped together to build complex queries.
-All aggregation operations take in a list of data documents, manipulate them in some way, and then emit the results to the next operation.
+All aggregation operations take in a list of data documents, manipulate them in some way, and then output the results to the next operation.
 
 **match** The `match` operation acts as a filter, returning only the documents that meet the specified criteria.
 ```
@@ -351,7 +344,6 @@ Preliminary visualizations help in this task.
 A histogram of database entries per year is shown in figure !!!.
 This very quickly demonstrates that the majority of documents in the NSR were published in the last 50 years.
 
-%- TODO histogram of papers per year
 Early stages in data visualization were used to learn about the dataset as a whole.
 Answering simple questions like how many papers are in the database?
 When were those papers written?
@@ -367,8 +359,8 @@ For example, out of a slice of data, perhaps all of the data, how many entries a
 
 ## Rankings
 
-For a particular selection of NSR data, it can be useful to know the ranks of various types of data.
-For example, if a user searches an author on the application they are presented with a ranking of their most frequent coauthors, keywords, and nuclides.
+For a particular selection of NSR data, it can be useful to know the rankings for important data fields.
+For example, if a user searches an author on the application they are presented with a ranked list of their most frequent coauthors, keywords, and nuclides.
 
 
 Network Analysis and Visualization
@@ -396,7 +388,8 @@ The D3 graphs produced in the web application use the D3.js Force directed graph
 
 ## Nuclide Graphs
 Almost any parameter can be used as a filter to produce an author network graph.
-The selector values present an interesting oppurtunity in this case.
+The selector values present an interesting opportunity in this case.
+We can filter the NSR data to only include entries that involved a particular nuclide.
 
 ## Implementation
 %- Citation
@@ -404,7 +397,7 @@ The Python library Networkx is used to create the graph data structures, which c
 Networkx has a collection of algorithms and functions used to analyze and manipulate the graphs.
 Such manipulations include identifying and sorting disconnected subgraphs within a slice of data.
 For example, figures @fig:nsr1989graphyifanhu and @fig:nsr1989graph are use only the largest connected graph of all the NSR entries in the year 1989.
-There were ??? other smallers graphs disconnected from the largest graph in 1989.
+There were ??? other smaller graphs disconnected from the largest graph in 1989.
 
 ## Future Work
 Treating the NSR database as a graph data structure opens up a lot of avenues for future work.
@@ -412,7 +405,7 @@ With a graph with authors as nodes and their publications determining the edges,
 This opens up the data to future work in other fields such the social sciences or large network analysis.
 
 ### Exporting Graph Data
-The Networkx library has support for writing the graph datastructures to multiple file types.
+The Networkx library has support for writing the graph data structures to multiple file types.
 Example code for exporting the 1989 data to `gexf` format for analysis in Gephi or similar tools is available ???.
 
 
@@ -429,7 +422,7 @@ A 2014 paper from Boris report a total of 96200 unique authors.
 Author search has been improved by implementing a suggestion system for partial author name searches.
 When we search for "Svenne" we can see there are both J.P.Svenne and J.Svenne.
 In the original NSR application it would be a manual task to discern the two author names.
-Our improvement is to add an author clustering scheme that show's us the similarity of authors.
+Our improvement is to add an author clustering scheme that shows the similarity of authors.
 Here we can see that JP Svenne and J Svenne are likely to be the same author.
 > Also use "Austin" S.M.Austin, Sam.Austin
 When a similarity measure is above a certain threshold the matching grouping of authors is automatic.
@@ -437,10 +430,10 @@ When a similarity measure is above a certain threshold the matching grouping of 
 This similarlity measurement could happen either online (immediately after the user submits a query) or offline (before the app is presented to users).
 Because our database is static and manually updated with new entries periodically, the offline approach makes sense.
 And additional benefit to the offline approach is that it can be easily moderated and tweaked with user submitted suggestions.
-A possible example being an author name misspelling that only happen once. (not enough times to measure similarity against)
+A possible example being an author name misspelling that only occurs once. (not enough times to measure similarity against)
 
 ### Levenshtein Distance
-String edit distance measures like the Levenshtein Distance offer an easy first approach to analyzing the author names.
+String edit distance measures such as the Levenshtein Distance offer an easy first approach to analyzing the author names.
 The Levenshtein distance is one type of string metric to evaluate the difference between two sequences of characters.
 A distance of 1 is attributed to ever single character edit necessary to transform one of the input strings into the other.
 Single character edits include an insertion of a character, a deletion, or a substitution.
@@ -451,7 +444,7 @@ The Python library Jellyfish makes it quite easy to use a few different distance
 Nevertheless, calculating any measure for all pairs of authors is a large task.
 A quick estimate of $100,000$ authors means $5,000,000,000$ unique (unordered) pairs to calculate.
 Thankfully this is not entirely prohibitive to calculate on modest hardware.
-It does however, produce a very large amount of data, so filtering is absolutely necessary.
+It does however, produce a large amount of data, so filtering is absolutely necessary.
 
 A small Python script, using Jellyfish, was prepared to calculate the Levenshtein Distance for each author name pair.
 Only pair with a distance less than 4 were written to file.
@@ -469,7 +462,7 @@ This analysis reveals over 20 million author pairs for further analysis.
 This type of analysis would require a significant modification to the existing string metrics.
 There are many open source implementations of string distance functions, so a modification is not out of the question.
 
-Another approach could be simplfy the list of authors while accepting potential loss of information.
+Another approach could simplify the list of authors while accepting potential loss of information.
 The current number of unique authors after perl parsing is $100147$, if we remove all authors that include *" the "* in their name we reduce to $98788$ authors.
 This has the effect of removing collaborations from the author list.
 This may or may not be desired for some analysis.
@@ -478,9 +471,9 @@ Author name fields representing collaborations are often long and have small str
 
 Continuing this approach of throwing away some data to narrow our results, removing all spaces returns on $97411$ unique authors.
 And removing all characters but alphabetical ones returns $95366$ unique authors.
-It is worth recalling that Borris reports 96200 unique authors in his 2014 paper.
+It is worth recalling that Pritychenko reports 96200 unique authors in his 2014 paper.
 
-> TODO Evaluate how much more detail I should go into on 'futher tools'
+%- TODO Evaluate how much more detail I should go into on 'further tools'
 
 There are other more advanced tools from the field of information and language theory that could be used as well.
 Simple transducers could be specified to calculate the author name abbreviations in an efficient manner.
@@ -492,23 +485,24 @@ Associating Mining
 
 ## Similar "Objects"
 %- TODO Determine which parts of the following discussion should be in algorithmic development
+%- ROBY very nice introduction!
 The ultimate goal of the Similar Objects feature is to provide a flexible recommender system that supports recommending different types of objects within the database.
-The most obvious usecase of this feature is to find similar authors to those the user is currently inspecting or searching.
-However the system should be extendable to also recommend similar keywords or periods in time, for example.
+An obvious use case of this feature is to find similar authors to those the user is currently inspecting or searching.
+However the system should be extendible to also recommend similar keywords or periods in time, for example.
 Implementing this feature requires a significant amount of offline data mining and analysis.
 Once the analysis is done, the runtime of the application need only do quick lookups in tables to find the desired results.
 
-With this in mind, the high level summary of this analysis stage is to build data object classifiers and labels and then enable the user inferface to search and display those labels.
+With this in mind, the high level summary of this analysis stage is to build data object classifiers and labels and then enable the user interface to search and display those labels.
 
 There are a number of metrics used in producing the data object labels.
 Similar authors could be authors who publish together, or authors who do not publish together but publish with similar keywords.
-The later is likely more interesting to users, as it could suggest similar authors they are unaware of.
+The latter is likely more interesting to users, as it could suggest similar authors they are unaware of.
 
 As the NSR database spans several decades, each data object presents time series information.
 Finding similar authors separated in time could be interesting.
 
 ### Association Mining with Apriori
-%- They are really just descirbing which selector values appear often together in the same paper, and that is not particularly illuminating domain knowledge.
+%- They are really just describing which selector values appear often together in the same paper, and that is not particularly illuminating domain knowledge.
 %- TODO cite the arules package
 As a preliminary test with association rule learning, we prepare our data for use with the Apriori algorithm in the *arules* package in R.
 
@@ -517,7 +511,7 @@ As a preliminary test with association rule learning, we prepare our data for us
 The Apriori algorithm returns list of association rules that have support and confidence values above the minimum amount specified.
 This list almost certainly contains duplicate information.
 Sometimes of the form A->B and B->A
-In the case of nuclides found in selector values, we often see multiple rules involving various different permutations of a list of common isotopes.
+In the case of nuclides found in selector values, we often see multiple rules involving different permutations of a list of common isotopes.
 
 %- Program workflow
 It is pretty easily to flatten our data as needed using the MongoDB aggregation framework.
@@ -528,7 +522,7 @@ Another python script, *parse-arules-output.py*, then parses the R apriori outpu
 
 At this stage, there is a list association rules relating authors through their use of keywords.
 Most of these rules likely involve authors that have published together.
-However, finding the rules with authors who have not published together would present very interesting information.
+However, finding the rules with authors who have not published together would present interesting information.
 Specifically, a filter is created to return authors who have published using the same keyword in different papers, and have never authored a paper together.
 
 %- I could make a list of the total coauthors for any given author.
@@ -540,7 +534,7 @@ Specifically, a filter is created to return authors who have published using the
 
 Cluster Analysis
 ================
-%- Introduce and discuss the algorithms used in various application features
+%- Introduce and discuss the algorithms used in application features
 %- Cluster analysis in research proposal is still useful.
 %- Starting with some of the naive algorithms, and then going to graph theory.
 %- A review of graph theoretic concepts and piecing them together for the application on hand.
@@ -596,13 +590,13 @@ There is a considerable amount of multivariate data in the NSR database.
 In order to gain insight from this data, only a section or slice should be considered initially.
 In this section, the authors will be analyzed with the attempt to identify groups or clusters of authors who behave similarly.
 
-An aggregation query is used to summarize our data in preparation for clusting.
+An aggregation query is used to summarize our data in preparation for clustering.
 This query saves, for each author, their total number of coauthors, their total number of years publishing, and their total number of publications.
 To help evaluate this summarization of authors, three heatmaps of this data are presented in figures @fig:nyne-log, @fig:nync-log, and @fig:nenc-log.
 
 Figure @fig:nyne-log shows an expected trend; authors who publish over more years tend to have more publications overall.
-Each of these figures shows that there are a very large number of authors that have published only a few times.
-Additionally, there are comparitively few authors who have published many times.
+Each of these figures shows that there are a large number of authors that have published only a few times.
+Additionally, there are comparatively few authors who have published many times.
 In anticipation of this result, the heatmap coloring is on a logarithmic scale, while the axes are linear.
 Without the log color scale, the plots would be washed out by the incredibly many author who have published only once.
 (To appease the curious, linearly coloured heatmaps are shown in the Appendix, figures @fig:nyne-linear, @fig:nync-linear, and @fig:nenc-linear.)
@@ -618,7 +612,7 @@ This is a result of our input data being continuous in nature.
 Clustering more categorical data could lead to more discrete or separated clusters.
 Nevertheless the cluster results of this data could be used to aid in classifying authors.
 
-The same data points from figures @fig:nyne-linear, @fig:nync-linear, and @fig:nenc-linear are shown in the various subplots of figure @fig:kmeans-authors1.
+The same data points from figures @fig:nyne-linear, @fig:nync-linear, and @fig:nenc-linear are shown in the subplots of figure @fig:kmeans-authors1.
 The color of each data point in figure @fig:kmeans-authors1 represent which cluster that author belongs to.
 This cluster membership was determined through the K-means algorithm set to find 5 centers (see [K-means Clustering](#k-means-clustering)).
 
@@ -629,7 +623,7 @@ Determining the ideal number of clusters is a difficult problem. !!!
 Figure @fig:kmeans-authors1 uses 5 clusters and demonstrates again that the data is continuous.
 As a result the clusters function as segmentations along a continuous spectrum.
 As the number of clusters increases, the size of the segmentations decrease.
-%- Clustering segmentation is all happening on one axis up to a certian point.
+%- Clustering segmentation is all happening on one axis up to a certain point.
 %- Eventually the segmentations partition the data with respect to other variables.
 
 %- Want data with more dimensionality
