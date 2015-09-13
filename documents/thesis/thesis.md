@@ -19,16 +19,14 @@ linestretch: 1.5
 
 Introduction
 ============
-
 %- The problem and its setting
 %- Proposed methodology to solve problem
-The United States National Nuclear Data Center prepares an evaluated database of nuclear science literature that poses a rich opportunity for knowledge discovery directed at the scientific work and study.
+The United States [National Nuclear Data Center](http://www.nndc.bnl.gov) prepares an evaluated database of nuclear science literature that poses a rich opportunity for knowledge discovery directed at the scientific work and study.
 Identifying trends and patterns in the meta data of over 200,000 documents may reveal latent structures of the progress and collaboration among the scientific community.
 The knowledge discovery and data mining process should reveal trends in the collective scientific study of nuclear structure, processes, and detection.
 Additionally, categorizing trends may provide predictive power in determining a worthwhile area of study or application of a technique.
 The analysis outcomes of studying literature meta data may provide useful when analyzing bodies of work from other disciplines.
 This knowledge may have implications in other similar scientific fields.
-%- We are building an application for users to use
 The ultimate goal is to enable further analysis on the body of nuclear science literature.
 
 %- Define research setting and sum-up what has been done
@@ -39,7 +37,6 @@ This discovery is the first of many entries in the Nuclear Science References da
 %- TODO this ending is insufficient
 The NSR has over 210,000 entries documenting the body of nuclear science literature, which provides the opportunity for knowledge discovery on the literature's meta data.
 
-
 %- What do we know already?
 %- How will this advance our knowledge?
 %- Explain your choice of model. Advantages? Suitability from theoretical point of view? practical reasons for using it?
@@ -48,7 +45,6 @@ Information retrieval has been repeatedly improved by large search engines like 
 And while nuclear science literature is a specialized field, Google Scholar is capable of searching many peer reviewed journal articles.
 The NSR provides meta data that can be converted to semantic information for advanced querying capabilities.
 This work is a cross disciplinary work, combining data mining technique with domain knowledge in nuclear physics.
-
 
 %- Description of the application domain, existing tools, and functional analysis of a comprehensive application that will be helpful to the physicists.
 %- Get some screenshots of the NSR website. (automate?)
@@ -80,7 +76,7 @@ Phrases can be used by enclosing them in quotes.
 The user can specify a publication year range, or choose a date to filter when the entries were added to the database.
 Additionally the user can enable 'primary only' or 'require measured quantity' flags.
 The results can be sorted in ascending or descending order and presented in HTML, BibTex, Text, Keynum, or Exchange formats.
-%- The quick search results do not offer these output customizations.
+The quick search results do not offer these output customizations.
 
 ### Indexed Search
 %- Author fingerprinting will improve the author 'browse' button
