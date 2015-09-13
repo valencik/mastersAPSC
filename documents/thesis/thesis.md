@@ -1,3 +1,4 @@
+%- Aggregations in prepare-data.py?
 ---
 title:  'Masters of Science in Applied Science Thesis'
 author:
@@ -108,7 +109,7 @@ The Data and Database
 =====================
 %- Data Structure and Representation?
 An early and difficult stage in any data science project is data acquisition.
-Thankfully the National Nuclear Data Center has composed the Nuclear Science References database already.
+Thankfully the National Nuclear Data Center has composed the Nuclear Science References (NSR) database already.
 For this work, a full database dump of the NSR was acquired on January 29th 2014.
 For simplicity, the data acquired from the NNDC on January 29th will be referred to as if it were the complete NSR database.
 All efforts have been taken to ensure the research procedures can easily be extended and repeated on new NSR data.
@@ -116,22 +117,33 @@ All efforts have been taken to ensure the research procedures can easily be exte
 ## Data Preparation
 The NSR data was provided in a custom EXCHANGE format @winchell2007nuclear.
 This format is flat text that is not suitable for direct analysis.
-The data needs to be easily parseable so data can be separated.
+The data needs to be easily parseable into a data structure for analysis and use.
 The easiest approach is to transform the data into a common format for which parsers already exist.
-%- TODO refresh what the difference is between parsing and text searching
 
-%- TODO get reference for JSON format
-JavaScript Object Notation, or JSON, was chosen as the final data format.
+[JavaScript Object Notation](http://json.org), or JSON, was chosen as the final data format.
 This choice was almost entirely motivated by the author's familiarity with JSON.
-While other data formats could have sufficed (perhaps YAML, for example) certain common data formats like comma separated values (csv) would have been more difficult.
+While other data formats could have sufficed (perhaps [YAML](http://yaml.org), for example) certain common data formats like comma separated values (csv) would have been more difficult.
 This is primarily because of the requirement for arrays in the data.
 This requirement is discussed further in the [Data Representation](#data-representation) section.
 
 %- NSR EXCHANGE format discussion
-%- TODO add figure reference
 An example of the raw data for a single paper can be seen in snippet @blk:rawNSRentry.
 The NSR has 9 possible types of fields which are shown in Table @tbl:NSRidentifiers.
 Each entry can only have one of each field type except for `<KEYWORDS>` and `<SELECTRS>` which exist as a pair and an entry can have multiple pairs of them.
+
+``` {#blk:rawNSRentry .text caption="An example NSR entry showing the raw NSR data format." fontsize=\small baselinestretch=1}
+<KEYNO   >1988AB01                                                              &
+<HISTORY >A19880309 M19880315                                                   &
+<CODEN   >JOUR PRVCA 37 401                                                     &
+<REFRENCE>Phys.Rev. C37, 401 (1988)                                             &
+<AUTHORS >A.Abzouzi, M.S.Antony                                                 &
+<TITLE   >Calculation of Energy Levels of {+232}Th,{+232}{+-}{+238}U for K(|p) =&
+ 0{++} Ground State Bands                                                       &
+<KEYWORDS>NUCLEAR STRUCTURE {+232}Th,{+232},{+234},{+236},{+238}U; calculated le&
+vels,band features. Semi-empirical formalism.                                   &
+<SELECTRS>N:232TH;A. N:232U;A. N:234U;A. N:236U;A. N:238U;A. C:OTHER;A.         &
+<DOI     >10.1103/PhysRevC.37.401                                               &
+```
 
 Identifiers   Description
 -----------   -----------
@@ -153,23 +165,9 @@ The `<CODEN   >` and `<REFRENCE>` fields contain information about the journal o
 The `<AUTHORS >` field is a comma separated list of author names.
 The author list is the key component in doing any sort of graph analysis of the data.
 The `<TITLE   >` field is a free text field representing the title of the reference with a custom set of abbreviations for special characters like Greek letters.
+These abbreviations are detailed in the NSR coding manual, and have been translated to their LaTeX counterparts in this work.
 Temporarily jumping ahead, the `<DOI     >` field contains the digital object identifier code that uniquely links to the source document.
-%- Write about the KEYWORDS and SELECTRS
-
-``` {#blk:rawNSRentry .text caption="An example NSR entry showing the raw NSR data format." fontsize=\small baselinestretch=1}
-<KEYNO   >1988AB01                                                              &
-<HISTORY >A19880309 M19880315                                                   &
-<CODEN   >JOUR PRVCA 37 401                                                     &
-<REFRENCE>Phys.Rev. C37, 401 (1988)                                             &
-<AUTHORS >A.Abzouzi, M.S.Antony                                                 &
-<TITLE   >Calculation of Energy Levels of {+232}Th,{+232}{+-}{+238}U for K(|p) =&
- 0{++} Ground State Bands                                                       &
-<KEYWORDS>NUCLEAR STRUCTURE {+232}Th,{+232},{+234},{+236},{+238}U; calculated le&
-vels,band features. Semi-empirical formalism.                                   &
-<SELECTRS>N:232TH;A. N:232U;A. N:234U;A. N:236U;A. N:238U;A. C:OTHER;A.         &
-<DOI     >10.1103/PhysRevC.37.401                                               &
-```
-%- ROBY explain this in a caption
+The remaining two fields, `<KEYWORDS>` and `<SELECTRS>` have the most structure and require special attention (given in section [Keyword Abstracts](#keyword-abstracts).
 
 %- NSR to JSON
 Transforming the NSR data to JSON is possible with a series of search and replace commands using regular expressions.
@@ -177,34 +175,64 @@ This series of search and replace commands are recorded in the Perl[^why-perl] s
 The result of the scripts is a file with a valid JSON structure for each NSR entry.
 
 [^why-perl]: Perl is used here as it remains one of the best RegEx implementations, and allowed for scripts that read as a simple ordered list of transformations to apply.
-%- TODO Show/reference the JSON format of example raw NSR data
+
+### Keyword Abstracts
+
+**This section will summarize the lengthy discussion of the keyword abstracts from the NSR manual.
+And add to that, the parts which have been used in this work.**
+
+> "What distinguishes NSR from more general bibliographic databases is the level of detail provided in the keyword abstracts."
+The `<KEYWORDS>` field is written by the maintainers of the NSR database, and then used to generate the `<SELECTRS>` field.
 
 ## Data Representation
 In order to produce a good data schema, thought must be given to the data representation.
 Consideration should be given to the types of queries that will be made on the data.
-%- year as int allows <, >, and =
-%- author array has first, last, size, unwind
-For example the author field is likely best represented as an array of strings, with each unique author being a separate element in the array.
-This attaches information about how many authors an entry has to our schema.
+With data spanning 120 years, it will be helpful to filter the data based on a numeric year value.
+Therefore one could construct a simple query to get all the entries from the 1970's.
+
+``` {#blk:NSR1970s .python caption="Python code to get all NSR entries from 1970 to 1979." fontsize=\small baselinestretch=1}
+import pymongo
+db = pymongo.MongoClient()['masters']
+db.NSR.find({"year": {"$gte": 1970, "$lt": 1980}})
+```
+
+%- Author data structure
+A more complex example is the list of authors for a NSR entry.
+The author field is likely best represented as an array of strings, with each unique author being a separate string element in the array.
+Representing the author list as an array instead of a free text field has immediate benefits as it is now a data structure.
+With this structure comes information and the ease of computing different properties of that data.
+The length of the array tells us how many authors collaborated on a given NSR entry.
+And since arrays are ordered, we can easily determine the first author[^first-author] of an entry.
+A skeptical reader might argue this is all possible with a free text field, and that is true.
+The real benefit of parsing our data into data structures is these structures are compatible with many tools, like our database.
+The database can now sort papers by their number of authors, or count the number of times someone was first author on an entry.
+Additionally, almost every aggregation query[^see-aggregation] made in this work relies on unwinding a data array at some stage.
+
+[^first-author]: The significance, if any, of being first author changes amongst journals. A clever data scientist would want to consider the `<REFRENCE>` information along with any first author analysis.
+[^see-aggregation]: See the [MongoDB Aggregation Framework](#mongodb-aggregation-framework) section for more details.
 
 %- Getting into SQL vs NoSQL here...
-An early requirement of the data representation was to handle the author list as an array.
-An author is a type of entity in the data.
 In a relational database the authors would have their own tables, separate from papers, as they are separate entities.
 This means a table and data scheme would need to be created for the papers and then a separate table and scheme for the authors, and similarly for keywords, selectors, and history.
 It is certainly possible to store the NSR data in a relational model.
 It was however much less work to convert the original data into a data scheme that used arrays.
 This is the primary motivator for not using a standard relational database.
 
+### Selectors
+The selectors are generated from the keyword abstracts.
+As a result, the keyword abstracts have been left as a free text field.
+The selectors however need a carefully considered data schema.
 
-The optimal schema for the SELECTRS field is not initially obvious.
-The current schema has SELECTRS parsed into a 3 dimensional array.
-Each 'selector' has a type, value, and a link variable.
-The following types are valid:
-\begin{quote}
-N, T, P, G, R, S, M, D, C, X, A, or Z, which stand for nuclide, target, parent, daughter, reaction, subject, measured, deduced, calculated, other subject, mass range, and charge range, respectively.
-\end{quote}
-The value changes based on the type. The link variable is used to tie together multiple selectors.
+The current schema has `<SELECTRS>` parsed into a 3 dimensional array with `type`, `value`, and `link` variables.
+The following `type`s are valid:
+
+> N, T, P, G, R, S, M, D, C, X, A, or Z, which stand for nuclide, target, parent, daughter, reaction, subject, measured, deduced, calculated, other subject, mass range, and charge range, respectively.
+
+The type of data for `value` changes based on the value of the `type`[^any-way].
+For `type`s N, T, P, and G, the `value` is a nuclide written in the form AX with A equal to the mass number, and X equal to the chemical symbol.
+The `link` variable is used to tie together multiple selectors of the same keyword sentence.
+
+[^any-way]: HAHAHAHAHAHAHAHA
 %- TODO Provide an example of multiple selectors being connected
 
 %- ROBY write a paragraph that factually states your final representation
@@ -276,7 +304,7 @@ Finally, the `DOI` is a Digital Object Identifier for the published resource.
 }
 ```
 
-## The Database
+## The Database - MongoDB
 
 MongoDB was chosen primarily because of the authors familiarity with it.
 Additionally it has nice features such as JSON support, an aggregation framework, and is easy to setup.
@@ -286,10 +314,19 @@ Postgres also supports JSON and is a mature database system.
 Because MySQL is so prevalent it is worth mentioning explicitly why it was not chosen.
 MySQL is a relational database and would thus not support the arrays in the data scheme as outline in the previous section.
 
-### MongoDB
+A document store database like MongoDB enables simple transformations of each NSR entry into a Mongo document (as discussed in [Data Preparation](#data-preparation)).
+In a relational database system like MySQL, each NSR entry would have to be split up, with different pieces of information populating different database tables.
+Authors would be a type of entity in their own authors table, that each NSR entry in an NSR table would link to.
+This type of relationship would be necessary for keywords and selectors as well.
+
+At the end of the [Data Representation](#data-representation) section we had a JSON structure for each entry in the NSR database.
+To populate our MongoDB database, these JSON structures are flattened into a single file, and imported into a MongoDB collection using the [`mongoimport` tool](http://docs.mongodb.org/manual/reference/program/mongoimport/).
+
+### Indexing the Data
 With the data representation complete and the data formatted correctly and imported to MongoDB, we can consider the database operations.
 The most common operation will be some sort of search or lookup.
-%- MongoDB Indexes
+%- TODO can I tie this to anything Borris says about usage?
+
 To optimize this process we instruct MongoDB to index our data on important or frequently referenced fields such as "authors" and "year".
 Indexing speeds up search queries in a manner similar to sorting a series of data elements.
 MongoDB allows for many different types of indexes.
@@ -298,11 +335,21 @@ This enables fast lookups for documents according to the indexed fields.
 For example it would be quick to find all the documents with type 'Journal' and year '1983'.
 Where as the search for all documents with keyword "fisson" has not been optimized by the previously mentioned indexes.
 
+```
+insert a single example of the speedup we get with indexing
+```
+
 Since our author field is really an array of string elements, we can use a single field index on it without issue.
 However, on field like the title or keywords a single field index will fall short of helping us find partial matches.
 For example, searching for documents with the word "neutron" in the title will not be sped up by a single field index.
 For this task we leverage MongoDB's text indexes.
 %- TODO Confirm that this is true, perhaps even demonstrate it
+
+%- Other concerns and code
+There are additional concerns in hosting a database server and web application.
+Typically a database is hosted on a dedicated server, separate from the web application, and perhaps not publically facing.
+These issues, and additional performance configurations will not be further addressed in this work.
+They are however addressed in the code repository for this work available at !!!.
 
 ### MongoDB Aggregation Framework
 The MongoDB Aggregation Framework is powerful and enables a lot of data manipulation.
@@ -334,10 +381,17 @@ Insert simple example here
 There are some additional, more straightforward operations such as `sort`, `limit`, `skip`, and `redact`.
 The final results form an aggregation query can be saved to a collection using the `out` operation, or can be returned to the calling application through the many MongoDB APIs.
 
+%- Documentation links
 Thankfully, MongoDB is currently a popular database and there exists lots of tutorials and example applications.
 The MongoDB documentation is available at [docs.mongodb.org/manual](http://docs.mongodb.org/manual/)
 All MongoDB interactions in this work use the python driver, `pymongo`.
 You can find the `pymongo` documentation at [api.mongodb.org/python/current](http://api.mongodb.org/python/current/)
+
+### Future Work
+The most ideal extension to this work in regards to databases is to extend it to support additional database systems.
+The prevalence of MySQL alone is motivation to support it.
+However, in continuing with the desire to use a NoSQL database system, the work could be extended to support CouchDB with relative ease.
+
 
 Data Summarization
 ==================
