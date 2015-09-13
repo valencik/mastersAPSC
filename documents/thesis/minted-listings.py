@@ -23,7 +23,6 @@ TEMPLATE = r'''
 '''.strip()
 
 caption = ""
-label = ""
 
 
 def latex(x):
@@ -57,7 +56,7 @@ def mintedify(key, value, format_, meta):
             atts = process_atts(attributes)
             return [latex(TEMPLATE.format(lang=language,
                                           capt=caption,
-                                          labl=label,
+                                          labl=ident,
                                           options=join_options(pos+atts),
                                           cont=contents))]
 
