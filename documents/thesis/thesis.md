@@ -349,8 +349,8 @@ We are provided answers to questions like "What percentage of all entries are jo
 "When were those journal articles written?"
 
 The summarization analysis can conveniently be applied to subsets of the data.
-For example, we may answer the question: "What percentage of 1989 entries are journal articles?"
-Or "what percentage of A.J.Sarty's contributions were journal articles?"
+For example, we may answer the question: "What percentage of 1989 entries are journal articles?" @tbl:types1989
+Or "what percentage of A.J.Sarty's contributions were journal articles?" @tbl:typesAJSarty
 
 Type       Amount
 ----       ------
@@ -372,7 +372,7 @@ JOUR       21
 Table: Different types of NSR entries for author A.J.Sarty. {#tbl:typesAJSarty}
 
 Preliminary visualizations help in this task.
-A histogram of database entries per year is shown in figure !!!.
+A histogram of database entries per year is shown in figure {@fig:nsrhisto}.
 This quickly demonstrates that the majority of documents in the NSR were published in the last 50 years.
 
 This property of the dataset has permitted testing data analysis code on years pre 1950, before applying the code to the full dataset.
@@ -427,7 +427,7 @@ The Python library Networkx is used to create the graph data structures, which c
 Networkx has a collection of algorithms and functions used to analyze and manipulate the graphs.
 Such manipulations include identifying and sorting disconnected subgraphs within a slice of data.
 For example, figures @fig:nsr1989graphyifanhu and @fig:nsr1989graph are use only the largest connected graph of all the NSR entries in the year 1989.
-There were ??? other smaller graphs disconnected from the largest graph in 1989.
+There were !!! other smaller graphs disconnected from the largest graph in 1989.
 
 ## Future Work
 Treating the NSR database as a graph data structure opens up a lot of avenues for future work.
@@ -436,7 +436,7 @@ This opens up the data to future work in other fields such the social sciences o
 
 ### Exporting Graph Data
 The Networkx library has support for writing the graph data structures to multiple file types.
-Example code for exporting the 1989 data to `gexf` format for analysis in Gephi or similar tools is available ???.
+Example code for exporting the 1989 data to `gexf` format for analysis in Gephi or similar tools is available !!!.
 
 
 Author Name Analysis
