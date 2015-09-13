@@ -345,8 +345,12 @@ Data Summarization
 %- Why? Visualizations are important in understanding data. As are summaries and rankings.
 %- How? MongoDB aggregations to D3 charts.
 Through data summarization we can learn the first-order characteristics of the data set.
+The goal is to learn some of the structure and composition of the data set.
+For example, there are 212835 entries in the data set[^our-data-set] that span from 1896 to 2014.
 We are provided answers to questions like "What percentage of all entries are journal articles?"
 "When were those journal articles written?"
+
+[^our-data-set]: Recall that our data set is a snapshot of the entire NSR data as dowloaded in January 2014.
 
 The summarization analysis can conveniently be applied to subsets of the data.
 For example, we may answer the question: "What percentage of 1989 entries are journal articles?" @tbl:types1989
