@@ -425,17 +425,17 @@ JOUR       21
 
 Table: Different types of NSR entries for author A.J.Sarty. {#tbl:typesAJSarty}
 
-Preliminary visualizations help in this task.
-A histogram of database entries per year is shown in figure {@fig:nsrhisto}.
-This quickly demonstrates that the majority of documents in the NSR were published in the last 50 years.
-
-This property of the dataset has permitted testing data analysis code on years pre 1950, before applying the code to the full dataset.
-This was particularly useful in developing the network analysis code and visualizations, as post 1950 the networks can be too large to process quickly.
-
 ## Visualizations
+
+Visualizations are very useful for data summarization.
+They can provide a summary of data at a glance.
+Consider figure {@fig:nsrhisto} in the next section, it quickly demonstrates that the majority of NSR entries were published in the last 50 years.
+This turned out to be a useful property of the dataset as it permitted testing data analysis code on small portions of the data (years pre 1950), before applying the code to the full dataset.
+This was particularly helpful in developing the network analysis code and visualizations, as post 1950 the networks can be too large to process quickly.
 
 There are two primary visual methods for displaying summary information in this application.
 The histograms show how a particular slice of the database evolves over time.
+This is illustrated in Figure @fig:nsrhisto, showing the evolution of contribution rate over time.
 The pie charts demonstrate the relative sizes of portions of the data.
 For example, out of a slice of data, perhaps all of the data, how many entries are papers and journals?
 
@@ -445,7 +445,23 @@ For example, out of a slice of data, perhaps all of the data, how many entries a
 
 For a particular selection of NSR data, it can be useful to know the rankings for important data fields.
 For example, if a user searches an author on the application they are presented with a ranked list of their most frequent coauthors, keywords, and nuclides.
+This type of analysis can of course be applied to the whole dataset as well.
+Table {#tbl:prolific-authors} shows the authors with the highest count of NSR entries in the entire database.
 
+Author              Number of Publications
+------              ----------------------
+R.V.F.Janssens                992
+M.P.Carpenter                 787
+A.Faessler                    736
+J.H.Hamilton                  703
+I.Ahmad                       694
+B.A.Brown                     690
+I.Y.Lee                       671
+W.Greiner                     637
+A.O.Macchiavelli              624
+T.L.Khoo                      614
+
+Table: The top 10 most prolific authors in the NSR database. {#tbl:prolific-authors}
 
 Network Analysis and Visualization
 ==================================
@@ -457,9 +473,8 @@ However, the list of authors of a paper can be used to build a network or graph 
 It is worth noting in this thesis, the word 'graph' will always refer to the mathematical representation of a set of objects and their links.
 The first graph constructed in this app was a graph where each node represents an author, and each edge or link represents a coauthorship.
 
-## Graph Layout Algorithms
 The visualization of large graphs is computational intensive and produces complex images.
-These images are perhaps of questionable usefulness.
+At a certain size, these images are perhaps of questionable usefulness.
 The resulting shape or 'layout' of a graph is dependent on the graph layout algorithm used.
 Figures @fig:nsr1989graphyifanhu and @fig:nsr1989graph use the exact same input data but two different layout algorithms (Yifan Hu ML and Atlas 2 respectively).
 
