@@ -510,31 +510,32 @@ Example code for exporting the 1989 data to `gexf` format for analysis in Gephi 
 
 Author Name Analysis
 ====================
+%- Choose and identify language to refer to the various situations a "name" might be referenced
 
-The NSR database, before and after the transformations in this work, has multiple author name strings for the same author.
-This is likely caused by typos and changes in formatting.
+The NSR database, before and after the transformations in this work, contains multiple author name strings for the same individual.
+This may be caused by typos, changes in formatting, and differences in style from one publication to the next.
+Authors themselves may opt in some publications to be identified by more than one initial and only one in others.
 One of the outcomes of this work is to reduce the number of erroneously named authors.
 
 Pritychenko reports 96200 unique authors in his 2014 paper @Pritychenko14.
-However, at the end of the data preparation stage in this work, the database reports 100147 unique authors.
-Having an accurate total author count is not particularly important for this work.
+However, at the end of the data preparation stage in this work, the database reported 100147 unique authors.
+An accurate total author count is not particularly important for this work.
 However, correctly identifying and including all authors when doing network analysis is important.
 
-Currently there are 41254 "authors" that appear only once in the NSR database.
-Some portion of this amount are likely to be author name misspellings that only occur once.
-Knowing that portion is important to understanding something about the database.
-In the [Initial Author Clustering](#initial-author-clustering) section we investigate how the database changes as we remove authors below a publication threshold.
-This analysis depends on correclty indentifying the number of authors who have only published a given number of times.
-If our list of authors has typos then this analysis in inaccurate.
+Currently there are 41254 unique author identifiers that appear only once in the NSR database.
+Some portion of those are author name misspellings that only occur once.
+Knowing that portion is important to understanding something about the database; In the [Initial Author Clustering](#initial-author-clustering) section we investigated how the database changed as we removed authors below a publication threshold.
+This analysis depends on correctly identifying the number of authors who have published a given number of times.
+Typos in the list of authors render this analysis in inaccurate.
 
-After the data preparation and importing step the database contains authors "A.Herzan" and "A. Herzan".
-The two author strings have 12 and 1 publication respectively.
-It is quite likely that the space in the second version was simply a typo.
-In the [Further Analysis](#further-analysis) subsection we will discuss methods to futher determine if the multiple author strings represent the same author.
+After the data preparation and importing step the database contains author identifiers "A.Herzan" and "A. Herzan" (as separate entities).
+The two author strings have 12 and 1 publication(s) respectively.
+Although there are two author strings in the database, it is highly improbable that the presence of a space in one indicates a second individual human being.
+In the [Further Analysis](#further-analysis) subsection we will discuss methods to determine if the multiple author strings represent the same author.
 For now our problem is just find author name strings that could be similar to one another.
 
 %- Online vs offline
-The searching for similar author names could happen either online (immediately after the user submits a query) or offline (before the app is presented to users).
+Searching for similar author names could happen either online (immediately after the user submits a query) or offline (before the app is presented to users).
 Because our database is static and manually updated with new entries periodically, the offline approach makes sense.
 And additional benefit to the offline approach is that it can be easily moderated and tweaked with user submitted suggestions.
 The general problem is referred to as approximate string matching.
@@ -571,7 +572,7 @@ This analysis reveals over 20 million author pairs for further analysis.
 ### Transformations
 Three simple string transformations have been constructed to try and identify similar author names.
 The first stage transforms all the characters in the name string to lower case.
-It turns out that $1936$ author names become non-unique when reduced to only lower case letters.
+$1936$ author names become non-unique when reduced to only lower case letters.
 
 ``` {#blk:names-lower .text caption="Names which become duplicates after transformation 1." fontsize=\small baselinestretch=1}
 C.Le Brun	C.Le brun	C.le Brun
@@ -604,25 +605,25 @@ W.-X.Huang	W.-x.Huang	W.X.Huang
 C.Le Brun	C.Le Brun,	C.Le brun	C.LeBrun	C.Lebrun	C.le Brun
 ```
 
-As the progression of transformations shows, an author name that becomes non unique in transformaiton 1 will continue to appear in the output results of transformations 2 and 3.
+As the progression of transformations shows, an author name that becomes non unique in transformation 1 will continue to appear in the output results of transformations 2 and 3.
 Some authors have the unfortunately luck of being misrepresented 6 different times.
 Surnames composed of multiple words separated by spaces appear to be the most prone to errors.
 The output of transformation 3 provides a reasonable list to apply additional analysis to.
 There are 3063 groups of author names identified as duplicates in the transformation 3 analysis (and 6561 author names in total).
 
-We have significantly reduced the amount of authors names that should be subject to additional analysis.
-Additionally it is worth repeating analysis.
-Performing the Levenshtein distance analysis on the 'nopunc' list would catch author names wher an initial has been omitted as an edit distance of 1.
+We have reduced, by two orders of magnitude, the number of authors names that should be subject to additional analysis.
+It is worth repeating analysis.
+Performing the Levenshtein distance analysis on the 'nopunc' list would catch author names where an initial has been omitted as an edit distance of 1.
 For example the edit distance of 'J.P.Svenne' and 'J.Svenne' is 2 before the transformations but 1 afterwards.
 %- Sam Austin
 It will still fall short of identifying author names where the first name is fully spelled out.
 
-"Adam Sarty" and "A.Sarty" should actually have a small distance in our application.
+"Adam Sarty" and "A.Sarty" should have a small distance in our application.
 This type of analysis would require a significant modification to the existing string metrics.
 There are many open source implementations of string distance functions, so a modification is not out of the question.
 
 Another approach could simplify the list of authors while accepting potential loss of information.
-The current number of unique authors after perl parsing is $100147$, if we remove all authors that include `" the "` in their name we reduce to $98788$ authors.
+The current number of unique authors after Perl parsing is $100147$, if we remove all authors that include `" the "` in their name we reduce to $98788$ authors.
 This has the effect of removing collaborations from the author list.
 This may or may not be desired for some analysis.
 In attempting to find author names with typos and similar data entry mistakes in their names this filtering is unlikely to have significant impact.
@@ -633,14 +634,17 @@ Author name fields representing collaborations are often long and have small str
 %- Can I come up with a # of publication independent clustering scheme?
 %- Probably not, and so the graph analysis would be quite useful here!
 %- Also use "Austin" S.M.Austin, Sam.Austin
-Now that we have such a reduced list of suspects, we can afford to run more expensive analysis on them.
-The expensive analysis should be comparing neighbors in the network. Does that go here or in the network analysis section?
+Now that we have such a reduced list of candidate multiple representations of individual authos, we can afford to run more expensive analysis on them.
+The expensive analysis should be comparing neighbors in the network.
 We could find all the neighbours of two given nodes and see how many overlap.
 With this we should also consider what the chance of having common neighbours is for any two random nodes.
-Perhaps as a first approximation of dealing with this we could consider the degree of the neighbours.
+A first approximation of dealing with this we could consider the degree of the neighbours.
 Common neighbours with a low degree are less likely to be common through random chance.
 %- (!!! better example than the Curie's? !!!)
 Note that this analysis likely falls short of addressing some copublishers with the same surname.
+%- ROBY Except that if they are actually publishing together then the name appears twice in the same list.
+%- ROBY If it's a variance or typo that shouldn't happen (because they are not publishing with themselves)
+
 
 Associating Mining
 ==================
