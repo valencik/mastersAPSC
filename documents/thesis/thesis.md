@@ -531,12 +531,42 @@ After the data preparation and importing step the database contains authors "A.H
 The two author strings have 12 and 1 publication respectively.
 It is quite likely that the space in the second version was simply a typo.
 In the [Further Analysis](#further-analysis) subsection we will discuss methods to futher determine if the multiple author strings represent the same author.
+For now our problem is just find author name strings that could be similar to one another.
 
 %- Online vs offline
 The searching for similar author names could happen either online (immediately after the user submits a query) or offline (before the app is presented to users).
-%- offline and online approximate string matching
 Because our database is static and manually updated with new entries periodically, the offline approach makes sense.
 And additional benefit to the offline approach is that it can be easily moderated and tweaked with user submitted suggestions.
+The general problem is referred to as approximate string matching.
+If the supplied query was "A.Herzan", then "A. Herzan" would be considered an approximate string match.
+This type of match could be found without much sophistication.
+However we want to also consider more difficult matches like "J.Svenne" and "J.P.Svenne".
+Approximate string matching libraries often use the Levenshtein Distance metric to compare strings.
+
+### Levenshtein Distance
+String edit distance measures such as the Levenshtein Distance offer an easy first approach to analyzing the author names.
+The Levenshtein distance is one type of string metric to evaluate the difference between two sequences of characters.
+A distance of 1 is attributed to ever single character edit necessary to transform one of the input strings into the other.
+Single character edits include an insertion of a character, a deletion, or a substitution.
+
+> TODO Present an example (for each: insertion, deletion, substitution) using actual author names from the NSR.
+
+The Python library [Jellyfish](http://jellyfish.readthedocs.org/en/latest/)  makes it quite easy to use a few different distance metrics.
+Nevertheless, calculating any measure for all pairs of authors is a large task.
+A quick estimate of $100,000$ authors means $5,000,000,000$ unique (unordered) pairs to calculate.
+Thankfully this is not entirely prohibitive to calculate on modest hardware.
+It does however, produce a large amount of data, so filtering is absolutely necessary.
+
+A small Python script, using Jellyfish, was prepared to calculate the Levenshtein Distance for each author name pair.
+Only pair with a distance less than 4 were written to file.
+> 3 is higher than necessary
+This analysis reveals over 20 million author pairs for further analysis.
+
+> TODO Discuss pairs with a distance of 1
+
+> TODO Discuss pairs with a distance of 4
+
+> TODO Discuss limitations of "non informed" string edit distances.
 
 ### Transformations
 Three simple string transformations have been constructed to try and identify similar author names.
@@ -574,6 +604,12 @@ W.-X.Huang	W.-x.Huang	W.X.Huang
 C.Le Brun	C.Le Brun,	C.Le brun	C.LeBrun	C.Lebrun	C.le Brun
 ```
 
+As the progression of transformations shows, an author name that becomes non unique in transformaiton 1 will continue to appear in the output results of transformations 2 and 3.
+Some authors have the unfortunately luck of being misrepresented 6 different times.
+Surnames composed of multiple words separated by spaces appear to be the most prone to errors.
+The output of transformation 3 provides a reasonable list to apply additional analysis to.
+There are 3063 groups of author names identified as duplicates in the transformation 3 analysis (and 6561 author names in total).
+
 We have significantly reduced the amount of authors names that should be subject to additional analysis.
 Additionally it is worth repeating analysis.
 Performing the Levenshtein distance analysis on the 'nopunc' list would catch author names wher an initial has been omitted as an edit distance of 1.
@@ -605,32 +641,6 @@ Perhaps as a first approximation of dealing with this we could consider the degr
 Common neighbours with a low degree are less likely to be common through random chance.
 %- (!!! better example than the Curie's? !!!)
 Note that this analysis likely falls short of addressing some copublishers with the same surname.
-
-### Levenshtein Distance
-String edit distance measures such as the Levenshtein Distance offer an easy first approach to analyzing the author names.
-The Levenshtein distance is one type of string metric to evaluate the difference between two sequences of characters.
-A distance of 1 is attributed to ever single character edit necessary to transform one of the input strings into the other.
-Single character edits include an insertion of a character, a deletion, or a substitution.
-
-> TODO Present an example (for each: insertion, deletion, substitution) using actual author names from the NSR.
-
-The Python library [Jellyfish](http://jellyfish.readthedocs.org/en/latest/)  makes it quite easy to use a few different distance metrics.
-Nevertheless, calculating any measure for all pairs of authors is a large task.
-A quick estimate of $100,000$ authors means $5,000,000,000$ unique (unordered) pairs to calculate.
-Thankfully this is not entirely prohibitive to calculate on modest hardware.
-It does however, produce a large amount of data, so filtering is absolutely necessary.
-
-A small Python script, using Jellyfish, was prepared to calculate the Levenshtein Distance for each author name pair.
-Only pair with a distance less than 4 were written to file.
-%- 3 is higher than necessary
-This analysis reveals over 20 million author pairs for further analysis.
-
-> TODO Discuss pairs with a distance of 1
-
-> TODO Discuss pairs with a distance of 4
-
-> TODO Discuss limitations of "non informed" string edit distances.
-
 
 Associating Mining
 ==================
