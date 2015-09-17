@@ -496,25 +496,100 @@ Example code for exporting the 1989 data to `gexf` format for analysis in Gephi 
 Author Name Analysis
 ====================
 
-## Author Fingerprinting
-%- build collection of all unique author names (101095)
-%- calculate the edit distances of all the author names (more than 5 billion calculations...)
-%- There are 41254 "authors" that appear once
-%- I would like to not actually write that number in the thesis, but instead compute and reference it.
-A 2014 paper from Boris report a total of 96200 unique authors.
+The NSR database, before and after the transformations in this work, has multiple author name strings for the same author.
+This is likely caused by typos and changes in formatting.
+One of the outcomes of this work is to reduce the number of erroneously named authors.
 
-Author search has been improved by implementing a suggestion system for partial author name searches.
-When we search for "Svenne" we can see there are both J.P.Svenne and J.Svenne.
-In the original NSR application it would be a manual task to discern the two author names.
-Our improvement is to add an author clustering scheme that shows the similarity of authors.
-Here we can see that JP Svenne and J Svenne are likely to be the same author.
-> Also use "Austin" S.M.Austin, Sam.Austin
-When a similarity measure is above a certain threshold the matching grouping of authors is automatic.
+Pritychenko reports 96200 unique authors in his 2014 paper @Pritychenko14.
+However, at the end of the data preparation stage in this work, the database reports 100147 unique authors.
+Having an accurate total author count is not particularly important for this work.
+However, correctly identifying and including all authors when doing network analysis is important.
 
-This similarlity measurement could happen either online (immediately after the user submits a query) or offline (before the app is presented to users).
+Currently there are 41254 "authors" that appear only once in the NSR database.
+Some portion of this amount are likely to be author name misspellings that only occur once.
+Knowing that portion is important to understanding something about the database.
+In the [Initial Author Clustering](#initial-author-clustering) section we investigate how the database changes as we remove authors below a publication threshold.
+This analysis depends on correclty indentifying the number of authors who have only published a given number of times.
+If our list of authors has typos then this analysis in inaccurate.
+
+After the data preparation and importing step the database contains authors "A.Herzan" and "A. Herzan".
+The two author strings have 12 and 1 publication respectively.
+It is quite likely that the space in the second version was simply a typo.
+In the [Further Analysis](#further-analysis) subsection we will discuss methods to futher determine if the multiple author strings represent the same author.
+
+%- Online vs offline
+The searching for similar author names could happen either online (immediately after the user submits a query) or offline (before the app is presented to users).
+%- offline and online approximate string matching
 Because our database is static and manually updated with new entries periodically, the offline approach makes sense.
 And additional benefit to the offline approach is that it can be easily moderated and tweaked with user submitted suggestions.
-A possible example being an author name misspelling that only occurs once. (not enough times to measure similarity against)
+
+### Transformations
+Three simple string transformations have been constructed to try and identify similar author names.
+The first stage transforms all the characters in the name string to lower case.
+It turns out that $1936$ author names become non-unique when reduced to only lower case letters.
+
+``` {#blk:names-lower .text caption="Names which become duplicates after transformation 1." fontsize=\small baselinestretch=1}
+C.Le Brun	C.Le brun	C.le Brun
+P.Fan	P.fan
+A.De Waard	A.de Waard
+R.Del Moral	R.del Moral
+J.M.Van Den Cruyce	J.M.Van den Cruyce	J.M.van den Cruyce
+```
+
+The second stage takes the lower cased names and removes all spaces.
+There are $2619$ author names that have duplicates when reduced to lower case letters with no spaces.
+
+``` {#blk:names-nospace .text caption="Names which become duplicates after transformations 1 and 2." fontsize=\small baselinestretch=1}
+B.N.Subba Rao	B.N.Subbarao
+R.M.Del Vecchio	R.M.DelVecchio	R.M.Delvecchio	R.M.del Vecchio
+J.Adam, Jr.	J.Adam,Jr.
+M.Le Vine	M.LeVine	M.Levine
+C.Ciofi Degli Atti	C.Ciofi Degliatti	C.Ciofi degli Atti
+C.Le Brun	C.Le brun	C.LeBrun	C.Lebrun	C.le Brun
+```
+
+Finally, we remove all punctuation as well, which results in $6561$ author strings that are not unique.
+A python script, `calc-author-name-transform-pairs.py` has been prepared to perform these transformations and write the author names which form duplicates to a file.
+
+``` {#blk:names-nopunc .text caption="Names which become duplicates after transformations 1, 2, and 3." fontsize=\small baselinestretch=1}
+B.V.T.Rao	B.V.Trao
+A.M.Laird	A.M<.Laird
+H.-R.Kissener	H.R.Kissener
+W.-X.Huang	W.-x.Huang	W.X.Huang
+C.Le Brun	C.Le Brun,	C.Le brun	C.LeBrun	C.Lebrun	C.le Brun
+```
+
+We have significantly reduced the amount of authors names that should be subject to additional analysis.
+Additionally it is worth repeating analysis.
+Performing the Levenshtein distance analysis on the 'nopunc' list would catch author names wher an initial has been omitted as an edit distance of 1.
+For example the edit distance of 'J.P.Svenne' and 'J.Svenne' is 2 before the transformations but 1 afterwards.
+%- Sam Austin
+It will still fall short of identifying author names where the first name is fully spelled out.
+
+"Adam Sarty" and "A.Sarty" should actually have a small distance in our application.
+This type of analysis would require a significant modification to the existing string metrics.
+There are many open source implementations of string distance functions, so a modification is not out of the question.
+
+Another approach could simplify the list of authors while accepting potential loss of information.
+The current number of unique authors after perl parsing is $100147$, if we remove all authors that include `" the "` in their name we reduce to $98788$ authors.
+This has the effect of removing collaborations from the author list.
+This may or may not be desired for some analysis.
+In attempting to find author names with typos and similar data entry mistakes in their names this filtering is unlikely to have significant impact.
+Author name fields representing collaborations are often long and have small string distances to one another as they informative part of their name is typically an acronym.
+
+### Further Analysis
+%- Clustering? no. Graph analysis.
+%- Can I come up with a # of publication independent clustering scheme?
+%- Probably not, and so the graph analysis would be quite useful here!
+%- Also use "Austin" S.M.Austin, Sam.Austin
+Now that we have such a reduced list of suspects, we can afford to run more expensive analysis on them.
+The expensive analysis should be comparing neighbors in the network. Does that go here or in the network analysis section?
+We could find all the neighbours of two given nodes and see how many overlap.
+With this we should also consider what the chance of having common neighbours is for any two random nodes.
+Perhaps as a first approximation of dealing with this we could consider the degree of the neighbours.
+Common neighbours with a low degree are less likely to be common through random chance.
+%- (!!! better example than the Curie's? !!!)
+Note that this analysis likely falls short of addressing some copublishers with the same surname.
 
 ### Levenshtein Distance
 String edit distance measures such as the Levenshtein Distance offer an easy first approach to analyzing the author names.
@@ -524,7 +599,7 @@ Single character edits include an insertion of a character, a deletion, or a sub
 
 > TODO Present an example (for each: insertion, deletion, substitution) using actual author names from the NSR.
 
-The Python library Jellyfish makes it quite easy to use a few different distance metrics.
+The Python library [Jellyfish](http://jellyfish.readthedocs.org/en/latest/)  makes it quite easy to use a few different distance metrics.
 Nevertheless, calculating any measure for all pairs of authors is a large task.
 A quick estimate of $100,000$ authors means $5,000,000,000$ unique (unordered) pairs to calculate.
 Thankfully this is not entirely prohibitive to calculate on modest hardware.
@@ -540,28 +615,6 @@ This analysis reveals over 20 million author pairs for further analysis.
 > TODO Discuss pairs with a distance of 4
 
 > TODO Discuss limitations of "non informed" string edit distances.
-
-### Extending the String Metric
-"Adam Sarty" and "A.Sarty" should actually have a small distance in our application.
-This type of analysis would require a significant modification to the existing string metrics.
-There are many open source implementations of string distance functions, so a modification is not out of the question.
-
-Another approach could simplify the list of authors while accepting potential loss of information.
-The current number of unique authors after perl parsing is $100147$, if we remove all authors that include *" the "* in their name we reduce to $98788$ authors.
-This has the effect of removing collaborations from the author list.
-This may or may not be desired for some analysis.
-In attempting to find author with typos and similar data entry mistakes in their names this filtering is unlikely to have significant impact.
-Author name fields representing collaborations are often long and have small string distances to one another as they informative part of their name is typically an acronym.
-
-Continuing this approach of throwing away some data to narrow our results, removing all spaces returns on $97411$ unique authors.
-And removing all characters but alphabetical ones returns $95366$ unique authors.
-It is worth recalling that Pritychenko reports 96200 unique authors in his 2014 paper.
-
-%- TODO Evaluate how much more detail I should go into on 'further tools'
-
-There are other more advanced tools from the field of information and language theory that could be used as well.
-Simple transducers could be specified to calculate the author name abbreviations in an efficient manner.
-However this presents a significant departure from the rest of the work.
 
 
 Associating Mining
