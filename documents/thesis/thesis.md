@@ -104,22 +104,20 @@ Additionally, the new database structure that is developed in this work enables 
 The Data and Database
 =====================
 %- Data Structure and Representation?
-An early and difficult stage in any data science project is data acquisition.
-Thankfully the National Nuclear Data Center has composed the Nuclear Science References (NSR) database already.
-For this work, a full database dump of the NSR was acquired on January 29th 2014.
-For simplicity, the data acquired from the NNDC on January 29th will be referred to as if it were the complete NSR database.
+The United States National Nuclear Data Center (NNDC) has composed the Nuclear Science References (NSR) database.
+A full database dump of the NSR was acquired on January 29th 2014.
+For simplicity, the data acquired from the NNDC on that date will be referred to as if it were the complete NSR database.
 All efforts have been taken to ensure the research procedures can easily be extended and repeated on new NSR data.
 
 ## Data Preparation
-The NSR data was provided in a custom EXCHANGE format @winchell2007nuclear.
+The NSR data is maintained in a custom EXCHANGE format @winchell2007nuclear.
 This format is flat text that is not suitable for direct analysis.
-The data needs to be easily parseable into a data structure for analysis and use.
-The easiest approach is to transform the data into a common format for which parsers already exist.
+To fully utilize the daya, it needs to be easily parseable into a data structure for analysis and use.
+The approach least likely to introduce errors is to transform the data into a common format for which parsers already exist.
 
-[JavaScript Object Notation](http://json.org), or JSON, was chosen as the final data format.
-This choice was almost entirely motivated by the author's familiarity with JSON.
-While other data formats could have sufficed (perhaps [YAML](http://yaml.org), for example) certain common data formats like comma separated values (csv) would have been more difficult.
-This is primarily because of the requirement for arrays in the data.
+[JavaScript Object Notation](http://json.org), or JSON, was chosen as the data format for this work.
+While other data formats could have sufficed (perhaps [YAML](http://yaml.org), for example), certain common data formats like comma separated values (csv) would have been more difficult.
+JSON met the requirements, including those for arrays and has the advantage of being openly available, well-supported, with a handy user community, and it was familiar to the author.
 This requirement is discussed further in the [Data Representation](#data-representation) section.
 
 %- NSR EXCHANGE format discussion
@@ -161,9 +159,9 @@ The `<CODEN   >` and `<REFRENCE>` fields contain information about the journal o
 The `<AUTHORS >` field is a comma separated list of author names.
 The author list is the key component in doing any sort of graph analysis of the data.
 The `<TITLE   >` field is a free text field representing the title of the reference with a custom set of abbreviations for special characters like Greek letters.
-These abbreviations are detailed in the NSR coding manual, and have been translated to their LaTeX counterparts in this work.
-Temporarily jumping ahead, the `<DOI     >` field contains the digital object identifier code that uniquely links to the source document.
-The remaining two fields, `<KEYWORDS>` and `<SELECTRS>` have the most structure and require special attention (given in section [Keyword Abstracts](#keyword-abstracts).
+These abbreviations are detailed in the NSR coding manual, and have been translated to their \LaTeX counterparts in this work.
+The `<DOI     >` field contains the digital object identifier code that uniquely links to the source document.
+The two fields, `<KEYWORDS>` and `<SELECTRS>` have the most structure and require special attention which is given in section [Keyword Abstracts](#keyword-abstracts).
 
 %- NSR to JSON
 Transforming the NSR data to JSON is possible with a series of search and replace commands using regular expressions.
@@ -224,11 +222,10 @@ The following `type`s are valid:
 
 > N, T, P, G, R, S, M, D, C, X, A, or Z, which stand for nuclide, target, parent, daughter, reaction, subject, measured, deduced, calculated, other subject, mass range, and charge range, respectively.
 
-The type of data for `value` changes based on the value of the `type`[^any-way].
+The type of data for `value` changes based on the value of the `type`.
 For `type`s N, T, P, and G, the `value` is a nuclide written in the form AX with A equal to the mass number, and X equal to the chemical symbol.
 The `link` variable is used to tie together multiple selectors of the same keyword sentence.
 
-[^any-way]: HAHAHAHAHAHAHAHA
 %- TODO Provide an example of multiple selectors being connected
 
 %- ROBY write a paragraph that factually states your final representation
@@ -240,7 +237,7 @@ The `_id` is used as the unique identifier in the MongoDB collection.
 `type` describes what publication type (journal, thesis, conference paper, etc) the resource is.
 `reference` is a copy of `REFRENCE` from the NSR data.
 `authors` is an array of string elements representing the authors who published that resource.
-`title` is a string, formatted for LaTeX, that represents the title of the resource.
+`title` is a string, formatted for \LaTeX, that represents the title of the resource.
 `keywords` is an array of strings that represent the KEYWORD sentences as described in the NSR manual.
 `selectors` is an array of objects that contain the type, value, and subkey information generated by the keyword entry by the NSR.
 Finally, the `DOI` is a Digital Object Identifier for the published resource.
