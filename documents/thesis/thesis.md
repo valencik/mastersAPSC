@@ -470,17 +470,105 @@ Network Analysis and Visualization
 %- How? Using python library Networkx to build graph datastructures. D3 and Gephi for visualizations
 All previous analysis of the NSR data has focused on the content of each entry in a flat manner.
 However, the list of authors of a paper can be used to build a network or graph of the authors.
-It is worth noting in this thesis, the word 'graph' will always refer to the mathematical representation of a set of objects and their links.
-The first graph constructed in this app was a graph where each node represents an author, and each edge or link represents a coauthorship.
+It is worth noting in this work, the word 'graph' will always refer to the mathematical representation of a set of objects and their links.
+The first graphs constructed in this work had each node represent an author, and each edge or link represent a coauthorship.
+An example can be seen in Figure @fig:small-graph-1940.
 
+![A single component of the 1940 author graph.](images/small-graph-1940.pdf){#fig:small-graph-1940}
+
+Figure @fig:small-graph-1940  is a single componet of the complete 1940 author graph.
+It has 7 nodes, each is a different author, and 12 edges which represent a coauthorship between the two nodes.
+`M.Ikawa` has publish with everyone in the graph.
+We can use this knowledge in a database query to get the papers that make up this graph (see @blk:graph1940s).
+
+``` {#blk:graph1940s .python caption="Python code to get the NSR entries in Figure @fig:small-graph-1940." fontsize=\small baselinestretch=1}
+import pymongo
+db = pymongo.MongoClient()['masters']
+db.NSR.find({"year": 1940, "authors": "M.Ikawa"})
+```
+
+The results of the database query (shown in Snippet @blk:graph1940s-results) reveal there were 3 papers in 1940 that contributed to this graph.
+One paper titled "Fission Products of Uranium by Fast Neutrons" has authors `Y.Nishina`, `T.Yasaki`, `K.Kimura`, and `M.Ikawa`.
+The other papers, titled "Neutron Induced Radioactivity in Columbium" and "Artificial Radioactivity Induced in Zr and Mo" respectively are both authored by `R.Sagane`, `S.Kojima`, `G.Miyamoto`, and `M.Ikawa`.
+This demonstrates a limitation in the current graph visualization.
+`G.Miyamoto` and `M.Ikawa` have published together twice (in 1940) but their edge looks no different than the edge between `Y.Nishina` and `T.Yasski`.
+
+``` {#blk:graph1940s-results .json caption="JSON documents for the NSR entries in Figure @fig:small-graph-1940." fontsize=\footnotesize breaklines=true baselinestretch=1}
+{
+  "_id": "1940NI03",
+  "year": 1940,
+  "history": [
+    "A19800701",
+    "M19860317"
+  ],
+  "code": "JOUR PHRVA 58 660",
+  "type": "JOUR",
+  "reference": "Phys.Rev. 58, 660 (1940)",
+  "authors": [
+    "Y.Nishina",
+    "T.Yasaki",
+    "K.Kimura",
+    "M.Ikawa"
+  ],
+  "title": "Fission Products of Uranium by Fast Neutrons",
+  "DOI": "10.1103\/PhysRev.58.660"
+}
+{
+  "_id": "1940SA06",
+  "year": 1940,
+  "history": [
+    "A19800701",
+    "M20010110"
+  ],
+  "code": "JOUR PPMJA 22 174",
+  "type": "JOUR",
+  "reference": "Proc.Phys.-Math.Soc.Japan 22, 174 (1940)",
+  "authors": [
+    "R.Sagane",
+    "S.Kojima",
+    "G.Miyamoto",
+    "M.Ikawa"
+  ],
+  "title": "Neutron Induced Radioactivity in Columbium"
+}
+{
+  "_id": "1940SA08",
+  "year": 1940,
+  "history": [
+    "A19800701",
+    "M19980402"
+  ],
+  "code": "JOUR PHRVA 57 1179",
+  "type": "JOUR",
+  "reference": "Phys.Rev. 57, 1179 (1940)",
+  "authors": [
+    "R.Sagane",
+    "S.Kojima",
+    "G.Miyamoto",
+    "M.Ikawa"
+  ],
+  "title": "Artificial Radioactivity Induced in Zr and Mo",
+  "DOI": "10.1103\/PhysRev.57.1179"
+}
+```
+
+%- Multiple components
+We can also visualize graphs with multiple components.
+Most graphs produced from regular data queries will have multiple components.
+As the data slice forming the graph gets larger the main fully connected component gets much larger than the rest of the components.
+%- I did some analysis on this for the whole dataset
+
+![Network graph of the first 50 years of NSR data](images/First-50-Years-NSR-Authors.pdf){#fig:first50years}
+
+%- Large graphs
 The visualization of large graphs is computational intensive and produces complex images.
 At a certain size, these images are perhaps of questionable usefulness.
 The resulting shape or 'layout' of a graph is dependent on the graph layout algorithm used.
 Figures @fig:nsr1989graphyifanhu and @fig:nsr1989graph use the exact same input data but two different layout algorithms (Yifan Hu ML and Atlas 2 respectively).
 
-![Network Graph of 1989. Nodes are authors coloured by modularity, and edges are a common publication.](/Users/andrew/Dropbox/Masters/gephi/images/NSR-1989-biggest-modularity-degree-yifanhuML.pdf){#fig:nsr1989graphyifanhu}
+![Network Graph of 1989. Nodes are authors coloured by modularity, and edges are a common publication.](images/NSR-1989-biggest-modularity-degree-yifanhuML.pdf){#fig:nsr1989graphyifanhu}
 
-![Network Graph of 1989. Nodes are authors coloured by modularity, and edges are a common publication.](/Users/andrew/Dropbox/Masters/gephi/images/NSR-1989-biggest-modularity-degree.png){#fig:nsr1989graph}
+![Network Graph of 1989. Nodes are authors coloured by modularity, and edges are a common publication.](images/smNSR-1989-biggest-modularity.png){#fig:nsr1989graph}
 
 %- D3 force graphs? citations, layout algorithm, what forces?
 The D3 graphs produced in the web application use the D3.js Force directed graph routines.
@@ -489,6 +577,8 @@ The D3 graphs produced in the web application use the D3.js Force directed graph
 Almost any parameter can be used as a filter to produce an author network graph.
 The selector values present an interesting opportunity in this case.
 We can filter the NSR data to only include entries that involved a particular nuclide.
+
+![Network graph of authors publishing on Lithium-11](images/lithium11-graph.pdf){#fig:li11graph}
 
 ## Implementation
 %- Citation
