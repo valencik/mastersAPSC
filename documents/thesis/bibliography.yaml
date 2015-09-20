@@ -69,4 +69,36 @@ references:
   page: 411-423
   volume: 63
   issue: 2
+
+- id: Pritychenko14
+  type: article-journal
+  author:
+  - family: Pritychenko
+    given: B.
+  issued:
+  - year: '2014'
+  title: Intriguing trends in nuclear physics articles authorship
+  container-title: CoRR
+  volume: abs/1411.1899
+  URL: http://arxiv.org/abs/1411.1899
+
+- id: gephiModularityAlgorithm
+  type: article-journal
+  author:
+  - family: Blondel
+    given: V. D.
+  - family: Guillaume
+    given: J.-L.
+  - family: Lambiotte
+    given: R.
+  - family: Lefebvre
+    given: 'E.'
+  issued:
+  - year: '2008'
+    month: '10'
+  title: <span class="nocase">Fast unfolding of communities in large networks</span>
+  container-title: 'Journal of Statistical Mechanics: Theory and Experiment'
+  page: '8'
+  volume: '10'
+  DOI: 10.1088/1742-5468/2008/10/P10008
 ...
