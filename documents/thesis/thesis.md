@@ -172,17 +172,20 @@ The result of the scripts is a file with a valid JSON structure for each NSR ent
 
 ### Keyword Abstracts
 
-**This section will summarize the lengthy discussion of the keyword abstracts from the NSR manual.
-And add to that, the parts which have been used in this work.**
+```
+This section will summarize the lengthy discussion of the keyword abstracts from
+the NSR manual. And add to that, the parts which have been used in this work.
+```
 
 > "What distinguishes NSR from more general bibliographic databases is the level of detail provided in the keyword abstracts."
 The `<KEYWORDS>` field is written by the maintainers of the NSR database, and then used to generate the `<SELECTRS>` field.
 
 ## Data Representation
-In order to produce a good data schema, thought must be given to the data representation.
-Consideration should be given to the types of queries that will be made on the data.
-With data spanning 120 years, it will be helpful to filter the data based on a numeric year value.
-Therefore one could construct a simple query to get all the entries from the 1970's.
+The data representation is the result of careful consideration of the types of queries to be made on the data.
+The data schema uses data types that best reflect out the data will be used.
+For example, with data spanning 120 years, it is helpful to filter the data based on a numeric year value.
+As such the `year` value in the data schema will be an integer.
+Therefore we construct a simple query to get all the entries from the 1970's.
 
 ``` {#blk:NSR1970s .python caption="Python code to get all NSR entries from 1970 to 1979." fontsize=\small baselinestretch=1}
 import pymongo
@@ -192,39 +195,37 @@ db.NSR.find({"year": {"$gte": 1970, "$lt": 1980}})
 
 %- Author data structure
 A more complex example is the list of authors for a NSR entry.
-The author field is likely best represented as an array of strings, with each unique author being a separate string element in the array.
-Representing the author list as an array instead of a free text field has immediate benefits as it is now a data structure.
-With this structure comes information and the ease of computing different properties of that data.
+The author field is best represented as an array of strings, with each unique author being a separate string element in the array.
+The representation of the author list as an array instead of a free text field is beneficial as the author list is now a data structure.
+With this structure comes information and ease of computing different properties of that data.
 The length of the array tells us how many authors collaborated on a given NSR entry.
 And since arrays are ordered, we can easily determine the first author[^first-author] of an entry.
-A skeptical reader might argue this is all possible with a free text field, and that is true.
-The real benefit of parsing our data into data structures is these structures are compatible with many tools, like our database.
-The database can now sort papers by their number of authors, or count the number of times someone was first author on an entry.
+While it is possible to extract the same information from a free text field, parsing our data into data structures create structures that are compatible with many tools, such as our database.
+Users of the database can now sort papers by their number of authors, or count the number of times someone was first author on an entry.
 Additionally, almost every aggregation query[^see-aggregation] made in this work relies on unwinding a data array at some stage.
 
 [^first-author]: The significance, if any, of being first author changes amongst journals. A clever data scientist would want to consider the `<REFRENCE>` information along with any first author analysis.
 [^see-aggregation]: See the [MongoDB Aggregation Framework](#mongodb-aggregation-framework) section for more details.
 
 %- Getting into SQL vs NoSQL here...
-In a relational database the authors would have their own tables, separate from papers, as they are separate entities.
-This means a table and data scheme would need to be created for the papers and then a separate table and scheme for the authors, and similarly for keywords, selectors, and history.
-It is certainly possible to store the NSR data in a relational model.
-It was however much less work to convert the original data into a data scheme that used arrays.
+It is possible to store the NSR data in a relational model.
+However, it is more efficient to convert the original data into a data schema that uses arrays.
 This is the primary motivator for not using a standard relational database.
+In a relational database the authors would have their own tables, separate from papers, as they are separate entities.
+This would mean a table and data schema would need to be created for the papers and then a separate table and schema for the authors, and similarly for keywords, selectors, and history.
 
 ### Selectors
 The selectors are generated from the keyword abstracts.
-As a result, the keyword abstracts have been left as a free text field.
-The selectors however need a carefully considered data schema.
-
-The current schema has `<SELECTRS>` parsed into a 3 dimensional array with `type`, `value`, and `link` variables.
-The following `type`s are valid:
+The current schema has `<SELECTRS>` parsed into a 3 dimensional array with `type`, `value`, and `subkey` variables.
+The following quote from the NSR Coding Manual @winchell2007nuclear describes the valid `type`s:
 
 > N, T, P, G, R, S, M, D, C, X, A, or Z, which stand for nuclide, target, parent, daughter, reaction, subject, measured, deduced, calculated, other subject, mass range, and charge range, respectively.
 
 The type of data for `value` changes based on the value of the `type`.
 For `type`s N, T, P, and G, the `value` is a nuclide written in the form AX with A equal to the mass number, and X equal to the chemical symbol.
-The `link` variable is used to tie together multiple selectors of the same keyword sentence.
+The value for A may have any number of digits.
+X may be one, two, or three letters.
+The `subkey` variable is used to link together multiple selectors of the same keyword sentence.
 
 %- TODO Provide an example of multiple selectors being connected
 
@@ -299,50 +300,55 @@ Finally, the `DOI` is a Digital Object Identifier for the published resource.
 
 ## The Database - MongoDB
 
-MongoDB was chosen primarily because of the authors familiarity with it.
+[MongoDB](https://www.mongodb.org) is an open source NoSQL document store database system.
+It was chosen because it is open source, easy to use, well supported, and the author is familiar with it.
 Additionally it has nice features such as JSON support, an aggregation framework, and is easy to setup.
-Other NoSQL databases like CouchDB support JSON and would likely work just as well.
-It is worth mentioning that MongoDB and CouchDB are comparatively new database systems.
+Other NoSQL databases like CouchDB support JSON and may have been acceptable as well.
+MongoDB and CouchDB are both comparatively new database systems.
 Postgres also supports JSON and is a mature database system.
 Because MySQL is so prevalent it is worth mentioning explicitly why it was not chosen.
-MySQL is a relational database and would thus not support the arrays in the data scheme as outline in the previous section.
+Despite the prevalence of MySQL, it was not chosen because it is a relational database and would thus not support the arrays in the data schema as outlined in [Data Preparation](#data-preparation).
 
-A document store database like MongoDB enables simple transformations of each NSR entry into a Mongo document (as discussed in [Data Preparation](#data-preparation)).
-In a relational database system like MySQL, each NSR entry would have to be split up, with different pieces of information populating different database tables.
+A document store database such as MongoDB enables simple transformations of each NSR entry into a Mongo document (as discussed in [Data Preparation](#data-preparation)).
+In a relational database system such as MySQL, each NSR entry would have to be split up, with different pieces of information populating different database tables.
 Authors would be a type of entity in their own authors table, that each NSR entry in an NSR table would link to.
 This type of relationship would be necessary for keywords and selectors as well.
 
-At the end of the [Data Representation](#data-representation) section we had a JSON structure for each entry in the NSR database.
-To populate our MongoDB database, these JSON structures are flattened into a single file, and imported into a MongoDB collection using the [`mongoimport` tool](http://docs.mongodb.org/manual/reference/program/mongoimport/).
+As reported in [Data Representation](#data-representation) section, a JSON structure was constructed for each entry in the NSR database.
+To populate the MongoDB database, these JSON structures were flattened into a single file, and imported into a MongoDB collection using the [`mongoimport` tool](http://docs.mongodb.org/manual/reference/program/mongoimport/).
 
 ### Indexing the Data
-With the data representation complete and the data formatted correctly and imported to MongoDB, we can consider the database operations.
-The most common operation will be some sort of search or lookup.
 %- TODO can I tie this to anything Borris says about usage?
-
+The most common operations on the correctly formated data after it was imported to MongoDB were searches or lookups.
 To optimize this process we instruct MongoDB to index our data on important or frequently referenced fields such as "authors" and "year".
 Indexing speeds up search queries in a manner similar to sorting a series of data elements.
 MongoDB allows for many different types of indexes.
-We create a single field indexes on the id, year, authors, selectors type, selectors value, and type fields.
-This enables fast lookups for documents according to the indexed fields.
+We create a single field indexes on the `_id`, `year`, `authors`, `selectors.type`, `selectors.value`, and `type` fields[^dot-notation].
+This enables fast lookups for documents[^documents] according to the indexed fields.
 For example it would be quick to find all the documents with type 'Journal' and year '1983'.
 Where as the search for all documents with keyword "fisson" has not been optimized by the previously mentioned indexes.
+
+[^dot-notation]: We use dot notation to denote that `selectors.type` refers to the `type` field of the `selectors` object.
+[^documents]: Recall that MongoDB is a 'document' store database, and each NSR entry has been imported as a 'document' in the MongoDB collection.
 
 ```
 insert a single example of the speedup we get with indexing
 ```
 
-Since our author field is really an array of string elements, we can use a single field index on it without issue.
-However, on field like the title or keywords a single field index will fall short of helping us find partial matches.
+Since our author field is really an array of string elements, we could use a single field index on it without issue.
+However, on fields such as the title or keywords a single field index does not locate partial matches.
 For example, searching for documents with the word "neutron" in the title will not be sped up by a single field index.
 For this task we leverage MongoDB's text indexes.
-%- TODO Confirm that this is true, perhaps even demonstrate it
+
+```
+this text field discussion is not useful
+```
 
 %- Other concerns and code
 There are additional concerns in hosting a database server and web application.
-Typically a database is hosted on a dedicated server, separate from the web application, and perhaps not publically facing.
+Typically a database is hosted on a dedicated server, separate from the web application, and perhaps not publicly facing.
 These issues, and additional performance configurations will not be further addressed in this work.
-They are however addressed in the code repository for this work available at !!!.
+They are however addressed in the code repository for this work available at `include a link!!!`.
 
 ### MongoDB Aggregation Framework
 The MongoDB Aggregation Framework is powerful and enables a lot of data manipulation.
@@ -371,18 +377,18 @@ A common usage is to sum a value, perhaps price, of all the input documents.
 Insert simple example here
 ```
 
-There are some additional, more straightforward operations such as `sort`, `limit`, `skip`, and `redact`.
-The final results form an aggregation query can be saved to a collection using the `out` operation, or can be returned to the calling application through the many MongoDB APIs.
+There are some additional, more straightforward, operations such as `sort`, `limit`, `skip`, and `redact`.
+The final results from an aggregation query can be saved to a collection using the `out` operation, or can be returned to the calling application through the many MongoDB APIs.
 
 %- Documentation links
-Thankfully, MongoDB is currently a popular database and there exists lots of tutorials and example applications.
-The MongoDB documentation is available at [docs.mongodb.org/manual](http://docs.mongodb.org/manual/)
+MongoDB is currently a popular database and there exists tutorials and example applications.
+The MongoDB documentation is available at [docs.mongodb.org/manual](http://docs.mongodb.org/manual/).
 All MongoDB interactions in this work use the python driver, `pymongo`.
-You can find the `pymongo` documentation at [api.mongodb.org/python/current](http://api.mongodb.org/python/current/)
+The `pymongo` documentation can be found at [api.mongodb.org/python/current](http://api.mongodb.org/python/current/).
 
 ### Future Work
-The most ideal extension to this work in regards to databases is to extend it to support additional database systems.
-The prevalence of MySQL alone is motivation to support it.
+An extension to this work is to support additional database systems.
+The prevalence of MySQL is motivation to support it.
 However, in continuing with the desire to use a NoSQL database system, the work could be extended to support CouchDB with relative ease.
 
 
