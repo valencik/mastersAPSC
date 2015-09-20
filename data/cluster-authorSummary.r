@@ -3,12 +3,13 @@
 
 # Parse commandline arguments
 args<-commandArgs(TRUE)
-if(length(args)<3) {
-    stop("Expected format: Rscript <inputfile.tsv> <min#clusters> <max#clusters>")
+if(length(args)<4) {
+    stop("Expected format: Rscript <inputfile.tsv> <output-name> <min#clusters> <max#clusters>")
 }
 inputFile = args[1]
-numCentersMin = as.numeric(args[2])
-numCentersMax = as.numeric(args[3])
+outputName = args[2]
+numCentersMin = as.numeric(args[3])
+numCentersMax = as.numeric(args[4])
 if (numCentersMin > numCentersMax) {
     stop("The minimum number of cluster centers must be less or equal to the maximum")
 }
@@ -51,18 +52,18 @@ for (numCenters in numCentersMin:numCentersMax) {
     # Record cluster analysis measurements to file
     writeLines("Recording clustering results to file...")
     clusterIndexes = rbind(numCenters, km$betweenss, km$tot.withinss, km$totss, dbi$DB, g1i)
-    write(clusterIndexes, file=paste0(outDir, "cluster-analysis.csv"), append=analysisAppend, ncolumns=6, sep=',')
+    write(clusterIndexes, file=paste0(outDir, outputName, "cluster-analysis.csv"), append=analysisAppend, ncolumns=6, sep=',')
 
     # Write cluster centers to a file
-    write(t(km$centers), file=paste0(outDir, numCenters,"cluster-centers.csv"), ncolumns=col, sep=',')
+    write(t(km$centers), file=paste0(outDir, outputName, numCenters,"cluster-centers.csv"), ncolumns=col, sep=',')
     
     # Write cluster membership to a file
-    write(t(cbind(array(row.names(data)),km$cluster)), file=paste0(outDir, numCenters,"cluster-memberships.csv"), ncolumns=2, sep=',')
+    write(t(cbind(array(row.names(data)),km$cluster)), file=paste0(outDir, outputName, numCenters,"cluster-memberships.csv"), ncolumns=2, sep=',')
     
     # Write the sizes of the clusters to a file
-    write((km$size), file=paste0(outDir, numCenters,"cluster-sizes.csv"), ncolumns=numCenters, sep=',')
+    write((km$size), file=paste0(outDir, outputName, numCenters,"cluster-sizes.csv"), ncolumns=numCenters, sep=',')
 
     # Some plotting
-    png(filename=paste0("images/", numCenters, "clusters.png"), width=1200, height=1200)
+    png(filename=paste0("images/", outputName, numCenters, "clusters.png"), width=1200, height=1200)
     plot(data, col=km$cluster)
 }
