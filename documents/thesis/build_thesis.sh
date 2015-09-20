@@ -1,4 +1,8 @@
-#!/usr/bin/env bash -e
+#!/usr/bin/env bash
+set -e
+
+# Quick backup to Dropbox
+cp thesis.md ~/Dropbox/Masters/
 
 # Get the American Physics Society CSL file
 if [ ! -f american-physics-society.csl ];
@@ -9,7 +13,7 @@ fi
 
 # Temporary comment filter for custom markdown
 echo "Removing custom markdown comments..."
-sed '/^%- .*$/d' thesis.md > thesis_no_comments.md
+sed '/^%- .*$/d' thesis.md > no_comments_thesis.md
 
 echo "Invoking Pandoc for TeX file creation..."
 pandoc --table-of-contents --number-sections --standalone \
@@ -19,11 +23,11 @@ pandoc --table-of-contents --number-sections --standalone \
   --filter pandoc-tablenos \
   --filter pandoc-eqnos \
   --filter pandoc-citeproc \
-  thesis_no_comments.md --output Thesis.tex
+  no_comments_thesis.md --output NSR-Thesis.tex
 
 echo "Calling pdflatex..."
-pdflatex -shell-escape Thesis.tex
-pdflatex -shell-escape Thesis.tex
+pdflatex -shell-escape NSR-Thesis.tex
+pdflatex -shell-escape NSR-Thesis.tex
 
 echo "Invoking Pandoc for HTML file creation..."
 pandoc --table-of-contents --number-sections --standalone \
@@ -33,7 +37,7 @@ pandoc --table-of-contents --number-sections --standalone \
   --filter pandoc-tablenos \
   --filter pandoc-eqnos \
   --filter pandoc-citeproc \
-  thesis_no_comments.md --output Thesis.html
+  no_comments_thesis.md --output NSR-Thesis.html
 
 echo "Opening PDF..."
-open Thesis.pdf
+open NSR-Thesis.pdf
