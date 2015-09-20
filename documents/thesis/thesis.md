@@ -888,6 +888,11 @@ Cluster Analysis
 %- Starting with some of the naive algorithms, and then going to graph theory.
 %- A review of graph theoretic concepts and piecing them together for the application on hand.
 
+```
+This chapter does not yet discuss cluster labels.
+Or using the cluster results in the application.
+```
+
 ## Classification and Cluster Analysis
 Classification and clustering are related approaches to organizing data elements into groups for further analysis.
 Classification is the process of deciding what group a particular datum should most optimally belong to.
@@ -897,10 +902,10 @@ Clustering is the grouping of multiple data points such that those belonging to 
 K-means clustering is a cluster analysis technique that can group data objects in $k$ clusters based on minimizing their distances with respect to cluster centroids.
 K-means is a partitional clustering algorithm.
 
-Say we have a finite set of objects,  $X = {x_1, x_2, ..., x_n}$ where each is a data object in $d$ dimensions.
+Take a finite set of objects,  $X = {x_1, x_2, ..., x_n}$ where each is a data object in $d$ dimensions.
 We can create $k$ clusters $C = {c_1, c_2, ..., c_k}$ where $k <= n$.
 The process starts by randomly choosing $k$ points, ${x_1, ..., x_k}$ to be the centroids of a cluster.
-Iterate over each object $x$ and assign it to a cluster $c$ based on the minimization of some parameter, for now, Euclidean distance.
+Iterate over each object $x$ and assign it to a cluster $c$ based on the minimization of some parameter; for now, Euclidean distance.
 The new centroids are now computed and the process is repeated until cluster stability is achieved.
 The goal is to minimize the total sum of squared errors between the centroids and all objects (see equation {@eq:kmeans}). 
 
@@ -917,9 +922,13 @@ Euclidean distance is typically used, leading to ball or sphere shaped clusters.
 
 The chosen number of clusters has a huge impact on the data partitions.
 Some heuristics exist to aid in determining an optimal $k$. @tibshirani2001estimating
-In practice, K-means is normally run multiple times with varying $k$ values and the best is selected by a domain expert.
+In practice, K-means is normally run multiple times with varying $k$ values and the optimum is selected by a domain expert.
 However, measurements of cluster effectiveness will be shown.
+
 %- TODO DB index, G1 index
+```
+Include the work I did with DB index and evaluating the cluster results.
+```
 
 ## Initial Author Clustering
 %- Cluster with author, numCoauthors, numEntries, numYears first
@@ -927,19 +936,19 @@ However, measurements of cluster effectiveness will be shown.
 %- e.g. Use values at a range of different percentiles.
 
 There is a considerable amount of multivariate data in the NSR database.
-In order to gain insight from this data, only a section or slice should be considered initially.
-In this section, the authors will be analyzed with the attempt to identify groups or clusters of authors who behave similarly.
+In order to gain insight from this data, only a section is initially considered.
+In this section, the authors will be analyzed to identify groups or clusters of authors who behave similarly.
 
 An aggregation query is used to summarize our data in preparation for clustering.
 This query saves, for each author, their total number of coauthors, their total number of years publishing, and their total number of publications.
 To help evaluate this summarization of authors, three heatmaps of this data are presented in figures @fig:nyne-log, @fig:nync-log, and @fig:nenc-log.
 
-Figure @fig:nyne-log shows an expected trend; authors who publish over more years tend to have more publications overall.
-Each of these figures shows that there are a large number of authors that have published only a few times.
+Figure @fig:nyne-log shows an expected trend: Authors who publish over more years tend to have more publications overall.
+Each of these figures shows that there is a large number of authors who have published only a few times.
 Additionally, there are comparatively few authors who have published many times.
-In anticipation of this result, the heatmap coloring is on a logarithmic scale, while the axes are linear.
-Without the log color scale, the plots would be washed out by the incredibly many author who have published only once.
-(To appease the curious, linearly coloured heatmaps are shown in the Appendix, figures @fig:nyne-linear, @fig:nync-linear, and @fig:nenc-linear.)
+The heatmap coloring is on a logarithmic scale, while the axes are linear.
+Without the log color scale, the plots would be washed out by the incredibly many authors who have published only once.
+(Linearly coloured heatmaps are shown in the Appendix, figures @fig:nyne-linear, @fig:nync-linear, and @fig:nenc-linear.)
 
 ![Number of entries an author has given the number of years they have published.](../../data/images/nyne-log-heatmap.png){#fig:nyne-log}
 
@@ -947,10 +956,10 @@ Without the log color scale, the plots would be washed out by the incredibly man
 
 ![Number of coauthors an author has given the number of entries they have published.](../../data/images/nenc-log-heatmap.png){#fig:nenc-log}
 
-The three heatmaps show that the 3 dimensional data is not well segmented and is instead rather continuous.
-This is a result of our input data being continuous in nature.
-Clustering more categorical data could lead to more discrete or separated clusters.
-Nevertheless the cluster results of this data could be used to aid in classifying authors.
+The three heatmaps show that the 3 dimensional data is not well segmented and is instead continuous.
+This is a result of the input data being continuous in nature.
+Clustering categorical data could lead to more discrete or separated clusters.
+Nevertheless, the cluster results of this data could be used to aid in classifying authors.
 
 The same data points from figures @fig:nyne-linear, @fig:nync-linear, and @fig:nenc-linear are shown in the subplots of figure @fig:kmeans-authors1.
 The color of each data point in figure @fig:kmeans-authors1 represent which cluster that author belongs to.
@@ -959,7 +968,7 @@ This cluster membership was determined through the K-means algorithm set to find
 ![Initial clustering on authors with Kmeans](../../data/images/5clusters-kmeans-authors1.png){#fig:kmeans-authors1}
 
 %- Get citation!
-Determining the ideal number of clusters is a difficult problem. !!!
+Determining the ideal number of clusters is a difficult problem. `include citations!!!`
 Figure @fig:kmeans-authors1 uses 5 clusters and demonstrates again that the data is continuous.
 As a result the clusters function as segmentations along a continuous spectrum.
 As the number of clusters increases, the size of the segmentations decrease.
@@ -967,28 +976,29 @@ As the number of clusters increases, the size of the segmentations decrease.
 %- Eventually the segmentations partition the data with respect to other variables.
 
 %- Want data with more dimensionality
-The numEntries and numCoauthors data presented in the heatmaps is not the whole story.
-An author could have published 20 papers in 1995 and only 1 paper in 1996, their resulting numYears value for that range would be 2.
-Let's try clustering with more dimensionality to our data.
-Instead of a single number representing an authors number of publications, a parameter of their distribution of publications over time could be used.
-How many papers has a given author published in the beginning of their career?
-The end of their career, or most recently?
+The numEntries and numCoauthors data presented in the heatmaps can be improved.
+An author could have published 20 papers in 1995 and 5 papers in 1996, their resulting numYears value for that range would be 2.
+This has the effect of ignoring how prolific a given author may have been in a certain time.
+We want the author who published 20 papers in 1995 to be measured differently than an author who published once in both 1995 and 1996.
+An improvement is obtained by increasing the dimensionality of the data.
+Instead of a single number representing an author's number of publications, a parameter representing the distribution of publications over time could be used.
+How many papers did a given author published in the beginning of their career?
+How many papers did the publish at the end of their career, or most recently?
 
 %- Need authors with many publications
 In order to break up the number of entries over time like this, each author needs to have multiple entries over multiple years.
-This excludes a lot of authors.
-Recall their are !!! 45511 !!! authors with only a single publication in the database.
-That is 40445 out of 100147, roughly $40\%$ of the total unique authors.
+Recall their are 41254 authors with only a single publication in the database.
+That is 41254 out of 100147, roughly $40\%$ of the total unique authors.
 
 %- Demonstrate that removing all single publication authors is not as harmful as it might seem
 How much of the database is affected if every author who has only published once is removed?
 This question can be answered directly with the MongoDB database.
 First every paper is taken and duplicated for every single author in that paper's author list.
 There is now a database object for each author in each paper.
-Every time an author's name appears that is one publication count for that author.
+Each time an author appears their publication count increments.
 Next, each database object that has an author that has a publication count of one is erased.
 Finally the unique remaining papers are the ones that have authors with more than one publication count.
-Table @tbl:papersWithoutNAuthors show the number of papers that remain once all the authors with a specified publication count are removed.
+Table @tbl:papersWithoutNAuthors shows the number of papers that remain once all the authors with a specified publication count are removed.
 
 %- TODO develop a better (continuous) way to calculate these numbers
 Entry Number Cutoff   Papers Remaining   Difference
@@ -1003,11 +1013,12 @@ Table: Papers affected by removal of authors with N or less papers. {#tbl:papers
 
 %- Summarize the Author cut off results
 The values presented in Table @tbl:papersWithoutNAuthors suggest that the bulk of the papers in the NSR are associated with authors who publish more than just a few times.
-This is result means that filtering out low publication authors in additional analysus does not affect the majority of the NSR entries.
+This result means that filtering out low publication authors in additional analysis does not affect the majority of the NSR entries.
 %- Demonstrate that 1993JA17 and 1996JA24 disappear correctly
 
-%- TODO present the results from limited author clustering
-
+```
+insert the results from limited author clustering
+```
 
 Conclusions
 ===========
