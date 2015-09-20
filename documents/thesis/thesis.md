@@ -681,18 +681,17 @@ Example code for exporting the 1989 data to `gexf` format is available at `inclu
 
 Author Name Analysis
 ====================
-%- Choose and identify language to refer to the various situations a "name" might be referenced
 
 The NSR database, before and after the data preparation in this work, contains mistakes, typos, and minor errors.
-The analysis in this section attempts to identify and mitigate these problems.
-Before continuing we must define some terms to help keep a clear understand.
+In this section, we describe the analysis which identifies and mitigates these issues.
+Some terms must be defined.
 We will use the word "author" (formatted plainly and without quotes) to refer to an individual human being who contributed to a work that is documented in the NSR database.
 The term "identifier" (also formatted plainly and without quotes) will refer to the string of text that occurs in the database.
 The actual identifier strings will always appear in a fixed width typeface.
-For example, and author may be Andrew Valencik, and he may have more than one identifier such as `A.Valencik`, `A. Valencik`, and or `A.C.Valencik`.
+For example, an author may be Andrew Valencik, and he may have more than one identifier such as `A.Valencik`, `A. Valencik`, and or `A.C.Valencik`.
 
-Initially this analysis will look at identifying the authors who have multiple identifiers in the database.
-As mentioned, this may be caused by typos, changes in formatting, and differences in style from one publication to the next.
+This analysis locates multiple identifiers in the database that correspond to single authors.
+This may be caused by typos, changes in formatting, and differences in style from one publication to the next.
 Authors themselves may opt in some publications to be identified by more than one initial and only one in others.
 
 Pritychenko reports 96200 unique authors in his 2014 paper @Pritychenko14.
@@ -701,54 +700,55 @@ An accurate total author count is not particularly important for this work.
 However, correctly identifying and including all authors when doing network analysis is important.
 
 Currently there are 41254 unique identifiers that appear only once in the NSR database.
-Some portion of those are author name misspellings that only occur once.
-Knowing that portion is important to understanding something about the database; In the [Initial Author Clustering](#initial-author-clustering) section we investigated how the database changed as we removed identifiers (referred to as just "authors" in that section) below a publication threshold.
+Some portion of those are author name variances that only occur once.
+Knowing that portion is important to understanding something about the database; in the [Initial Author Clustering](#initial-author-clustering) section we investigated how the database changed as we removed identifiers (referred to as just "authors" in that section) below a publication threshold.
 This analysis depends on correctly identifying the number of authors who have published a given number of times.
-Typos in the list of authors render this analysis in inaccurate.
+Typos in the list of authors render such an analysis in inaccurate.
 
 After the data preparation and importing step the database contains identifiers `A.Herzan` and `A. Herzan`.
 These two identifiers have 12 and 1 publication(s) respectively.
-Although there are two identifiers in the database, it is highly improbable that the presence of a space in one indicates a second individual human being.
+Although there are two identifiers in the database, it is highly improbable that the presence of a space in one indicates a second author.
 In the [Further Analysis](#further-analysis) subsection we will discuss methods to determine if the multiple identifiers represent the same author.
-For now our problem is just to find identifiers that are similar to one another.
+In this subsection, the analysis described finds identifiers that are similar to one another.
 
 %- Online vs offline
 Searching for similar identifiers could happen either online (immediately after the user submits a query) or offline (before the app is presented to users).
 Because our database is static and manually updated with new entries periodically, the offline approach makes sense.
-And additional benefit to the offline approach is that it can be easily moderated and tweaked with user submitted suggestions.
+An additional benefit to the offline approach is that it can be easily moderated and tweaked with user submitted suggestions.
 The general problem is referred to as approximate string matching.
 If the supplied query was `A.Herzan`, then `A. Herzan` would be considered an approximate string match.
 This type of match could be found without much sophistication.
-However we want to also consider more difficult matches like `J.Svenne` and `J.P.Svenne`.
+However, we want to also consider more difficult matches like `J.Svenne` and `J.P.Svenne`.
 Approximate string matching libraries often use the Levenshtein Distance metric to compare strings.
 
 ### Levenshtein Distance
 String edit distance measures such as the Levenshtein Distance offer an easy first approach to analyzing the author names.
 The Levenshtein distance is one type of string metric to evaluate the difference between two sequences of characters.
-A distance of 1 is attributed to ever single character edit necessary to transform one of the input strings into the other.
+A distance of 1 is attributed to every single character edit necessary to transform one of the input strings into the other.
 Single character edits include an insertion of a character, a deletion, or a substitution.
 
-> TODO Present an example (for each: insertion, deletion, substitution) using actual author names from the NSR.
+```
+TODO Present an example (for each: insertion, deletion, substitution)
+```
 
 The Python library [Jellyfish](http://jellyfish.readthedocs.org/en/latest/)  makes it quite easy to use a few different distance metrics.
 Nevertheless, calculating any measure for all pairs of authors is a large task.
 A quick estimate of $100,000$ authors means $5,000,000,000$ unique (unordered) pairs to calculate.
 Thankfully this is not entirely prohibitive to calculate on modest hardware.
-It does however, produce a large amount of data, so filtering is absolutely necessary.
+It does, however, produce a large amount of data, making filtering absolutely necessary.
 
 A small Python script, using Jellyfish, was prepared to calculate the Levenshtein Distance for each author name pair.
-Only pair with a distance less than 4 were written to file.
-> 3 is higher than necessary
+Only pairs with a distance less than 4 were written to file.
 This analysis reveals over 20 million author pairs for further analysis.
 
-> TODO Discuss pairs with a distance of 1
-
-> TODO Discuss pairs with a distance of 4
-
-> TODO Discuss limitations of "non informed" string edit distances.
+```
+TODO Discuss pairs with a distance of 1
+TODO Discuss pairs with a distance of 4
+TODO Discuss limitations of "non informed" string edit distances.
+```
 
 ### Transformations
-Three simple string transformations have been constructed to try and identify similar identifiers.
+Three simple string transformations have been constructed to locate similar identifiers.
 The first stage transforms all the characters in the name string to lower case.
 $1936$ author names become non-unique when reduced to only lower case letters.
 
@@ -760,7 +760,7 @@ R.Del Moral	R.del Moral
 J.M.Van Den Cruyce	J.M.Van den Cruyce	J.M.van den Cruyce
 ```
 
-The second stage takes the lower cased identifiers and removes all spaces.
+The second stage takes the lower case identifiers and removes all spaces.
 There are $2619$ identifiers that have duplicates when reduced to lower case letters with no spaces.
 
 ``` {#blk:names-nospace .text caption="Identifiers which become duplicates after transformations 1 and 2." fontsize=\small baselinestretch=1}
@@ -783,40 +783,43 @@ W.-X.Huang	W.-x.Huang	W.X.Huang
 C.Le Brun	C.Le Brun,	C.Le brun	C.LeBrun	C.Lebrun	C.le Brun
 ```
 
-As the progression of transformations shows, an identifier that becomes non unique in transformation 1 will continue to appear in the output results of transformations 2 and 3.
-Some authors have the unfortunately luck of being misrepresented 6 different times.
-Surnames composed of multiple words separated by spaces appear to be the most prone to errors.
+As the progression of transformations shows, an identifier that becomes non-unique in transformation 1 will continue to appear in the output results of transformations 2 and 3.
+Some authors have been represented up to 6 different ways.
+Surnames composed of multiple words separated by spaces appear to be the most prone to multiple representations.
 The output of transformation 3 provides a reasonable list to apply additional analysis to.
 There are 3063 groups of identifiers identified as duplicates in the transformation 3 analysis (and 6561 identifiers in total).
 
 We have reduced, by two orders of magnitude, the number of identifiers that should be subject to additional analysis.
-It is worth repeating analysis.
-Performing the Levenshtein distance analysis on the 'nopunc' list would catch identifiers where an initial has been omitted as an edit distance of 1.
-For example the edit distance of 'J.P.Svenne' and 'J.Svenne' is 2 before the transformations but 1 afterwards.
+With the transformed list, it is worth repeating analysis.
+Performing the Levenshtein distance analysis on the 'nopunc' list will locate identifiers where an initial has been omitted as an edit distance of 1.
+For example the edit distance of 'J.P.Svenne' and 'J.Svenne' is 2 before the transformations and 1 afterwards.
 %- Sam Austin
-It will still fall short of identifying identifiers where the first name is fully spelled out.
 
-"Adam Sarty" and "A.Sarty" should have a small distance in our application.
-This type of analysis would require a significant modification to the existing string metrics.
+Performing the Levenshtein distance analysis will still fall short of identifying identifiers where the first name is fully spelled out.
+`Adam Sarty` and `A.Sarty` are both valid identifies for a single author.
+An application to locate multiple identifiers of this type would require a significant modification to the existing string metrics.
 There are many open source implementations of string distance functions, so a modification is not out of the question.
 
 Another approach could simplify the list of authors while accepting potential loss of information.
-The current number of unique identifiers after data preparation is $100147$, if we remove all identifiers that include `" the "` in their name we reduce to $98788$ identifiers.
+The current number of unique identifiers after data preparation is $100147$, if we remove all identifiers that include "` the `" in their name we reduce to $98788$ identifiers.
 This has the effect of removing collaborations from the author list.
-This may or may not be desired for some analysis.
-In attempting to find author names with typos and similar data entry mistakes in their names this filtering is unlikely to have significant impact.
+This may or may not be desired for some analyses.
+In attempting to find authors multiply represented in the database, this filtering is unlikely to have significant impact.
 Identifiers representing collaborations are often long and have small string distances to one another as they informative part of their name is typically an acronym.
 
 ### Further Analysis
 %- Clustering? no. Graph analysis.
-%- Can I come up with a # of publication independent clustering scheme?
+%- Can I come up with a # of publication independent clustering schema?
 %- Probably not, and so the graph analysis would be quite useful here!
 %- Also use "Austin" S.M.Austin, Sam.Austin
 Now that we have such a reduced list of candidate identifiers that may represent the same author, we can afford to run more expensive analysis on them.
+The product of the analysis described above is a list of candidates which may represent cases of multiple identifiers for a single author.
+To locate multiply-identified single authors, that candidate list must be examined.
+Since the list in comparatively small we propose computation expensive analyses may be performed to achieve that end.
 The expensive analysis should be comparing neighbors in the network.
 We could find all the neighbours of two given nodes and see how many overlap.
 With this we should also consider what the chance of having common neighbours is for any two random nodes.
-A first approximation of dealing with this we could consider the degree of the neighbours.
+A first approximation would be to consider the degree of the neighbours.
 Common neighbours with a low degree are less likely to be common through random chance.
 %- (!!! better example than the Curie's? !!!)
 Note that this analysis likely falls short of addressing some copublishers with the same surname.
