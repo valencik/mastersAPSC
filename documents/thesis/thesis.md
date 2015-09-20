@@ -5,7 +5,7 @@ author:
 - name: Andrew Valencik
   affiliation: Saint Mary\'s University
 author: Andrew Valencik
-date: September 8th 2015
+date: September 19th 2015 - Edifying Edits Edition.
 bibliography: bibliography.yaml
 csl: american-physics-society.csl
 link-citations: true
@@ -19,6 +19,11 @@ linestretch: 1.5
 
 Introduction
 ============
+
+```
+this section needs a rewrite once the rest is done
+```
+
 %- The problem and its setting
 %- Proposed methodology to solve problem
 The United States [National Nuclear Data Center](http://www.nndc.bnl.gov) prepares an evaluated database of nuclear science literature that poses a rich opportunity for knowledge discovery directed at the scientific work and study.
@@ -64,6 +69,7 @@ For example the searching of indexed fields, including the selector values, is s
 
 ### Quick Search
 The quick search functionality is shown on the NSR homepage, it is likely the most commonly used interface.
+%- ROBY is this info available in Borris's paper?
 It enables searching by author name, nuclide, or reaction.
 Two types of filters are available to limit the results: a year range, and reference type which can return only experimental or theory entries.
 Each of the search fields show examples of the type of search as well.
@@ -1059,6 +1065,7 @@ Appendix
 
 ![Number of coauthors an author has given the number of entries they have published.](../../data/images/nenc-heatmap.png){#fig:nenc-linear}
 
+![Complete 1940 author graph.](images/complete-graph-1940.pdf){#fig:complete-graph-1940}
 
 Bibliography
 ============
