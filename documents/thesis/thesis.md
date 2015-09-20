@@ -416,7 +416,7 @@ We can answer questions such as "What percentage of all entries are journal arti
 As Table @tbl:typesAll shows, the majority of the document types in the NSR are journal articles.
 The next most popular are reports, and conference preceedings.
 There are fewer books and preprint than there are unknown and unlabel entries.
-The python code to produce these results is shown in Snippet @typesAllCode.
+The python code to produce these results is shown in Snippet @blk:typesAllCode.
 
 [^our-data-set]: Recall that the data set used in this work is a snapshot of the entire NSR data as dowloaded in January 2014.
 
@@ -508,7 +508,7 @@ Table: The top 10 most prolific authors in the NSR database. {#tbl:prolific-auth
 ## Visualizations
 
 Visualizations provide a summary of data at a glance.
-Consider Figure {@fig:nsrhisto}, it quickly demonstrates that the majority of NSR entries were published in the last 50 years.
+Consider Figure @fig:nsrhisto, it quickly demonstrates that the majority of NSR entries were published in the last 50 years.
 
 ![A histogram of all NSR entries published from 1896 to 2014](images/NSRyearlyhistogram.pdf){#fig:nsrhisto}
 
@@ -524,7 +524,7 @@ Figure @fig:viz-types-histo shows the amount of each different document type in 
 ![A histogram showing the contribution types](images/viz-types-NSR-histo.png){#fig:viz-types-histo}
 
 The pie charts are useful to demonstrate the relative sizes of portions of the data.
-Again the docuent type amounts are shown in Figure @viz-types-pie as a pie chart.
+Again the docuent type amounts are shown in Figure @fig:viz-types-pie as a pie chart.
 Figures @fig:viz-types-histo and @fig:viz-types-pie are visual representations of the data in Table @tbl:typesAll.
 
 ![A pie chart showing the types of NSR entries](images/viz-types-NSR-pie.png){#fig:viz-types-pie}
@@ -653,7 +653,7 @@ The graph is partitioned into communities where there are dense intra-community 
 Almost any parameter can be used as a filter to produce an author network graph.
 The selector values present an interesting opportunity in this case.
 We can filter the NSR data to only include entries that involved a particular nuclide.
-Figure @li11graph shows an author node graph for all the NSR entries that have `LI11` as a selector value.
+Figure @fig:li11graph shows an author node graph for all the NSR entries that have `LI11` as a selector value.
 All of the components have been kept in the visualization.
 
 ```
