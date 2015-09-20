@@ -397,59 +397,92 @@ Data Summarization
 %- What? Created summaries and ranked info in a web app.
 %- Why? Visualizations are important in understanding data. As are summaries and rankings.
 %- How? MongoDB aggregations to D3 charts.
+
+```
+NOTE: This section currently has weak mentions of the actual application built.
+With no real introduction of the application, mentions of it feel out of place...
+```
+
 Through data summarization we can learn the first-order characteristics of the data set.
-The goal is to learn some of the structure and composition of the data set.
+The goal is obtain a broad perspective of the structure and composition of the data set.
 For example, there are 212835 entries in the data set[^our-data-set] that span from 1896 to 2014.
-We are provided answers to questions like "What percentage of all entries are journal articles?"
-"When were those journal articles written?"
+We can answer questions such as "What percentage of all entries are journal articles?"
+As Table @tbl:typesAll shows, the majority of the document types in the NSR are journal articles.
+The next most popular are reports, and conference preceedings.
+There are fewer books and preprint than there are unknown and unlabel entries.
+The python code to produce these results is shown in Snippet @typesAllCode.
 
-[^our-data-set]: Recall that our data set is a snapshot of the entire NSR data as dowloaded in January 2014.
+[^our-data-set]: Recall that the data set used in this work is a snapshot of the entire NSR data as dowloaded in January 2014.
 
+Type       Amount   Percentage
+----       ------   ----------
+THESIS     1934     0.908\%
+PREPRINT   779      0.366\%
+BOOK       107      0.050\%
+PC         1661     0.780\%
+CONF       16836    7.910\%
+REPT       24554    11.53\%
+JOUR       165477   77.74\%
+UNKNOWN    1487     0.698\%
+
+Table: The amounts of each type of NSR entry in the whole data set. {#tbl:typesAll}
+
+``` {#blk:typesAllCode .python caption="The aggregation query to get amount of types in the NSR." fontsize=\small baselinestretch=1}
+import pymongo
+db = pymongo.MongoClient()['masters']
+db.NSR.aggregate([{"$group": {"_id": "$type", "count": {"$sum": 1}}}])
+```
+
+%- Slice of author
 The summarization analysis can conveniently be applied to subsets of the data.
-For example, we may answer the question: "What percentage of 1989 entries are journal articles?" @tbl:types1989
-Or "what percentage of A.J.Sarty's contributions were journal articles?" @tbl:typesAJSarty
+The data can be filtered to only involve a particular author.
+This provides answers to questions such as "what percentage of A.J.Sarty's contributions were journal articles?"
+Table @tbl:typesAJSarty shows A.J.Sarty has primarily worked on journal articles, with one preprint article.
+The code for this query, which is shown in Snippet @blk:typesAJSarty, simply adds a `$match` operation to Snippet @blk:typesAllCode.
 
-Type       Amount
-----       ------
-THESIS     16
-PREPRINT   21
-BOOK       7
-PC         14
-CONF       331
-REPT       732
-JOUR       2892
-
-Table: Different types of NSR entries in 1989. {#tbl:types1989}
-
-Type       Amount
-----       ------
-PREPRINT   1
-JOUR       21
+Type       Amount   Percentage
+----       ------   ------
+PREPRINT   1        5\%
+JOUR       21       95\%
 
 Table: Different types of NSR entries for author A.J.Sarty. {#tbl:typesAJSarty}
 
-## Visualizations
+``` {#blk:typesAJSarty .python caption="Aggregation query to get the types of an author's publications." fontsize=\small baselinestretch=1}
+import pymongo
+db = pymongo.MongoClient()['masters']
+db.NSR.aggregate([{"$match": {"authors": "A.J.Sarty"}},
+                  {"$group": {"_id": "$type", "count": {"$sum": 1}}}])
+```
 
-Visualizations are very useful for data summarization.
-They can provide a summary of data at a glance.
-Consider figure {@fig:nsrhisto} in the next section, it quickly demonstrates that the majority of NSR entries were published in the last 50 years.
-This turned out to be a useful property of the dataset as it permitted testing data analysis code on small portions of the data (years pre 1950), before applying the code to the full dataset.
-This was particularly helpful in developing the network analysis code and visualizations, as post 1950 the networks can be too large to process quickly.
+%- Slice of time
+The data can also be partitioned or sliced in time.
+This also use to ask questions such as "what percentage of 1989 entries are journal articles?"
+As we can see from Table @tbl:types1989 the $72.06\%$ of the NSR entries are journal articles.
+This percentage is different than that of the whole work (as shown in Table @tbl:typesAll), but not by a significant amount.
+It does highlight a particular interest that the data is not uniform.
+%- To understand how the data changes with resepect to time we can use visualizations.
 
-There are two primary visual methods for displaying summary information in this application.
-The histograms show how a particular slice of the database evolves over time.
-This is illustrated in Figure @fig:nsrhisto, showing the evolution of contribution rate over time.
-The pie charts demonstrate the relative sizes of portions of the data.
-For example, out of a slice of data, perhaps all of the data, how many entries are papers and journals?
+Type       Amount   Percentage
+----       ------   ----------
+THESIS     16       0.398\%
+PREPRINT   21       0.523\%
+BOOK       7        0.174\%
+PC         14       0.348\%
+CONF       331      8.248\%
+REPT       732      18.24\%
+JOUR       2892     72.06\%
 
-![A histogram of papers publish from 1896 to 2014](/Users/andrew/Dropbox/Masters/roughFigures/NSRyearlyhistogram.pdf){#fig:nsrhisto}
+Table: Different types of NSR entries in 1989. {#tbl:types1989}
 
-## Rankings
-
-For a particular selection of NSR data, it can be useful to know the rankings for important data fields.
-For example, if a user searches an author on the application they are presented with a ranked list of their most frequent coauthors, keywords, and nuclides.
+%- Rankings
+For a particular selection of NSR data, it is useful to know the rankings for important data fields.
+For example, when a user searches an author on the application they are presented with a ranked list of their most frequent coauthors, keywords, and nuclides.
 This type of analysis can of course be applied to the whole dataset as well.
 Table {#tbl:prolific-authors} shows the authors with the highest count of NSR entries in the entire database.
+
+```
+NOTE: This section needs more discussion...
+```
 
 Author              Number of Publications
 ------              ----------------------
@@ -465,6 +498,31 @@ A.O.Macchiavelli              624
 T.L.Khoo                      614
 
 Table: The top 10 most prolific authors in the NSR database. {#tbl:prolific-authors}
+
+## Visualizations
+
+Visualizations provide a summary of data at a glance.
+Consider Figure {@fig:nsrhisto}, it quickly demonstrates that the majority of NSR entries were published in the last 50 years.
+
+![A histogram of all NSR entries published from 1896 to 2014](images/NSRyearlyhistogram.pdf){#fig:nsrhisto}
+
+The low publication numbers in the first 50 years turned out to be a useful property of the dataset.
+It permitted testing data analysis code on small portions of the data (years pre 1950), before applying the code to the full dataset.
+This was particularly helpful in developing the network analysis code and visualizations, as post 1950 the networks can be too large to process quickly.
+
+There are two primary visual methods for displaying summary information in this application: histograms and pie charts.
+The histograms, as seen in Figure @fig:nsrhisto, can show how a particular slice of the database evolves over time.
+It is also useful to see amounts in categorical data.
+Figure @fig:viz-types-histo shows the amount of each different document type in the NSR database.
+
+![A histogram showing the contribution types](images/viz-types-NSR-histo.png){#fig:viz-types-histo}
+
+The pie charts are useful to demonstrate the relative sizes of portions of the data.
+Again the docuent type amounts are shown in Figure @viz-types-pie as a pie chart.
+Figures @fig:viz-types-histo and @fig:viz-types-pie are visual representations of the data in Table @tbl:typesAll.
+
+![A pie chart showing the types of NSR entries](images/viz-types-NSR-pie.png){#fig:viz-types-pie}
+
 
 Network Analysis and Visualization
 ==================================
