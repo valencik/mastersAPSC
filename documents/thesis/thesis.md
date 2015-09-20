@@ -531,13 +531,13 @@ Network Analysis and Visualization
 %- How? Using python library Networkx to build graph datastructures. D3 and Gephi for visualizations
 All previous analysis of the NSR data has focused on the content of each entry in a flat manner.
 However, the list of authors of a paper can be used to build a network or graph of the authors.
-It is worth noting in this work, the word 'graph' will always refer to the mathematical representation of a set of objects and their links.
+(In this work, the word 'graph' will always refer to the mathematical representation of a set of objects and their links.)
 The first graphs constructed in this work had each node represent an author, and each edge or link represent a coauthorship.
 An example can be seen in Figure @fig:small-graph-1940.
 
 ![A single component of the 1940 author graph.](images/small-graph-1940.pdf){#fig:small-graph-1940}
 
-Figure @fig:small-graph-1940  is a single componet of the complete 1940 author graph.
+Figure @fig:small-graph-1940  is a single component of the complete 1940 author graph (shown in Appendix Figure @fig:complete-graph1940).
 It has 7 nodes, each is a different author, and 12 edges which represent a coauthorship between the two nodes.
 `M.Ikawa` has publish with everyone in the graph.
 We can use this knowledge in a database query to get the papers that make up this graph (see @blk:graph1940s).
@@ -553,6 +553,9 @@ One paper titled "Fission Products of Uranium by Fast Neutrons" has authors `Y.N
 The other papers, titled "Neutron Induced Radioactivity in Columbium" and "Artificial Radioactivity Induced in Zr and Mo" respectively are both authored by `R.Sagane`, `S.Kojima`, `G.Miyamoto`, and `M.Ikawa`.
 This demonstrates a limitation in the current graph visualization.
 `G.Miyamoto` and `M.Ikawa` have published together twice (in 1940) but their edge looks no different than the edge between `Y.Nishina` and `T.Yasski`.
+Most graph libraries allow for a lot of customization and embedding of data.
+In a future work, the graphing routines could be modified to represent the number of copublications along the graph edges.
+This could be done as a text label, or perhaps an added thickness to the edge line.
 
 ``` {#blk:graph1940s-results .json caption="JSON documents for the NSR entries in Figure @fig:small-graph-1940." fontsize=\footnotesize breaklines=true baselinestretch=1}
 {
@@ -615,48 +618,65 @@ This demonstrates a limitation in the current graph visualization.
 
 %- Multiple components
 We can also visualize graphs with multiple components.
-Most graphs produced from regular data queries will have multiple components.
+Disconnected components, like those visible in Figure @fig:first50years, are groups of authors who have published together and not with any author in another component.
+There is only ever one node per author identifier.
+Most graphs produced from yearly data queries will have multiple components.
 As the data slice forming the graph gets larger the main fully connected component gets much larger than the rest of the components.
 %- I did some analysis on this for the whole dataset
 
 ![Network graph of the first 50 years of NSR data](images/First-50-Years-NSR-Authors.pdf){#fig:first50years}
 
 %- Large graphs
-The visualization of large graphs is computational intensive and produces complex images.
-At a certain size, these images are perhaps of questionable usefulness.
+The visualization of large graphs is computationally intensive and produces complex images.
+All the graphs produced in the web application are done so using a modified version of [Mike Bostock's Force Directed Graph example](http://bl.ocks.org/mbostock/4062045).
+
+%- Size
+Above a certain size, these images are of questionable usefulness.
 The resulting shape or 'layout' of a graph is dependent on the graph layout algorithm used.
 Figures @fig:nsr1989graphyifanhu and @fig:nsr1989graph use the exact same input data but two different layout algorithms (Yifan Hu ML and Atlas 2 respectively).
+The position of the nodes and edges in these figures are products of the layout algorithm used.
+The colour of the nodes is determined by Gephi's modularity function @gephiModularityAlgorithm.
+The modularity of a graph is a measure of structure.
+The graph is partitioned into communities where there are dense intra-community connections and sparse inter-community connections.
 
 ![Network Graph of 1989. Nodes are authors coloured by modularity, and edges are a common publication.](images/NSR-1989-biggest-modularity-degree-yifanhuML.pdf){#fig:nsr1989graphyifanhu}
 
 ![Network Graph of 1989. Nodes are authors coloured by modularity, and edges are a common publication.](images/smNSR-1989-biggest-modularity.png){#fig:nsr1989graph}
 
-%- D3 force graphs? citations, layout algorithm, what forces?
-The D3 graphs produced in the web application use the D3.js Force directed graph routines.
-
 ## Nuclide Graphs
 Almost any parameter can be used as a filter to produce an author network graph.
 The selector values present an interesting opportunity in this case.
 We can filter the NSR data to only include entries that involved a particular nuclide.
+Figure @li11graph shows an author node graph for all the NSR entries that have `LI11` as a selector value.
+All of the components have been kept in the visualization.
+
+```
+Include discussion on component size distributions.
+```
 
 ![Network graph of authors publishing on Lithium-11](images/lithium11-graph.pdf){#fig:li11graph}
 
 ## Implementation
 %- Citation
-The Python library Networkx is used to create the graph data structures, which can then be sent to our visualization code, or be exported for analysis with other tools.
+The Python library [Networkx](https://networkx.github.io) is used to create the graph data structures, which can then be sent to our visualization code, or be exported for analysis with other tools.
 Networkx has a collection of algorithms and functions used to analyze and manipulate the graphs.
 Such manipulations include identifying and sorting disconnected subgraphs within a slice of data.
-For example, figures @fig:nsr1989graphyifanhu and @fig:nsr1989graph are use only the largest connected graph of all the NSR entries in the year 1989.
+For example, figures @fig:nsr1989graphyifanhu and @fig:nsr1989graph use only the largest connected graph of all the NSR entries in the year 1989.
 There were !!! other smaller graphs disconnected from the largest graph in 1989.
 
 ## Future Work
-Treating the NSR database as a graph data structure opens up a lot of avenues for future work.
-With a graph with authors as nodes and their publications determining the edges, the result is a social network of collaborating scientists.
-This opens up the data to future work in other fields such the social sciences or large network analysis.
+Treating the NSR database as graph data opens up avenues for future work.
+A graph with authors as nodes and their publications determining the edges provides a social network of collaborating scientists.
+Thus the data is made available for future work in other fields such the social sciences or large network analysis.
+
+Another area of interest is in graph clustering, the results of which could be compared to those from the [Cluster Analysis](#cluster-analysis) section.
 
 ### Exporting Graph Data
 The Networkx library has support for writing the graph data structures to multiple file types.
-Example code for exporting the 1989 data to `gexf` format for analysis in Gephi or similar tools is available !!!.
+They are written to a JSON object before being served to the web application, for example.
+Additionally they can be written to `gexf`, `GML`, `GraphML` and [others](http://networkx.readthedocs.org/en/latest/reference/readwrite.html).
+These files can then be imported into other analysis applications like Gephi.
+Example code for exporting the 1989 data to `gexf` format is available at `include link!!!`.
 
 
 Author Name Analysis
