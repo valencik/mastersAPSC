@@ -5,6 +5,11 @@
 *.csv
 *.tsv
 *.json
+*.gz
+*.csl
+/documents/thesis/NSR-Thesis.*
+/documents/thesis/no_comments_thesis.md
+/documents/thesis/pandoc-filters
 
 # iPython Notebooks
 .ipynb_checkpoints/
