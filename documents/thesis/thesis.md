@@ -827,7 +827,7 @@ Note that this analysis likely falls short of addressing some copublishers with 
 %- ROBY If it's a variance or typo that shouldn't happen (because they are not publishing with themselves)
 
 
-Associating Mining
+Association Mining
 ==================
 
 ## Similar "Objects"
@@ -853,7 +853,9 @@ Finding similar authors separated in time could be interesting.
 %- TODO cite the arules package
 As a preliminary test with association rule learning, we prepare our data for use with the Apriori algorithm in the *arules* package in R.
 
-> TODO Work through an example and explain the algorithm.
+```
+TODO: Work through an example and explain the algorithm.
+```
 
 The Apriori algorithm returns list of association rules that have support and confidence values above the minimum amount specified.
 This list almost certainly contains duplicate information.
@@ -867,7 +869,7 @@ The resulting data is then handled by the R script *apriori-dedup.r*.
 The R script writes the output of the apriori algorithm to a file.
 Another python script, *parse-arules-output.py*, then parses the R apriori output to be in a more usable csv format.
 
-At this stage, there is a list association rules relating authors through their use of keywords.
+There is a list association rules relating authors through their use of keywords.
 Most of these rules likely involve authors that have published together.
 However, finding the rules with authors who have not published together would present interesting information.
 Specifically, a filter is created to return authors who have published using the same keyword in different papers, and have never authored a paper together.
