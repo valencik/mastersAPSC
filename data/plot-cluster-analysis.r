@@ -16,24 +16,51 @@ library("RColorBrewer")
 
 
 data = read.csv(file="author-cluster-input.tsv", sep='\t', header=TRUE, row.names=1)
+dataNoSingleAuthors = data[data$numEntries > 1,]
 
 
 # Plot heat maps
 rf = colorRampPalette(rev(brewer.pal(11,'Spectral')))
 r = rf(32)
-heatLayer = scale_fill_gradientn(colours=r, trans="log", breaks=c(1,10,100,1000,10000))
+heatLayer = scale_fill_gradientn(colours=r)
+logHeatLayer = scale_fill_gradientn(colours=r, trans="log", breaks=c(1,10,100,1000,10000))
 
 nyne = ggplot(data, aes(numYears,numEntries))
 png("images/nyne-heatmap.png", width=800, height=800)
-nyne + stat_bin2d(binwidth=c(1,10)) +  heatLayer
+nyne + stat_bin2d(binwidth=c(1,1)) + heatLayer
+png("images/nyne-log-heatmap.png", width=800, height=800)
+nyne + stat_bin2d(binwidth=c(1,10)) + logHeatLayer
 
 nync = ggplot(data, aes(numYears,numCoauthors))
 png("images/nync-heatmap.png", width=800, height=800)
-nync + stat_bin2d(binwidth=c(1,10)) +  heatLayer
+nync + stat_bin2d(binwidth=c(1,1)) + heatLayer
+png("images/nync-log-heatmap.png", width=800, height=800)
+nync + stat_bin2d(binwidth=c(1,10)) + logHeatLayer
 
 nenc = ggplot(data, aes(numEntries,numCoauthors))
 png("images/nenc-heatmap.png", width=800, height=800)
-nenc + stat_bin2d(binwidth=c(10,10)) + heatLayer
+nenc + stat_bin2d(binwidth=c(1,1)) + heatLayer
+png("images/nenc-log-heatmap.png", width=800, height=800)
+nenc + stat_bin2d(binwidth=c(10,10)) + logHeatLayer
+
+# Plot heat maps without single publication authors
+nyne = ggplot(dataNoSingleAuthors, aes(numYears,numEntries))
+png("images/nyne-no-single-authors-heatmap.png", width=800, height=800)
+nyne + stat_bin2d(binwidth=c(1,1)) + heatLayer
+png("images/nyne-log-no-single-authors-heatmap.png", width=800, height=800)
+nyne + stat_bin2d(binwidth=c(1,10)) + logHeatLayer
+
+nync = ggplot(dataNoSingleAuthors, aes(numYears,numCoauthors))
+png("images/nync-no-single-authors-heatmap.png", width=800, height=800)
+nync + stat_bin2d(binwidth=c(1,1)) + heatLayer
+png("images/nync-log-no-single-authors-heatmap.png", width=800, height=800)
+nync + stat_bin2d(binwidth=c(1,10)) + logHeatLayer
+
+nenc = ggplot(dataNoSingleAuthors, aes(numEntries,numCoauthors))
+png("images/nenc-no-single-authors-heatmap.png", width=800, height=800)
+nenc + stat_bin2d(binwidth=c(1,1)) + heatLayer
+png("images/nenc-log-no-single-authors-heatmap.png", width=800, height=800)
+nenc + stat_bin2d(binwidth=c(10,10)) + logHeatLayer
 
 
 # Plot Cluster Images
