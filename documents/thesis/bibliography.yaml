@@ -101,4 +101,16 @@ references:
   page: '8'
   volume: '10'
   DOI: 10.1088/1742-5468/2008/10/P10008
+
+- id: huang2008similarity
+  type: paper-conference
+  author:
+  - family: Huang
+    given: Anna
+  issued:
+  - year: '2008'
+  title: Similarity measures for text document clustering
+  container-title: Proceedings of the sixth new zealand computer science research
+    student conference (nZCSRSC2008), christchurch, new zealand
+  page: '49-56'
 ...
