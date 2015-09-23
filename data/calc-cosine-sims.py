@@ -1,7 +1,6 @@
 import pymongo
 import sys
-import statistics
-import math
+import csv
 import functools
 from collections import defaultdict
 from gensim import corpora, models, similarities
@@ -28,7 +27,7 @@ db = client['masters']
 
 # Get the selectors for all papers
 selectors_pipeline = [
-        {"$match": {"selectors": {"$exists": True}, "year": {"$gt": 1985}}},
+        {"$match": {"selectors": {"$exists": True}}},
         {"$project": {"_id":1, "selectors":1}}
 ]
 results = db.NSR.aggregate(selectors_pipeline, allowDiskUse=True)
@@ -62,12 +61,19 @@ corpora.MmCorpus.serialize('selector-sparse-vectors.mm', sparse_vectors) # store
 
 # Initialize a transform
 tfidf = models.TfidfModel(sparse_vectors)
-index = similarities.Similarity('./', sparse_vectors, num_features=23704)
-index.num_best = 8
+index = similarities.Similarity('./', sparse_vectors, num_features=len(frequency))
+index.num_best = 20
 
-sims = index[tfidf[dictionary.doc2bow(corpus[3])]]
-print(keynum_list[3] + "  " + str(corpus[3]) + " <-- query")
-for i,x in iter(sims):
-    print(keynum_list[i] + "  " + str(corpus[i]) + " " + str(x))
+#with open('similar-papers-cosine-selectors.tsv', 'w', newline='') as tsvfile:
+#    print("Writing similar papers data to file...")
+#    sim_writer = csv.writer(tsvfile, delimiter='\t')
+#    for i,paper in enumerate(corpus):
+#        sims = index[tfidf[dictionary.doc2bow(corpus[i])]]
+#        sim_list = [keynum_list[hisim[0]] for hisim in sims if hisim[1] > 0.65]
+#        sim_list.insert(0, keynum_list[i])
+#        sim_writer.writerow(sim_list)
 
-#db.authorSummary.update_one({"_id": author},{"$set": {"cluster": cluster_membership}})
+for i,paper in enumerate(corpus):
+    sims = index[tfidf[dictionary.doc2bow(corpus[i])]]
+    sim_list = [{"paper": keynum_list[hisim[0]], "score": hisim[1]} for hisim in sims if hisim[1] > 0.65 and hisim[0] != i]
+    db.simNSR.update_one({"_id": keynum_list[i]},{"$set": {"simPapers": sim_list}})
