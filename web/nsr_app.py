@@ -119,7 +119,7 @@ def authorgraph(pipeline, options):
     G.add_nodes_from(nodes)
     graphs = list(nx.connected_component_subgraphs(G))
     graphs.sort(key = lambda x: -x.number_of_edges())
-    if 'topnetwork' in options:
+    if 'topnetwork' in options and int(options['topnetwork']) != 0:
         top_num = int(options['topnetwork'])
         data = json_graph.node_link_data(graphs[top_num-1])
     else:
