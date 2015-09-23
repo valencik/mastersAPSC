@@ -98,7 +98,7 @@ def authornetwork(year_id):
 def searchnetwork():
     searchnetwork_params = request.args
     if 'nuclide' in searchnetwork_params:
-        search_nuclide = searchnetwork_params['nuclide']
+        search_nuclide = searchnetwork_params['nuclide'].upper()
         searchnetwork_pipeline = [
             {"$match": {"selectors.type":"N", "selectors.value":search_nuclide}}
         ]
