@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+<div class="resume">
+    <header class="page-header">
+    <h1 class="page-title">{{ author }}</h1>
+    </header>
+<div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-offset-1 col-md-10 col-lg-offset-2 col-lg-8">
+    <div class="panel panel-default">
+
+      <div class="bs-callout bs-callout-danger">
+        <h3>Recommended Papers (cosine simularity to selectors)</h3>
+        <ul class="list-group">
+        {% for doc in docs %}
+          <a class="list-group-item" 
+          {% if doc.DOI %}
+            href="http://dx.doi.org/{{ doc.DOI }}">
+          {% else %}
+            > <!-- no DOI available -->
+          {% endif %}
+            <h4>Score: {{ doc.score }}</h4>
+            <p class="list-group-item-text">
+              <b>{{ doc.year }} -  </b>
+              <i>{{ doc.title }}</i> </br>
+              {{ doc.author_headline }}
+            </p>
+          </a>
+        {% endfor %}
+        </ul>
+      </div>
+
+    </div> <!--End of main panel content-- >
+
+  </div>
+</div>
+    
+</div>
+
+</div>
+{% endblock %}

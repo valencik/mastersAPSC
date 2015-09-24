@@ -63,6 +63,48 @@ def author_report(author_id):
         cluster=cluster_id
     )
 
+# Page: Recommended papers based on cosine score
+@app.route('/recpapers/<author_id>')
+def paper_recommend(author_id):
+    recpapers_pipeline = [
+        {"$match": {"authors": author_id}},
+        {"$unwind": "$simPapers"},
+        {"$group": {"_id": "$simPapers.paper", "score": {"$sum": "$simPapers.score"}}},
+        {"$sort": {"score": -1}}
+    ]
+    recommended_papers = db.simNSR.aggregate(recpapers_pipeline)
+
+    # save the score for each recommended paper
+    scores = dict()
+    for paper in recommended_papers:
+        scores[paper['_id']] = paper['score']
+
+    # get the full documents for each paper
+    results = nsr.find({"_id": {"$in": [x for x in scores.keys()]}})
+
+    # build up the docs list to render
+    docs = []
+    for document in results:
+        score = scores[document['_id']]
+        if score < 1.0: continue
+        if 'authors' in document:
+            if author_id in document['authors']: continue
+            headline = str(document['authors'])[1:-1].replace("'", "")
+            if len(headline) > 90: headline = headline[0:90] + "..."
+        document['author_headline'] = headline
+        document['score'] = "{:6.4f}".format(score)
+        docs.append(document)
+
+    # sort the docs by score
+    docs.sort(key=lambda x: x['score'], reverse=True)
+
+    return render_template('recommendedPapersForAuthor.html',
+        author=author_id,
+        author_num="???",
+        paper_num=len(docs),
+        docs=docs
+    )
+
 # API: topauthors
 # returns an array of authors in given year sorted by publication number
 @app.route('/api/topauthors/<int:year_id>')
