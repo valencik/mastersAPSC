@@ -685,8 +685,72 @@ These files can then be imported into other analysis applications like Gephi.
 Example code for exporting the 1989 data to `gexf` format is available at `include link!!!`.
 
 
-Author Name Analysis
-====================
+
+Text Mining
+===========
+
+Text mining is an area of analysis that focuses on extracting useful information from unstructured plain text data.
+The data to analyze is often natural language text written by humans.
+Examples of such data include user reviews of a product or service, customer feedback comments, emails, forum posts, or even academic journal articles.
+
+A simple goal of text mining could be to summarize the input text.
+However, this can be abstracted further to 'numericizing' text data for use in an analysis model.
+
+Sentiment analysis is the extraction of subjective information, like opinions, from text data.
+This can be accomplished by parsing natural language and quantifying the affectivity of keywords.
+
+## Cosine Similarity
+%- https://stackoverflow.com/questions/15173225/how-to-calculate-cosine-similarity-given-2-sentence-strings-python
+The K-means discussion above mentioned a few types of distance metrics for use in clustering.
+When dealing with text we often use the cosine similarity of two documents to compute their 'distance.
+We build a term vector for each document to be analyzed, this is a vector describing the amount of occurrences each word has in the document
+Say document one, $d1$, is "The quick brown fox jumped over the lazy dog" and document two, $d2$, is "The brown dog jumped over the brown fox".
+We create a term vector for each document, as seen in table @tbl:termtable.
+Often in doing this, very common words like 'the' are omitted.
+Equations @eq:d1termvector and @eq:d2termvector are the term vectors for each document.
+The cosine similarity is the dot product of the two documents divided by the product of their magnitudes @eq:cosinesimilarity. @huang2008similarity
+
+vector    quick   brown   fox   jumped   over   lazy   dog
+------    -----   -----   ---   ------   ----   ----   ---
+d1        1       1       1     1        1      1      1
+d2        0       2       1     1        1      0      1
+
+Table: Term vectors for $d1$ and $d2$. {#tbl:termtable}
+
+$$
+d1 = \left< 1, 1, 1, 1, 1, 1, 1 \right>
+$$ {#eq:d1termvector}
+
+$$
+d2 = \left< 0, 2, 1, 1, 1, 0, 1 \right>
+$$ {#eq:d2termvector}
+
+$$
+\cos (d1,d1) = \frac{d1 \cdot d2 }{\left| d1 \right| \left| d2 \right|}
+$$ {#eq:cosinesimilarity}
+
+$$
+ d1 \cdot d2 = (1)(0) + (1)(2) + (1)(1) + (1)(1) + (1)(1) + (1)(0) + (1)(1) = 6.0
+$$ {#eq:cosinesimilarity1}
+
+$$
+ \left| d1 \right| = \left( (1)^2 + (1)^2 + (1)^2 + (1)^2 + (1)^2 + (1)^2 + (1)^2 \right) ^{\frac{1}{2}} =  2.645751311
+$$ {#eq:cosinesimilarity2}
+
+$$
+ \left| d2 \right| = \left( (0)^2 + (2)^2 + (1)^2 + (1)^2 + (1)^2 + (0)^2 + (1)^2 \right) ^{\frac{1}{2}} =  2.828427125
+$$ {#eq:cosinesimilarity3}
+
+$$
+\cos (d1,d2) = \frac{d1 \cdot d2 }{\left| d1 \right| \left| d2 \right|} = \frac{6.0}{\left| 2.645751311 \right| \left| 2.828427125 \right|} = 0.8017837257
+$$ {#eq:cosinesimilarityF}
+
+As equation @eq:cosinesimilarityF shows, the two documents are quite similar, and thus have a high cosine similarity.
+When $d1 = d2$ the similarity is 1.0.
+This technique is a simple way of numercizing text for further mathematical manipulation and treatment.
+
+
+## Author Name Analysis
 
 The NSR database, before and after the data preparation in this work, contains mistakes, typos, and minor errors.
 In this section, we describe the analysis which identifies and mitigates these issues.
