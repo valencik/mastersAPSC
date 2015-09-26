@@ -749,6 +749,39 @@ As equation @eq:cosinesimilarityF shows, the two documents are quite similar, an
 When $d1 = d2$ the similarity is 1.0.
 This technique is a simple way of numercizing text for further mathematical manipulation and treatment.
 
+### Cosine Similarity of NSR Selectors
+A script was prepared to perform cosine similarity analysis on the NSR selectors.
+The code is available at `calc-cosine-sims.py`.
+For each NSR entry we form a vector from the entry's selectors.
+These vectors are used to form a corpus that calculates the frequency of each term in the vectors.
+A few highly frequent selectors are filtered out.
+```
+selector OTHER
+```
+These selectors are similar to stop words, they occur frequently and do now tell us much about the particular NSR entry.
+The vectors are formed by taking the selectors and turning them into strings.
+We drop the `subkey` value for this analysis as we are not particularly concerned about the ordering of the of the selectors, just that they did happen in a given paper.
+The fact that cosine similarity does not take into account the ordering of words is a limitation that negatively impacts its performance on real world text documents. !!! citation !!!!
+This does not affect out analysis has we are not analyzing natural language but rather constructing our "words" out of a list of items that act like keywords.
+
+We use the python package `gensim` to handle the vector creation and similarity analysis.
+
+We run the similarity function...
+```
+ expand on what techniques and algorithms this is actually using
+```
+
+The result is a list of paper `_id`'s that are similar to the input paper.
+These results are written to the database in a new field `simPapers`.
+%- Should it be the same database? Does this affect the data representation section?
+The `simPapers` is actually an array of objects, similar to the `selectors` field.
+Each object contains two items, the `_id` of the paper, and the computed score from `gensim`.
+
+```
+show an example
+```
+
+The usage of these similarity scores is shown in the [Application Section](#the-application).
 
 ## Author Name Analysis
 
@@ -876,6 +909,32 @@ This has the effect of removing collaborations from the author list.
 This may or may not be desired for some analyses.
 In attempting to find authors multiply represented in the database, this filtering is unlikely to have significant impact.
 Identifiers representing collaborations are often long and have small string distances to one another as they informative part of their name is typically an acronym.
+
+### The Application
+
+The cosine similarity results are presented in the results via a paper recommendation engine.
+The user of the application can search and for an author and see papers that are similar to the papers the author has coauthored.
+
+%- TODO: JS or Python?
+The user's input is first matched against possibly multiple identifiers, making use of the results from the [Author Name Analysis](#author-name-analysis) section.
+%- Mongo
+The database query must be done in two stages.
+We first need to get all of the similar paper `_id`s for the inputted authors papers, and then we need to actually fetch the database documents for those paper `_id`s.
+This cannot be done in one step as we do not know the paper `_id`s to fetch until we grab all of the authors papers, and once we have the authors papers we need to get papers that the other has not written. (this sentence sucks)
+Then a database aggregation query is constructed to fetch all of the papers associated with the resulting identifiers.
+The database unwinds the `simPapers.paper` field and then groups on it.
+At this stage we have a document for each paper that was considered similar to the authors papers.
+
+%- Python code
+We then prepare the render object to be sent to the html template to show the user.
+The end user then sees a web page with the search author in prominent text followed by a list of papers that have a cosine similarity to at least one of their own papers greater than 0.65.
+```
+I have not written about the scoring function
+```
+
+```
+insert image of the application interface
+```
 
 ### Further Analysis
 %- Clustering? no. Graph analysis.
