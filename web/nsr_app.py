@@ -28,7 +28,7 @@ app.after_request(add_cors_headers)
 # Root site route
 @app.route('/')
 def hello_world():
-    return render_template('summary-homepage.html', header='NSR Data Visuals')
+    return render_template('index.html', header='NSR Data Visuals')
 
 # Route for find_one(year)
 @app.route('/api/year/<int:year_id>')
@@ -123,13 +123,26 @@ def topauthors(year_id):
     results = jsonify(nsr.aggregate(topauthors_pipeline))
     return results
 
+# API: yearnetwork
+# returns a network of authors
+@app.route('/api/yearnetwork/<int:year_id>')
+def yearnetwork(year_id):
+    yearnetwork_params = request.args
+    yearnetwork_pipeline = [
+        {"$match": {"year": year_id}}
+    ]
+    data = yeargraph(yearnetwork_pipeline, yearnetwork_params)
+    return jsonify(data)
+
 # API: authornetwork
 # returns a network of authors
-@app.route('/api/authornetwork/<int:year_id>')
-def authornetwork(year_id):
+@app.route('/api/authornetwork')
+def authornetwork():
     authornetwork_params = request.args
+    author_id = authornetwork_params['author']
+    print(author_id)
     authornetwork_pipeline = [
-        {"$match": {"year": year_id}}
+        {"$match": {"authors": author_id}}
     ]
     data = authorgraph(authornetwork_pipeline, authornetwork_params)
     return jsonify(data)

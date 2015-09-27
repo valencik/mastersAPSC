@@ -34,7 +34,7 @@ function omniSearch(ev){
             var reYearArray = /(?:^(\d{4})-(\d{4})$)|(?:^(\d{4}))/.exec(commandParam);
             if (reYearArray){
                 if(reYearArray[3]){
-                    d3.xhr("/api/authornetwork/"+parseInt(reYearArray[3])+"?topnetwork="+options.topnetwork)
+                    d3.xhr("/api/yearnetwork/"+parseInt(reYearArray[3])+"?topnetwork="+options.topnetwork)
                     .get(function(error, data){
                         graphData = JSON.parse(data.response)
                         forceDirectedGraph(null, graphData.nodes, graphData.links, options);
@@ -43,6 +43,12 @@ function omniSearch(ev){
                 if(reYearArray[1] && reYearArray[2]){
                     console.log("Ranges not yet supported");
                 }
+            } else {
+                d3.xhr("/api/authornetwork?author="+commandParam+"&topnetwork="+options.topnetwork)
+                .get(function(error, data){
+                    graphData = JSON.parse(data.response)
+                    forceDirectedGraph(null, graphData.nodes, graphData.links, options);
+                })
             }
             break;
 
