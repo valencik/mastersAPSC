@@ -956,62 +956,147 @@ Note that this analysis likely falls short of addressing some copublishers with 
 %- ROBY If it's a variance or typo that shouldn't happen (because they are not publishing with themselves)
 
 
-Association Mining
-==================
+Data Mining
+===========
 
-## Similar "Objects"
-%- TODO Determine which parts of the following discussion should be in algorithmic development
 %- ROBY very nice introduction!
-The ultimate goal of the Similar Objects feature is to provide a flexible recommender system that supports recommending different types of objects within the database.
+The ultimate goal of the analysis in this section is to enable a flexible recommender system that supports recommending different types of objects within the database.
 An obvious use case of this feature is to find similar authors to those the user is currently inspecting or searching.
-However the system should be extendible to also recommend similar keywords or periods in time, for example.
+%- However the system should be extendible to also recommend similar keywords or periods in time, for example.
 Implementing this feature requires a significant amount of offline data mining and analysis.
 Once the analysis is done, the runtime of the application need only do quick lookups in tables to find the desired results.
-
-With this in mind, the high level summary of this analysis stage is to build data object classifiers and labels and then enable the user interface to search and display those labels.
+With this in mind, the high level summary of this analysis stage is to build data labels and relationships and then enable the user interface to search and display the results.
 
 There are a number of metrics used in producing the data object labels.
 Similar authors could be authors who publish together, or authors who do not publish together but publish with similar keywords.
 The latter is likely more interesting to users, as it could suggest similar authors they are unaware of.
 
-As the NSR database spans several decades, each data object presents time series information.
-Finding similar authors separated in time could be interesting.
 
 ### Association Mining with Apriori
-%- They are really just describing which selector values appear often together in the same paper, and that is not particularly illuminating domain knowledge.
-%- TODO cite the arules package
-As a preliminary test with association rule learning, we prepare our data for use with the Apriori algorithm in the *arules* package in R.
+%- Intro to association mining
+Frequent pattern mining is an important part of data mining and knowledge discovery. @DBLP:books/crc/aggarwal2014
+The common application of rule learning is the market basket analysis.
+A history of customer transactions at a supermarket is analyzed to find groups of items that are frequently purchased together.
+Association rules are similar to if-then constructs.
+A rule written {R (N,G),T 238U} => {N 239U} with support $0.00129$ and confidence $0.9308$ tells us that the selectors `R (N,G)`, `T 238U`, and `N 239U` appear together in $0.129\%$ of the data.
+The confidence is a measure of reliability in the rule.
+In the above example $93.08\%$ of the time that `R (N,G)` and  `T 238U` appear, `N 239U` also appears.
+Formally the support is defined in Equation @ap-support, as is confidence in Equation @apriori-confidence.
 
-```
-TODO: Work through an example and explain the algorithm.
-```
+%- Apriori algorithm
+$$
+\mbox{support} = \frac{\mbox{count} \left( X \cup  Y \right)}{n}
+$$ {#eq:ap-support}
 
-The Apriori algorithm returns list of association rules that have support and confidence values above the minimum amount specified.
-This list almost certainly contains duplicate information.
-Sometimes of the form A->B and B->A
-In the case of nuclides found in selector values, we often see multiple rules involving different permutations of a list of common isotopes.
+$$
+\mbox{confidence} = \frac{\mbox{count} \left( X \cup  Y \right)}{\mbox{count} \left( X \right)}
+$$ {#eq:ap-confidence}
 
-%- Program workflow
-It is pretty easily to flatten our data as needed using the MongoDB aggregation framework.
-A python script *prepare-data.py* has been developed to prepare the data for analysis.
-The resulting data is then handled by the R script *apriori-dedup.r*.
-The R script writes the output of the apriori algorithm to a file.
-Another python script, *parse-arules-output.py*, then parses the R apriori output to be in a more usable csv format.
+%- apriori-dedup.r
+Our analysus will make use of the apriori algorithm implementation in the [`arules`](https://cran.r-project.org/web/packages/arules/index.html)@arules-manual @arules-article package in R.
+The `prepare-data.py` program generates three transaction lists for analysis in R.
+The R script `apriori-dedup.r` takes an input file, output file, minimum support, and minimum confidence as command line arguments.
+The arules package provides facilities in helping prune duplicate rules, and rules that are subsets of other rules.
+However, in analyses that produce many thousands of rules this pruning is too expensive and thus not used.
 
-There is a list association rules relating authors through their use of keywords.
-Most of these rules likely involve authors that have published together.
-However, finding the rules with authors who have not published together would present interesting information.
-Specifically, a filter is created to return authors who have published using the same keyword in different papers, and have never authored a paper together.
+%- papers -> authors
+%- To the physicists reading this section, the results will appear obvious.
+Our first analysis will use each NSR entry as a transaction, and the itemset will be the list of authors for that NSR entry.
+The resulting rules will be made up of authors who frequently publish together.
+Since Apriori finds frequent item sets, this analysis will favour authors with many publications in the NSR (and thus appear frequently).
+If we specify a minimum support of $0.0008$, apriori yields 344 association rules involving 104 unique author identifiers.
+Table @tbl:apriori1 shows a sample of the resulting rules.
 
+rules                                                            support     confidence   lift
+-----                                                            -------     ----------   ----
+{F.Scarlassara,L.Corradi} => {G.Montagnoli}                      0.0008287   0.9813       1022.4
+{A.M.Stefanini,L.Corradi} => {G.Montagnoli}                      0.0008129   0.9687       1009.2
+{A.M.Stefanini,F.Scarlassara} => {G.Montagnoli}                  0.0008077   0.9625       1002.7
+{A.M.Stefanini,F.Scarlassara} => {L.Corradi}                     0.0008025   0.9562       974.9
+{H.Iwasaki,H.Sakurai,S.Shimoura,S.Takeuchi} => {T.Minemura}      0.0008287   0.9461       949.3
+{G.G.Adamian} => {N.V.Antonenko}                                 0.0008182   0.9397       942.9
+{H.Iwasaki,S.Shimoura,S.Takeuchi} => {T.Minemura}                0.0008497   0.9257       928.9
+{H.Iwasaki,H.Sakurai,S.Shimoura,T.Motobayashi} => {T.Minemura}   0.0008444   0.9252       928.4
+{H.Iwasaki,S.Shimoura,T.Motobayashi} => {T.Minemura}             0.0008706   0.9071       910.2
+{L.Corradi} => {G.Montagnoli}                                    0.0008549   0.8716       908.1
+
+Table: Frequent itemset rules for authors of papers. {#tbl:apriori1}
+
+%- low support
+All of the 11 unique authors in Table @tbl:apriori1 have published more than 165 times.
+There are only 608 authors who have greater than 165 publications in the database.
+In order to have rules involving more authors[^more-authors] we need to lower the minimum support.
+The minimum support to see a given author in a rule is dependent on their publication count.
+If an author has published 65 times we need to have a support less than $65/212835$ to include any rule that involves them.
+The author would still need to have a rule that satisfied out confidence constraint as well.
+
+[^more-authors]: Recall we have on the order of 100,000 authors in the database.
+
+%- Extended p-a run
+On an extended run with a low support of 0.00029 the Apriori algorithm produces 2.2 million rules.
+With this many rules we can no longer prune duplicates in R as the memory requirements are enormous.
+However we can still perform some simple analysis like counting unique authors.
+With a support value of 0.00029 the analysis of author lists from NSR entries produces 2211797 rules involving 859 unique author identifiers.
+%- Running the apriori algorithm on author lists from papers is of little utility.
+%- The rules involving only two authors reveal author pairs where the (Roby - Svenson)
+
+%- papers -> selectors
+Apriori with each paper as a transaction, and selectors as items should produce lists of selectors that frequently occur together in papers.
+This tends to produce association rules that look like a list of isotopes involved in nuclear reactions.
+The first four rules in Table @tbl:apriori2 can be read off as nuclear reactions.
+$^{290}\mbox{Lv}$ undergoes alpha decay and produces the daughter nucleus $^{286}\mbox{Fl}$, along with an alpha particle but this is not recorded in the NSR selectors.
+With a support value of 0.00029 the analysis of selectors from their NSR entry lists produces 3479553 rules involving 1202 unique selectors.
+
+rules                              support     confidence   lift
+-----                              -------     ----------   ----
+{P 290LV,S A-DECAY} => {G 286FL}   0.000298    1.0000       3346.7
+{P 289FL,S A-DECAY} => {G 285CN}   0.000310    1.0000       3225.0
+{P 29418,S A-DECAY} => {G 290LV}   0.000310    1.0000       3225.0
+{P 286FL,S A-DECAY} => {G 282CN}   0.000310    1.0000       3225.0
+{G 285CN} => {P 289FL}             0.000310    1.0000       3167.4
+{P 289FL} => {G 285CN}             0.000310    0.9821       3167.4
+{G 286FL} => {P 290LV}             0.000298    1.0000       3167.4
+{G 285CN,S A-DECAY} => {P 289FL}   0.000310    1.0000       3167.4
+{G 286FL,S A-DECAY} => {P 290LV}   0.000298    1.0000       3167.4
+{P 290LV} => {G 286FL}             0.000298    0.9464       3167.4
+
+Table: Frequent itemset rules for selectors in  papers. {#tbl:apriori2}
+
+%- selectors -> authors
+Our final analysis with apriori uses each selector as a transaction and the list of authors who have published with that selector as the itemset.
+There is a chance that some of these rules involve authors who have not published together.
+This information would be useful, however the analysis to find such a rule has not been completed.
+With a support value of 0.0042 the analysis of author lists for each selector produces 3832412 rules involving 774 unique author identifiers.
+
+%- TODO tie back to motivation? (similar objects)
+
+%- TODO nuclide graph tie in....
+If we want to find authors who have not published together but do publish on similar keywords, this analysis is not optimal.
+A more efficient approach would leverage the graph data in Section [Nuclide Graphs](#nuclide-graphs).
+The selector rules found above could be used to enlarge the search query for a graph.
+So instead of searching for just `290LV` we could enlarge the search by also including papers with `286FL`.
+Alternatively we could reduce the search results by including only papers with both `290LV` and `286FL`.
 %- I could make a list of the total coauthors for any given author.
 %- Then I could cheaply lookup an author in an association rule (perhaps the rhs author) and see if i find the other authors in the rule.
-%- Pawan has suggested another method: taking the difference of two sets of rules.
-%- One produced using any initial criteria as long as the rules are associations of authors, and the second rules produced from coauthorship data.
-%- Testing both methods could be interesting and should not be terribly difficult.
+%- If we consider the p -> s results as groups of selectors that frequently appear together, can we then take a -> s results and ...do something.
 
 
-Cluster Analysis
-================
+rules                                                           support     confidence   lift
+-----                                                           -------     ----------   ----
+{B.Kindler} => {B.Lommel}                                       0.008280    0.9733       110.0
+{W.G.Lynch} => {M.B.Tsang}                                      0.008723    0.9236       100.7
+{V.I.Chepigin} => {A.P.Kabachenko}                              0.008846    0.9148       96.7
+{E.Fioretto,L.Corradi} => {S.Szilner}                           0.008043    0.9536       93.6
+{A.Gadea,A.M.Stefanini,G.Montagnoli} => {S.Szilner}             0.008012    0.9487       93.1
+{A.Gadea,F.Scarlassara,G.Montagnoli,L.Corradi} => {S.Szilner}   0.008115    0.9459       92.8
+{A.Gadea,F.Scarlassara,G.Montagnoli} => {S.Szilner}             0.008125    0.9437       92.6
+{A.Gadea,G.Montagnoli,L.Corradi} => {S.Szilner}                 0.008115    0.9425       92.5
+{F.Scarlassara,L.Corradi,S.Szilner} => {G.Montagnoli}           0.008517    1.0000       92.4
+{A.M.Stefanini,L.Corradi,S.Szilner} => {G.Montagnoli}           0.008403    1.0000       92.4
+
+Table: Frequent itemset rules for selectors in  papers. {#tbl:apriori3}
+
+## Cluster Analysis
 %- Introduce and discuss the algorithms used in application features
 %- Cluster analysis in research proposal is still useful.
 %- Starting with some of the naive algorithms, and then going to graph theory.
@@ -1022,7 +1107,6 @@ This chapter does not yet discuss cluster labels.
 Or using the cluster results in the application.
 ```
 
-## Classification and Cluster Analysis
 Classification and clustering are related approaches to organizing data elements into groups for further analysis.
 Classification is the process of deciding what group a particular datum should most optimally belong to.
 Clustering is the grouping of multiple data points such that those belonging to a group are more similar in some manner than those outside of that group.
@@ -1148,6 +1232,17 @@ This result means that filtering out low publication authors in additional analy
 ```
 insert the results from limited author clustering
 ```
+
+## Future Work
+
+As the NSR database spans several decades, each data object presents time series information.
+Finding similar authors separated in time could be interesting.
+
+The results from the association rule learning could be used to develop a classification system.
+As authors input the keywords for their paper the system could try to match the user's input with association rules.
+This would require relating the association rules to the desired classification rules.
+Alternatively, the NSR entries could be classified manually and then we could rerun apriori to learn rules that directly link to the classification label.
+
 
 Conclusions
 ===========
