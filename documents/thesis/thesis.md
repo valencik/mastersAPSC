@@ -1136,12 +1136,9 @@ Euclidean distance is typically used, leading to ball or sphere shaped clusters.
 The chosen number of clusters has a huge impact on the data partitions.
 Some heuristics exist to aid in determining an optimal $k$. @tibshirani2001estimating
 In practice, K-means is normally run multiple times with varying $k$ values and the optimum is selected by a domain expert.
-However, measurements of cluster effectiveness will be shown.
 
-%- TODO DB index, G1 index
-```
-Include the work I did with DB index and evaluating the cluster results.
-```
+However, their exist methods to measure the effectiveness of a clustering configuration.
+%- TODO The Davies–Bouldin index and the G1 index
 
 ## Initial Author Clustering
 %- Cluster with author, numCoauthors, numEntries, numYears first
@@ -1174,22 +1171,68 @@ This is a result of the input data being continuous in nature.
 Clustering categorical data could lead to more discrete or separated clusters.
 Nevertheless, the cluster results of this data could be used to aid in classifying authors.
 
-The same data points from figures @fig:nyne-linear, @fig:nync-linear, and @fig:nenc-linear are shown in the subplots of figure @fig:kmeans-authors1.
-The color of each data point in figure @fig:kmeans-authors1 represent which cluster that author belongs to.
-This cluster membership was determined through the K-means algorithm set to find 5 centers (see [K-means Clustering](#k-means-clustering)).
+The Davies-Bouldin index and G1 index have been calculated for all K-means clustering schemes from 2 centers to 16.
+The results are plotted in Figure @fig:cluster-dbi for Davies-Bouldin index and Figure @fig:cluster-g1 for the G1 index.
+The Davies-Bouldin index monotonically increases from 2 clusters to 9 clusters.
+This suggests that we should prefer a lower number of clusters when possible, but that there is no single configuration that is significantly better than another (in the range from 2 through 9).
+The G1 index results suggest that 7 clusters is optimal for this data, with 6 and 5 clusters being second and third best fits respectively.
 
-![Initial clustering on authors with Kmeans](../../data/images/5clusters-kmeans-authors1.png){#fig:kmeans-authors1}
+![Davies-Bouldin index for number of clusters](../../data/images/first-dbi-clusters.png){#fig:cluster-dbi}
 
-%- Get citation!
-Determining the ideal number of clusters is a difficult problem. `include citations!!!`
-Figure @fig:kmeans-authors1 uses 5 clusters and demonstrates again that the data is continuous.
+![G1 index for number of clusters](../../data/images/first-g1-clusters.png){#fig:cluster-g1}
+
+The two cluster evaluation metrics used leave us we a range of choices.
+If we consider the G1 results to suggest we pick from 5, 6, or 7 clusters, then the Davies-Bouldin index results would suggest we pick to lowest, 5 clusters.
+Table @tbl:first-5clusters shows the data point values for the 5 different cluster centroids.
+Table @tbl:first-6clusters and Table @tbl:first-7clusters show the centroid information for the 6 and 7 cluster scheme.
+In all cases we can see `numCoauthors`, `numYears`, and `numEntries` monotically increase as the size of the cluster decreases.
+
+Figure @fig:kmeans-first5 shows the `numCoauthors`, `numYears`, and `numEntries` data coloured according to their cluster membership in the 5 cluster scheme.
+This figure again demonstrates that the data is continuous and well separated clusters do not exist.
 As a result the clusters function as segmentations along a continuous spectrum.
 As the number of clusters increases, the size of the segmentations decrease.
 %- Clustering segmentation is all happening on one axis up to a certain point.
 %- Eventually the segmentations partition the data with respect to other variables.
 
+
+| numCoauthors     | numYears         | numEntries       | size  |
+|------------------|------------------|------------------|-------|
+| 11.4876483917048 | 2.55445544554455 | 3.60072163932811 | 81204 |
+| 79.4678688037993 | 8.61924903532205 | 18.0874146631048 | 13476 |
+| 205.222624902925 | 17.7325912503236 | 52.5293813098628 | 3863  |
+| 414.608223429015 | 25.9177657098526 | 119.608999224205 | 1289  |
+| 801.04126984127  | 31.7365079365079 | 277.911111111111 | 315   |
+
+Table: Centroid data points for 5 cluster K-Means on initial data {#tbl:first-5clusters}
+
+| numCoauthors     | numYears         | numEntries       | size  |
+|------------------|------------------|------------------|-------|
+| 9.96414115204982 | 2.37631032693306 | 3.24300726517903 | 77080 |
+| 60.8403847447367 | 7.28499361000874 | 14.1641891437412 | 14867 |
+| 146.008180755746 | 13.5820023373588 | 34.6965329178029 | 5134  |
+| 284.6278850683   | 22.2030146019783 | 78.4950541686293 | 2123  |
+| 509.374491180461 | 27.9728629579376 | 149.461329715061 | 737   |
+| 880.849514563107 | 31.7281553398058 | 316.980582524272 | 206   |
+
+Table: Centroid data points for 6 cluster K-Means on initial data {#tbl:first-6clusters}
+
+| numCoauthors     | numYears         | numEntries       | size  |
+|------------------|------------------|------------------|-------|
+| 8.74102071614762 | 2.19689943750857 | 2.89733845520648 | 72890 |
+| 47.5835029921648 | 6.59732247516812 | 12.1323338885804 | 16209 |
+| 113.874277896017 | 10.6775615688659 | 24.8566433566434 | 6578  |
+| 218.386715867159 | 18.8660516605166 | 57.1645756457565 | 2710  |
+| 370.992424242424 | 25.1599326599327 | 106.705387205387 | 1188  |
+| 615.65096359743  | 29.2997858672377 | 186.638115631692 | 467   |
+| 1006.95238095238 | 33.2             | 386.561904761905 | 105   |
+
+Table: Centroid data points for 7 cluster K-Means on initial data {#tbl:first-7clusters}
+
+![Initial clustering on authors with Kmeans](../../data/images/first5clusters.png){#fig:kmeans-first5}
+
+### Secondary Clustering
 %- Want data with more dimensionality
-The numEntries and numCoauthors data presented in the heatmaps can be improved.
+The `numEntries` and `numCoauthors` data presented in the heatmaps can be improved.
 An author could have published 20 papers in 1995 and 5 papers in 1996, their resulting numYears value for that range would be 2.
 This has the effect of ignoring how prolific a given author may have been in a certain time.
 We want the author who published 20 papers in 1995 to be measured differently than an author who published once in both 1995 and 1996.
@@ -1229,9 +1272,7 @@ The values presented in Table @tbl:papersWithoutNAuthors suggest that the bulk o
 This result means that filtering out low publication authors in additional analysis does not affect the majority of the NSR entries.
 %- Demonstrate that 1993JA17 and 1996JA24 disappear correctly
 
-```
-insert the results from limited author clustering
-```
+![Secondary clustering on authors with Kmeans](../../data/images/quartiles5clusters.png){#fig:kmeans-quartiles5}
 
 ## Future Work
 
