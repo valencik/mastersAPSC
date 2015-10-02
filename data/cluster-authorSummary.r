@@ -41,7 +41,7 @@ for (numCenters in numCentersMin:numCentersMax) {
     }
 
     writeLines("Clustering...")
-    km = kmeans(x=data, centers=numCenters, iter.max=1000, nstart=20)
+    km = kmeans(x=scale(data), centers=numCenters, iter.max=1000, nstart=20)
     
     # Calculate various cluster analysis measurements from clusterSim
     writeLines("Starting DB analysis with clusterSim...")
