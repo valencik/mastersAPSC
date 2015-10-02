@@ -113,4 +113,56 @@ references:
   container-title: Proceedings of the sixth new zealand computer science research
     student conference (nZCSRSC2008), christchurch, new zealand
   page: '49-56'
+
+- id: DBLP:books/crc/aggarwal2014
+  type: book
+  editor:
+  - family: Aggarwal
+    given: Charu C.
+  issued:
+  - year: '2014'
+  title: 'Data classification: Algorithms and applications'
+  title-short: Data classification
+  publisher: CRC Press
+  URL: http://www.crcnetbase.com/doi/book/10.1201/b17320
+  ISBN: '978-1-4665-8674-1'
+
+- id: arules-manual
+  type: book
+  author:
+  - family: Hahsler
+    given: Michael
+  - family: Buchta
+    given: Christian
+  - family: Gruen
+    given: Bettina
+  - family: Hornik
+    given: Kurt
+  issued:
+  - year: '2015'
+  title: 'Arules: Mining association rules and frequent itemsets'
+  title-short: Arules
+  note: R package version 1.2-1
+  URL: http://CRAN.R-project.org/package=arules
+
+- id: arules-article
+  type: article-journal
+  author:
+  - family: Hahsler
+    given: Michael
+  - family: Gruen
+    given: Bettina
+  - family: Hornik
+    given: Kurt
+  issued:
+  - year: '2005'
+    month: October
+  title: Arules – A computational environment for mining association rules and frequent
+    item sets
+  container-title: Journal of Statistical Software
+  page: '1-25'
+  volume: '14'
+  issue: '15'
+  URL: http://www.jstatsoft.org/v14/i15/
+  ISSN: '1548-7660'
 ...
