@@ -10,7 +10,7 @@ references:
   issued:
   - year: 2006
     month: 03
-  title: A survey of knowledge discovery and data mining process models
+  title: 'A survey of knowledge discovery and data mining process models'
   container-title: The Knowledge Engineering Review
   page: 1-24
   volume: 21
@@ -27,7 +27,7 @@ references:
     given: David F
   issued:
   - year: 2007
-  title: Nuclear science references coding manual
+  title: 'Nuclear science references coding manual'
   container-title: Science
   page: 3
 
@@ -62,7 +62,7 @@ references:
     given: Trevor
   issued:
   - year: 2001
-  title: Estimating the number of clusters in a data set via the gap statistic
+  title: 'Estimating the number of clusters in a data set via the gap statistic'
   container-title: 'Journal of the Royal Statistical Society: Series B (Statistical
     Methodology)'
   publisher: Wiley Online Library
@@ -77,7 +77,7 @@ references:
     given: B.
   issued:
   - year: '2014'
-  title: Intriguing trends in nuclear physics articles authorship
+  title: 'Intriguing trends in nuclear physics articles authorship'
   container-title: CoRR
   volume: abs/1411.1899
   URL: http://arxiv.org/abs/1411.1899
@@ -96,7 +96,7 @@ references:
   issued:
   - year: '2008'
     month: '10'
-  title: <span class="nocase">Fast unfolding of communities in large networks</span>
+  title: 'Fast unfolding of communities in large networks'
   container-title: 'Journal of Statistical Mechanics: Theory and Experiment'
   page: '8'
   volume: '10'
@@ -109,7 +109,7 @@ references:
     given: Anna
   issued:
   - year: '2008'
-  title: Similarity measures for text document clustering
+  title: 'Similarity measures for text document clustering'
   container-title: Proceedings of the sixth new zealand computer science research
     student conference (nZCSRSC2008), christchurch, new zealand
   page: '49-56'
@@ -157,12 +157,43 @@ references:
   issued:
   - year: '2005'
     month: October
-  title: Arules – A computational environment for mining association rules and frequent
-    item sets
+  title: 'Arules – A computational environment for mining association rules and frequent item sets'
   container-title: Journal of Statistical Software
   page: '1-25'
   volume: '14'
   issue: '15'
   URL: http://www.jstatsoft.org/v14/i15/
   ISSN: '1548-7660'
+
+- id: NSRweb
+  type: article-journal
+  author:
+  - family: Pritychenko
+    given: B.
+  - family: Běták
+    given: 'E.'
+  - family: Kellett
+    given: M. A.
+  - family: Singh
+    given: B.
+  - family: Totans
+    given: J.
+  issued:
+  - year: '2011'
+    month: '6'
+  title: 'The Nuclear Science References (NSR) database and Web Retrieval System'
+  container-title: Nuclear Instruments and Methods in Physics Research A
+  page: '213-218'
+  volume: '640'
+  DOI: 10.1016/j.nima.2011.03.018
+
+- id: wiki-vsm
+  type: book
+  author:
+  - family: Wikipedia
+  issued:
+  - year: '2015'
+  title: 'Vector space model — wikipedia, the free encyclopedia'
+  note: \[Online; accessed 2-October-2015\]
+  URL: https://en.wikipedia.org/w/index.php?title=Vector_space_model&oldid=668110552
 ...
