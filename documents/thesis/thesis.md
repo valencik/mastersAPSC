@@ -9,11 +9,11 @@ author:
 - name: Andrew Valencik
   affiliation: Saint Mary\'s University
 author: Andrew Valencik
-date: September 27th 2015 - The Carefully Consolidated Construction.
+date: October 1st 2015 - Feeling Feeble For A Final.
 bibliography: bibliography.yaml
 csl: american-physics-society.csl
 link-citations: true
-linestretch: 1.5
+linestretch: 1.6
 ...
 
 \listoffigures
@@ -176,14 +176,6 @@ The result of the scripts is a file with a valid JSON structure for each NSR ent
 
 [^why-perl]: Perl is used here as it remains one of the best RegEx implementations, and allowed for scripts that read as a simple ordered list of transformations to apply.
 
-### Keyword Abstracts
-%- TODO
-
-> "What distinguishes NSR from more general bibliographic databases is the level of detail provided in the keyword abstracts." @winchell2007nuclear
-
-The `<KEYWORDS>` field is written by the maintainers of the NSR database, and then used to generate the `<SELECTRS>` field.
-
-## Data Representation
 The data representation is the result of careful consideration of the types of queries to be made on the data.
 The data schema uses data types that best reflect out the data will be used.
 For example, with data spanning 120 years, it is helpful to filter the data based on a numeric year value.
@@ -217,6 +209,12 @@ This is the primary motivator for not using a standard relational database.
 In a relational database the authors would have their own tables, separate from papers, as they are separate entities.
 This would mean a table and data schema would need to be created for the papers and then a separate table and schema for the authors, and similarly for keywords, selectors, and history.
 
+### Keyword Abstracts
+%- TODO
+The `<KEYWORDS>` field is written by the maintainers of the NSR database, and then used to generate the `<SELECTRS>` field.
+
+> "What distinguishes NSR from more general bibliographic databases is the level of detail provided in the keyword abstracts." @winchell2007nuclear
+
 ### Selectors
 The selectors are generated from the keyword abstracts.
 The current schema has `<SELECTRS>` parsed into a 3 dimensional array with `type`, `value`, and `subkey` variables.
@@ -230,7 +228,7 @@ The value for A may have any number of digits.
 X may be one, two, or three letters.
 The `subkey` variable is used to link together multiple selectors of the same keyword sentence.
 
-%- final representation
+## Final Representation
 An example of the final data representation used by the work is shown in Snippet \ref{blk:rawNSRJSON}.
 The `_id` is used as the unique identifier in the MongoDB collection.
 `year` is an integer and represents the year the resource was published.
@@ -363,6 +361,7 @@ Data Summarization
 %- Why? Visualizations are important in understanding data. As are summaries and rankings.
 %- How? MongoDB aggregations to D3 charts.
 
+## Data Composition and Queries
 Through data summarization we can learn the first-order characteristics of the data set.
 The goal is obtain a broad perspective of the structure and composition of the data set.
 For example, there are 212835 entries in the data set[^our-data-set] that span from 1896 to 2014.
@@ -487,7 +486,9 @@ Network Analysis and Visualization
 %- How? Using python library Networkx to build graph datastructures. D3 and Gephi for visualizations
 All previous analysis of the NSR data has focused on the content of each entry in a flat manner.
 However, the list of authors of a paper can be used to build a network or graph of the authors.
-(In this work, the word 'graph' will always refer to the mathematical representation of a set of objects and their links.)
+In this work, the word 'graph' will always refer to the mathematical representation of a set of objects and their links.
+
+##Data Graphs
 The first graphs constructed in this work had each node represent an author, and each edge or link represent a coauthorship.
 An example can be seen in Figure @fig:small-graph-1940.
 
@@ -841,7 +842,7 @@ This may or may not be desired for some analyses.
 In attempting to find authors multiply represented in the database, this filtering is unlikely to have significant impact.
 Identifiers representing collaborations are often long and have small string distances to one another as they informative part of their name is typically an acronym.
 
-### The Application
+## The Application
 
 The cosine similarity results are presented in the results via a paper recommendation engine.
 The user of the application can search and for an author and see papers that are similar to the papers the author has coauthored.
@@ -899,9 +900,9 @@ Similar authors could be authors who publish together, or authors who do not pub
 The latter is likely more interesting to users, as it could suggest similar authors they are unaware of.
 
 
-### Association Mining with Apriori
+## Association Mining
 %- Intro to association mining
-Frequent pattern mining is an important part of data mining and knowledge discovery. @DBLP:books/crc/aggarwal2014
+Frequent pattern mining is an important part of data mining and knowledge discovery @DBLP:books/crc/aggarwal2014.
 The common application of rule learning is the market basket analysis.
 A history of customer transactions at a supermarket is analyzed to find groups of items that are frequently purchased together.
 Association rules are similar to if-then constructs.
@@ -1062,7 +1063,7 @@ In practice, K-means is normally run multiple times with varying $k$ values and 
 However, their exist methods to measure the effectiveness of a clustering configuration.
 %- TODO The Davies–Bouldin index and the G1 index
 
-## Initial Author Clustering
+### Initial Author Clustering
 %- Cluster with author, numCoauthors, numEntries, numYears first
 %- Then develope more advanced clusterings by increasing the number of parameters used to describe these points.
 %- e.g. Use values at a range of different percentiles.
