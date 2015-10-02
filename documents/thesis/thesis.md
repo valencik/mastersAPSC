@@ -311,36 +311,24 @@ To populate the MongoDB database, these JSON structures were flattened into a si
 
 ### Indexing the Data
 %- TODO can I tie this to anything Borris says about usage?
-The most common operations on the correctly formated data after it was imported to MongoDB were searches or lookups.
-To optimize this process we instruct MongoDB to index our data on important or frequently referenced fields such as "authors" and "year".
+The performance of the database can be optimized by indexing on important or frequently referenced fields such as "authors" and "year".
 Indexing speeds up search queries in a manner similar to sorting a series of data elements.
 MongoDB allows for many different types of indexes.
 We create a single field indexes on the `_id`, `year`, `authors`, `selectors.type`, `selectors.value`, and `type` fields[^dot-notation].
 This enables fast lookups for documents[^documents] according to the indexed fields.
 For example it would be quick to find all the documents with type 'Journal' and year '1983'.
-Where as the search for all documents with keyword "fisson" has not been optimized by the previously mentioned indexes.
+Text indexes can also be created to enable fast search of words in the titles or keyword fields.
+This has not been done as the titles and keyword fields are not used in our analysis.
+We instead make use of the list of selectors to infer the topic of a given NSR entry.
 
 [^dot-notation]: We use dot notation to denote that `selectors.type` refers to the `type` field of the `selectors` object.
 [^documents]: Recall that MongoDB is a 'document' store database, and each NSR entry has been imported as a 'document' in the MongoDB collection.
-
-```
-insert a single example of the speedup we get with indexing
-```
-
-Since our author field is really an array of string elements, we could use a single field index on it without issue.
-However, on fields such as the title or keywords a single field index does not locate partial matches.
-For example, searching for documents with the word "neutron" in the title will not be sped up by a single field index.
-For this task we leverage MongoDB's text indexes.
-
-```
-this text field discussion is not useful
-```
 
 %- Other concerns and code
 There are additional concerns in hosting a database server and web application.
 Typically a database is hosted on a dedicated server, separate from the web application, and perhaps not publicly facing.
 These issues, and additional performance configurations will not be further addressed in this work.
-They are however addressed in the code repository for this work available at `include a link!!!`.
+They are however addressed in the code repository for this work available at: [github.com/valencik/mastersAPSC](https://github.com/valencik/mastersAPSC).
 
 ### MongoDB Aggregation Framework
 The MongoDB Aggregation Framework is powerful and enables a lot of data manipulation.
