@@ -59,7 +59,8 @@ This work is a cross disciplinary work, combining data mining technique with dom
 ## The Nuclear Science References Website
 The NNDC maintains the [NSR website](http://www.nndc.bnl.gov/nsr/) which serves a simple interface to the Nuclear Science References database.
 They offer four primary search interfaces, a quick search, text search, indexed search, and keynumber search.
-The quick search interface is shown in figure {@fig:nsrweb1}.
+The functionality and architecture of the NSR database and web site is discussed by Pritychenko in @NSRweb.
+The quick search interface is shown in Figure {@fig:nsrweb1}.
 
 ![The main interface for the NNDC's NSR website. Captured June 28th 2015](images/web-NSR-main-June-28-2015.png) {#fig:nsrweb1}
 
@@ -118,7 +119,7 @@ All efforts have been taken to ensure the research procedures can easily be exte
 ## Data Preparation
 The NSR data is maintained in a custom EXCHANGE format @winchell2007nuclear.
 This format is flat text that is not suitable for direct analysis.
-To fully utilize the daya, it needs to be easily parseable into a data structure for analysis and use.
+To fully utilize the data, it needs to be easily parseable into a data structure for analysis and use.
 The approach least likely to introduce errors is to transform the data into a common format for which parsers already exist.
 
 [JavaScript Object Notation](http://json.org), or JSON, was chosen as the data format for this work.
@@ -308,7 +309,6 @@ As reported in [Data Representation](#data-representation) section, a JSON struc
 To populate the MongoDB database, these JSON structures were flattened into a single file, and imported into a MongoDB collection using the [`mongoimport` tool](http://docs.mongodb.org/manual/reference/program/mongoimport/).
 
 ### Indexing the Data
-%- TODO can I tie this to anything Borris says about usage?
 The performance of the database can be optimized by indexing on important or frequently referenced fields such as "authors" and "year".
 Indexing speeds up search queries in a manner similar to sorting a series of data elements.
 MongoDB allows for many different types of indexes.
@@ -615,8 +615,7 @@ Just the largest connected component can be viewed by adding `topnetwork:1` to t
 The Python library [Networkx](https://networkx.github.io) is used to create the graph data structures, which can then be sent to our visualization code, or be exported for analysis with other tools.
 Networkx has a collection of algorithms and functions used to analyze and manipulate the graphs.
 Such manipulations include identifying and sorting disconnected subgraphs within a slice of data.
-For example, figures @fig:nsr1989graphyifanhu and @fig:nsr1989graph use only the largest connected graph of all the NSR entries in the year 1989.
-There were !!! other smaller graphs disconnected from the largest graph in 1989.
+For example, Figure @fig:nsr1989graphyifanhu and Figure @fig:nsr1989graph use only the largest connected graph of all the NSR entries in the year 1989.
 
 ## Future Work
 Treating the NSR database as graph data opens up avenues for future work.
@@ -630,7 +629,7 @@ The Networkx library has support for writing the graph data structures to multip
 They are written to a JSON object before being served to the web application, for example.
 Additionally they can be written to `gexf`, `GML`, `GraphML` and [others](http://networkx.readthedocs.org/en/latest/reference/readwrite.html).
 These files can then be imported into other analysis applications like Gephi.
-Example code for exporting the 1989 data to `gexf` format is available at `include link!!!`.
+Example code for exporting the 1989 data to `gexf` format is available at [github.com/valencik/mastersAPSC](https://github.com/valencik/mastersAPSC).
 
 
 
@@ -708,8 +707,7 @@ These are the most common selectors, and contribute little meaning on their own.
 These selectors are similar to stop words, they occur frequently and do now tell us much about the particular NSR entry.
 The vectors are formed by taking the selectors and turning them into strings.
 We drop the `subkey` value for this analysis as we are not particularly concerned about the ordering of the of the selectors, just that they did happen in a given paper.
-%- TODO citation
-The fact that cosine similarity does not take into account the ordering of words is a limitation that negatively impacts its performance on real world text documents.
+The fact that cosine similarity does not take into account the ordering of words is a limitation that negatively impacts its performance on real world text documents @wiki-vsm.
 This does not affect out analysis has we are not analyzing natural language but rather constructing our "words" out of a list of items that act like keywords.
 
 The python package `gensim` is used to handle the vector creation and similarity analysis.
@@ -780,7 +778,7 @@ A small Python script, using Jellyfish, was prepared to calculate the Levenshtei
 Only pairs with a distance less than 4 were written to file.
 This resulted in over 20 million pairs.
 It was observed that pairs with a Levenshtein distances of 2 or greater were unlikely to be duplicate representations of the same author.
-Futhermore, 20 million pairs is too many for additional analysis.
+Furthermore, 20 million pairs is too many for additional analysis.
 
 ### Transformations
 Three simple string transformations have been constructed to locate similar identifiers.
@@ -878,7 +876,6 @@ We could find all the neighbours of two given nodes and see how many overlap.
 With this we should also consider what the chance of having common neighbours is for any two random nodes.
 A first approximation would be to consider the degree of the neighbours.
 Common neighbours with a low degree are less likely to be common through random chance.
-%- (!!! better example than the Curie's? !!!)
 Note that this analysis likely falls short of addressing some copublishers with the same surname.
 %- ROBY Except that if they are actually publishing together then the name appears twice in the same list.
 %- ROBY If it's a variance or typo that shouldn't happen (because they are not publishing with themselves)
