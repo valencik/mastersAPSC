@@ -1211,6 +1211,20 @@ Conclusions
 %- Conclude with discussion of contributions.
 %- How the application uncovers some of the previously unknown and interesting results.
 
+%- Data (and App?)
+This work has enabled exploration and manipulation of the data that was inaccessible or impossible given the existing applications.
+The web application provides interactive search and visualizations to aid data exploration.
+
+%- Network
+The treatment of the data as a network is a new and flexible contribution.
+It can be used to visualize an author's collaborators.
+Or to see the collaborations that exist around a given topic.
+
+%- Data Mining
+The data mining analysis has revealed naming issues in the database, and proposed methods for mitigating them.
+The use of text mining tools has enabled the creation of a paper recommender system that recommends based on semantic information of the given journal articles, theses, conference proceedings, and other sources.
+Due to the high quality of the Nuclear Science References database and in particular the selectors, this recommender system can function without access to the whole text for each recommended source.
+
 
 Appendix
 ========
