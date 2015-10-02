@@ -55,7 +55,7 @@ for (numCenters in numCentersMin:numCentersMax) {
     write(clusterIndexes, file=paste0(outDir, outputName, "cluster-analysis.csv"), append=analysisAppend, ncolumns=6, sep=',')
 
     # Write cluster centers to a file
-    write(t(km$centers), file=paste0(outDir, outputName, numCenters,"cluster-centers.csv"), ncolumns=col, sep=',')
+    write.csv(km$centers, file=paste0(outDir, outputName, numCenters,"cluster-centers.csv"))
     
     # Write cluster membership to a file
     write(t(cbind(array(row.names(data)),km$cluster)), file=paste0(outDir, outputName, numCenters,"cluster-memberships.csv"), ncolumns=2, sep=',')
@@ -67,3 +67,23 @@ for (numCenters in numCentersMin:numCentersMax) {
     png(filename=paste0("images/", outputName, numCenters, "clusters.png"), width=1200, height=1200)
     plot(data, col=km$cluster)
 }
+
+# Plot Cluster Images
+data = read.csv(file=paste0(outDir, outputName, "cluster-analysis.csv"), header=FALSE)
+x = data[,1]
+
+png(file=paste0("images/", outputName, "-totss-clusters.png"), width=800, height=800)
+plot(x, data[,2], main="Kmeans Total Sum of Squares", xlab="Number of clusters", ylab="km$totss")
+lines(x, data[,2], type="l")
+
+png(file=paste0("images/", outputName, "-withinss-clusters.png"), width=800, height=800)
+plot(x, data[,3], main="Kmeans Total Within Cluster Sum of Squares", xlab="Number of clusters", ylab="km$tot.withinss")
+lines(x, data[,3], type="l")
+
+png(file=paste0("images/", outputName, "-dbi-clusters.png"), width=800, height=800)
+plot(x, data[,5], main="Davies Bouldin Index", xlab="Number of clusters", ylab="D.B. Index")
+lines(x, data[,5], type="l")
+
+png(file=paste0("images/", outputName, "-g1-clusters.png"), width=800, height=800)
+plot(x, data[,6], main="G1 Index", xlab="Number of clusters", ylab="G1 Index")
+lines(x, data[,6], type="l")
