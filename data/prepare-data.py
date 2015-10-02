@@ -95,77 +95,105 @@ if 'authorSummaryByYear' not in db.collection_names():
 
 
 # Generate authorSummary tsv for clustering
-print("Aggregating authorSummary data...")
-authorSummary_pipeline = [
-    {"$project": {"_id": 0, "author": "$_id", "numCoauthors": {"$size": "$coauthors"},
-                  "numYears": {"$size": "$years"}, "numEntries": {"$size": "$papers"}}}
-]
-results = db.authorSummary.aggregate(authorSummary_pipeline, allowDiskUse=True)
-with open('author-cluster-input.tsv', 'w', newline='') as tsvfile:
-    print("Writing authorSummary data to file...")
-    cluster_writer = csv.writer(tsvfile, delimiter='\t')
-    cluster_writer.writerow(["author", "numCoauthors", "numYears", "numEntries"])
-    for document in results:
-        cluster_list = [document['author']]
-        cluster_list.append(document['numCoauthors'])
-        cluster_list.append(document['numYears'])
-        cluster_list.append(document['numEntries'])
-        cluster_writer.writerow(cluster_list)
+if not os.path.exists('author-cluster-input.tsv'):
+    print("Aggregating authorSummary data...")
+    authorSummary_pipeline = [
+        {"$project": {"_id": 0, "author": "$_id", "numCoauthors": {"$size": "$coauthors"},
+                      "numYears": {"$size": "$years"}, "numEntries": {"$size": "$papers"}}}
+    ]
+    results = db.authorSummary.aggregate(authorSummary_pipeline, allowDiskUse=True)
+    with open('author-cluster-input.tsv', 'w', newline='') as tsvfile:
+        print("Writing authorSummary data to file...")
+        cluster_writer = csv.writer(tsvfile, delimiter='\t')
+        cluster_writer.writerow(["author", "numCoauthors", "numYears", "numEntries"])
+        for document in results:
+            cluster_list = [document['author']]
+            cluster_list.append(document['numCoauthors'])
+            cluster_list.append(document['numYears'])
+            cluster_list.append(document['numEntries'])
+            cluster_writer.writerow(cluster_list)
 
 
 # Generate authorSummaryByYear tsv for clustering
-print("Aggregating authorSummaryByYear data...")
-authorSummaryByYear_pipeline = [
-    {"$group": {"_id": "$_id.author", "yearData": {
-        "$push": {"year": "$_id.year", "numCoauthors": {"$size": "$coauthors"}, "numEntries": {"$size": "$papers"}}}}},
-    {"$project": {"author": "$_id", "yearData": 1, "numYears": {"$size": "$yearData"}}},
-    {"$match": {"numYears": {"$gt": 3}}}
-]
-results = db.authorSummaryByYear.aggregate(authorSummaryByYear_pipeline, allowDiskUse=True)
-with open('author-cluster-entry-quartiles-input.tsv', 'w', newline='') as tsvfile:
-    print("Writing authorSummaryByYear data to file...")
-    cluster_writer = csv.writer(tsvfile, delimiter='\t')
-    cluster_writer.writerow(["author", "numYears", "meanCoauthors",
-                             "numEntries025", "numEntries050", "numEntries075", "numEntries100"])
-    for document in results:
-        years = []
-        entries = []
-        coauthors = []
-        for yearDatum in document['yearData']:
-            years.append(yearDatum['year'])
-            coauthors.append(yearDatum['numCoauthors'])
-            entries.append(yearDatum['numEntries'])
-        assert int(len(years)) == int(document['numYears']), "len(years) should be equal to numYears"
-        sumEntries = entries.copy()
-        for i, entry in enumerate(sumEntries):
-            if i >= 1:
-                sumEntries[i] = sumEntries[i] + sumEntries[i - 1]
-        numEntries025 = math.floor(percentile(sumEntries, 0.25))
-        numEntries050 = math.floor(percentile(sumEntries, 0.50))
-        numEntries075 = math.floor(percentile(sumEntries, 0.75))
-        numEntries100 = sumEntries[-1]
-        cluster_list = [document['author']]
-        cluster_list.append(document['numYears'])
-        cluster_list.append(statistics.mean(coauthors))
-        cluster_list.append(numEntries025)
-        cluster_list.append(numEntries050)
-        cluster_list.append(numEntries075)
-        cluster_list.append(numEntries100)
-        cluster_writer.writerow(cluster_list)
+if not os.path.exists('author-cluster-entry-quartiles-input.tsv'):
+    print("Aggregating authorSummaryByYear data...")
+    authorSummaryByYear_pipeline = [
+        {"$group": {"_id": "$_id.author", "yearData": { "$push":
+            {"year": "$_id.year", "numCoauthors": {"$size": "$coauthors"}, "numEntries": {"$size": "$papers"}}}}},
+        {"$project": {"author": "$_id", "yearData": 1, "numYears": {"$size": "$yearData"}}},
+        {"$match": {"numYears": {"$gt": 3}}}
+    ]
+    results = db.authorSummaryByYear.aggregate(authorSummaryByYear_pipeline, allowDiskUse=True)
+    with open('author-cluster-entry-quartiles-input.tsv', 'w', newline='') as tsvfile:
+        print("Writing authorSummaryByYear data to file...")
+        cluster_writer = csv.writer(tsvfile, delimiter='\t')
+        cluster_writer.writerow(["author", "numYears", "meanCoauthors",
+                                 "numEntries025", "numEntries050", "numEntries075", "numEntries100"])
+        for document in results:
+            years = []
+            entries = []
+            coauthors = []
+            for yearDatum in document['yearData']:
+                years.append(yearDatum['year'])
+                coauthors.append(yearDatum['numCoauthors'])
+                entries.append(yearDatum['numEntries'])
+            assert int(len(years)) == int(document['numYears']), "len(years) should be equal to numYears"
+            sumEntries = entries.copy()
+            for i, entry in enumerate(sumEntries):
+                if i >= 1:
+                    sumEntries[i] = sumEntries[i] + sumEntries[i - 1]
+            numEntries025 = math.floor(percentile(sumEntries, 0.25))
+            numEntries050 = math.floor(percentile(sumEntries, 0.50)) - numEntries025
+            numEntries075 = math.floor(percentile(sumEntries, 0.75)) - numEntries050
+            numEntries100 = sumEntries[-1] - numEntries075
+            cluster_list = [document['author']]
+            cluster_list.append(document['numYears'])
+            cluster_list.append(statistics.mean(coauthors))
+            cluster_list.append(numEntries025)
+            cluster_list.append(numEntries050)
+            cluster_list.append(numEntries075)
+            cluster_list.append(numEntries100)
+            cluster_writer.writerow(cluster_list)
 
-# Generate transactions tsv for association rule learning
-print("Aggregating transaction data...")
-selectorAuthors_pipeline = [
-    {"$match": {"selectors.type": "N"}},
-    {"$unwind": "$selectors"},
-    {"$unwind": "$authors"},
-    {"$group": {"_id": "$selectors.value", "authors": {"$addToSet": "$authors"}}}
-]
-results = db.NSR.aggregate(selectorAuthors_pipeline, allowDiskUse=True)
-with open('transactionsSelectorAuthors.tsv', 'w', newline='') as tsvfile:
-    print("Writing transaction data to file...")
-    transaction_writer = csv.writer(tsvfile, delimiter='\t')
-    for document in results:
-        transaction_list = document['authors']
-        transaction_list.insert(0, document['_id'])
-        transaction_writer.writerow(transaction_list)
+# Generate paper -> author transactions tsv
+if not os.path.exists('transactions-papers-authors.tsv'):
+    print("Generating papers -> authors transaction tsv files for association rule learning...")
+    pipeline = [
+        {"$match": {"authors": {"$exists": True}}},
+        {"$project": {"_id": 0, "authors": "$authors"}}
+    ]
+    results = db.NSR.aggregate(pipeline, allowDiskUse=True)
+    with open('transactions-papers-authors.tsv', 'w', newline='') as tsvfile:
+        transaction_writer = csv.writer(tsvfile, delimiter='\t')
+        for document in results:
+            transaction_writer.writerow(document['authors'])
+
+# Generate papers -> selectors transactions tsv
+if not os.path.exists('transactions-papers-selectors.tsv'):
+    print("Generating papers -> selectors transaction tsv files for association rule learning...")
+    pipeline = [
+        {"$match": {"selectors": {"$exists": True}}},
+        {"$project": {"_id": 0, "selectors": 1}}
+    ]
+    results = db.NSR.aggregate(pipeline, allowDiskUse=True)
+    with open('transactions-papers-selectors.tsv', 'w', newline='') as tsvfile:
+        transaction_writer = csv.writer(tsvfile, delimiter='\t')
+        for document in results:
+            selector_list = [s['type'] + " " + s['value'] for s in document['selectors']]
+            transaction_writer.writerow(selector_list)
+
+# Generate selectors -> authors transactions tsv
+if not os.path.exists('transactions-selectors-authors-set.tsv'):
+    print("Generating selectors -> authors transaction tsv files for association rule learning...")
+    pipeline = [
+        {"$match": {"selectors": {"$exists": True}}},
+        {"$unwind": "$selectors"},
+        {"$unwind": "$authors"},
+        {"$group": {"_id": "$selectors", "authors": {"$addToSet": "$authors"}}},
+        {"$project": {"_id": 0, "authors": "$authors"}}
+    ]
+    results = db.NSR.aggregate(pipeline, allowDiskUse=True)
+    with open('transactions-selectors-authors-set.tsv', 'w', newline='') as tsvfile:
+        transaction_writer = csv.writer(tsvfile, delimiter='\t')
+        for document in results:
+            transaction_writer.writerow(document['authors'])
