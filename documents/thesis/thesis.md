@@ -1,11 +1,15 @@
-%- Aggregations in prepare-data.py?
+%- TODO balance mentions of application
+%- TODO cite: 50 years of kmeans
+%- TODO cite: Facebook paper A good overview of the process
+%- TODO cite: Medical clusters and MDS paper
+%- TODO cite: [Graph Node Similarity](http://argo.matf.bg.ac.rs/publications/2011/similarity.pdf)
 ---
 title:  'Masters of Science in Applied Science Thesis'
 author:
 - name: Andrew Valencik
   affiliation: Saint Mary\'s University
 author: Andrew Valencik
-date: September 19th 2015 - Edifying Edits Edition.
+date: September 27th 2015 - The Carefully Consolidated Construction.
 bibliography: bibliography.yaml
 csl: american-physics-society.csl
 link-citations: true
@@ -19,10 +23,7 @@ linestretch: 1.5
 
 Introduction
 ============
-
-```
-this section needs a rewrite once the rest is done
-```
+%- TODO rewrite
 
 %- The problem and its setting
 %- Proposed methodology to solve problem
@@ -39,7 +40,6 @@ The ultimate goal is to enable further analysis on the body of nuclear science l
 %- What is the problem? What will I study?
 The academic field of nuclear science is over one hundred years old, starting with the discovery of radiation.
 This discovery is the first of many entries in the Nuclear Science References database, collected, cataloged, distributed, and evaluated by the National Nuclear Data Center [@Kurgan200603].
-%- TODO this ending is insufficient
 The NSR has over 210,000 entries documenting the body of nuclear science literature, which provides the opportunity for knowledge discovery on the literature's meta data.
 
 %- What do we know already?
@@ -127,7 +127,7 @@ JSON met the requirements, including those for arrays and has the advantage of b
 This requirement is discussed further in the [Data Representation](#data-representation) section.
 
 %- NSR EXCHANGE format discussion
-An example of the raw data for a single paper can be seen in snippet @blk:rawNSRentry.
+An example of the raw data for a single paper can be seen in snippet \ref{rawNSRentry}.
 The NSR has 9 possible types of fields which are shown in Table @tbl:NSRidentifiers.
 Each entry can only have one of each field type except for `<KEYWORDS>` and `<SELECTRS>` which exist as a pair and an entry can have multiple pairs of them.
 
@@ -177,13 +177,10 @@ The result of the scripts is a file with a valid JSON structure for each NSR ent
 [^why-perl]: Perl is used here as it remains one of the best RegEx implementations, and allowed for scripts that read as a simple ordered list of transformations to apply.
 
 ### Keyword Abstracts
+%- TODO
 
-```
-This section will summarize the lengthy discussion of the keyword abstracts from
-the NSR manual. And add to that, the parts which have been used in this work.
-```
+> "What distinguishes NSR from more general bibliographic databases is the level of detail provided in the keyword abstracts." @winchell2007nuclear
 
-> "What distinguishes NSR from more general bibliographic databases is the level of detail provided in the keyword abstracts."
 The `<KEYWORDS>` field is written by the maintainers of the NSR database, and then used to generate the `<SELECTRS>` field.
 
 ## Data Representation
@@ -225,7 +222,7 @@ The selectors are generated from the keyword abstracts.
 The current schema has `<SELECTRS>` parsed into a 3 dimensional array with `type`, `value`, and `subkey` variables.
 The following quote from the NSR Coding Manual @winchell2007nuclear describes the valid `type`s:
 
-> N, T, P, G, R, S, M, D, C, X, A, or Z, which stand for nuclide, target, parent, daughter, reaction, subject, measured, deduced, calculated, other subject, mass range, and charge range, respectively.
+> N, T, P, G, R, S, M, D, C, X, A, or Z, which stand for nuclide, target, parent, daughter, reaction, subject, measured, deduced, calculated, other subject, mass range, and charge range, respectively. @winchell2007nuclear
 
 The type of data for `value` changes based on the value of the `type`.
 For `type`s N, T, P, and G, the `value` is a nuclide written in the form AX with A equal to the mass number, and X equal to the chemical symbol.
@@ -233,10 +230,8 @@ The value for A may have any number of digits.
 X may be one, two, or three letters.
 The `subkey` variable is used to link together multiple selectors of the same keyword sentence.
 
-%- TODO Provide an example of multiple selectors being connected
-
-%- ROBY write a paragraph that factually states your final representation
-An example of the final data representation used by the work is shown in figure {@blk:rawNSRJSON}.
+%- final representation
+An example of the final data representation used by the work is shown in Snippet \ref{blk:rawNSRJSON}.
 The `_id` is used as the unique identifier in the MongoDB collection.
 `year` is an integer and represents the year the resource was published.
 `history` is an array that contains encoded information representing dates when the original NSR document was added and/or modified.
@@ -362,26 +357,11 @@ There are a handful of simple aggregation operations that can be piped together 
 All aggregation operations take in a list of data documents, manipulate them in some way, and then output the results to the next operation.
 
 **match** The `match` operation acts as a filter, returning only the documents that meet the specified criteria.
-```
-Insert simple example here
-```
-
 **project** The `project` operation manipulates each individual document renaming, omitting, or changing each field according to the input parameters.
-```
-Insert simple example here
-```
-
 **unwind** The `unwind` operation acts on an array field of the input documents.
 It creates a new document for each element in the array, with all fields duplicated exist the array field which is equal to the element.
-```
-Insert simple example here
-```
-
 **group** The `group` operation can combine similar documents and can perform calculations based on that combination.
 A common usage is to sum a value, perhaps price, of all the input documents.
-```
-Insert simple example here
-```
 
 There are some additional, more straightforward, operations such as `sort`, `limit`, `skip`, and `redact`.
 The final results from an aggregation query can be saved to a collection using the `out` operation, or can be returned to the calling application through the many MongoDB APIs.
@@ -404,11 +384,6 @@ Data Summarization
 %- Why? Visualizations are important in understanding data. As are summaries and rankings.
 %- How? MongoDB aggregations to D3 charts.
 
-```
-NOTE: This section currently has weak mentions of the actual application built.
-With no real introduction of the application, mentions of it feel out of place...
-```
-
 Through data summarization we can learn the first-order characteristics of the data set.
 The goal is obtain a broad perspective of the structure and composition of the data set.
 For example, there are 212835 entries in the data set[^our-data-set] that span from 1896 to 2014.
@@ -416,7 +391,7 @@ We can answer questions such as "What percentage of all entries are journal arti
 As Table @tbl:typesAll shows, the majority of the document types in the NSR are journal articles.
 The next most popular are reports, and conference preceedings.
 There are fewer books and preprint than there are unknown and unlabel entries.
-The python code to produce these results is shown in Snippet @blk:typesAllCode.
+The python code to produce these results is shown in Snippet \ref{blk:typesAllCode}.
 
 [^our-data-set]: Recall that the data set used in this work is a snapshot of the entire NSR data as dowloaded in January 2014.
 
@@ -444,7 +419,7 @@ The summarization analysis can conveniently be applied to subsets of the data.
 The data can be filtered to only involve a particular author.
 This provides answers to questions such as "what percentage of A.J.Sarty's contributions were journal articles?"
 Table @tbl:typesAJSarty shows A.J.Sarty has primarily worked on journal articles, with one preprint article.
-The code for this query, which is shown in Snippet @blk:typesAJSarty, simply adds a `$match` operation to Snippet @blk:typesAllCode.
+The code for this query, which is shown in Snippet \ref{blk:typesAJSarty}, simply adds a `$match` operation to Snippet \ref{blk:typesAllCode}.
 
 Type       Amount   Percentage
 ----       ------   ------
@@ -485,10 +460,6 @@ For a particular selection of NSR data, it is useful to know the rankings for im
 For example, when a user searches an author on the application they are presented with a ranked list of their most frequent coauthors, keywords, and nuclides.
 This type of analysis can of course be applied to the whole dataset as well.
 Table {#tbl:prolific-authors} shows the authors with the highest count of NSR entries in the entire database.
-
-```
-NOTE: This section needs more discussion...
-```
 
 Author              Number of Publications
 ------              ----------------------
@@ -543,10 +514,10 @@ An example can be seen in Figure @fig:small-graph-1940.
 
 ![A single component of the 1940 author graph.](images/small-graph-1940.pdf){#fig:small-graph-1940}
 
-Figure @fig:small-graph-1940  is a single component of the complete 1940 author graph (shown in Appendix Figure @fig:complete-graph1940).
+Figure @fig:small-graph-1940  is a single component of the complete 1940 author graph (shown in Appendix Figure @fig:complete-graph-1940).
 It has 7 nodes, each is a different author, and 12 edges which represent a coauthorship between the two nodes.
 `M.Ikawa` has publish with everyone in the graph.
-We can use this knowledge in a database query to get the papers that make up this graph (see @blk:graph1940s).
+We can use this knowledge in a database query to get the papers that make up this graph (see \ref{blk:graph1940s}).
 
 ``` {#blk:graph1940s .python caption="Python code to get the NSR entries in Figure @fig:small-graph-1940." fontsize=\small baselinestretch=1}
 import pymongo
@@ -554,7 +525,7 @@ db = pymongo.MongoClient()['masters']
 db.NSR.find({"year": 1940, "authors": "M.Ikawa"})
 ```
 
-The results of the database query (shown in Snippet @blk:graph1940s-results) reveal there were 3 papers in 1940 that contributed to this graph.
+The results of the database query (shown in Snippet \ref{blk:graph1940s-results}) reveal there were 3 papers in 1940 that contributed to this graph.
 One paper titled "Fission Products of Uranium by Fast Neutrons" has authors `Y.Nishina`, `T.Yasaki`, `K.Kimura`, and `M.Ikawa`.
 The other papers, titled "Neutron Induced Radioactivity in Columbium" and "Artificial Radioactivity Induced in Zr and Mo" respectively are both authored by `R.Sagane`, `S.Kojima`, `G.Miyamoto`, and `M.Ikawa`.
 This demonstrates a limitation in the current graph visualization.
@@ -654,11 +625,8 @@ Almost any parameter can be used as a filter to produce an author network graph.
 The selector values present an interesting opportunity in this case.
 We can filter the NSR data to only include entries that involved a particular nuclide.
 Figure @fig:li11graph shows an author node graph for all the NSR entries that have `LI11` as a selector value.
-All of the components have been kept in the visualization.
-
-```
-Include discussion on component size distributions.
-```
+The figure shows that there is one large connected component of the graph, and many smaller components.
+Just the largest connected component can be viewed by adding `topnetwork:1` to the input query.
 
 ![Network graph of authors publishing on Lithium-11](images/lithium11-graph.pdf){#fig:li11graph}
 
@@ -754,33 +722,25 @@ A script was prepared to perform cosine similarity analysis on the NSR selectors
 The code is available at `calc-cosine-sims.py`.
 For each NSR entry we form a vector from the entry's selectors.
 These vectors are used to form a corpus that calculates the frequency of each term in the vectors.
-A few highly frequent selectors are filtered out.
-```
-selector OTHER
-```
+Any selector with a value equal to `OTHER` was filtered out.
+These are the most common selectors, and contribute little meaning on their own.
+
 These selectors are similar to stop words, they occur frequently and do now tell us much about the particular NSR entry.
 The vectors are formed by taking the selectors and turning them into strings.
 We drop the `subkey` value for this analysis as we are not particularly concerned about the ordering of the of the selectors, just that they did happen in a given paper.
-The fact that cosine similarity does not take into account the ordering of words is a limitation that negatively impacts its performance on real world text documents. !!! citation !!!!
+%- TODO citation
+The fact that cosine similarity does not take into account the ordering of words is a limitation that negatively impacts its performance on real world text documents.
 This does not affect out analysis has we are not analyzing natural language but rather constructing our "words" out of a list of items that act like keywords.
 
-We use the python package `gensim` to handle the vector creation and similarity analysis.
+The python package `gensim` is used to handle the vector creation and similarity analysis.
+While `gensim` offers many features and different forms of similarity measures[^gensim-sims], we make use of the cosine simularity routines.
 
-We run the similarity function...
-```
- expand on what techniques and algorithms this is actually using
-```
+[^gensim-sims]: Documentation for `gensim`'s methods of calculating similarities is available at: [radimrehurek.com/gensim/similarities/docsim.html](http://radimrehurek.com/gensim/similarities/docsim.html)
 
 The result is a list of paper `_id`'s that are similar to the input paper.
 These results are written to the database in a new field `simPapers`.
-%- Should it be the same database? Does this affect the data representation section?
-The `simPapers` is actually an array of objects, similar to the `selectors` field.
+The `simPapers` field is actually an array of objects, similar to the `selectors` field.
 Each object contains two items, the `_id` of the paper, and the computed score from `gensim`.
-
-```
-show an example
-```
-
 The usage of these similarity scores is shown in the [Application Section](#the-application).
 
 ## Author Name Analysis
@@ -830,10 +790,6 @@ The Levenshtein distance is one type of string metric to evaluate the difference
 A distance of 1 is attributed to every single character edit necessary to transform one of the input strings into the other.
 Single character edits include an insertion of a character, a deletion, or a substitution.
 
-```
-TODO Present an example (for each: insertion, deletion, substitution)
-```
-
 The Python library [Jellyfish](http://jellyfish.readthedocs.org/en/latest/)  makes it quite easy to use a few different distance metrics.
 Nevertheless, calculating any measure for all pairs of authors is a large task.
 A quick estimate of $100,000$ authors means $5,000,000,000$ unique (unordered) pairs to calculate.
@@ -842,13 +798,9 @@ It does, however, produce a large amount of data, making filtering absolutely ne
 
 A small Python script, using Jellyfish, was prepared to calculate the Levenshtein Distance for each author name pair.
 Only pairs with a distance less than 4 were written to file.
-This analysis reveals over 20 million author pairs for further analysis.
-
-```
-TODO Discuss pairs with a distance of 1
-TODO Discuss pairs with a distance of 4
-TODO Discuss limitations of "non informed" string edit distances.
-```
+This resulted in over 20 million pairs.
+It was observed that pairs with a Levenshtein distances of 2 or greater were unlikely to be duplicate representations of the same author.
+Futhermore, 20 million pairs is too many for additional analysis.
 
 ### Transformations
 Three simple string transformations have been constructed to locate similar identifiers.
@@ -915,7 +867,7 @@ Identifiers representing collaborations are often long and have small string dis
 The cosine similarity results are presented in the results via a paper recommendation engine.
 The user of the application can search and for an author and see papers that are similar to the papers the author has coauthored.
 
-%- TODO: JS or Python?
+%- TODO: JS or Python? (later application building)
 The user's input is first matched against possibly multiple identifiers, making use of the results from the [Author Name Analysis](#author-name-analysis) section.
 %- Mongo
 The database query must be done in two stages.
@@ -928,13 +880,9 @@ At this stage we have a document for each paper that was considered similar to t
 %- Python code
 We then prepare the render object to be sent to the html template to show the user.
 The end user then sees a web page with the search author in prominent text followed by a list of papers that have a cosine similarity to at least one of their own papers greater than 0.65.
-```
-I have not written about the scoring function
-```
+%- TODO I have not written about the scoring function
 
-```
-insert image of the application interface
-```
+%- TODO insert image of the application interface
 
 ### Further Analysis
 %- Clustering? no. Graph analysis.
@@ -981,7 +929,7 @@ Association rules are similar to if-then constructs.
 A rule written {R (N,G),T 238U} => {N 239U} with support $0.00129$ and confidence $0.9308$ tells us that the selectors `R (N,G)`, `T 238U`, and `N 239U` appear together in $0.129\%$ of the data.
 The confidence is a measure of reliability in the rule.
 In the above example $93.08\%$ of the time that `R (N,G)` and  `T 238U` appear, `N 239U` also appears.
-Formally the support is defined in Equation @ap-support, as is confidence in Equation @apriori-confidence.
+Formally the support is defined in Equation @eq:ap-support, as is confidence in Equation @eq:ap-confidence.
 
 %- Apriori algorithm
 $$
@@ -1067,7 +1015,6 @@ Our final analysis with apriori uses each selector as a transaction and the list
 There is a chance that some of these rules involve authors who have not published together.
 This information would be useful, however the analysis to find such a rule has not been completed.
 With a support value of 0.0042 the analysis of author lists for each selector produces 3832412 rules involving 774 unique author identifiers.
-
 %- TODO tie back to motivation? (similar objects)
 
 %- TODO nuclide graph tie in....
@@ -1079,7 +1026,6 @@ Alternatively we could reduce the search results by including only papers with b
 %- I could make a list of the total coauthors for any given author.
 %- Then I could cheaply lookup an author in an association rule (perhaps the rhs author) and see if i find the other authors in the rule.
 %- If we consider the p -> s results as groups of selectors that frequently appear together, can we then take a -> s results and ...do something.
-
 
 rules                                                           support     confidence   lift
 -----                                                           -------     ----------   ----
@@ -1102,10 +1048,7 @@ Table: Frequent itemset rules for selectors in  papers. {#tbl:apriori3}
 %- Starting with some of the naive algorithms, and then going to graph theory.
 %- A review of graph theoretic concepts and piecing them together for the application on hand.
 
-```
-This chapter does not yet discuss cluster labels.
-Or using the cluster results in the application.
-```
+%- TODO This chapter does not yet discuss cluster labels.  Or using the cluster results in the application.
 
 Classification and clustering are related approaches to organizing data elements into groups for further analysis.
 Classification is the process of deciding what group a particular datum should most optimally belong to.
@@ -1193,7 +1136,6 @@ As a result the clusters function as segmentations along a continuous spectrum.
 As the number of clusters increases, the size of the segmentations decrease.
 %- Clustering segmentation is all happening on one axis up to a certain point.
 %- Eventually the segmentations partition the data with respect to other variables.
-
 
 | numCoauthors     | numYears         | numEntries       | size  |
 |------------------|------------------|------------------|-------|
@@ -1291,32 +1233,8 @@ Conclusions
 %- How the application uncovers some of the previously unknown and interesting results.
 
 
-Miscellaneous
-=============
-> A section for all the lonely topics out there.
-
-## Future Work
-- Time series profile clustering. Show me other objects that evolved like this one.
-- Chart of nuclides, table of elements visualizations
-- Research predictions, suggestions
-- Author/Group/Journal profiling (innovative, follower, prolific...) (likely better done with citation info)
-- Anything involving other data like citations
-
-## Contributions
-- Data parsing and cleaning
-- Visualization and summarization
-- Exploration
-
-## References to cite
-- 50 years of kmeans
-- Facebook paper A good overview of the process
-- Medical clusters and MDS paper
-[Graph Node Similarity](http://argo.matf.bg.ac.rs/publications/2011/similarity.pdf)
-
-
 Appendix
 ========
-
 
 ![Number of entries an author has given the number of years they have published.](../../data/images/nyne-heatmap.png){#fig:nyne-linear}
 
@@ -1325,6 +1243,7 @@ Appendix
 ![Number of coauthors an author has given the number of entries they have published.](../../data/images/nenc-heatmap.png){#fig:nenc-linear}
 
 ![Complete 1940 author graph.](images/complete-graph-1940.pdf){#fig:complete-graph-1940}
+
 
 Bibliography
 ============
