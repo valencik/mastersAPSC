@@ -69,7 +69,7 @@ def paper_recommend(author_id):
     recpapers_pipeline = [
         {"$match": {"authors": author_id}},
         {"$unwind": "$simPapers"},
-        {"$group": {"_id": "$simPapers.paper", "score": {"$sum": "$simPapers.score"}}},
+        {"$group": {"_id": "$simPapers.paper", "score": {"$avg": "$simPapers.score"}}},
         {"$sort": {"score": -1}}
     ]
     recommended_papers = db.simNSR.aggregate(recpapers_pipeline)
@@ -86,7 +86,6 @@ def paper_recommend(author_id):
     docs = []
     for document in results:
         score = scores[document['_id']]
-        if score < 1.0: continue
         if 'authors' in document:
             if author_id in document['authors']: continue
             headline = str(document['authors'])[1:-1].replace("'", "")
