@@ -196,4 +196,34 @@ references:
   title: 'Vector space model — wikipedia, the free encyclopedia'
   note: \[Online; accessed 2-October-2015\]
   URL: https://en.wikipedia.org/w/index.php?title=Vector_space_model&oldid=668110552
+
+- id: wiki-DOI
+  type: book
+  author:
+  - family: Wikipedia
+  issued:
+  - year: '2015'
+  title: 'Digital object identifier — wikipedia, the free encyclopedia'
+  note: \[Online; accessed 3-October-2015\]
+  URL: https://en.wikipedia.org/w/index.php?title=Digital_object_identifier&oldid=682846053
+
+- id: mongo-doc
+  type: book
+  author:
+  - family: MongoDB
+  issued:
+  - year: '2015'
+  title: 'The MongoDB 3.0 Manual'
+  note: \[Online; accessed 3-October-2015\]
+  URL: https://docs.mongodb.org/manual/
+
+- id: pymongo-doc
+  type: book
+  author:
+  - family: PyMongo
+  issued:
+  - year: '2015'
+  title: 'PyMongo 3.0.3 Documentation'
+  note: \[Online; accessed 3-October-2015\]
+  URL: http://api.mongodb.org/python/current/
 ...
