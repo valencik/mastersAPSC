@@ -1090,7 +1090,10 @@ Some heuristics exist to aid in determining an optimal $k$. @tibshirani2001estim
 In practice, K-means is normally run multiple times with varying $k$ values and the optimum is selected by a domain expert.
 
 However, their exist methods to measure the effectiveness of a clustering configuration.
-%- TODO The Davies–Bouldin index and the G1 index
+The Davies-Bouldin considers the ratio of external separation between clusters to the scatter within a cluster @wiki-dbi.
+The G1, or Calinski-Harabasz pseudo F-statistic, or CH criterion is a hueristic device to help evaluate different clustering schemes on the same input data @g1-paper.
+It works best when used on standardized data in a Euclidean space @ch-stackoverflow.
+Both of these evaluation methods are provided in the R package `clusterSim` @clusterSim.
 
 ### Initial Author Clustering
 %- Cluster with author, numCoauthors, numEntries, numYears first

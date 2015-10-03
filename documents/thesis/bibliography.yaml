@@ -239,4 +239,53 @@ references:
   volume: 40
   issue: 4
   URL: http://argo.matf.bg.ac.rs/publications/2011/similarity.pdf
+
+- id: g1-paper
+  type: article-journal
+  author:
+  - family: Calinski
+    given: T.
+  - family: Harabasz
+    given: J.
+  issued:
+  - year: '1974'
+  title: 'A dendrite method for cluster analysis'
+  container-title: Communications in Statistics-theory and Methods
+  page: '1-27'
+  volume: '3'
+  issue: '1'
+  DOI: 10.1080/03610927408827101
+
+- id: ch-stackoverflow
+  type: book
+  author:
+  - family: ttnphns
+  issued:
+  - year: '2015'
+  title: 'What is an acceptable value of the Calinski & Harabasz (CH) criterion?'
+  note: \[Online; accessed 3-October-2015\]
+  URL: http://stats.stackexchange.com/a/52863
+
+- id: wiki-dbi
+  type: book
+  author:
+  - family: Wikipedia
+  issued:
+  - year: '2015'
+  title: 'Davies–Bouldin index — wikipedia, the free encyclopedia'
+  note: \[Online; accessed 3-October-2015\]
+  URL: https://en.wikipedia.org/w/index.php?title=Davies%E2%80%93Bouldin_index&oldid=678440106
+
+- id: clusterSim
+  type: book
+  author:
+  - family: Walesiak
+    given: Marek
+  - family: Dudek
+    given: Andrzej
+  - year: '2015'
+  title: 'clusterSim: Searching for Optimal Clustering Procedure for a Data Set'
+  title-short: clusterSim
+  note: R package version 0.44-2
+  URL: https://cran.r-project.org/web/packages/clusterSim/index.html
 ...
