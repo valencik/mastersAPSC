@@ -851,13 +851,24 @@ An application to locate multiple identifiers of this type would require a signi
 There are many open source implementations of string distance functions, so a modification is not out of the question.
 However, such a modification is outside the scope of this work.
 
-%- TODO future work?
-Another approach could simplify the list of authors while accepting potential loss of information.
-The current number of unique identifiers after data preparation is $100147$, if we remove all identifiers that include "` the `" in their name we reduce to $98788$ identifiers.
-This has the effect of removing collaborations from the author list.
-This may or may not be desired for some analyses.
-In attempting to find authors multiply represented in the database, this filtering is unlikely to have significant impact.
-Identifiers representing collaborations are often long and have small string distances to one another as they informative part of their name is typically an acronym.
+### Collaboration Groups
+In addition to single authors who may or may not be multiply identified, there are collaboration groups.
+There are 1359 identifiers that include "` the `" in their name.
+Identifiers representing collaborations are often long with an acronym as the informative part of their name.
+Table \ref{blk:ld-collabs} shows that Levenshtein distances of 2 or greater are likely to be different collaborations.
+
+``` {#blk:ld-collabs .text caption="Levenshtein distances $>1$ on collaborations." fontsize=\small baselinestretch=1}
+For the CMS Collaboration	for the 8B Collaboration	4
+For the CMS Collaboration	for the A1 Collaboration	4
+For the CMS Collaboration	for the A4 Collaboration	4
+For the CMS Collaboration	for the AMS Collaboration	2
+For the CMS Collaboration	for the BES Collaboration	3
+For the CMS Collaboration	for the CBM Collaboration	3
+For the CMS Collaboration	for the CDF Collaboration	3
+For the CMS Collaboration	for the CE71 Collaboration	4
+For the CMS Collaboration	for the CERES Collaboration	4
+```
+
 
 ## The Application
 
