@@ -891,7 +891,7 @@ An example for author "A.J.Sarty" is shown in Figure @fig:simpapers-author.
 
 ![Similar papers for author "A.J.Sarty"](images/simpapers-author.png) {#fig:simpapers-author}
 
-### Further Analysis
+## Further Analysis
 %- TODO Roby says she's been here before?
 %- Clustering? no. Graph analysis.
 %- Can I come up with a # of publication independent clustering schema?
