@@ -710,7 +710,7 @@ $$
 \cos (d1,d2) = \frac{d1 \cdot d2 }{\left| d1 \right| \left| d2 \right|} = \frac{6.0}{\left| 2.645751311 \right| \left| 2.828427125 \right|} = 0.8017837257
 $$ {#eq:cosinesimilarityF}
 
-As equation @eq:cosinesimilarityF shows, the two documents are quite similar, and thus have a high cosine similarity.
+As Equation @eq:cosinesimilarityF shows, the two documents are quite similar, and thus have a high cosine similarity.
 When $d1 = d2$ the similarity is 1.0.
 This technique is a simple way of numercizing text for further mathematical manipulation and treatment.
 
@@ -1070,7 +1070,7 @@ We can create $k$ clusters $C = {c_1, c_2, ..., c_k}$ where $k <= n$.
 The process starts by randomly choosing $k$ points, ${x_1, ..., x_k}$ to be the centroids of a cluster.
 Iterate over each object $x$ and assign it to a cluster $c$ based on the minimization of some parameter; for now, Euclidean distance.
 The new centroids are now computed and the process is repeated until cluster stability is achieved.
-The goal is to minimize the total sum of squared errors between the centroids and all objects (see equation {@eq:kmeans}). 
+The goal is to minimize the total sum of squared errors between the centroids and all objects (see Equation @eq:kmeans).
 
 $$
 J(C) = \sum^K_{k=1} \sum_{x_i \in c_k} \left| x_i - \mu_k \right| ^2
