@@ -520,7 +520,7 @@ It has 7 nodes, each of which is a different author, and 12 edges, which represe
 `M.Ikawa` has published with everyone in the graph.
 We can use this knowledge in a database query to get the papers that make up this graph (see Snippet \ref{blk:graph1940s}).
 
-``` {#blk:graph1940s .python caption="Python code to get the NSR entries in Figure @fig:small-graph-1940." fontsize=\small baselinestretch=1}
+``` {#blk:graph1940s .python caption="Python code to get the NSR entries in Figure \ref{fig:small-graph-1940}." fontsize=\small baselinestretch=1}
 import pymongo
 db = pymongo.MongoClient()['masters']
 db.NSR.find({"year": 1940, "authors": "M.Ikawa"})
@@ -535,7 +535,7 @@ Most graph libraries allow for a lot of customization and embedding of data.
 In a future work, the graphing routines could be modified to represent the number of copublications along the graph edges.
 This could be achieved with a text label, or an added thickness to the edge line.
 
-``` {#blk:graph1940s-results .json caption="JSON documents for the NSR entries in Figure @fig:small-graph-1940." fontsize=\footnotesize breaklines=true baselinestretch=1}
+``` {#blk:graph1940s-results .json caption="JSON documents for the NSR entries in Figure \ref{fig:small-graph-1940}." fontsize=\footnotesize breaklines=true baselinestretch=1}
 {
   "_id": "1940NI03",
   "year": 1940,
