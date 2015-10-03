@@ -23,7 +23,6 @@ linestretch: 1.6
 
 Introduction
 ============
-%- TODO ROBY start wider, general statements about data mining and what it can do
 %- TODO ROBY be less speculative, summarize work
 
 %- The problem and its setting
@@ -60,7 +59,7 @@ The Nuclear Science References, or NSR, has over 210,000 entries documenting the
 %- How capable is it as a tool to explore further work?
 ## The Nuclear Science References Website
 The NNDC maintains the [NSR website](http://www.nndc.bnl.gov/nsr/) which serves a simple interface to the Nuclear Science References database.
-They offer four primary search interfaces, a quick search, text search, indexed search, and keynumber search.
+They offer four primary search interfaces: quick search, text search, indexed search, and keynumber search.
 The functionality and architecture of the NSR database and web site is discussed by Pritychenko in @NSRweb.
 The quick search interface is shown in Figure {@fig:nsrweb1}.
 
@@ -68,10 +67,11 @@ The quick search interface is shown in Figure {@fig:nsrweb1}.
 
 The search functions are separated in either different pages or different text boxes.
 Some options and customizations are set through drop down menus.
+%- TODO separate how?
 For example the searching of indexed fields, including the selector values, is separate from the text search.
 
 ### Quick Search
-The quick search functionality is shown on the NSR homepage, it is the most commonly used interface @NSRweb.
+The quick search functionality is the most commonly used interface @NSRweb.
 It enables searching by author name, nuclide, or reaction.
 Two types of filters are available to limit the results: a year range, and reference type which can return only experimental or theory entries.
 Each of the search fields show examples of the type of search as well.
@@ -111,7 +111,7 @@ Additionally, the new database structure that is developed in this work enables 
 
 ### The Web Application
 The web application presents a single search interface as shown in Figure @fig:webapp-search.
-This interface can take queiries with a specified command, or one can be inferred.
+This interface can take queries with a specified command, or one can be inferred.
 If the user inputs a string that matches an author name than the application retrieves a profile page for that author.
 An example profile page for input "R.A.E.Austin" is shown in Figure @fig:author-profile.
 The author profiles combine information discussed in Section [Data Summarization](#data-summarization) and Section [Cluster Analysis](#cluster-analysis) .
@@ -126,7 +126,7 @@ This summary uses information and visualizations discussed in Section [Data Summ
 Visualizations of a network of collaborators are retrieved with the `collab:` command.
 For example, `collab:R.A.E.Austin` will retrieve a network graph of all the authors who have published with `R.A.E.Austin`.
 Additionally, the `collab:` command can take a nuclide as an input and generate a network graph of all authors who have published on that nuclide.
-Analysis of the network graphs is futher discussed in Section [Network Analysis and Visualization](#network-analysis-and-visualization).
+Analysis of the network graphs is further discussed in Section [Network Analysis and Visualization](#network-analysis-and-visualization).
 
 The `simpapers:` command returns a list of papers that are considered similar to the input selection.
 The command can take an authors name, or NSR Keynumber as valid inputs.
@@ -145,7 +145,7 @@ All efforts have been taken to ensure the research procedures can easily be exte
 ## Data Preparation
 The NSR data is maintained in a custom EXCHANGE format @winchell2007nuclear.
 This format is flat text that is not suitable for direct analysis.
-To fully utilize the data, it needs to be easily parseable into a data structure for analysis and use.
+To fully utilize the data, it needs to be easily parsed into a data structure for analysis and use.
 The approach least likely to introduce errors is to transform the data into a common format for which parsers already exist.
 
 [JavaScript Object Notation](http://json.org), or JSON, was chosen as the data format for this work.
@@ -190,7 +190,7 @@ The `<KEYNO   >` field is a unique key number assigned to each NSR entry.
 The data on which a particular entry was added to the database or last modified is encoded in the `<HISTORY >` field.
 The `<CODEN   >` and `<REFRENCE>` fields contain information about the journal or other type of resource the document came from.
 The `<AUTHORS >` field is a comma separated list of author names.
-The author list is one of the key relational components of the data, establishing links betweeen papers and other authors.
+The author list is one of the key relational components of the data, establishing links between papers and other authors.
 The `<TITLE   >` field is a free text field representing the title of the reference with a custom set of abbreviations for special characters like Greek letters.
 These abbreviations are detailed in the NSR coding manual @winchell2007nuclear.
 In this work, the abbreviations have been translated to \LaTeX.
@@ -394,11 +394,11 @@ Our goal was to obtain a broad perspective of its structure and composition.
 For example, there are 212835 entries[^our-data-set] that span from 1896 to 2014.
 We can answer questions such as "What percentage of all entries are journal articles?"
 As Table @tbl:typesAll shows, the majority of the document types in the NSR are journal articles.
-The next most popular are reports, and conference preceedings.
+The next most popular are reports, and conference proceedings.
 There are fewer books and preprints than there are unknown and unlabeled entries.
 The python code to produce these results is shown in Snippet \ref{blk:typesAllCode}.
 
-[^our-data-set]: Recall that the data set used in this work is a snapshot of the entire NSR data as dowloaded in January 2014.
+[^our-data-set]: Recall that the data set used in this work is a snapshot of the entire NSR data as downloaded in January 2014.
 
 Type       Amount   Percentage
 ----       ------   ----------
@@ -485,7 +485,6 @@ Table: The top 10 most prolific authors in the NSR database. {#tbl:prolific-auth
 Visualizations provide a summary of data at a glance.
 Consider Figure @fig:nsrhisto, which quickly demonstrates that the majority of NSR entries were published in the last 50 years.
 
-%- TODO fix title in graphic
 ![A histogram of all NSR entries published from 1896 to 2014](images/NSR-yearly-histogram.pdf){#fig:nsrhisto}
 
 The low publication numbers in the first 50 years was a useful property of the dataset.
@@ -867,11 +866,10 @@ Identifiers representing collaborations are often long and have small string dis
 
 ## The Application
 
-The cosine similarity results are presented in the results via a paper recommendation engine.
+The cosine similarity results are presented in the web application via the `simpapers:` command.
 The user of the application can search and for an author and see papers that are similar to the papers the author has coauthored.
-
-%- TODO: JS or Python? (later application building)
 The user's input is first matched against possibly multiple identifiers, making use of the results from the [Author Name Analysis](#author-name-analysis) section.
+
 %- Mongo
 Then a two-staged database query is performed.
 We first get all of the similar paper `_id`s from the `simPapers` array in each of the inputted author's papers.
@@ -880,11 +878,11 @@ At this stage we have a list of `_id`s that are similar to one or more NSR entri
 We fetch the NSR entry for the full list of `_id`s and filter out any that were published by the inputted author.
 Because the similarity ranking considers the selectors used and authors often publish multiple times using similar selectors, the recommended papers often include ones written by the same authors as the inputted paper.
 
-%- Python code
+%- TODO I have not written about the scoring function
+%- Web app
 The render object is then prepared to be sent to the html template to show the user.
 The end user then sees a web page with the search author in prominent text followed by a list of papers that have a cosine similarity to at least one of their own papers greater than 0.65.
 An example for author "A.J.Sarty" is shown in Figure @fig:simpapers-author.
-%- TODO I have not written about the scoring function
 
 ![Similar papers for author "A.J.Sarty"](images/simpapers-author.png) {#fig:simpapers-author}
 
@@ -943,10 +941,10 @@ $$
 \mbox{confidence} = \frac{\mbox{count} \left( X \cup  Y \right)}{\mbox{count} \left( X \right)}
 $$ {#eq:ap-confidence}
 
-%- apriori-dedup.r
-Our analysus will make use of the apriori algorithm implementation in the [`arules`](https://cran.r-project.org/web/packages/arules/index.html)@arules-manual @arules-article package in R.
+%- Apriori-dedup.r
+Our analysis will make use of the Apriori algorithm implementation in the [`arules`](https://cran.r-project.org/web/packages/arules/index.html)@arules-manual @arules-article package in R.
 The `prepare-data.py` program generates three transaction lists for analysis in R.
-The R script `apriori-dedup.r` takes an input file, output file, minimum support, and minimum confidence as command line arguments.
+The R script `Apriori-dedup.r` takes an input file, output file, minimum support, and minimum confidence as command line arguments.
 The arules package provides facilities in helping prune duplicate rules, and rules that are subsets of other rules.
 However, in analyses that produce many thousands of rules this pruning is too expensive and thus not used.
 
@@ -955,8 +953,8 @@ However, in analyses that produce many thousands of rules this pruning is too ex
 Our first analysis will use each NSR entry as a transaction, and the itemset will be the list of authors for that NSR entry.
 The resulting rules will be made up of authors who frequently publish together.
 Since Apriori finds frequent item sets, this analysis will favour authors with many publications in the NSR (and thus appear frequently).
-If we specify a minimum support of $0.0008$, apriori yields 344 association rules involving 104 unique author identifiers.
-Table @tbl:apriori1 shows a sample of the resulting rules.
+If we specify a minimum support of $0.0008$, Apriori yields 344 association rules involving 104 unique author identifiers.
+Table @tbl:Apriori1 shows a sample of the resulting rules.
 
 rules                                                            support     confidence   lift
 -----                                                            -------     ----------   ----
@@ -971,10 +969,10 @@ rules                                                            support     con
 {H.Iwasaki,S.Shimoura,T.Motobayashi} => {T.Minemura}             0.0008706   0.9071       910.2
 {L.Corradi} => {G.Montagnoli}                                    0.0008549   0.8716       908.1
 
-Table: Frequent itemset rules for authors of papers. {#tbl:apriori1}
+Table: Frequent itemset rules for authors of papers. {#tbl:Apriori1}
 
 %- low support
-All of the 11 unique authors in Table @tbl:apriori1 have published more than 165 times.
+All of the 11 unique authors in Table @tbl:Apriori1 have published more than 165 times.
 There are only 608 authors who have greater than 165 publications in the database.
 In order to have rules involving more authors[^more-authors] we need to lower the minimum support.
 The minimum support to see a given author in a rule is dependent on their publication count.
@@ -988,13 +986,13 @@ On an extended run with a low support of 0.00029 the Apriori algorithm produces 
 With this many rules we can no longer prune duplicates in R as the memory requirements are enormous.
 However we can still perform some simple analysis like counting unique authors.
 With a support value of 0.00029 the analysis of author lists from NSR entries produces 2211797 rules involving 859 unique author identifiers.
-%- Running the apriori algorithm on author lists from papers is of little utility.
+%- Running the Apriori algorithm on author lists from papers is of little utility.
 %- The rules involving only two authors reveal author pairs where the (Roby - Svenson)
 
 %- papers -> selectors
 Apriori with each paper as a transaction, and selectors as items should produce lists of selectors that frequently occur together in papers.
 This tends to produce association rules that look like a list of isotopes involved in nuclear reactions.
-The first four rules in Table @tbl:apriori2 can be read off as nuclear reactions.
+The first four rules in Table @tbl:Apriori2 can be read off as nuclear reactions.
 $^{290}\mbox{Lv}$ undergoes alpha decay and produces the daughter nucleus $^{286}\mbox{Fl}$, along with an alpha particle but this is not recorded in the NSR selectors.
 With a support value of 0.00029 the analysis of selectors from their NSR entry lists produces 3479553 rules involving 1202 unique selectors.
 
@@ -1011,10 +1009,10 @@ rules                              support     confidence   lift
 {G 286FL,S A-DECAY} => {P 290LV}   0.000298    1.0000       3167.4
 {P 290LV} => {G 286FL}             0.000298    0.9464       3167.4
 
-Table: Frequent itemset rules for selectors in  papers. {#tbl:apriori2}
+Table: Frequent itemset rules for selectors in  papers. {#tbl:Apriori2}
 
 %- selectors -> authors
-Our final analysis with apriori uses each selector as a transaction and the list of authors who have published with that selector as the itemset.
+Our final analysis with Apriori uses each selector as a transaction and the list of authors who have published with that selector as the itemset.
 There is a chance that some of these rules involve authors who have not published together.
 This information would be useful, however the analysis to find such a rule has not been completed.
 With a support value of 0.0042 the analysis of author lists for each selector produces 3832412 rules involving 774 unique author identifiers.
@@ -1043,7 +1041,7 @@ rules                                                           support     conf
 {F.Scarlassara,L.Corradi,S.Szilner} => {G.Montagnoli}           0.008517    1.0000       92.4
 {A.M.Stefanini,L.Corradi,S.Szilner} => {G.Montagnoli}           0.008403    1.0000       92.4
 
-Table: Frequent itemset rules for selectors in  papers. {#tbl:apriori3}
+Table: Frequent itemset rules for selectors in  papers. {#tbl:Apriori3}
 
 ## Cluster Analysis
 %- Introduce and discuss the algorithms used in application features
@@ -1088,7 +1086,7 @@ However, their exist methods to measure the effectiveness of a clustering config
 
 ### Initial Author Clustering
 %- Cluster with author, numCoauthors, numEntries, numYears first
-%- Then develope more advanced clusterings by increasing the number of parameters used to describe these points.
+%- Then develop more advanced clusterings by increasing the number of parameters used to describe these points.
 %- e.g. Use values at a range of different percentiles.
 
 There is a considerable amount of multivariate data in the NSR database.
@@ -1097,14 +1095,14 @@ In this section, the authors will be analyzed to identify groups or clusters of 
 
 An aggregation query is used to summarize our data in preparation for clustering.
 This query saves, for each author, their total number of coauthors, their total number of years publishing, and their total number of publications.
-To help evaluate this summarization of authors, three heatmaps of this data are presented in figures @fig:nyne-log, @fig:nync-log, and @fig:nenc-log.
+To help evaluate this summarization of authors, three heat maps of this data are presented in figures @fig:nyne-log, @fig:nync-log, and @fig:nenc-log.
 
 Figure @fig:nyne-log shows an expected trend: Authors who publish over more years tend to have more publications overall.
 Each of these figures shows that there is a large number of authors who have published only a few times.
 Additionally, there are comparatively few authors who have published many times.
-The heatmap coloring is on a logarithmic scale, while the axes are linear.
+The heat map coloring is on a logarithmic scale, while the axes are linear.
 Without the log color scale, the plots would be washed out by the incredibly many authors who have published only once.
-(Linearly coloured heatmaps are shown in the Appendix, figures @fig:nyne-linear, @fig:nync-linear, and @fig:nenc-linear.)
+(Linearly coloured heat maps are shown in the Appendix, figures @fig:nyne-linear, @fig:nync-linear, and @fig:nenc-linear.)
 
 ![Number of entries an author has given the number of years they have published.](../../data/images/nyne-log-heatmap.png){#fig:nyne-log}
 
@@ -1112,7 +1110,7 @@ Without the log color scale, the plots would be washed out by the incredibly man
 
 ![Number of coauthors an author has given the number of entries they have published.](../../data/images/nenc-log-heatmap.png){#fig:nenc-log}
 
-The three heatmaps show that the 3 dimensional data is not well segmented and is instead continuous.
+The three heat maps show that the 3 dimensional data is not well segmented and is instead continuous.
 This is a result of the input data being continuous in nature.
 Clustering categorical data could lead to more discrete or separated clusters.
 Nevertheless, the cluster results of this data could be used to aid in classifying authors.
@@ -1131,7 +1129,7 @@ The two cluster evaluation metrics used leave us we a range of choices.
 If we consider the G1 results to suggest we pick from 5, 6, or 7 clusters, then the Davies-Bouldin index results would suggest we pick to lowest, 5 clusters.
 Table @tbl:first-5clusters shows the data point values for the 5 different cluster centroids.
 Table @tbl:first-6clusters and Table @tbl:first-7clusters show the centroid information for the 6 and 7 cluster scheme.
-In all cases we can see `numCoauthors`, `numYears`, and `numEntries` monotically increase as the size of the cluster decreases.
+In all cases we can see `numCoauthors`, `numYears`, and `numEntries` monotonically increase as the size of the cluster decreases.
 
 Figure @fig:kmeans-first5 shows the `numCoauthors`, `numYears`, and `numEntries` data coloured according to their cluster membership in the 5 cluster scheme.
 This figure again demonstrates that the data is continuous and well separated clusters do not exist.
@@ -1173,11 +1171,11 @@ Table: Centroid data points for 6 cluster K-Means on initial data {#tbl:first-6c
 
 Table: Centroid data points for 7 cluster K-Means on initial data {#tbl:first-7clusters}
 
-![Initial clustering on authors with Kmeans](../../data/images/first5clusters.png){#fig:kmeans-first5}
+![Initial clustering on authors with K-means](../../data/images/first5clusters.png){#fig:kmeans-first5}
 
 ### Secondary Clustering
 %- Want data with more dimensionality
-The `numEntries` and `numCoauthors` data presented in the heatmaps can be improved.
+The `numEntries` and `numCoauthors` data presented in the heat maps can be improved.
 An author could have published 20 papers in 1995 and 5 papers in 1996, their resulting numYears value for that range would be 2.
 This has the effect of ignoring how prolific a given author may have been in a certain time.
 We want the author who published 20 papers in 1995 to be measured differently than an author who published once in both 1995 and 1996.
@@ -1217,7 +1215,7 @@ The values presented in Table @tbl:papersWithoutNAuthors suggest that the bulk o
 This result means that filtering out low publication authors in additional analysis does not affect the majority of the NSR entries.
 %- Demonstrate that 1993JA17 and 1996JA24 disappear correctly
 
-![Secondary clustering on authors with Kmeans](../../data/images/quartiles5clusters.png){#fig:kmeans-quartiles5}
+![Secondary clustering on authors with K-means](../../data/images/quartiles5clusters.png){#fig:kmeans-quartiles5}
 
 ## Future Work
 
@@ -1227,7 +1225,7 @@ Finding similar authors separated in time could be interesting.
 The results from the association rule learning could be used to develop a classification system.
 As authors input the keywords for their paper the system could try to match the user's input with association rules.
 This would require relating the association rules to the desired classification rules.
-Alternatively, the NSR entries could be classified manually and then we could rerun apriori to learn rules that directly link to the classification label.
+Alternatively, the NSR entries could be classified manually and then we could rerun Apriori to learn rules that directly link to the classification label.
 
 
 Conclusions
