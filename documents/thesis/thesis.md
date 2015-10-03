@@ -619,9 +619,9 @@ The colour of the nodes is determined by Gephi's modularity function @gephiModul
 The modularity of a graph is a measure of structure.
 The graph is partitioned into communities where there are dense intra-community connections and sparse inter-community connections.
 
-![Network Graph of 1989. Nodes are authors coloured by modularity, and edges are a common publication.](images/NSR-1989-biggest-modularity-degree-yifanhuML.pdf){#fig:nsr1989graphyifanhu}
+![Network Graph of 1989 produced in Gephi with the Yifan Hu ML layout algorithm.](images/NSR-1989-biggest-modularity-degree-yifanhuML.pdf){#fig:nsr1989graphyifanhu}
 
-![Network Graph of 1989. Nodes are authors coloured by modularity, and edges are a common publication.](images/smNSR-1989-biggest-modularity.png){#fig:nsr1989graph}
+![Network Graph of 1989 produced in Gephi with the Atlas 2 layout algorithm.](images/smNSR-1989-biggest-modularity.png){#fig:nsr1989graph}
 
 ## Nuclide Graphs
 Almost any parameter can be used as a filter to produce an author network graph.
