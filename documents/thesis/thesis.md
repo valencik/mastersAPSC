@@ -109,6 +109,29 @@ All one needs in order to use the application is a modern web browser.
 Interactive visualizations are used to encourage exploring the data.
 Additionally, the new database structure that is developed in this work enables searches that were previously cumbersome or impossible.
 
+### The Web Application
+The web application presents a single search interface as shown in Figure @fig:webapp-search.
+This interface can take queiries with a specified command, or one can be inferred.
+If the user inputs a string that matches an author name than the application retrieves a profile page for that author.
+An example profile page for input "R.A.E.Austin" is shown in Figure @fig:author-profile.
+The author profiles combine information discussed in Section [Data Summarization](#data-summarization) and Section [Cluster Analysis](#cluster-analysis) .
+
+If the user inputs a year or year range such as `1989` or `1970-1979` than a summary of the data for those years is shown.
+This summary uses information and visualizations discussed in Section [Data Summarization](#data-summarization).
+
+![The search interface of the new web app](images/webapp-search.png) {#fig:webapp-search}
+
+![The author profile page for "R.A.E.Austin"](images/author-profile.png) {#fig:author-profile}
+
+Visualizations of a network of collaborators are retrieved with the `collab:` command.
+For example, `collab:R.A.E.Austin` will retrieve a network graph of all the authors who have published with `R.A.E.Austin`.
+Additionally, the `collab:` command can take a nuclide as an input and generate a network graph of all authors who have published on that nuclide.
+Analysis of the network graphs is futher discussed in Section [Network Analysis and Visualization](#network-analysis-and-visualization).
+
+The `simpapers:` command returns a list of papers that are considered similar to the input selection.
+The command can take an authors name, or NSR Keynumber as valid inputs.
+The method by which papers are determined to be similar is discussed in Section [Cosine Similarity of NSR Selectors](#cosine-similarity-of-nsr-selectors).
+
 
 The Data and Database
 =====================
