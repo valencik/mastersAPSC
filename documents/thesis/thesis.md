@@ -61,23 +61,18 @@ The Nuclear Science References, or NSR, has over 210,000 entries documenting the
 The NNDC maintains the [NSR website](http://www.nndc.bnl.gov/nsr/) which serves a simple interface to the Nuclear Science References database.
 They offer four primary search interfaces: quick search, text search, indexed search, and keynumber search.
 The functionality and architecture of the NSR database and web site is discussed by Pritychenko in @NSRweb.
-The quick search interface is shown in Figure {@fig:nsrweb1}.
+The quick search interface is shown in Figure @fig:nsrweb1.
 
 ![The main interface for the NNDC's NSR website. Captured June 28th 2015](images/web-NSR-main-June-28-2015.png) {#fig:nsrweb1}
 
-The search functions are separated in either different pages or different text boxes.
-Some options and customizations are set through drop down menus.
-%- TODO separate how?
-For example the searching of indexed fields, including the selector values, is separate from the text search.
-
-### Quick Search
+%- Quick Search
 The quick search functionality is the most commonly used interface @NSRweb.
 It enables searching by author name, nuclide, or reaction.
 Two types of filters are available to limit the results: a year range, and reference type which can return only experimental or theory entries.
 Each of the search fields show examples of the type of search as well.
 For example the author field shows you can search for an author using their first initials and their last name, or only their last name.
 
-### Text Search
+%- Text Search
 The text search interface enables text searching in the title, keywords, or both fields.
 The search is not case sensitive and requires a search string of at least three characters in length.
 Phrases can be used by enclosing them in quotes.
@@ -86,7 +81,7 @@ Additionally the user can enable 'primary only' or 'require measured quantity' f
 The results can be sorted in ascending or descending order and presented in HTML, BibTex, Text, Keynum, or Exchange formats.
 The quick search results do not offer these output customizations.
 
-### Indexed Search
+%- Indexed Search
 %- Author fingerprinting will improve the author 'browse' button
 The interface for indexed searching is similar to the Text Search.
 The most important difference is the functionality offered by the browse buttons for the search parameters.
@@ -96,7 +91,7 @@ For each of the types available the browser button will redirect to another page
 For example, Author and First Author direct to a simple search interface that allows some partial matches against the list of known authors.
 %- TODO ROBY have you compared this to your known multiples?
 
-### Result Analysis
+%- Result Analysis
 Search queries are remembered and presented in the 'Combine View' tab.
 You can combine the results of recent queries with boolean logic.
 Analysis is offered on the search queries which displays how many nuclides, authors, journals, and publication years the query involved.
