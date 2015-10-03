@@ -363,7 +363,7 @@ Data Summarization
 
 ## Data Composition and Queries
 Through data summarization we can learn the first-order characteristics of the data set.
-The goal is obtain a broad perspective of the structure and composition of the data set.
+Our goal was to obtain a broad perspective of the structure and composition of the data set.
 For example, there are 212835 entries in the data set[^our-data-set] that span from 1896 to 2014.
 We can answer questions such as "What percentage of all entries are journal articles?"
 As Table @tbl:typesAll shows, the majority of the document types in the NSR are journal articles.
@@ -414,12 +414,10 @@ db.NSR.aggregate([{"$match": {"authors": "A.J.Sarty"}},
 ```
 
 %- Slice of time
-The data can also be partitioned or sliced in time.
-This also use to ask questions such as "what percentage of 1989 entries are journal articles?"
-As we can see from Table @tbl:types1989 the $72.06\%$ of the NSR entries are journal articles.
+The data can also be partitioned or sliced in time, supporting questions such as "what percentage of 1989 entries are journal articles?"
+As we can see from Table @tbl:types1989 $72.06\%$ of the NSR entries in 1989 are journal articles.
 This percentage is different than that of the whole work (as shown in Table @tbl:typesAll), but not by a significant amount.
-It does highlight a particular interest that the data is not uniform.
-%- To understand how the data changes with resepect to time we can use visualizations.
+It does highlight a particular point of interest, i.e. that the data is not uniform.
 
 Type       Amount   Percentage
 ----       ------   ----------
@@ -437,7 +435,7 @@ Table: Different types of NSR entries in 1989. {#tbl:types1989}
 For a particular selection of NSR data, it is useful to know the rankings for important data fields.
 For example, when a user searches an author on the application they are presented with a ranked list of their most frequent coauthors, keywords, and nuclides.
 This type of analysis can of course be applied to the whole dataset as well.
-Table {#tbl:prolific-authors} shows the authors with the highest count of NSR entries in the entire database.
+Table @tbl:prolific-authors shows the authors with the highest count of NSR entries in the entire database.
 
 Author              Number of Publications
 ------              ----------------------
@@ -457,13 +455,13 @@ Table: The top 10 most prolific authors in the NSR database. {#tbl:prolific-auth
 ## Visualizations
 
 Visualizations provide a summary of data at a glance.
-Consider Figure @fig:nsrhisto, it quickly demonstrates that the majority of NSR entries were published in the last 50 years.
+Consider Figure @fig:nsrhisto, which quickly demonstrates that the majority of NSR entries were published in the last 50 years.
 
 ![A histogram of all NSR entries published from 1896 to 2014](images/NSRyearlyhistogram.pdf){#fig:nsrhisto}
 
-The low publication numbers in the first 50 years turned out to be a useful property of the dataset.
+The low publication numbers in the first 50 years was a useful property of the dataset.
 It permitted testing data analysis code on small portions of the data (years pre 1950), before applying the code to the full dataset.
-This was particularly helpful in developing the network analysis code and visualizations, as post 1950 the networks can be too large to process quickly.
+This was particularly helpful in developing the network analysis code and visualizations, as post 1950 the networks are too large to process quickly.
 
 There are two primary visual methods for displaying summary information in this application: histograms and pie charts.
 The histograms, as seen in Figure @fig:nsrhisto, can show how a particular slice of the database evolves over time.
@@ -496,7 +494,7 @@ An example can be seen in Figure @fig:small-graph-1940.
 
 Figure @fig:small-graph-1940  is a single component of the complete 1940 author graph (shown in Appendix Figure @fig:complete-graph-1940).
 It has 7 nodes, each is a different author, and 12 edges which represent a coauthorship between the two nodes.
-`M.Ikawa` has publish with everyone in the graph.
+`M.Ikawa` has published with everyone in the graph.
 We can use this knowledge in a database query to get the papers that make up this graph (see \ref{blk:graph1940s}).
 
 ``` {#blk:graph1940s .python caption="Python code to get the NSR entries in Figure @fig:small-graph-1940." fontsize=\small baselinestretch=1}
@@ -617,25 +615,21 @@ Networkx has a collection of algorithms and functions used to analyze and manipu
 Such manipulations include identifying and sorting disconnected subgraphs within a slice of data.
 For example, Figure @fig:nsr1989graphyifanhu and Figure @fig:nsr1989graph use only the largest connected graph of all the NSR entries in the year 1989.
 
-## Future Work
+## Exporting Graph Data
 Treating the NSR database as graph data opens up avenues for future work.
-A graph with authors as nodes and their publications determining the edges provides a social network of collaborating scientists.
-Thus the data is made available for future work in other fields such the social sciences or large network analysis.
+All of the graphs we have created have authors as nodes with edges determined by their coauthors.
+These graphs are social networks of collaborating scientists.
+The study of them could be of interest to social scientists and network scientists.
 
-Another area of interest is in graph clustering, the results of which could be compared to those from the [Cluster Analysis](#cluster-analysis) section.
-
-### Exporting Graph Data
-The Networkx library has support for writing the graph data structures to multiple file types.
-They are written to a JSON object before being served to the web application, for example.
-Additionally they can be written to `gexf`, `GML`, `GraphML` and [others](http://networkx.readthedocs.org/en/latest/reference/readwrite.html).
+Exporting the graph data helps enable future work.
+The Networkx library has support for writing the graph data structures to multiple file types, such as `gexf`, `GML`, `GraphML` and [others](http://networkx.readthedocs.org/en/latest/reference/readwrite.html).
 These files can then be imported into other analysis applications like Gephi.
 Example code for exporting the 1989 data to `gexf` format is available at [github.com/valencik/mastersAPSC](https://github.com/valencik/mastersAPSC).
 
 
-
 Text Mining
 ===========
-
+%- TODO citation
 Text mining is an area of analysis that focuses on extracting useful information from unstructured plain text data.
 The data to analyze is often natural language text written by humans.
 Examples of such data include user reviews of a product or service, customer feedback comments, emails, forum posts, or even academic journal articles.
@@ -643,17 +637,15 @@ Examples of such data include user reviews of a product or service, customer fee
 A simple goal of text mining could be to summarize the input text.
 However, this can be abstracted further to 'numericizing' text data for use in an analysis model.
 
-Sentiment analysis is the extraction of subjective information, like opinions, from text data.
-This can be accomplished by parsing natural language and quantifying the affectivity of keywords.
-
 ## Cosine Similarity
 %- https://stackoverflow.com/questions/15173225/how-to-calculate-cosine-similarity-given-2-sentence-strings-python
-The K-means discussion above mentioned a few types of distance metrics for use in clustering.
-When dealing with text we often use the cosine similarity of two documents to compute their 'distance.
+In order to compare two items we need a metric by which we can measure them.
+In the Section [K-means Clustering](#k-means-clustering) we discuss distance metrics for clustering.
+When dealing with text we often use the cosine similarity of two documents to compute their distance.
 We build a term vector for each document to be analyzed, this is a vector describing the amount of occurrences each word has in the document
 Say document one, $d1$, is "The quick brown fox jumped over the lazy dog" and document two, $d2$, is "The brown dog jumped over the brown fox".
 We create a term vector for each document, as seen in table @tbl:termtable.
-Often in doing this, very common words like 'the' are omitted.
+Often in doing this, very common words like "the" are omitted.
 Equations @eq:d1termvector and @eq:d2termvector are the term vectors for each document.
 The cosine similarity is the dot product of the two documents divided by the product of their magnitudes @eq:cosinesimilarity. @huang2008similarity
 
@@ -699,40 +691,38 @@ This technique is a simple way of numercizing text for further mathematical mani
 ### Cosine Similarity of NSR Selectors
 A script was prepared to perform cosine similarity analysis on the NSR selectors.
 The code is available at `calc-cosine-sims.py`.
-For each NSR entry we form a vector from the entry's selectors.
-These vectors are used to form a corpus that calculates the frequency of each term in the vectors.
+For each NSR entry, a vector was formed from the entry's selectors.
+These vectors were used to form a corpus that calculated the frequency of each term in the vectors.
 Any selector with a value equal to `OTHER` was filtered out.
 These are the most common selectors, and contribute little meaning on their own.
 
-These selectors are similar to stop words, they occur frequently and do now tell us much about the particular NSR entry.
-The vectors are formed by taking the selectors and turning them into strings.
-We drop the `subkey` value for this analysis as we are not particularly concerned about the ordering of the of the selectors, just that they did happen in a given paper.
+These selectors are similar to stop words, they occur frequently and do not tell us much about the particular NSR entry.
+The vectors are formed by turning the selectors into strings.
+We dropped the `subkey` value for this analysis as we were not concerned with the ordering of the of the selectors.
 The fact that cosine similarity does not take into account the ordering of words is a limitation that negatively impacts its performance on real world text documents @wiki-vsm.
-This does not affect out analysis has we are not analyzing natural language but rather constructing our "words" out of a list of items that act like keywords.
+This does not affect our analysis as we were not analyzing natural language but constructing our "words" out of a list of items that act like keywords.
 
-The python package `gensim` is used to handle the vector creation and similarity analysis.
-While `gensim` offers many features and different forms of similarity measures[^gensim-sims], we make use of the cosine simularity routines.
+The python package `gensim` was used to handle the vector creation and similarity analysis.
+While `gensim` offers many features and different forms of similarity measures[^gensim-sims], we made use of the cosine simularity routines.
 
 [^gensim-sims]: Documentation for `gensim`'s methods of calculating similarities is available at: [radimrehurek.com/gensim/similarities/docsim.html](http://radimrehurek.com/gensim/similarities/docsim.html)
 
-The result is a list of paper `_id`'s that are similar to the input paper.
-These results are written to the database in a new field `simPapers`.
+The result was a list of paper `_id`s that were similar to the input paper.
+These results were written to the database in a new field `simPapers`.
 The `simPapers` field is actually an array of objects, similar to the `selectors` field.
 Each object contains two items, the `_id` of the paper, and the computed score from `gensim`.
 The usage of these similarity scores is shown in the [Application Section](#the-application).
 
 ## Author Name Analysis
 
-The NSR database, before and after the data preparation in this work, contains mistakes, typos, and minor errors.
-In this section, we describe the analysis which identifies and mitigates these issues.
-Some terms must be defined.
+In this section, we describe the analysis which identifies and mitigates the issue of having multiple variants of author names in the database.
 We will use the word "author" (formatted plainly and without quotes) to refer to an individual human being who contributed to a work that is documented in the NSR database.
 The term "identifier" (also formatted plainly and without quotes) will refer to the string of text that occurs in the database.
 The actual identifier strings will always appear in a fixed width typeface.
 For example, an author may be Andrew Valencik, and he may have more than one identifier such as `A.Valencik`, `A. Valencik`, and or `A.C.Valencik`.
 
 This analysis locates multiple identifiers in the database that correspond to single authors.
-This may be caused by typos, changes in formatting, and differences in style from one publication to the next.
+This may be caused by differences in style from one publication to the next, changes in formatting, or simple typos.
 Authors themselves may opt in some publications to be identified by more than one initial and only one in others.
 
 Pritychenko reports 96200 unique authors in his 2014 paper @Pritychenko14.
@@ -742,9 +732,9 @@ However, correctly identifying and including all authors when doing network anal
 
 Currently there are 41254 unique identifiers that appear only once in the NSR database.
 Some portion of those are author name variances that only occur once.
-Knowing that portion is important to understanding something about the database; in the [Initial Author Clustering](#initial-author-clustering) section we investigated how the database changed as we removed identifiers (referred to as just "authors" in that section) below a publication threshold.
+Knowing that portion is important to understanding something about the database; in the [Initial Author Clustering](#initial-author-clustering) section we investigated how the database changed as we removed identifiers (referred to as "authors" in that section) below a publication threshold.
 This analysis depends on correctly identifying the number of authors who have published a given number of times.
-Typos in the list of authors render such an analysis in inaccurate.
+Variances in the list of authors render such an analysis in inaccurate.
 
 After the data preparation and importing step the database contains identifiers `A.Herzan` and `A. Herzan`.
 These two identifiers have 12 and 1 publication(s) respectively.
@@ -763,6 +753,7 @@ However, we want to also consider more difficult matches like `J.Svenne` and `J.
 Approximate string matching libraries often use the Levenshtein Distance metric to compare strings.
 
 ### Levenshtein Distance
+%- TODO citation
 String edit distance measures such as the Levenshtein Distance offer an easy first approach to analyzing the author names.
 The Levenshtein distance is one type of string metric to evaluate the difference between two sequences of characters.
 A distance of 1 is attributed to every single character edit necessary to transform one of the input strings into the other.
@@ -781,11 +772,11 @@ It was observed that pairs with a Levenshtein distances of 2 or greater were unl
 Furthermore, 20 million pairs is too many for additional analysis.
 
 ### Transformations
-Three simple string transformations have been constructed to locate similar identifiers.
-The first stage transforms all the characters in the name string to lower case.
-$1936$ author names become non-unique when reduced to only lower case letters.
+Three simple string transformations were constructed to locate similar identifiers.
+The first stage transformed all the characters in the name string to lower case.
+$1936$ author names became non-unique when reduced to only lower case letters.
 
-``` {#blk:names-lower .text caption="Identifiers which become duplicates after transformation 1." fontsize=\small baselinestretch=1}
+``` {#blk:names-lower .text caption="Identifiers which became duplicates after transformation 1." fontsize=\small baselinestretch=1}
 C.Le Brun	C.Le brun	C.le Brun
 P.Fan	P.fan
 A.De Waard	A.de Waard
@@ -793,10 +784,10 @@ R.Del Moral	R.del Moral
 J.M.Van Den Cruyce	J.M.Van den Cruyce	J.M.van den Cruyce
 ```
 
-The second stage takes the lower case identifiers and removes all spaces.
-There are $2619$ identifiers that have duplicates when reduced to lower case letters with no spaces.
+The second stage toke the lower case identifiers and removed all spaces.
+There were $2619$ identifiers that had duplicates when reduced to lower case letters with no spaces.
 
-``` {#blk:names-nospace .text caption="Identifiers which become duplicates after transformations 1 and 2." fontsize=\small baselinestretch=1}
+``` {#blk:names-nospace .text caption="Identifiers which became duplicates after transformations 1 and 2." fontsize=\small baselinestretch=1}
 B.N.Subba Rao	B.N.Subbarao
 R.M.Del Vecchio	R.M.DelVecchio	R.M.Delvecchio	R.M.del Vecchio
 J.Adam, Jr.	J.Adam,Jr.
@@ -805,10 +796,10 @@ C.Ciofi Degli Atti	C.Ciofi Degliatti	C.Ciofi degli Atti
 C.Le Brun	C.Le brun	C.LeBrun	C.Lebrun	C.le Brun
 ```
 
-Finally, we remove all punctuation as well, which results in $6561$ identifiers that are not unique.
-A python script, `calc-author-name-transform-pairs.py` has been prepared to perform these transformations and write the identifiers which form duplicates to a file.
+Finally, we remove all punctuation as well, which resulted in $6561$ identifiers that were not unique.
+A python script, `calc-author-name-transform-pairs.py` was prepared to perform these transformations and write the identifiers which form duplicates to a file.
 
-``` {#blk:names-nopunc .text caption="Identifiers which become duplicates after transformations 1, 2, and 3." fontsize=\small baselinestretch=1}
+``` {#blk:names-nopunc .text caption="Identifiers which became duplicates after transformations 1, 2, and 3." fontsize=\small baselinestretch=1}
 B.V.T.Rao	B.V.Trao
 A.M.Laird	A.M<.Laird
 H.-R.Kissener	H.R.Kissener
@@ -818,8 +809,8 @@ C.Le Brun	C.Le Brun,	C.Le brun	C.LeBrun	C.Lebrun	C.le Brun
 
 As the progression of transformations shows, an identifier that becomes non-unique in transformation 1 will continue to appear in the output results of transformations 2 and 3.
 Some authors have been represented up to 6 different ways.
-Surnames composed of multiple words separated by spaces appear to be the most prone to multiple representations.
-The output of transformation 3 provides a reasonable list to apply additional analysis to.
+Surnames composed of multiple words separated by spaces are likely to be multiply represented.
+The output of transformation 3 provided a list of reasonable size to apply additional analysis to.
 There are 3063 groups of identifiers identified as duplicates in the transformation 3 analysis (and 6561 identifiers in total).
 
 We have reduced, by two orders of magnitude, the number of identifiers that should be subject to additional analysis.
@@ -832,7 +823,9 @@ Performing the Levenshtein distance analysis will still fall short of identifyin
 `Adam Sarty` and `A.Sarty` are both valid identifies for a single author.
 An application to locate multiple identifiers of this type would require a significant modification to the existing string metrics.
 There are many open source implementations of string distance functions, so a modification is not out of the question.
+However, such a modification is outside the scope of this work.
 
+%- TODO future work?
 Another approach could simplify the list of authors while accepting potential loss of information.
 The current number of unique identifiers after data preparation is $100147$, if we remove all identifiers that include "` the `" in their name we reduce to $98788$ identifiers.
 This has the effect of removing collaborations from the author list.
@@ -848,21 +841,22 @@ The user of the application can search and for an author and see papers that are
 %- TODO: JS or Python? (later application building)
 The user's input is first matched against possibly multiple identifiers, making use of the results from the [Author Name Analysis](#author-name-analysis) section.
 %- Mongo
-The database query must be done in two stages.
-We first need to get all of the similar paper `_id`s for the inputted authors papers, and then we need to actually fetch the database documents for those paper `_id`s.
-This cannot be done in one step as we do not know the paper `_id`s to fetch until we grab all of the authors papers, and once we have the authors papers we need to get papers that the other has not written. (this sentence sucks)
-Then a database aggregation query is constructed to fetch all of the papers associated with the resulting identifiers.
-The database unwinds the `simPapers.paper` field and then groups on it.
-At this stage we have a document for each paper that was considered similar to the authors papers.
+Then a two-staged database query is performed.
+We first get all of the similar paper `_id`s from the `simPapers` array in each of the inputted author's papers.
+The total list of similar paper `_id`s can be filtered by the similarity score that is also included in the `simPapers` array.
+At this stage we have a list of `_id`s that are similar to one or more NSR entries the inputted author published.
+We fetch the NSR entry for the full list of `_id`s and filter out any that were published by the inputted author.
+Because the similarity ranking considers the selectors used and authors often publish multiple times using similar selectors, the recommended papers often include ones written by the same authors as the inputted paper.
 
 %- Python code
-We then prepare the render object to be sent to the html template to show the user.
+The render object is then prepared to be sent to the html template to show the user.
 The end user then sees a web page with the search author in prominent text followed by a list of papers that have a cosine similarity to at least one of their own papers greater than 0.65.
 %- TODO I have not written about the scoring function
 
 %- TODO insert image of the application interface
 
 ### Further Analysis
+%- TODO Roby says she's been here before?
 %- Clustering? no. Graph analysis.
 %- Can I come up with a # of publication independent clustering schema?
 %- Probably not, and so the graph analysis would be quite useful here!
