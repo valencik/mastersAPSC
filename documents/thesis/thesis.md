@@ -486,7 +486,7 @@ Visualizations provide a summary of data at a glance.
 Consider Figure @fig:nsrhisto, which quickly demonstrates that the majority of NSR entries were published in the last 50 years.
 
 %- TODO fix title in graphic
-![A histogram of all NSR entries published from 1896 to 2014](images/NSRyearlyhistogram.pdf){#fig:nsrhisto}
+![A histogram of all NSR entries published from 1896 to 2014](images/NSR-yearly-histogram.pdf){#fig:nsrhisto}
 
 The low publication numbers in the first 50 years was a useful property of the dataset.
 It permitted testing data analysis code on small portions of the data (years pre 1950), before applying the code to the full dataset.
