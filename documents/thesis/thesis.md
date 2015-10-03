@@ -130,6 +130,7 @@ Analysis of the network graphs is futher discussed in Section [Network Analysis 
 
 The `simpapers:` command returns a list of papers that are considered similar to the input selection.
 The command can take an authors name, or NSR Keynumber as valid inputs.
+An example for author "A.J.Sarty" is shown in Figure @fig:simpapers-author.
 The method by which papers are determined to be similar is discussed in Section [Cosine Similarity of NSR Selectors](#cosine-similarity-of-nsr-selectors).
 
 
@@ -882,9 +883,10 @@ Because the similarity ranking considers the selectors used and authors often pu
 %- Python code
 The render object is then prepared to be sent to the html template to show the user.
 The end user then sees a web page with the search author in prominent text followed by a list of papers that have a cosine similarity to at least one of their own papers greater than 0.65.
+An example for author "A.J.Sarty" is shown in Figure @fig:simpapers-author.
 %- TODO I have not written about the scoring function
 
-%- TODO insert image of the application interface
+![Similar papers for author "A.J.Sarty"](images/simpapers-author.png) {#fig:simpapers-author}
 
 ### Further Analysis
 %- TODO Roby says she's been here before?
