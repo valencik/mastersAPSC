@@ -883,11 +883,14 @@ At this stage we have a list of `_id`s that are similar to one or more NSR entri
 We fetch the NSR entry for the full list of `_id`s and filter out any that were published by the inputted author.
 Because the similarity ranking considers the selectors used and authors often publish multiple times using similar selectors, the recommended papers often include ones written by the same authors as the inputted paper.
 
-%- TODO I have not written about the scoring function
 %- Web app
 The render object is then prepared to be sent to the html template to show the user.
 The end user then sees a web page with the search author in prominent text followed by a list of papers that have a cosine similarity to at least one of their own papers greater than 0.65.
 An example for author "A.J.Sarty" is shown in Figure @fig:simpapers-author.
+The similar papers are sorting in descending order of their score function value.
+The scoring function is the average of all the `score` fields for that paper that were encountered in the aggregation.[^multiple-scores]
+
+[^multiple-scores]: Because we fetch the `simPapers` array for multiple papers when searching for an author's similar papers, we can see the same `_id` multiple times and with different scores each time.
 
 ![Similar papers for author "A.J.Sarty"](images/simpapers-author.png) {#fig:simpapers-author}
 
