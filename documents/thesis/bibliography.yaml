@@ -226,4 +226,17 @@ references:
   title: 'PyMongo 3.0.3 Documentation'
   note: \[Online; accessed 3-October-2015\]
   URL: http://api.mongodb.org/python/current/
+
+- id: neighbor-matching
+  type: article-journal
+  author:
+  - family: Nikolić
+    given: Mladen
+  issued:
+  - year: 2012
+  title: 'Measuring Similarity of Graph Nodes by Neighbor Matching'
+  container-title: Intelligent Data Analysis
+  volume: 40
+  issue: 4
+  URL: http://argo.matf.bg.ac.rs/publications/2011/similarity.pdf
 ...

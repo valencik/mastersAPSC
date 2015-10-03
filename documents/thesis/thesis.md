@@ -2,7 +2,6 @@
 %- TODO cite: 50 years of kmeans
 %- TODO cite: Facebook paper A good overview of the process
 %- TODO cite: Medical clusters and MDS paper
-%- TODO cite: [Graph Node Similarity](http://argo.matf.bg.ac.rs/publications/2011/similarity.pdf)
 ---
 title:  'Masters of Science in Applied Science Thesis'
 author:
@@ -901,7 +900,7 @@ An example for author "A.J.Sarty" is shown in Figure @fig:simpapers-author.
 The product of the analysis in Section [Transformations](#transformations) is a list of candidates which may represent cases of multiple identifiers for a single author.
 To confirm multiply-identified single authors, that candidate list must be examined.
 Since the list is comparatively small we propose computationally expensive analyses may be performed to achieve that end.
-One method could use the network graph information and compare neighbors in the network.
+One method could use the network graph information and compare neighbors in the network @neighbor-matching.
 We could find all the neighbours of two given nodes and see how many are common to both.
 With this we should also consider what the chance of having common neighbours is for any two random nodes.
 A first approximation would be to consider the degree of the neighbours.
