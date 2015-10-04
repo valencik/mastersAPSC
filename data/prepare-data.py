@@ -138,16 +138,19 @@ if not os.path.exists('author-cluster-entry-quartiles-input.tsv'):
                 entries.append(yearDatum['numEntries'])
             assert int(len(years)) == int(document['numYears']), "len(years) should be equal to numYears"
             if sum(entries) <= 10: continue
-            sumEntries = entries.copy()
+            years, entries = zip(*sorted(zip(years,entries), key=lambda x: x[0]))
+            sumEntries = [entries[years.index(t)] if t in years else 0 for t in range(min(years), max(years)+1)]
+            assert len(sumEntries) == max(years)-min(years)+1
             for i, entry in enumerate(sumEntries):
                 if i >= 1:
                     sumEntries[i] = sumEntries[i] + sumEntries[i - 1]
+            assert sumEntries[-1] == sum(entries), "sumEntries[-1] should be equal to sum(entries)"
             numEntries025 = math.floor(percentile(sumEntries, 0.25))
             numEntries050 = math.floor(percentile(sumEntries, 0.50)) - numEntries025
-            numEntries075 = math.floor(percentile(sumEntries, 0.75)) - numEntries050
-            numEntries100 = sumEntries[-1] - numEntries075
+            numEntries075 = math.floor(percentile(sumEntries, 0.75)) - numEntries050 - numEntries025
+            numEntries100 = sumEntries[-1] - numEntries075 - numEntries050 - numEntries025
             cluster_list = [document['author']]
-            cluster_list.append(max(years) - min(years))
+            cluster_list.append(max(years) - min(years)+1)
             cluster_list.append(statistics.mean(coauthors))
             cluster_list.append(numEntries025)
             cluster_list.append(numEntries050)
