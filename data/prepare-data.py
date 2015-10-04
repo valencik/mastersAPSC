@@ -127,7 +127,7 @@ if not os.path.exists('author-cluster-entry-quartiles-input.tsv'):
         print("Writing authorSummaryByYear data to file...")
         cluster_writer = csv.writer(tsvfile, delimiter='\t')
         cluster_writer.writerow(["author", "careerLength", "meanCoauthors",
-                                 "numEntries025", "numEntries050", "numEntries075", "numEntries100"])
+                                 "numEntries", "percentile50"])
         for document in results:
             years = []
             entries = []
@@ -145,17 +145,12 @@ if not os.path.exists('author-cluster-entry-quartiles-input.tsv'):
                 if i >= 1:
                     sumEntries[i] = sumEntries[i] + sumEntries[i - 1]
             assert sumEntries[-1] == sum(entries), "sumEntries[-1] should be equal to sum(entries)"
-            numEntries025 = math.floor(percentile(sumEntries, 0.25))
-            numEntries050 = math.floor(percentile(sumEntries, 0.50)) - numEntries025
-            numEntries075 = math.floor(percentile(sumEntries, 0.75)) - numEntries050 - numEntries025
-            numEntries100 = sumEntries[-1] - numEntries075 - numEntries050 - numEntries025
+            percentile50 = percentile(sumEntries, 0.50) / sumEntries[-1]
             cluster_list = [document['author']]
             cluster_list.append(max(years) - min(years)+1)
             cluster_list.append(statistics.mean(coauthors))
-            cluster_list.append(numEntries025)
-            cluster_list.append(numEntries050)
-            cluster_list.append(numEntries075)
-            cluster_list.append(numEntries100)
+            cluster_list.append(sumEntries[-1])
+            cluster_list.append(percentile50)
             cluster_writer.writerow(cluster_list)
 
 # Generate paper -> author transactions tsv
