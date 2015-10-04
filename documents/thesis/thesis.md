@@ -1213,13 +1213,39 @@ Table @tbl:papersWithoutNAuthors shows the number of papers that remain once all
 %- TODO develop a better (continuous) way to calculate these numbers
 Entry Number Cutoff   Papers Remaining   Difference
 -------------------   ----------------   ----------
-0                     212835
-1                     187741             25094
-2                     185404             2337
-3                     183410             1994
-4                     181315             2095
+1                     190654
+2                     187741             2913
+3                     185404             2337
+4                     183410             1994
+5                     181315             2095
+6                     179606             1709
+7                     177945             1661
+8                     176390             1555
+9                     174702             1688
+10                    173117             1585
 
 Table: Papers affected by removal of authors with N or less papers. {#tbl:papersWithoutNAuthors}
+
+```
+for (i=0; i<=10; i++){db.NSR.aggregate([{$project: {_id: 1, authors: 1, year: 1}}, {$unwind: "$authors"}, {$group: {_id: "$authors", numEntries: {$sum: 1}, papers: {$addToSet: "$_id"}}}, {$match: {"numEntries": {$gte: i}}}, {$unwind: "$papers"}, {$group: {_id: "$papers", uniqueKey: {$sum: {$multiply: [1, 0]}}}}, {$group: {_id: "$uniqueKey", papersRemaining: {$sum:1}}}], {allowDiskUse: true}).forEach( function(myDoc) { print( "user: " + myDoc.papersRemaining ); }) }
+```
+
+```
+db.NSR.aggregate([{$match: {authors: {$exists: 0}}}, {$group: {_id: "$type", sum: {$sum: 1}}}])
+```
+
+Type       Amount
+----       ------
+UNKNOWN    33
+PC         48
+CONF       4614
+PREPRINT   78
+THESIS     968
+REPT       10876
+JOUR       5564
+Total      22181
+
+Table: Types without any authors. {#tbl:typesWithoutAuthors}
 
 %- Summarize the Author cut off results
 The values presented in Table @tbl:papersWithoutNAuthors suggest that the bulk of the papers in the NSR are associated with authors who publish more than just a few times.
@@ -1272,6 +1298,71 @@ Appendix
 ![Number of coauthors an author has given the number of entries they have published.](../../data/images/nenc-heatmap.png){#fig:nenc-linear}
 
 ![Complete 1940 author graph.](images/complete-graph-1940.pdf){#fig:complete-graph-1940}
+
+Entry Number Cutoff   Papers Remaining   Difference
+-------------------   ----------------   ----------
+1                     190654
+2                     187741             2913
+3                     185404             2337
+4                     183410             1994
+5                     181315             2095
+6                     179606             1709
+7                     177945             1661
+8                     176390             1555
+9                     174702             1688
+10                    173117             1585
+11                    171509             1608
+12                    170056             1453
+13                    168781             1275
+14                    167414             1367
+15                    166124             1290
+16                    164944             1180
+17                    163642             1302
+18                    162486             1156
+19                    161238             1248
+20                    160062             1176
+21                    158789             1273
+22                    157486             1303
+23                    156335             1151
+24                    155317             1018
+25                    154132             1185
+26                    153076             1056
+27                    151902             1174
+28                    150809             1093
+29                    149713             1096
+30                    148662             1051
+31                    147555             1107
+32                    146284             1271
+33                    145353             931
+34                    144274             1079
+35                    143131             1143
+36                    142021             1110
+37                    141015             1006
+38                    140160             855
+39                    138883             1277
+40                    137957             926
+41                    136800             1157
+42                    135836             964
+43                    134926             910
+44                    133973             953
+45                    132927             1046
+46                    131937             990
+47                    130949             988
+48                    130069             880
+49                    129096             973
+50                    128311             785
+51                    127378             933
+52                    126543             835
+53                    125617             926
+54                    124699             918
+55                    123765             934
+56                    122964             801
+57                    122307             657
+58                    121650             657
+59                    120860             790
+60                    120024             836
+
+Table: Papers affected by removal of authors with N or less papers. {#tbl:fullPapersWithoutNAuthors}
 
 
 Bibliography
