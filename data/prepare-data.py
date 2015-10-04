@@ -120,8 +120,7 @@ if not os.path.exists('author-cluster-entry-quartiles-input.tsv'):
     authorSummaryByYear_pipeline = [
         {"$group": {"_id": "$_id.author", "yearData": { "$push":
             {"year": "$_id.year", "numCoauthors": {"$size": "$coauthors"}, "numEntries": {"$size": "$papers"}}}}},
-        {"$project": {"author": "$_id", "yearData": 1, "numYears": {"$size": "$yearData"}}},
-        {"$match": {"numYears": {"$gt": 3}}}
+        {"$project": {"author": "$_id", "yearData": 1, "numYears": {"$size": "$yearData"}}}
     ]
     results = db.authorSummaryByYear.aggregate(authorSummaryByYear_pipeline, allowDiskUse=True)
     with open('author-cluster-entry-quartiles-input.tsv', 'w', newline='') as tsvfile:
@@ -138,6 +137,7 @@ if not os.path.exists('author-cluster-entry-quartiles-input.tsv'):
                 coauthors.append(yearDatum['numCoauthors'])
                 entries.append(yearDatum['numEntries'])
             assert int(len(years)) == int(document['numYears']), "len(years) should be equal to numYears"
+            if sum(entries) <= 10: continue
             sumEntries = entries.copy()
             for i, entry in enumerate(sumEntries):
                 if i >= 1:
