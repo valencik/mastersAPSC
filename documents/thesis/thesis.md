@@ -1059,9 +1059,6 @@ Table: Frequent itemset rules for selectors in  papers. {#tbl:Apriori3}
 %- Cluster analysis in research proposal is still useful.
 %- Starting with some of the naive algorithms, and then going to graph theory.
 %- A review of graph theoretic concepts and piecing them together for the application on hand.
-
-%- TODO This chapter does not yet discuss cluster labels.  Or using the cluster results in the application.
-
 Classification and clustering are related approaches to organizing data elements into groups for further analysis.
 Classification is the process of deciding what group a particular datum should most optimally belong to.
 Clustering is the grouping of multiple data points such that those belonging to a group are more similar in some manner than those outside of that group.
@@ -1146,7 +1143,7 @@ Table @tbl:first-6clusters and Table @tbl:first-7clusters show the centroid info
 In all cases we can see `numCoauthors`, `numYears`, and `numEntries` monotonically increase as the size of the cluster decreases.
 
 Figure @fig:kmeans-first5 shows the `numCoauthors`, `numYears`, and `numEntries` data coloured according to their cluster membership in the 5 cluster scheme.
-This figure again demonstrates that the data is continuous and well separated clusters do not exist.
+This figure again demonstrates the data is continuous and that well separated clusters do not exist.
 As a result the clusters function as segmentations along a continuous spectrum.
 As the number of clusters increases, the size of the segmentations decrease.
 %- Clustering segmentation is all happening on one axis up to a certain point.
@@ -1190,30 +1187,42 @@ Table: Centroid data points for 7 cluster K-Means on initial data {#tbl:first-7c
 ### Secondary Clustering
 %- Want data with more dimensionality
 The `numEntries` and `numCoauthors` data presented in the heat maps can be improved.
-An author could have published 20 papers in 1995 and 5 papers in 1996, their resulting numYears value for that range would be 2.
+An author could have published 20 papers in 1995 and 5 papers in 1996, their resulting `numYears` value for that range would be 2.
 This has the effect of ignoring how prolific a given author may have been in a certain time.
 We want the author who published 20 papers in 1995 to be measured differently than an author who published once in both 1995 and 1996.
+
 An improvement is obtained by increasing the dimensionality of the data.
 Instead of a single number representing an author's number of publications, a parameter representing the distribution of publications over time could be used.
 How many papers did a given author published in the beginning of their career?
 How many papers did the publish at the end of their career, or most recently?
+We will take four measurements for each author regarding their publication history:
+the number of papers published in the first, second, third, and forth quartile of their careers.
 
 %- Need authors with many publications
 In order to break up the number of entries over time like this, each author needs to have multiple entries over multiple years.
 Recall their are 41254 authors with only a single publication in the database.
 That is 41254 out of 100147, roughly $40\%$ of the total unique authors.
+Therefore we lose $40\%$ of the authors in the database if we require an author to have published over multiple years.
+In order to have a non zero number of publications in each quartile an author must have a minimum of 4 publications.
+This requirement cuts out $62\%$ of authors.
 
 %- Demonstrate that removing all single publication authors is not as harmful as it might seem
-How much of the database is affected if every author who has only published once is removed?
+How much of the database is affected if every author below a certain publication amount is removed?
 This question can be answered directly with the MongoDB database.
 First every paper is taken and duplicated for every single author in that paper's author list.
 There is now a database object for each author in each paper.
 Each time an author appears their publication count increments.
-Next, each database object that has an author that has a publication count of one is erased.
+Next, each database object that has an author with a publication count below the cutoff is removed.
 Finally the unique remaining papers are the ones that have authors with more than one publication count.
-Table @tbl:papersWithoutNAuthors shows the number of papers that remain once all the authors with a specified publication count are removed.
+Table @tbl:papersWithoutNAuthors[^code-papersWithoutNAuthors] shows the number of papers that remain once all the authors with a specified publication count are removed.
+Note that the starting number is $190654$ not $212835$ as quite a few NSR entries do not have an author field.
+Table @tbl:typesWithoutAuthors shows a break down of the NSR entry types that do not have authors.
+A large percentage of those entries without author fields are reports and conference proceedings[^no-author-jour].
 
-%- TODO develop a better (continuous) way to calculate these numbers
+[^code-papersWithoutNAuthors]: The code to produce the results in Table \ref{tbl:papersWithoutNAuthors} is shown in Appendix Snippet \ref{blk:papersWithoutNAuthors}
+
+[^no-author-jour]: Of the $5564$ journal articles without an author field, $5489$ were written between 1970 and 1980.
+
 Entry Number Cutoff   Papers Remaining   Difference
 -------------------   ----------------   ----------
 1                     190654
@@ -1226,16 +1235,9 @@ Entry Number Cutoff   Papers Remaining   Difference
 8                     176390             1555
 9                     174702             1688
 10                    173117             1585
+11                    171509             1608
 
 Table: Papers affected by removal of authors with N or less papers. {#tbl:papersWithoutNAuthors}
-
-```
-for (i=0; i<=10; i++){db.NSR.aggregate([{$project: {_id: 1, authors: 1, year: 1}}, {$unwind: "$authors"}, {$group: {_id: "$authors", numEntries: {$sum: 1}, papers: {$addToSet: "$_id"}}}, {$match: {"numEntries": {$gte: i}}}, {$unwind: "$papers"}, {$group: {_id: "$papers", uniqueKey: {$sum: {$multiply: [1, 0]}}}}, {$group: {_id: "$uniqueKey", papersRemaining: {$sum:1}}}], {allowDiskUse: true}).forEach( function(myDoc) { print( "user: " + myDoc.papersRemaining ); }) }
-```
-
-```
-db.NSR.aggregate([{$match: {authors: {$exists: 0}}}, {$group: {_id: "$type", sum: {$sum: 1}}}])
-```
 
 Type       Amount
 ----       ------
@@ -1253,9 +1255,23 @@ Table: Types without any authors. {#tbl:typesWithoutAuthors}
 %- Summarize the Author cut off results
 The values presented in Table @tbl:papersWithoutNAuthors suggest that the bulk of the papers in the NSR are associated with authors who publish more than just a few times.
 This result means that filtering out low publication authors in additional analysis does not affect the majority of the NSR entries.
+As a result the secondary clustering only considered the authors who contribute $90\%$ of the NSR entries with author fields.
+Explicitly we considered authors who published 11 or more times.
+This amounted to $18006$ authors.
+The code to produce the input data for the secondary clustering is available in the `prepare-data.py` script.
 %- Demonstrate that 1993JA17 and 1996JA24 disappear correctly
 
-![Secondary clustering on authors with K-means](../../data/images/quartiles5clusters.png){#fig:kmeans-quartiles5}
+The Davies-Bouldin index for the secondary clustering is shown in Figure @fig:quartiles-dbi.
+It suggests a clustering scheme of either 2, 5 or 8.
+The G1 index, shown in Figure @fig:quartiles-g1, suggests either 2 or 5 cluster centers.
+
+![Davies-Bouldin index for secondary clustering](../../data/images/11papers-career-length-sorted-Quartiles-dbi-clusters.png){#fig:quartiles-dbi}
+
+![G1 index for secondary clustering](../../data/images/11papers-career-length-sorted-Quartiles-g1-clusters.png){#fig:quartiles-g1}
+
+![Secondary clustering on authors with K-means](../../data/images/11papers-career-length-sorted-Quartiles5clusters.png){#fig:kmeans-quartiles5}
+
+%- TODO This chapter does not yet discuss cluster labels.  Or using the cluster results in the application.
 
 ## Future Work
 
@@ -1302,71 +1318,9 @@ Appendix
 
 ![Complete 1940 author graph.](images/complete-graph-1940.pdf){#fig:complete-graph-1940}
 
-Entry Number Cutoff   Papers Remaining   Difference
--------------------   ----------------   ----------
-1                     190654
-2                     187741             2913
-3                     185404             2337
-4                     183410             1994
-5                     181315             2095
-6                     179606             1709
-7                     177945             1661
-8                     176390             1555
-9                     174702             1688
-10                    173117             1585
-11                    171509             1608
-12                    170056             1453
-13                    168781             1275
-14                    167414             1367
-15                    166124             1290
-16                    164944             1180
-17                    163642             1302
-18                    162486             1156
-19                    161238             1248
-20                    160062             1176
-21                    158789             1273
-22                    157486             1303
-23                    156335             1151
-24                    155317             1018
-25                    154132             1185
-26                    153076             1056
-27                    151902             1174
-28                    150809             1093
-29                    149713             1096
-30                    148662             1051
-31                    147555             1107
-32                    146284             1271
-33                    145353             931
-34                    144274             1079
-35                    143131             1143
-36                    142021             1110
-37                    141015             1006
-38                    140160             855
-39                    138883             1277
-40                    137957             926
-41                    136800             1157
-42                    135836             964
-43                    134926             910
-44                    133973             953
-45                    132927             1046
-46                    131937             990
-47                    130949             988
-48                    130069             880
-49                    129096             973
-50                    128311             785
-51                    127378             933
-52                    126543             835
-53                    125617             926
-54                    124699             918
-55                    123765             934
-56                    122964             801
-57                    122307             657
-58                    121650             657
-59                    120860             790
-60                    120024             836
-
-Table: Papers affected by removal of authors with N or less papers. {#tbl:fullPapersWithoutNAuthors}
-
+``` {#blk:papersWithoutNAuthors .javascript caption="The mongoshell code to determine the results shown in Table \ref{tbl:papersWithoutNAuthos}" fontsize=\small baselinestretch=1}
+for (i=0; i<=10; i++){db.NSR.aggregate([{$project: {_id: 1, authors: 1, year: 1}}, {$unwind: "$authors"}, {$group: {_id: "$authors", numEntries: {$sum: 1}, papers: {$addToSet: "$_id"}}}, {$match: {"numEntries": {$gte: i}}}, {$unwind: "$papers"}, {$group: {_id: "$papers", uniqueKey: {$sum: {$multiply: [1, 0]}}}}, {$group: {_id: "$uniqueKey", papersRemaining: {$sum:1}}}], {allowDiskUse: true}).forEach( function(myDoc) { print( "user: " + myDoc.papersRemaining ); }) }
+```
 
 Bibliography
 ============
