@@ -1280,6 +1280,18 @@ The clustering results for 6 centers is shown in Figure @fig:kmeans-thirds6.
 
 Table: Centroid data points for 6 cluster K-Means on initial data {#tbl:thirds-6clusters}
 
+The first cluster presented in Table @tbl:thirds-6clusters represent authors who have had longer careers, published with fewer coauthors, and published a relatively normal amount of NSR entries, mostly in the middle of their careers.
+The second cluster of authors had similar length careers but published with more coauthors and many more entries in total.
+These are the most prolific cluster of authors, and represents a small group of people, with only 564 members in the cluster.
+The authors in the third cluster have had very strong publication amounts in the last third of their careers.
+Most other features of these authors are normal.
+The forth and largest cluster are those with few publications over few years mostly in the middle of their careers.
+The fifth cluster of authors have the shortest careers, but publish with the most coauthors on average.
+The sixth and second largest cluster is similar to the forth except these authors had strong early years in their career.
+
+Note that there is current no accounting for if a career has ended years ago, or if the author is still actively publishing.
+Therefore, in this analysis, every author's career either ends naturally on some year, or artificially in 2014 when the data stops.
+
 ### The Application
 
 The results of cluster analysis can be written to the database with the `update-database.py` script.
