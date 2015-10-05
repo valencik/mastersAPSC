@@ -495,21 +495,21 @@ A large percentage of those entries without author fields are reports and confer
 
 [^no-author-jour]: Of the $5564$ journal articles without an author field, $5489$ were written between 1970 and 1980.
 
-Entry Number Cutoff   Papers Remaining   Difference
--------------------   ----------------   ----------
+Entry Number Cutoff   Entries Remaining   Difference
+-------------------   -----------------   ----------
 1                     190654
-2                     187741             2913
-3                     185404             2337
-4                     183410             1994
-5                     181315             2095
-6                     179606             1709
-7                     177945             1661
-8                     176390             1555
-9                     174702             1688
-10                    173117             1585
-11                    171509             1608
+2                     187741              2913
+3                     185404              2337
+4                     183410              1994
+5                     181315              2095
+6                     179606              1709
+7                     177945              1661
+8                     176390              1555
+9                     174702              1688
+10                    173117              1585
+11                    171509              1608
 
-Table: Papers affected by removal of authors with N or less papers. {#tbl:papersWithoutNAuthors}
+Table: NSR entries affected by removal of authors with N or less papers. {#tbl:papersWithoutNAuthors}
 
 Type       Amount
 ----       ------
@@ -523,6 +523,11 @@ JOUR       5564
 Total      22181
 
 Table: Types without any authors. {#tbl:typesWithoutAuthors}
+
+The relationship between publication amount cutoff and NSR entries remaining is quite consistent.
+The same data in Table @tbl:papersWithoutNAuthors is plotted in Figure @fig:papersWithoutNAuthors.
+
+![NSR entries remaining after author removal](images/papersWithoutNAuthors.png)
 
 %- Summarize the Author cut off results
 The values presented in Table @tbl:papersWithoutNAuthors suggest that the bulk of the papers in the NSR are associated with authors who publish more than just a few times.
