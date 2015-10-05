@@ -137,7 +137,7 @@ For simplicity, the data acquired from the NNDC on that date will be referred to
 All efforts have been taken to ensure the research procedures can easily be extended and repeated on new NSR data.
 
 ## Data Preparation
-The NSR data is maintained in a custom EXCHANGE format @winchell2007nuclear.
+The NSR data is maintained in a custom EXCHANGE format @nsr-manual.
 This format is flat text that is not suitable for direct analysis.
 To fully utilize the data, it needs to be easily parsed into a data structure for analysis and use.
 The approach least likely to introduce errors is to transform the data into a common format for which parsers already exist.
@@ -178,7 +178,7 @@ Identifiers   Description
 `<SELECTRS>`  Indexing parameter list
 `<DOI     >`  Digital object identifier
 
-Table: The nine legal record identifiers from the Nuclear Science References Coding Manual @winchell2007nuclear. {#tbl:NSRidentifiers}
+Table: The nine legal record identifiers from the Nuclear Science References Coding Manual @nsr-manual. {#tbl:NSRidentifiers}
 
 The `<KEYNO   >` field is a unique key number assigned to each NSR entry.
 The data on which a particular entry was added to the database or last modified is encoded in the `<HISTORY >` field.
@@ -186,7 +186,7 @@ The `<CODEN   >` and `<REFRENCE>` fields contain information about the journal o
 The `<AUTHORS >` field is a comma separated list of author names.
 The author list is one of the key relational components of the data, establishing links between papers and other authors.
 The `<TITLE   >` field is a free text field representing the title of the reference with a custom set of abbreviations for special characters like Greek letters.
-These abbreviations are detailed in the NSR coding manual @winchell2007nuclear.
+These abbreviations are detailed in the NSR coding manual @nsr-manual.
 In this work, the abbreviations have been translated to \LaTeX.
 The `<DOI     >` field contains the digital object identifier code that uniquely links to the source document's metadata.
 While not strictly necessary, the DOI often has a URL associated with it that links to the source document on the website of the publishing journal @wiki-DOI.
@@ -234,17 +234,20 @@ In a relational database the authors would have their own tables, separate from 
 This inefficient choice would entail a table and data schema created for the papers and then a separate table and schema for the authors, and similarly for keywords, selectors, and history.
 
 ### Keyword Abstracts
-%- TODO complete this discussion
-%- TODO include the fact that a human reads each entry and creates keywords
-The `<KEYWORDS>` field is written by the maintainers of the NSR database, and then used to generate the `<SELECTRS>` field.
+The `<KEYWORDS>` field is written by the maintainers of the NSR database, and then used to generate the `<SELECTRS>` field @nsr-manual.
+Each NSR entry is read and then a keyword abstract is manually created to reflect the physical systems that were studied and measured in the work.
 
-> "What distinguishes NSR from more general bibliographic databases is the level of detail provided in the keyword abstracts." @winchell2007nuclear
+> "What distinguishes NSR from more general bibliographic databases is the level of detail provided in the keyword abstracts." @nsr-manual
+
+Keyword abstracts each have one of the following major topics:
+`NUCLEAR REACTIONS`, `RADIOACTIVITY`, `NUCLEAR STRUCTURE`, `NUCLEAR MOMENTS`, `ATOMIC PHYSICS`, `ATOMIC MASSES`, and `COMPILATION`.
+To accomodate work that span multiple topics, NSR entries can have multiple keyword abstracts.
 
 The selectors are generated from the keyword abstracts.
 The current schema has `<SELECTRS>` parsed into a 3 dimensional array with `type`, `value`, and `subkey` variables.
-The following quote from the NSR Coding Manual @winchell2007nuclear describes the valid `type`s:
+The following quote from the NSR Coding Manual @nsr-manual describes the valid `type`s:
 
-> N, T, P, G, R, S, M, D, C, X, A, or Z, which stand for nuclide, target, parent, daughter, reaction, subject, measured, deduced, calculated, other subject, mass range, and charge range, respectively. @winchell2007nuclear
+> N, T, P, G, R, S, M, D, C, X, A, or Z, which stand for nuclide, target, parent, daughter, reaction, subject, measured, deduced, calculated, other subject, mass range, and charge range, respectively. @nsr-manual
 
 The type of data for `value` changes based on the value of the `type`.
 For `type`s N, T, P, and G, the `value` is a nuclide written in the form AX with A equal to the mass number, and X equal to the chemical symbol.
