@@ -1,13 +1,15 @@
-%- TODO balance mentions of application
+%- Code in appendix? Additional screenshots in appendix?
+%- Custom bibliography styling?
 %- TODO cite: Facebook paper A good overview of the process
 %- TODO cite: Medical clusters and MDS paper
+%- TODO mention research gate - expert information from neutral 3rd party
 ---
-title:  'Masters of Science in Applied Science Thesis'
+title:  'Structure Mining the Nuclear Science References'
 author:
 - name: Andrew Valencik
   affiliation: Saint Mary\'s University
 author: Andrew Valencik
-date: October 4th 2015 - Pumpkin Spice Late Latte Edition.
+date: October 5th 2015 - Marvelous Monday Manuscript.
 bibliography: bibliography.yaml
 csl: american-physics-society.csl
 link-citations: true
@@ -29,6 +31,7 @@ Information retrieval has been repeatedly improved by large search engines like 
 Vast quantities of information are now easily retrieved on an extensive array of subjects.
 Scientific literature has received special attention through projects like [Google Scholar](https://scholar.google.ca) or [Microsoft Academic Search](http://academic.research.microsoft.com).
 However, these projects are still generalized to accommodate all sciences.
+%- Vertical search
 Information retrieval and data exploration can be improved by customizing an application to a specific domain.
 This work is a cross disciplinary effort, combining semantic information of nuclear physics literature and data mining techniques to build a custom application for data exploration and information retrieval in nuclear science.
 
@@ -56,9 +59,9 @@ The Nuclear Science References, or NSR, has over 210,000 entries documenting the
 %- Easy method of exporting data?
 %- How capable is it as a tool to explore further work?
 ## The Nuclear Science References Website
-The NNDC maintains the [NSR website](http://www.nndc.bnl.gov/nsr/) which serves a simple interface to the Nuclear Science References database.
-They offer four primary search interfaces: quick search, text search, indexed search, and keynumber search.
+The NNDC maintains the [NSR website](http://www.nndc.bnl.gov/nsr/) which serves a web interface to the Nuclear Science References database.
 The functionality and architecture of the NSR database and web site is discussed by Pritychenko in @NSRweb.
+Four search interfaces are offered: quick search, text search, indexed search, and keynumber search.
 The quick search interface is shown in Figure @fig:nsrweb1.
 
 ![The main interface for the NNDC's NSR website. Captured June 28th 2015](images/web-NSR-main-June-28-2015.png) {#fig:nsrweb1}
@@ -95,7 +98,7 @@ You can combine the results of recent queries with boolean logic.
 Analysis is offered on the search queries which displays how many nuclides, authors, journals, and publication years the query involved.
 
 ## Proposed Improvements
-The primary function of the developed application is increased accessibility to exploration of the Nuclear Science References data.
+The primary function of the developed application is increasing accessibility to exploration of the Nuclear Science References data.
 This includes the authors documented, the entries recorded and keyworded, their links, and all available metadata for the nearly 120 years.
 The application makes use of a web interface to aid in increasing accessibility.
 All one needs in order to use the application is a modern web browser.
@@ -131,6 +134,7 @@ The Data and Database
 =====================
 %- Data Structure and Representation?
 The United States National Nuclear Data Center (NNDC) has composed the Nuclear Science References (NSR) database.
+%- TODO create bibtex entry
 A full database dump of the NSR was acquired on January 29th 2014.
 For simplicity, the data acquired from the NNDC on that date will be referred to as if it were the complete NSR database.
 All efforts have been taken to ensure the research procedures can easily be extended and repeated on new NSR data.
@@ -138,7 +142,7 @@ All efforts have been taken to ensure the research procedures can easily be exte
 ## Data Preparation
 The NSR data is maintained in a custom EXCHANGE format @nsr-manual.
 This format is flat text that is not suitable for direct analysis.
-To fully utilize the data, it needs to be easily parsed into a data structure for analysis and use.
+To fully utilize the data, it needs to be easily parsed into data structures for analysis and use.
 The approach least likely to introduce errors is to transform the data into a common format for which parsers already exist.
 
 [JavaScript Object Notation](http://json.org), or JSON, was chosen as the data format for this work.
@@ -204,6 +208,7 @@ For example, with data spanning 120 years, it is helpful to filter the data base
 As such the `year` value in the data schema is an integer.
 Allowing the construction of a simple query to get all the entries from a given year range.
 Example code to retrieve all NSR entries from the 1970's is given in Snippet \ref{blk:NSR1970s}.
+Note the use of `$gte` and `$lt` which correspond to the mathematical operators greater than or equal to and less than.
 
 ``` {#blk:NSR1970s .python caption="Python code to get all NSR entries from 1970 to 1979." fontsize=\small baselinestretch=1}
 import pymongo
@@ -241,6 +246,11 @@ Each NSR entry is read and then a keyword abstract is manually created to reflec
 Keyword abstracts each have one of the following major topics:
 `NUCLEAR REACTIONS`, `RADIOACTIVITY`, `NUCLEAR STRUCTURE`, `NUCLEAR MOMENTS`, `ATOMIC PHYSICS`, `ATOMIC MASSES`, and `COMPILATION`.
 To accommodate work that spans multiple topics, NSR entries can have multiple keyword abstracts.
+Following these major topics are one or more indexed sentences.
+These sentences describe the elements of the physical system studied, and any measurements that were made.
+It is this structure that provides the most semantic information about the NSR entry.
+Thanks to the careful work of the NSR maintainers, the `<KEYWORDS>` and resulting `<SELECTRS>` fields reveal the NSR entry's content in a machine readable manner.
+Without this information any data mining project using the content of the NSR entries would require raw text access to the either the full document or the abstract.
 
 The selectors are generated from the keyword abstracts.
 The current schema has `<SELECTRS>` parsed into a 3 dimensional array with `type`, `value`, and `subkey` variables.
@@ -955,7 +965,6 @@ The scoring function is the average of all the `score` fields for that paper tha
 ![Similar entries for author "A.J.Sarty"](images/simpapers-author.png) {#fig:simpapers-author}
 
 ## Further Analysis
-%- TODO Roby says she's been here before?
 %- Clustering? no. Graph analysis.
 %- Can I come up with a # of publication independent clustering schema?
 %- Probably not, and so the graph analysis would be quite useful here!
@@ -992,13 +1001,17 @@ The latter is likely more interesting to users, as it could suggest similar auth
 ## Association Mining
 %- Intro to association mining
 Frequent pattern mining is an important part of data mining and knowledge discovery @DBLP:books/crc/aggarwal2014.
-The common application of rule learning is the market basket analysis.
+It is also known as rule learning and is frequently used on market basket analysis.
 A history of customer transactions at a supermarket is analyzed to find groups of items that are frequently purchased together.
+For example, when customers perchase item A, the frequently purchase item B in the same transaction.
+The connection is between the items A and B and is independent of customers.
+
 Association rules are similar to if-then constructs.
 A rule written {R (N,G),T 238U} => {N 239U} with support $0.00129$ and confidence $0.9308$ tells us that the selectors `R (N,G)`, `T 238U`, and `N 239U` appear together in $0.129\%$ of the data.
 The confidence is a measure of reliability in the rule.
 In the above example $93.08\%$ of the time that `R (N,G)` and  `T 238U` appear, `N 239U` also appears.
-Formally the support is defined in Equation @eq:ap-support, as is confidence in Equation @eq:ap-confidence.
+Formally the support is defined @DBLP:books/crc/aggarwal2014 in Equation @eq:ap-support, as is confidence in Equation @eq:ap-confidence.
+Lift is defined in Equation @eq:ap-lift as described in the arules package @arules-manual.
 
 %- Apriori algorithm
 $$
@@ -1009,12 +1022,17 @@ $$
 \mbox{confidence} = \frac{\mbox{count} \left( X \cup  Y \right)}{\mbox{count} \left( X \right)}
 $$ {#eq:ap-confidence}
 
+$$
+\mbox{lift} = \frac{P \left( X \cup  Y \right)}{P \left( X \right) P \left( Y \right)}
+$$ {#eq:ap-lift}
+
 %- Apriori-dedup.r
 Our analysis will make use of the Apriori algorithm implementation in the [`arules`](https://cran.r-project.org/web/packages/arules/index.html)@arules-manual @arules-article package in R.
 The `prepare-data.py` program generates three transaction lists for analysis in R.
 The R script `Apriori-dedup.r` takes an input file, output file, minimum support, and minimum confidence as command line arguments.
 The arules package provides facilities in helping prune duplicate rules, and rules that are subsets of other rules.
-However, in analyses that produce many thousands of rules this pruning is too expensive and thus not used.
+However, in analyses that produce many thousands of rules, such as those using low minimum support thresholds, this pruning is computationally expensive and thus not used.
+As a result, the final list of rules on our extended runs contained many duplicates.
 
 %- papers -> authors
 %- To the physicists reading this section, the results will appear obvious.
@@ -1044,15 +1062,15 @@ All of the 11 unique authors in Table @tbl:Apriori1 have published more than 165
 There are only 608 authors who have greater than 165 publications in the database.
 In order to have rules involving more authors[^more-authors] we need to lower the minimum support.
 The minimum support to see a given author in a rule is dependent on their publication count.
-If an author has published 65 times we need to have a support less than $65/212835$ to include any rule that involves them.
-The author would still need to have a rule that satisfied out confidence constraint as well.
+If an author has published 65 times, support less than $65/212835$ is required to include any rule that involves them.
+The author still needs to have a rule that satisfied the confidence constraint as well.
 
 [^more-authors]: Recall we have on the order of 100,000 authors in the database.
 
 %- Extended p-a run
 On an extended run with a low support of 0.00029 the Apriori algorithm produces 2.2 million rules.
 With this many rules we can no longer prune duplicates in R as the memory requirements are enormous.
-However we can still perform some simple analysis like counting unique authors.
+However we can still perform some simple analyses like counting unique authors.
 With a support value of 0.00029 the analysis of author lists from NSR entries produces 2211797 rules involving 859 unique author identifiers.
 %- Running the Apriori algorithm on author lists from papers is of little utility.
 %- The rules involving only two authors reveal author pairs where the (Roby - Svenson)
@@ -1062,6 +1080,7 @@ Apriori with each paper as a transaction, and selectors as items should produce 
 This tends to produce association rules that look like a list of isotopes involved in nuclear reactions.
 The first four rules in Table @tbl:Apriori2 can be read off as nuclear reactions.
 $^{290}\mbox{Lv}$ undergoes alpha decay and produces the daughter nucleus $^{286}\mbox{Fl}$, along with an alpha particle but this is not recorded in the NSR selectors.
+We see that $^{290}\mbox{Lv}$ and alpha decay are never mentioned without $^{286}\mbox{Fl}$.
 With a support value of 0.00029 the analysis of selectors from their NSR entry lists produces 3479553 rules involving 1202 unique selectors.
 
 rules                              support     confidence   lift
@@ -1117,7 +1136,7 @@ Table: Frequent itemset rules for selectors in entries. {#tbl:Apriori3}
 %- Starting with some of the naive algorithms, and then going to graph theory.
 %- A review of graph theoretic concepts and piecing them together for the application on hand.
 Classification and clustering are related approaches to organizing data elements into groups for further analysis.
-Classification is the process of deciding what group a particular datum should most optimally belong to.
+Classification is the process of deciding to what group a particular datum should most optimally belong.
 Clustering is the grouping of multiple data points such that those belonging to a group are more similar in some manner than those outside of that group.
 
 ### K-means Clustering
@@ -1146,10 +1165,10 @@ The chosen number of clusters has a huge impact on the data partitions.
 Some heuristics exist to aid in determining an optimal $k$. @tibshirani2001estimating
 In practice, K-means is normally run multiple times with varying $k$ values and the optimum is selected by a domain expert.
 
-However, their exist methods to measure the effectiveness of a clustering configuration.
-The Davies-Bouldin considers the ratio of external separation between clusters to the scatter within a cluster @wiki-dbi.
+However, there exist methods to measure the effectiveness of a clustering configuration.
+The Davies-Bouldin index considers the ratio of external separation between clusters to the scatter within a cluster @wiki-dbi.
 Given two clustering schemes of the same input data, the one with the lowest Davies-Bouldin index is preferred.
-The G1, or Calinski-Harabasz pseudo F-statistic, or CH criterion is a hueristic device to help evaluate different clustering schemes on the same input data @g1-paper.
+The G1, or Calinski-Harabasz criterion is a hueristic device to help evaluate different clustering schemes on the same input data @g1-paper.
 It works best when used on standardized data in a Euclidean space @ch-stackoverflow.
 In contrast to the Davies-Bouldin index, a higher G1 index value suggests a better clustering scheme.
 Both of these evaluation methods are provided in the R package `clusterSim` @clusterSim.
@@ -1161,12 +1180,13 @@ Both of these evaluation methods are provided in the R package `clusterSim` @clu
 
 There is a considerable amount of multivariate data in the NSR database.
 In order to gain insight from this data, only a section is initially considered.
-In this section, the authors will be analyzed to identify groups or clusters of authors who behave similarly.
+In this section, the authors will be analyzed to identify groups or clusters based on publication traits.
+Specifically we considered three parameters:
+the total length in years an author has published to date,
+their average number of coauthors across all their NSR entries,
+and their total publication count.
 
-An aggregation query is used to summarize our data in preparation for clustering.
-This query saves, for each author, their total number of coauthors, their total number of years publishing, and their total number of publications.
 To help evaluate this summarization of authors, three heat maps of this data are presented in figures @fig:nyne-log, @fig:nync-log, and @fig:nenc-log.
-
 Figure @fig:nyne-log shows an expected trend: Authors who publish over more years tend to have more publications overall.
 Each of these figures shows that there is a large number of authors who have published only a few times.
 Additionally, there are comparatively few authors who have published many times.
@@ -1194,7 +1214,7 @@ The G1 index results suggest that 5 cluster centers is best, with 6 being the ne
 
 ![G1 index for number of clusters](images/11papers-noratio-g1-clusters.png){#fig:cluster-g1}
 
-The two cluster evaluation metrics are mostly in agreement, this is a sign of strength.
+The two cluster evaluation metrics suggest that 5 or 6 cluster centers is optimal.
 Table @tbl:first-5clusters shows the data point values for the 5 different cluster centroids.
 Table @tbl:first-6clusters shows the centroid information for the 6 cluster scheme.
 Note that the data has been standardized, so the values in the tables are in standard deviations.
@@ -1229,30 +1249,30 @@ Table: Centroid data points for 6 cluster K-Means on initial data {#tbl:first-6c
 ![Initial clustering on authors with K-means](images/11papers-noratio5clusters.png){#fig:kmeans-noratio5}
 
 The first cluster in Table @tbl:first-5clusters represents authors who have had short careers but published an average number of entries with many coauthors.
-The second cluster of authors have had long careers and published and average amount with an average number of coauthors.
-The authors in the third cluster are the most prolific authors who frequently publish with many coauthors.
-The forth and largest cluster of authors are those with younger careers and fewer publications with fewer coauthors.
+The second cluster of authors have had long careers and published an average amount with an average number of coauthors.
+The authors in the third cluster have published the most and frequently publish with many coauthors.
+The fourth and largest cluster of authors are those with shorter careers and fewer publications with fewer coauthors.
 Finally, the fifth cluster of authors have had the longest careers, published many times, and overall, have published with an average amount of coauthors.
 
 ### Secondary Clustering
 %- Want data with more dimensionality
-An author that published 20 entries in 1995 and 5 entries in 1996, their resulting `numYears` value for that range would be 2.
-This has the effect of ignoring how prolific a given author may have been in a certain time.
-We want the author who published 20 entries in 1995 to be measured differently than an author who published once in both 1995 and 1996.
+In this analysis, an author publishing 20 entries in 1995 and 5 entries in 1997 appears has a numYears value of 3.
+It is blind to how prolific a given author may have been in shorter periods.
+Our goal is for the the author who published 20 entries in 1995 to be measured differently than an author who published once in each of 1995 and 1997.
 
 Instead of a single number representing an author's number of publications, a parameter representing the distribution of publications over time is used.
-How many entries did a given author published in the beginning of their career?
-How many entries did the publish at the end of their career, or most recently?
+How many entries did a given author publish in the beginning of their career?
+How many entries did the author publish at the end of their career, or most recently?
 We take three measurements for each author regarding their publication history:
-the percentage of their total publications in the first, second, and final third of their career.
+the percentage of their total publications in the first, second, and final third of their career to date.
 
 %- Need authors with many publications
 In order to break up the number of entries over time like this, each author needs to have multiple entries over multiple years.
-Recall their are 41254 authors with only a single publication in the database.
+Recall there are 41254 authors with only a single publication in the database.
 That is 41254 out of 100147, roughly $40\%$ of the total unique authors.
 Therefore we lose $40\%$ of the authors in the database if we require an author to have published over multiple years.
-In order to have a non zero number of publications in each quartile an author must have a minimum of 3 publications.
-This requirement cuts out $55\%$ of authors.
+In order to have a non zero number of publications in each third an author must have a minimum of 3 publications in three different years.
+The requirement for publishing 3 or more times in any years cuts out $55\%$ of authors in the database.
 
 %- Tie in to Author Contributions results
 Recall the analysis in Section [Author Contributions](#author-contributions) suggests that a small portion of the authors contribute a large portion of the NSR entries.
@@ -1265,7 +1285,7 @@ The code to produce the input data for the secondary clustering is available in 
 
 The G1 index for the secondary clustering is shown in Figure @fig:thirds-g1.
 It suggests a clustering scheme of either 4 or 6 centers.
-The Davies-Bouldin index, shown in Figure @fig:thirds-dbi suggests either 2, 5, 6
+The Davies-Bouldin index, shown in Figure @fig:thirds-dbi suggests either 2, 5, 6.
 The clustering results for 6 centers is shown in Figure @fig:kmeans-thirds6.
 
 ![Davies-Bouldin index for secondary clustering](images/11papers-ratio-third-dbi-clusters.png){#fig:thirds-dbi}
@@ -1285,16 +1305,16 @@ The clustering results for 6 centers is shown in Figure @fig:kmeans-thirds6.
 
 Table: Centroid data points for 6 cluster K-Means on initial data {#tbl:thirds-6clusters}
 
-The first cluster presented in Table @tbl:thirds-6clusters represent authors who have had longer careers, published with fewer coauthors, and published a relatively normal amount of NSR entries, mostly in the middle of their careers.
-The second cluster of authors had similar length careers but published with more coauthors and many more entries in total.
-These are the most prolific cluster of authors, and represents a small group of people, with only 564 members in the cluster.
-The authors in the third cluster have had very strong publication amounts in the last third of their careers.
-Most other features of these authors are normal.
-The forth and largest cluster are those with few publications over few years mostly in the middle of their careers.
+The first cluster presented in Table @tbl:thirds-6clusters represents authors who have had longer careers, published with fewer coauthors, and published a relatively normal amount of NSR entries, mostly in the middle of their careers.
+The second cluster of authors had similar length careers and published with more coauthors and contributed many more entries in total.
+These are the most prolific of authors, and represent a small group of people, with only 564 members.
+The authors in the third cluster have high publication numbers in the last third of their careers.
+Most other features of these authors are typical.
+The fourth and largest cluster are those with few publications over few years mostly in the middle of their careers.
 The fifth cluster of authors have the shortest careers, but publish with the most coauthors on average.
-The sixth and second largest cluster is similar to the forth except these authors had strong early years in their career.
+The sixth and second largest cluster is similar to the fourth except these authors had strong early years in their career, as well.
 
-Note that there is current no accounting for if a career has ended years ago, or if the author is still actively publishing.
+Note that there is currently no accounting for whether a career has ended years ago, or if the author is still actively publishing.
 Therefore, in this analysis, every author's career either ends naturally on some year, or artificially in 2014 when the data stops.
 
 ### The Application
@@ -1307,9 +1327,12 @@ This is demonstrated in Figure @fig:author-profile.
 
 As the NSR database spans several decades, each data object presents time series information.
 Finding similar authors separated in time could be interesting.
+Additionally there is a dramatic change in the rate of publications over time.
+The average number of coauthors in 1940 may be different from the average number in later years.
+Weighting author publication traits in time could produce better results.
 
 The results from the association rule learning could be used to develop a classification system.
-As authors input the keywords for their paper the system could try to match the user's input with association rules.
+As authors input the keywords for their paper, the system could try to match the user's input with association rules.
 This would require relating the association rules to the desired classification rules.
 Alternatively, the NSR entries could be classified manually and then we could rerun Apriori to learn rules that directly link to the classification label.
 
@@ -1326,10 +1349,10 @@ The new web application provides interactive search and visualizations to aid da
 %- Network
 The treatment of the data as a network is a new and flexible contribution.
 It can be used to visualize an author's collaborators, or to see the collaborations that exist around a given topic.
-Accessing the data as a network will hopefully inspire further work in studying the NSR as a social network.
+Accessing the data as a network can facilitate further work in studying the NSR as a social network.
 
 %- Data Mining
-The data mining analysis has revealed naming issues in the database, and proposed methods for mitigating them.
+The data mining analysis has revealed naming issues in the database, and I have proposed methods for mitigating them.
 The use of text mining tools has enabled the creation of a paper recommender system that recommends based on semantic information of the given journal titles, theses, conference proceedings, and other sources.
 Due to the high quality of the Nuclear Science References database and in particular the selectors, this recommender system can function without access to the whole text for each recommended source.
 
