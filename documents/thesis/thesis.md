@@ -1201,7 +1201,7 @@ There is now a database object for each author in each paper.
 Each time an author appears their publication count increments.
 Next, each database object that has an author with a publication count below the cutoff is removed.
 Finally the unique remaining papers are the ones that have authors with more than one publication count.
-Table @tbl:papersWithoutNAuthors[^code-papersWithoutNAuthors] shows the number of papers that remain once all the authors with a specified publication count are removed.
+Table @tbl:papersWithoutNAuthors shows the number of papers that remain once all the authors with a specified publication count are removed[^code-papersWithoutNAuthors].
 Note that the starting number is $190654$ not $212835$ as quite a few NSR entries do not have an author field.
 Table @tbl:typesWithoutAuthors shows a break down of the NSR entry types that do not have authors.
 A large percentage of those entries without author fields are reports and conference proceedings[^no-author-jour].
@@ -1311,8 +1311,20 @@ Appendix
 
 ![Complete 1940 author graph.](images/complete-graph-1940.pdf){#fig:complete-graph-1940}
 
-``` {#blk:papersWithoutNAuthors .javascript caption="The mongoshell code to determine the results shown in Table \ref{tbl:papersWithoutNAuthos}" fontsize=\small baselinestretch=1}
-for (i=0; i<=10; i++){db.NSR.aggregate([{$project: {_id: 1, authors: 1, year: 1}}, {$unwind: "$authors"}, {$group: {_id: "$authors", numEntries: {$sum: 1}, papers: {$addToSet: "$_id"}}}, {$match: {"numEntries": {$gte: i}}}, {$unwind: "$papers"}, {$group: {_id: "$papers", uniqueKey: {$sum: {$multiply: [1, 0]}}}}, {$group: {_id: "$uniqueKey", papersRemaining: {$sum:1}}}], {allowDiskUse: true}).forEach( function(myDoc) { print( "user: " + myDoc.papersRemaining ); }) }
+``` {#blk:papersWithoutNAuthors .javascript caption="The mongoshell code to determine the results shown in Table \ref{tbl:papersWithoutNAuthors}" fontsize=\small baselinestretch=1 breaklines=true }
+for (i=0; i<=10; i++){
+    db.NSR.aggregate([
+        {$project: {_id: 1, authors: 1, year: 1}},
+        {$unwind: "$authors"},
+        {$group: {_id: "$authors", numEntries: {$sum: 1}, papers: {$addToSet: "$_id"}}},
+        {$match: {"numEntries": {$gte: i}}},
+        {$unwind: "$papers"},
+        {$group: {_id: "$papers", uniqueKey: {$sum: {$multiply: [1, 0]}}}},
+        {$group: {_id: "$uniqueKey", papersRemaining: {$sum:1}}}
+    ], {allowDiskUse: true})
+    .forEach(function(myDoc) {
+        print( "user: " + myDoc.papersRemaining ); }
+    ) }
 ```
 
 Bibliography
