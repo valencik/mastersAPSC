@@ -1,5 +1,4 @@
 %- TODO balance mentions of application
-%- TODO cite: 50 years of kmeans
 %- TODO cite: Facebook paper A good overview of the process
 %- TODO cite: Medical clusters and MDS paper
 ---
@@ -8,7 +7,7 @@ author:
 - name: Andrew Valencik
   affiliation: Saint Mary\'s University
 author: Andrew Valencik
-date: October 3rd 2015 - Sorry About That, Saturday Special.
+date: October 4th 2015 - Pumpkin Spice Late Latte Edition.
 bibliography: bibliography.yaml
 csl: american-physics-society.csl
 link-citations: true
@@ -241,7 +240,7 @@ Each NSR entry is read and then a keyword abstract is manually created to reflec
 
 Keyword abstracts each have one of the following major topics:
 `NUCLEAR REACTIONS`, `RADIOACTIVITY`, `NUCLEAR STRUCTURE`, `NUCLEAR MOMENTS`, `ATOMIC PHYSICS`, `ATOMIC MASSES`, and `COMPILATION`.
-To accomodate work that span multiple topics, NSR entries can have multiple keyword abstracts.
+To accommodate work that spans multiple topics, NSR entries can have multiple keyword abstracts.
 
 The selectors are generated from the keyword abstracts.
 The current schema has `<SELECTRS>` parsed into a 3 dimensional array with `type`, `value`, and `subkey` variables.
@@ -527,7 +526,7 @@ Table: Types without any authors. {#tbl:typesWithoutAuthors}
 The relationship between publication amount cutoff and NSR entries remaining is quite consistent.
 The same data in Table @tbl:papersWithoutNAuthors is plotted in Figure @fig:papersWithoutNAuthors.
 
-![NSR entries remaining after author removal](images/papersWithoutNAuthors.png)
+![NSR entries remaining after author removal](images/papersWithoutNAuthors.png) {#fig:papersWithoutNAuthors}
 
 %- Summarize the Author cut off results
 The values presented in Table @tbl:papersWithoutNAuthors suggest that the bulk of the entries in the NSR are associated with authors who publish more than just a few times.
@@ -554,7 +553,7 @@ Figure @fig:viz-types-histo shows the amount of each different document type in 
 ![A histogram showing the contribution types over all years](images/viz-types-NSR-histo.png){#fig:viz-types-histo}
 
 The pie charts demonstrate the relative sizes of portions of the data.
-The docuent type amounts are shown in Figure @fig:viz-types-pie as a pie chart.
+The document type amounts are shown in Figure @fig:viz-types-pie as a pie chart.
 Figures @fig:viz-types-histo and @fig:viz-types-pie are visual representations of the data in Table @tbl:typesAll.
 
 ![A pie chart showing the types of NSR entries over all years](images/viz-types-NSR-pie.png){#fig:viz-types-pie}
@@ -789,7 +788,7 @@ The fact that cosine similarity does not take into account the ordering of words
 This does not affect our analysis as we were not analyzing natural language but constructing our "words" out of a list of items that act like keywords.
 
 The python package `gensim` was used to handle the vector creation and similarity analysis.
-While `gensim` offers many features and different forms of similarity measures[^gensim-sims], we made use of the cosine simularity routines.
+While `gensim` offers many features and different forms of similarity measures[^gensim-sims], we made use of the cosine similarity routines.
 
 [^gensim-sims]: Documentation for `gensim`'s methods of calculating similarities is available at: [radimrehurek.com/gensim/similarities/docsim.html](http://radimrehurek.com/gensim/similarities/docsim.html)
 
