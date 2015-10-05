@@ -1117,11 +1117,11 @@ The heat map coloring is on a logarithmic scale, while the axes are linear.
 Without the log color scale, the plots would be washed out by the incredibly many authors who have published only once.
 (Linearly coloured heat maps are shown in the Appendix, figures @fig:nyne-linear, @fig:nync-linear, and @fig:nenc-linear.)
 
-![Number of entries an author has given the number of years they have published.](../../data/images/nyne-log-heatmap.png){#fig:nyne-log}
+![Number of entries an author has given the number of years they have published.](images/nyne-log-heatmap.png){#fig:nyne-log}
 
-![Number of coauthors an author has given the number of years they have published.](../../data/images/nync-log-heatmap.png){#fig:nync-log}
+![Number of coauthors an author has given the number of years they have published.](images/nync-log-heatmap.png){#fig:nync-log}
 
-![Number of coauthors an author has given the number of entries they have published.](../../data/images/nenc-log-heatmap.png){#fig:nenc-log}
+![Number of coauthors an author has given the number of entries they have published.](images/nenc-log-heatmap.png){#fig:nenc-log}
 
 The three heat maps show that the 3 dimensional data is not well segmented and is instead continuous.
 This is a result of the input data being continuous in nature.
@@ -1133,9 +1133,9 @@ The results are plotted in Figure @fig:cluster-dbi for Davies-Bouldin index and 
 The Davies-Bouldin index suggest either 5 or 6 cluster centers is best for this data.
 The G1 index results suggest that 5 cluster centers is best, with 6 being the next best.
 
-![Davies-Bouldin index for number of clusters](../../data/images/11papers-noratio-dbi-clusters.png){#fig:cluster-dbi}
+![Davies-Bouldin index for number of clusters](images/11papers-noratio-dbi-clusters.png){#fig:cluster-dbi}
 
-![G1 index for number of clusters](../../data/images/11papers-noratio-g1-clusters.png){#fig:cluster-g1}
+![G1 index for number of clusters](images/11papers-noratio-g1-clusters.png){#fig:cluster-g1}
 
 The two cluster evaluation metrics are mostly in agreement, this is a sign of strength.
 Table @tbl:first-5clusters shows the data point values for the 5 different cluster centroids.
@@ -1169,7 +1169,7 @@ Table: Centroid data points for 5 cluster K-Means on initial data {#tbl:first-5c
 
 Table: Centroid data points for 6 cluster K-Means on initial data {#tbl:first-6clusters}
 
-![Initial clustering on authors with K-means](../../data/images/11papers-noratio5clusters.png){#fig:kmeans-noratio5}
+![Initial clustering on authors with K-means](images/11papers-noratio5clusters.png){#fig:kmeans-noratio5}
 
 ### Secondary Clustering
 %- Want data with more dimensionality
@@ -1253,11 +1253,11 @@ It suggests a clustering scheme of either 4 or 6 centers.
 The Davies-Bouldin index, shown in Figure @fig:thirds-dbi suggests either 2, 5, 6
 The clustering results for 6 centers is shown in Figure @fig:kmeans-thirds6.
 
-![Davies-Bouldin index for secondary clustering](../../data/images/11papers-ratio-third-dbi-clusters.png){#fig:thirds-dbi}
+![Davies-Bouldin index for secondary clustering](images/11papers-ratio-third-dbi-clusters.png){#fig:thirds-dbi}
 
-![G1 index for secondary clustering](../../data/images/11papers-ratio-third-g1-clusters.png){#fig:thirds-g1}
+![G1 index for secondary clustering](images/11papers-ratio-third-g1-clusters.png){#fig:thirds-g1}
 
-![Secondary K-means clustering with 6 centers](../../data/images/11papers-ratio-third6clusters.png){#fig:kmeans-thirds6}
+![Secondary K-means clustering with 6 centers](images/11papers-ratio-third6clusters.png){#fig:kmeans-thirds6}
 
 
 ### The Application
@@ -1303,11 +1303,11 @@ The meta data provided by the Nuclear Science References has enabled a custom ex
 Appendix
 ========
 
-![Number of entries an author has given the number of years they have published.](../../data/images/nyne-heatmap.png){#fig:nyne-linear}
+![Number of entries an author has given the number of years they have published.](images/nyne-heatmap.png){#fig:nyne-linear}
 
-![Number of coauthors an author has given the number of years they have published.](../../data/images/nync-heatmap.png){#fig:nync-linear}
+![Number of coauthors an author has given the number of years they have published.](images/nync-heatmap.png){#fig:nync-linear}
 
-![Number of coauthors an author has given the number of entries they have published.](../../data/images/nenc-heatmap.png){#fig:nenc-linear}
+![Number of coauthors an author has given the number of entries they have published.](images/nenc-heatmap.png){#fig:nenc-linear}
 
 ![Complete 1940 author graph.](images/complete-graph-1940.pdf){#fig:complete-graph-1940}
 
