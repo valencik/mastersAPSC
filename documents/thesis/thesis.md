@@ -477,6 +477,59 @@ T.L.Khoo                      614
 Table: The top 10 most prolific authors in the NSR database. {#tbl:prolific-authors}
 %- TODO perhaps reduce to 5 to avoid page splitting
 
+## Author Contributions
+%- Demonstrate that removing all single publication authors is not as harmful as it might seem
+How much of the database is affected if every author below a certain publication amount is removed?
+This question can be answered directly with the MongoDB database.
+First every paper is taken and duplicated for every single author in that paper's author list.
+There is now a database object for each author in each paper.
+Each time an author appears their publication count increments.
+Next, each database object that has an author with a publication count below the cutoff is removed.
+Finally the unique remaining papers are the ones that have authors with more than one publication count.
+Table @tbl:papersWithoutNAuthors shows the number of papers that remain once all the authors with a specified publication count are removed[^code-papersWithoutNAuthors].
+Note that the starting number is $190654$ not $212835$ as quite a few NSR entries do not have an author field.
+Table @tbl:typesWithoutAuthors shows a break down of the NSR entry types that do not have authors.
+A large percentage of those entries without author fields are reports and conference proceedings[^no-author-jour].
+
+[^code-papersWithoutNAuthors]: The code to produce the results in Table \ref{tbl:papersWithoutNAuthors} is shown in Appendix Snippet \ref{blk:papersWithoutNAuthors}
+
+[^no-author-jour]: Of the $5564$ journal articles without an author field, $5489$ were written between 1970 and 1980.
+
+Entry Number Cutoff   Papers Remaining   Difference
+-------------------   ----------------   ----------
+1                     190654
+2                     187741             2913
+3                     185404             2337
+4                     183410             1994
+5                     181315             2095
+6                     179606             1709
+7                     177945             1661
+8                     176390             1555
+9                     174702             1688
+10                    173117             1585
+11                    171509             1608
+
+Table: Papers affected by removal of authors with N or less papers. {#tbl:papersWithoutNAuthors}
+
+Type       Amount
+----       ------
+UNKNOWN    33
+PC         48
+CONF       4614
+PREPRINT   78
+THESIS     968
+REPT       10876
+JOUR       5564
+Total      22181
+
+Table: Types without any authors. {#tbl:typesWithoutAuthors}
+
+%- Summarize the Author cut off results
+The values presented in Table @tbl:papersWithoutNAuthors suggest that the bulk of the papers in the NSR are associated with authors who publish more than just a few times.
+Taking the last value in the table, the authors who publish 11 or more times in the NSR make up about $90\%$ of all the NSR entries with an author field.
+There are only $18006$ authors who have published 11 or more times.
+Therefore, about $18\%$ of authors make up about $90\%$ of the contributions in the NSR database.
+
 ## Visualizations
 
 Visualizations provide a summary of data at a glance.
@@ -1173,16 +1226,14 @@ Table: Centroid data points for 6 cluster K-Means on initial data {#tbl:first-6c
 
 ### Secondary Clustering
 %- Want data with more dimensionality
-The `numEntries` and `numCoauthors` data presented in the heat maps can be improved.
-An author could have published 20 papers in 1995 and 5 papers in 1996, their resulting `numYears` value for that range would be 2.
+An author that published 20 papers in 1995 and 5 papers in 1996, their resulting `numYears` value for that range would be 2.
 This has the effect of ignoring how prolific a given author may have been in a certain time.
 We want the author who published 20 papers in 1995 to be measured differently than an author who published once in both 1995 and 1996.
 
-An improvement is obtained by increasing the dimensionality of the data.
-Instead of a single number representing an author's number of publications, a parameter representing the distribution of publications over time could be used.
+Instead of a single number representing an author's number of publications, a parameter representing the distribution of publications over time is used.
 How many papers did a given author published in the beginning of their career?
 How many papers did the publish at the end of their career, or most recently?
-We will take three measurements for each author regarding their publication history:
+We take three measurements for each author regarding their publication history:
 the percentage of their total publications in the first, second, and final third of their career.
 
 %- Need authors with many publications
@@ -1193,57 +1244,11 @@ Therefore we lose $40\%$ of the authors in the database if we require an author 
 In order to have a non zero number of publications in each quartile an author must have a minimum of 3 publications.
 This requirement cuts out $55\%$ of authors.
 
-%- Demonstrate that removing all single publication authors is not as harmful as it might seem
-How much of the database is affected if every author below a certain publication amount is removed?
-This question can be answered directly with the MongoDB database.
-First every paper is taken and duplicated for every single author in that paper's author list.
-There is now a database object for each author in each paper.
-Each time an author appears their publication count increments.
-Next, each database object that has an author with a publication count below the cutoff is removed.
-Finally the unique remaining papers are the ones that have authors with more than one publication count.
-Table @tbl:papersWithoutNAuthors shows the number of papers that remain once all the authors with a specified publication count are removed[^code-papersWithoutNAuthors].
-Note that the starting number is $190654$ not $212835$ as quite a few NSR entries do not have an author field.
-Table @tbl:typesWithoutAuthors shows a break down of the NSR entry types that do not have authors.
-A large percentage of those entries without author fields are reports and conference proceedings[^no-author-jour].
-
-[^code-papersWithoutNAuthors]: The code to produce the results in Table \ref{tbl:papersWithoutNAuthors} is shown in Appendix Snippet \ref{blk:papersWithoutNAuthors}
-
-[^no-author-jour]: Of the $5564$ journal articles without an author field, $5489$ were written between 1970 and 1980.
-
-Entry Number Cutoff   Papers Remaining   Difference
--------------------   ----------------   ----------
-1                     190654
-2                     187741             2913
-3                     185404             2337
-4                     183410             1994
-5                     181315             2095
-6                     179606             1709
-7                     177945             1661
-8                     176390             1555
-9                     174702             1688
-10                    173117             1585
-11                    171509             1608
-
-Table: Papers affected by removal of authors with N or less papers. {#tbl:papersWithoutNAuthors}
-
-Type       Amount
-----       ------
-UNKNOWN    33
-PC         48
-CONF       4614
-PREPRINT   78
-THESIS     968
-REPT       10876
-JOUR       5564
-Total      22181
-
-Table: Types without any authors. {#tbl:typesWithoutAuthors}
-
-%- Summarize the Author cut off results
-The values presented in Table @tbl:papersWithoutNAuthors suggest that the bulk of the papers in the NSR are associated with authors who publish more than just a few times.
+%- Tie in to Author Contributions results
+Recall the analysis in Section [Author Contributions](#author-contributions) suggests that a small portion of the authors contribute a large portion of the NSR entries.
 This result means that filtering out low publication authors in additional analysis does not affect the majority of the NSR entries.
 As a result the secondary clustering only considered the authors who contribute $90\%$ of the NSR entries with author fields.
-Explicitly we considered authors who published 11 or more times.
+Explicitly, we considered authors who published 11 or more times.
 This amounted to $18006$ authors.
 The code to produce the input data for the secondary clustering is available in the `prepare-data.py` script.
 %- Demonstrate that 1993JA17 and 1996JA24 disappear correctly
@@ -1259,6 +1264,16 @@ The clustering results for 6 centers is shown in Figure @fig:kmeans-thirds6.
 
 ![Secondary K-means clustering with 6 centers](images/11papers-ratio-third6clusters.png){#fig:kmeans-thirds6}
 
+| careerLength | meanCoauthors | numEntries | numEntries033 | numEntries066 | numEntries100 | size |
+| ------------ | ------------- | ---------- | ------------- | ------------- | ------------- | ---- |
+| 1.16972      | -0.27103      | 0.46882    | -0.45377      | 0.71277       | -0.11090      | 3299 |
+| 1.08866      | 1.88560       | 4.07120    | -0.78269      | 0.51341       | 0.41716       | 564  |
+| 0.41893      | -0.21279      | -0.17738   | -0.83277      | -0.83916      | 1.62115       | 2993 |
+| -0.64822     | -0.31975      | -0.36245   | -0.25189      | 0.63417       | -0.26423      | 5227 |
+| -0.71602     | 1.98927       | 0.10059    | -0.02918      | 0.25118       | -0.18162      | 1651 |
+| -0.27094     | -0.26837      | -0.37100   | 1.35796       | -0.90415      | -0.71240      | 4268 |
+
+Table: Centroid data points for 6 cluster K-Means on initial data {#tbl:thirds-6clusters}
 
 ### The Application
 
