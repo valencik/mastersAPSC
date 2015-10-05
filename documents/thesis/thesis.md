@@ -97,7 +97,7 @@ Analysis is offered on the search queries which displays how many nuclides, auth
 
 ## Proposed Improvements
 The primary function of the developed application is increased accessibility to exploration of the Nuclear Science References data.
-This includes the authors documented, the papers recorded and keyworded, their links, and all available metadata for the nearly 120 years.
+This includes the authors documented, the entries recorded and keyworded, their links, and all available metadata for the nearly 120 years.
 The application makes use of a web interface to aid in increasing accessibility.
 All one needs in order to use the application is a modern web browser.
 Interactive visualizations are used to encourage exploring the data.
@@ -122,10 +122,10 @@ For example, `collab:R.A.E.Austin` will retrieve a network graph of all the auth
 Additionally, the `collab:` command can take a nuclide as an input and generate a network graph of all authors who have published on that nuclide.
 Analysis of the network graphs is further discussed in Section [Network Analysis and Visualization](#network-analysis-and-visualization).
 
-The `simpapers:` command returns a list of papers that are considered similar to the input selection.
+The `simpapers:` command returns a list of NSR entries that are considered similar to the input selection.
 The command can take an authors name, or NSR Keynumber as valid inputs.
 An example for author "A.J.Sarty" is shown in Figure @fig:simpapers-author.
-The method by which papers are determined to be similar is discussed in Section [Cosine Similarity of NSR Selectors](#cosine-similarity-of-nsr-selectors).
+The method by which NSR entries are determined to be similar is discussed in Section [Cosine Similarity of NSR Selectors](#cosine-similarity-of-nsr-selectors).
 
 
 The Data and Database
@@ -184,7 +184,7 @@ The `<KEYNO   >` field is a unique key number assigned to each NSR entry.
 The data on which a particular entry was added to the database or last modified is encoded in the `<HISTORY >` field.
 The `<CODEN   >` and `<REFRENCE>` fields contain information about the journal or other type of resource the document came from.
 The `<AUTHORS >` field is a comma separated list of author names.
-The author list is one of the key relational components of the data, establishing links between papers and other authors.
+The author list is one of the key relational components of the data, establishing links between NSR entries and other authors.
 The `<TITLE   >` field is a free text field representing the title of the reference with a custom set of abbreviations for special characters like Greek letters.
 These abbreviations are detailed in the NSR coding manual @nsr-manual.
 In this work, the abbreviations have been translated to \LaTeX.
@@ -485,8 +485,8 @@ First every paper is taken and duplicated for every single author in that paper'
 There is now a database object for each author in each paper.
 Each time an author appears their publication count increments.
 Next, each database object that has an author with a publication count below the cutoff is removed.
-Finally the unique remaining papers are the ones that have authors with more than one publication count.
-Table @tbl:papersWithoutNAuthors shows the number of papers that remain once all the authors with a specified publication count are removed[^code-papersWithoutNAuthors].
+Finally the unique remaining NSR entries are the ones that have authors with more than one publication count.
+Table @tbl:papersWithoutNAuthors shows the number of NSR entries that remain once all the authors with a specified publication count are removed[^code-papersWithoutNAuthors].
 Note that the starting number is $190654$ not $212835$ as quite a few NSR entries do not have an author field.
 Table @tbl:typesWithoutAuthors shows a break down of the NSR entry types that do not have authors.
 A large percentage of those entries without author fields are reports and conference proceedings[^no-author-jour].
@@ -509,7 +509,7 @@ Entry Number Cutoff   Entries Remaining   Difference
 10                    173117              1585
 11                    171509              1608
 
-Table: NSR entries affected by removal of authors with N or less papers. {#tbl:papersWithoutNAuthors}
+Table: NSR entries affected by removal of authors with a publication count less than the cutoff. {#tbl:papersWithoutNAuthors}
 
 Type       Amount
 ----       ------
@@ -530,7 +530,7 @@ The same data in Table @tbl:papersWithoutNAuthors is plotted in Figure @fig:pape
 ![NSR entries remaining after author removal](images/papersWithoutNAuthors.png)
 
 %- Summarize the Author cut off results
-The values presented in Table @tbl:papersWithoutNAuthors suggest that the bulk of the papers in the NSR are associated with authors who publish more than just a few times.
+The values presented in Table @tbl:papersWithoutNAuthors suggest that the bulk of the entries in the NSR are associated with authors who publish more than just a few times.
 Taking the last value in the table, the authors who publish 11 or more times in the NSR make up about $90\%$ of all the NSR entries with an author field.
 There are only $18006$ authors who have published 11 or more times.
 Therefore, about $18\%$ of authors make up about $90\%$ of the contributions in the NSR database.
@@ -578,7 +578,7 @@ An example can be seen in Figure @fig:small-graph-1940.
 Figure @fig:small-graph-1940  is a single component of the complete 1940 author graph (shown in Appendix Figure @fig:complete-graph-1940).
 It has 7 nodes, each of which is a different author, and 12 edges, which represent a coauthorship between the two nodes.
 `M.Ikawa` has published with everyone in the graph.
-We can use this knowledge in a database query to get the papers that make up this graph (see Snippet \ref{blk:graph1940s}).
+We can use this knowledge in a database query to get the entries that make up this graph (see Snippet \ref{blk:graph1940s}).
 
 ``` {#blk:graph1940s .python caption="Python code to get the NSR entries in Figure \ref{fig:small-graph-1940}." fontsize=\small baselinestretch=1}
 import pymongo
@@ -586,9 +586,9 @@ db = pymongo.MongoClient()['masters']
 db.NSR.find({"year": 1940, "authors": "M.Ikawa"})
 ```
 
-The results of the database query (shown in Snippet \ref{blk:graph1940s-results}) reveal there were 3 papers in 1940 that contributed to this graph.
+The results of the database query (shown in Snippet \ref{blk:graph1940s-results}) reveal there were 3 entries in 1940 that contributed to this graph.
 One paper titled "Fission Products of Uranium by Fast Neutrons" has authors `Y.Nishina`, `T.Yasaki`, `K.Kimura`, and `M.Ikawa`.
-The other papers, titled "Neutron Induced Radioactivity in Columbium" and "Artificial Radioactivity Induced in Zr and Mo" respectively are both authored by `R.Sagane`, `S.Kojima`, `G.Miyamoto`, and `M.Ikawa`.
+The other entries, titled "Neutron Induced Radioactivity in Columbium" and "Artificial Radioactivity Induced in Zr and Mo" respectively are both authored by `R.Sagane`, `S.Kojima`, `G.Miyamoto`, and `M.Ikawa`.
 This demonstrates a limitation in the current graph visualization.
 `G.Miyamoto` and `M.Ikawa` have published together twice (in 1940) but their edge looks no different than the edge between `Y.Nishina` and `T.Yasski`.
 Most graph libraries allow for a lot of customization and embedding of data.
@@ -933,27 +933,27 @@ For the CMS Collaboration	for the CERES Collaboration	4
 ## The Application
 
 The cosine similarity results are presented in the web application via the `simpapers:` command.
-The user of the application can search and for an author and see papers that are similar to the papers the author has coauthored.
+The user of the application can search and for an author and see entries that are similar to the entries the author has coauthored.
 The user's input is first matched against possibly multiple identifiers, making use of the results from the [Author Name Analysis](#author-name-analysis) section.
 
 %- Mongo
 Then a two-staged database query is performed.
-We first get all of the similar paper `_id`s from the `simPapers` array in each of the inputted author's papers.
+We first get all of the similar paper `_id`s from the `simPapers` array in each of the inputted author's entries.
 The total list of similar paper `_id`s can be filtered by the similarity score that is also included in the `simPapers` array.
 At this stage we have a list of `_id`s that are similar to one or more NSR entries the inputted author published.
 We fetch the NSR entry for the full list of `_id`s and filter out any that were published by the inputted author.
-Because the similarity ranking considers the selectors used and authors often publish multiple times using similar selectors, the recommended papers often include ones written by the same authors as the inputted paper.
+Because the similarity ranking considers the selectors used and authors often publish multiple times using similar selectors, the recommended entries often include ones written by the same authors as the inputted paper.
 
 %- Web app
 The render object is then prepared to be sent to the html template to show the user.
-The end user then sees a web page with the search author in prominent text followed by a list of papers that have a cosine similarity to at least one of their own papers greater than 0.65.
+The end user then sees a web page with the search author in prominent text followed by a list of entries that have a cosine similarity to at least one of their own entries greater than 0.65.
 An example for author "A.J.Sarty" is shown in Figure @fig:simpapers-author.
-The similar papers are sorting in descending order of their score function value.
+The similar entries are sorting in descending order of their score function value.
 The scoring function is the average of all the `score` fields for that paper that were encountered in the aggregation.[^multiple-scores]
 
-[^multiple-scores]: Because we fetch the `simPapers` array for multiple papers when searching for an author's similar papers, we can see the same `_id` multiple times and with different scores each time.
+[^multiple-scores]: Because we fetch the `simPapers` array for multiple entries when searching for an author's similar entries, we can see the same `_id` multiple times and with different scores each time.
 
-![Similar papers for author "A.J.Sarty"](images/simpapers-author.png) {#fig:simpapers-author}
+![Similar entries for author "A.J.Sarty"](images/simpapers-author.png) {#fig:simpapers-author}
 
 ## Further Analysis
 %- TODO Roby says she's been here before?
@@ -1038,7 +1038,7 @@ rules                                                            support     con
 {H.Iwasaki,S.Shimoura,T.Motobayashi} => {T.Minemura}             0.0008706   0.9071       910.2
 {L.Corradi} => {G.Montagnoli}                                    0.0008549   0.8716       908.1
 
-Table: Frequent itemset rules for authors of papers. {#tbl:Apriori1}
+Table: Frequent itemset rules for authors of entries. {#tbl:Apriori1}
 
 %- low support
 All of the 11 unique authors in Table @tbl:Apriori1 have published more than 165 times.
@@ -1059,7 +1059,7 @@ With a support value of 0.00029 the analysis of author lists from NSR entries pr
 %- The rules involving only two authors reveal author pairs where the (Roby - Svenson)
 
 %- papers -> selectors
-Apriori with each paper as a transaction, and selectors as items should produce lists of selectors that frequently occur together in papers.
+Apriori with each paper as a transaction, and selectors as items should produce lists of selectors that frequently occur together in NSR entries.
 This tends to produce association rules that look like a list of isotopes involved in nuclear reactions.
 The first four rules in Table @tbl:Apriori2 can be read off as nuclear reactions.
 $^{290}\mbox{Lv}$ undergoes alpha decay and produces the daughter nucleus $^{286}\mbox{Fl}$, along with an alpha particle but this is not recorded in the NSR selectors.
@@ -1078,7 +1078,7 @@ rules                              support     confidence   lift
 {G 286FL,S A-DECAY} => {P 290LV}   0.000298    1.0000       3167.4
 {P 290LV} => {G 286FL}             0.000298    0.9464       3167.4
 
-Table: Frequent itemset rules for selectors in  papers. {#tbl:Apriori2}
+Table: Frequent itemset rules for selectors in NSR entries. {#tbl:Apriori2}
 
 %- selectors -> authors
 Our final analysis with Apriori uses each selector as a transaction and the list of authors who have published with that selector as the itemset.
@@ -1091,8 +1091,8 @@ With a support value of 0.0042 the analysis of author lists for each selector pr
 If we want to find authors who have not published together but do publish on similar keywords, this analysis is not optimal.
 A more efficient approach would leverage the graph data in Section [Nuclide Graphs](#nuclide-graphs).
 The selector rules found above could be used to enlarge the search query for a graph.
-So instead of searching for just `290LV` we could enlarge the search by also including papers with `286FL`.
-Alternatively we could reduce the search results by including only papers with both `290LV` and `286FL`.
+So instead of searching for just `290LV` we could enlarge the search by also including entries with `286FL`.
+Alternatively we could reduce the search results by including only entries with both `290LV` and `286FL`.
 %- I could make a list of the total coauthors for any given author.
 %- Then I could cheaply lookup an author in an association rule (perhaps the rhs author) and see if i find the other authors in the rule.
 %- If we consider the p -> s results as groups of selectors that frequently appear together, can we then take a -> s results and ...do something.
@@ -1110,7 +1110,7 @@ rules                                                           support     conf
 {F.Scarlassara,L.Corradi,S.Szilner} => {G.Montagnoli}           0.008517    1.0000       92.4
 {A.M.Stefanini,L.Corradi,S.Szilner} => {G.Montagnoli}           0.008403    1.0000       92.4
 
-Table: Frequent itemset rules for selectors in  papers. {#tbl:Apriori3}
+Table: Frequent itemset rules for selectors in entries. {#tbl:Apriori3}
 
 ## Cluster Analysis
 %- Introduce and discuss the algorithms used in application features
@@ -1231,13 +1231,13 @@ Table: Centroid data points for 6 cluster K-Means on initial data {#tbl:first-6c
 
 ### Secondary Clustering
 %- Want data with more dimensionality
-An author that published 20 papers in 1995 and 5 papers in 1996, their resulting `numYears` value for that range would be 2.
+An author that published 20 entries in 1995 and 5 entries in 1996, their resulting `numYears` value for that range would be 2.
 This has the effect of ignoring how prolific a given author may have been in a certain time.
-We want the author who published 20 papers in 1995 to be measured differently than an author who published once in both 1995 and 1996.
+We want the author who published 20 entries in 1995 to be measured differently than an author who published once in both 1995 and 1996.
 
 Instead of a single number representing an author's number of publications, a parameter representing the distribution of publications over time is used.
-How many papers did a given author published in the beginning of their career?
-How many papers did the publish at the end of their career, or most recently?
+How many entries did a given author published in the beginning of their career?
+How many entries did the publish at the end of their career, or most recently?
 We take three measurements for each author regarding their publication history:
 the percentage of their total publications in the first, second, and final third of their career.
 
