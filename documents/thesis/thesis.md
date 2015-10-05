@@ -1229,6 +1229,12 @@ Table: Centroid data points for 6 cluster K-Means on initial data {#tbl:first-6c
 
 ![Initial clustering on authors with K-means](images/11papers-noratio5clusters.png){#fig:kmeans-noratio5}
 
+The first cluster in Table @tbl:first-5clusters represents authors who have had short careers but published an average number of entries with many coauthors.
+The second cluster of authors have had long careers and published and average amount with an average number of coauthors.
+The authors in the third cluster are the most prolific authors who frequently publish with many coauthors.
+The forth and largest cluster of authors are those with younger careers and fewer publications with fewer coauthors.
+Finally, the fifth cluster of authors have had the longest careers, published many times, and overall, have published with an average amount of coauthors.
+
 ### Secondary Clustering
 %- Want data with more dimensionality
 An author that published 20 entries in 1995 and 5 entries in 1996, their resulting `numYears` value for that range would be 2.
