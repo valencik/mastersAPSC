@@ -1091,8 +1091,10 @@ In practice, K-means is normally run multiple times with varying $k$ values and 
 
 However, their exist methods to measure the effectiveness of a clustering configuration.
 The Davies-Bouldin considers the ratio of external separation between clusters to the scatter within a cluster @wiki-dbi.
+Given two clustering schemes of the same input data, the one with the lowest Davies-Bouldin index is preferred.
 The G1, or Calinski-Harabasz pseudo F-statistic, or CH criterion is a hueristic device to help evaluate different clustering schemes on the same input data @g1-paper.
 It works best when used on standardized data in a Euclidean space @ch-stackoverflow.
+In contrast to the Davies-Bouldin index, a higher G1 index value suggests a better clustering scheme.
 Both of these evaluation methods are provided in the R package `clusterSim` @clusterSim.
 
 ### Initial Author Clustering
@@ -1128,61 +1130,46 @@ Nevertheless, the cluster results of this data could be used to aid in classifyi
 
 The Davies-Bouldin index and G1 index have been calculated for all K-means clustering schemes from 2 centers to 16.
 The results are plotted in Figure @fig:cluster-dbi for Davies-Bouldin index and Figure @fig:cluster-g1 for the G1 index.
-The Davies-Bouldin index monotonically increases from 2 clusters to 9 clusters.
-This suggests that we should prefer a lower number of clusters when possible, but that there is no single configuration that is significantly better than another (in the range from 2 through 9).
-The G1 index results suggest that 7 clusters is optimal for this data, with 6 and 5 clusters being second and third best fits respectively.
+The Davies-Bouldin index suggest either 5 or 6 cluster centers is best for this data.
+The G1 index results suggest that 5 cluster centers is best, with 6 being the next best.
 
-![Davies-Bouldin index for number of clusters](../../data/images/first-dbi-clusters.png){#fig:cluster-dbi}
+![Davies-Bouldin index for number of clusters](../../data/images/11papers-noratio-dbi-clusters.png){#fig:cluster-dbi}
 
-![G1 index for number of clusters](../../data/images/first-g1-clusters.png){#fig:cluster-g1}
+![G1 index for number of clusters](../../data/images/11papers-noratio-g1-clusters.png){#fig:cluster-g1}
 
-The two cluster evaluation metrics used leave us we a range of choices.
-If we consider the G1 results to suggest we pick from 5, 6, or 7 clusters, then the Davies-Bouldin index results would suggest we pick to lowest, 5 clusters.
+The two cluster evaluation metrics are mostly in agreement, this is a sign of strength.
 Table @tbl:first-5clusters shows the data point values for the 5 different cluster centroids.
-Table @tbl:first-6clusters and Table @tbl:first-7clusters show the centroid information for the 6 and 7 cluster scheme.
-In all cases we can see `numCoauthors`, `numYears`, and `numEntries` monotonically increase as the size of the cluster decreases.
+Table @tbl:first-6clusters shows the centroid information for the 6 cluster scheme.
+Note that the data has been standardized, so the values in the tables are in standard deviations.
+%- In all cases we can see `numCoauthors`, `numYears`, and `numEntries` monotonically increase as the size of the cluster decreases.
 
-Figure @fig:kmeans-first5 shows the `numCoauthors`, `numYears`, and `numEntries` data coloured according to their cluster membership in the 5 cluster scheme.
+Figure @fig:kmeans-noratio5 shows the `numCoauthors`, `numYears`, and `numEntries` data coloured according to their cluster membership in the 5 cluster scheme.
 This figure again demonstrates the data is continuous and that well separated clusters do not exist.
 As a result the clusters function as segmentations along a continuous spectrum.
 As the number of clusters increases, the size of the segmentations decrease.
-%- Clustering segmentation is all happening on one axis up to a certain point.
-%- Eventually the segmentations partition the data with respect to other variables.
 
-| numCoauthors     | numYears         | numEntries       | size  |
+|   careerLength   |   meanCoauthors  |   numEntries     | size  |
 |------------------|------------------|------------------|-------|
-| 11.4876483917048 | 2.55445544554455 | 3.60072163932811 | 81204 |
-| 79.4678688037993 | 8.61924903532205 | 18.0874146631048 | 13476 |
-| 205.222624902925 | 17.7325912503236 | 52.5293813098628 | 3863  |
-| 414.608223429015 | 25.9177657098526 | 119.608999224205 | 1289  |
-| 801.04126984127  | 31.7365079365079 | 277.911111111111 | 315   |
+| -0.67901         | 1.68445          | -0.03426         | 2342  |
+| 0.91890          | -0.44386         | -0.12959         | 5510  |
+| 0.87978          | 2.90728          | 4.92022          | 316   |
+| -0.70500         | -0.34365         | -0.40397         | 8262  |
+| 1.31926          | 0.26803          | 1.63938          | 1572  |
 
 Table: Centroid data points for 5 cluster K-Means on initial data {#tbl:first-5clusters}
 
-| numCoauthors     | numYears         | numEntries       | size  |
+|   careerLength   |   meanCoauthors  |   numEntries     | size  |
 |------------------|------------------|------------------|-------|
-| 9.96414115204982 | 2.37631032693306 | 3.24300726517903 | 77080 |
-| 60.8403847447367 | 7.28499361000874 | 14.1641891437412 | 14867 |
-| 146.008180755746 | 13.5820023373588 | 34.6965329178029 | 5134  |
-| 284.6278850683   | 22.2030146019783 | 78.4950541686293 | 2123  |
-| 509.374491180461 | 27.9728629579376 | 149.461329715061 | 737   |
-| 880.849514563107 | 31.7281553398058 | 316.980582524272 | 206   |
+| -0.69065         | 0.91707          | -0.21925         | 3131  |
+| 1.20883          | 2.50212          | 5.70388          | 231   |
+| 1.29734          | 0.31428          | 1.68485          | 1537  |
+| -0.67117         | -0.48459         | -0.41750         | 7213  |
+| 0.96457          | -0.44891         | -0.11525         | 5301  |
+| -0.64999         | 3.29831          | 0.68203          | 589   |
 
 Table: Centroid data points for 6 cluster K-Means on initial data {#tbl:first-6clusters}
 
-| numCoauthors     | numYears         | numEntries       | size  |
-|------------------|------------------|------------------|-------|
-| 8.74102071614762 | 2.19689943750857 | 2.89733845520648 | 72890 |
-| 47.5835029921648 | 6.59732247516812 | 12.1323338885804 | 16209 |
-| 113.874277896017 | 10.6775615688659 | 24.8566433566434 | 6578  |
-| 218.386715867159 | 18.8660516605166 | 57.1645756457565 | 2710  |
-| 370.992424242424 | 25.1599326599327 | 106.705387205387 | 1188  |
-| 615.65096359743  | 29.2997858672377 | 186.638115631692 | 467   |
-| 1006.95238095238 | 33.2             | 386.561904761905 | 105   |
-
-Table: Centroid data points for 7 cluster K-Means on initial data {#tbl:first-7clusters}
-
-![Initial clustering on authors with K-means](../../data/images/first5clusters.png){#fig:kmeans-first5}
+![Initial clustering on authors with K-means](../../data/images/11papers-noratio5clusters.png){#fig:kmeans-noratio5}
 
 ### Secondary Clustering
 %- Want data with more dimensionality
@@ -1195,16 +1182,16 @@ An improvement is obtained by increasing the dimensionality of the data.
 Instead of a single number representing an author's number of publications, a parameter representing the distribution of publications over time could be used.
 How many papers did a given author published in the beginning of their career?
 How many papers did the publish at the end of their career, or most recently?
-We will take four measurements for each author regarding their publication history:
-the number of papers published in the first, second, third, and forth quartile of their careers.
+We will take three measurements for each author regarding their publication history:
+the percentage of their total publications in the first, second, and final third of their career.
 
 %- Need authors with many publications
 In order to break up the number of entries over time like this, each author needs to have multiple entries over multiple years.
 Recall their are 41254 authors with only a single publication in the database.
 That is 41254 out of 100147, roughly $40\%$ of the total unique authors.
 Therefore we lose $40\%$ of the authors in the database if we require an author to have published over multiple years.
-In order to have a non zero number of publications in each quartile an author must have a minimum of 4 publications.
-This requirement cuts out $62\%$ of authors.
+In order to have a non zero number of publications in each quartile an author must have a minimum of 3 publications.
+This requirement cuts out $55\%$ of authors.
 
 %- Demonstrate that removing all single publication authors is not as harmful as it might seem
 How much of the database is affected if every author below a certain publication amount is removed?
@@ -1261,17 +1248,23 @@ This amounted to $18006$ authors.
 The code to produce the input data for the secondary clustering is available in the `prepare-data.py` script.
 %- Demonstrate that 1993JA17 and 1996JA24 disappear correctly
 
-The Davies-Bouldin index for the secondary clustering is shown in Figure @fig:quartiles-dbi.
-It suggests a clustering scheme of either 2, 5 or 8.
-The G1 index, shown in Figure @fig:quartiles-g1, suggests either 2 or 5 cluster centers.
+The G1 index for the secondary clustering is shown in Figure @fig:thirds-g1.
+It suggests a clustering scheme of either 4 or 6 centers.
+The Davies-Bouldin index, shown in Figure @fig:thirds-dbi suggests either 2, 5, 6
+The clustering results for 6 centers is shown in Figure @fig:kmeans-thirds6.
 
-![Davies-Bouldin index for secondary clustering](../../data/images/11papers-career-length-sorted-Quartiles-dbi-clusters.png){#fig:quartiles-dbi}
+![Davies-Bouldin index for secondary clustering](../../data/images/11papers-ratio-third-dbi-clusters.png){#fig:thirds-dbi}
 
-![G1 index for secondary clustering](../../data/images/11papers-career-length-sorted-Quartiles-g1-clusters.png){#fig:quartiles-g1}
+![G1 index for secondary clustering](../../data/images/11papers-ratio-third-g1-clusters.png){#fig:thirds-g1}
 
-![Secondary clustering on authors with K-means](../../data/images/11papers-career-length-sorted-Quartiles5clusters.png){#fig:kmeans-quartiles5}
+![Secondary K-means clustering with 6 centers](../../data/images/11papers-ratio-third6clusters.png){#fig:kmeans-thirds6}
 
-%- TODO This chapter does not yet discuss cluster labels.  Or using the cluster results in the application.
+
+### The Application
+
+The results of cluster analysis can be written to the database with the `update-database.py` script.
+The clusters (if multiple are written to the database) an author belongs to are shown on the author profile page.
+This is demonstrated in Figure @fig:author-profile.
 
 ## Future Work
 
