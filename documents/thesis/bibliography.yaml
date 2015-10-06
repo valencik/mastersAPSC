@@ -324,4 +324,17 @@ references:
   title: 'MongoDB — wikipedia, the free encyclopedia'
   note: \[Online; accessed 6-October-2015\]
   URL: https://en.wikipedia.org/w/index.php?title=MongoDB&oldid=683358519
+
+- id: becquerel
+  type: article-journal
+  author:
+  - family: Bécquerel
+    given: A H
+  issued:
+  - year: '1896'
+  title: 'Sur les radiations invisibles emises par les corps phosphorescents'
+  container-title: C. R. Acad. Sci. Paris
+  page: '501'
+  volume: '122'
+  URL: http://cds.cern.ch/record/261888
 ...

@@ -2,7 +2,6 @@
 %- Custom bibliography styling?
 %- TODO cite: Facebook paper A good overview of the process
 %- TODO cite: Medical clusters and MDS paper
-%- TODO mention research gate - expert information from neutral 3rd party
 ---
 title:  'Structure Mining the Nuclear Science References'
 author:
@@ -30,12 +29,12 @@ Introduction
 Information retrieval has been repeatedly improved by large search engines like Google, Yahoo, DuckDuckGo, and more.
 Vast quantities of information are now easily retrieved on an extensive array of subjects.
 Scientific literature has received special attention through projects like [Google Scholar](https://scholar.google.ca) or [Microsoft Academic Search](http://academic.research.microsoft.com).
-However, these projects are still generalized to accommodate all sciences.
+These projects are still generalized to accommodate all sciences.
 %- Vertical search
 Information retrieval and data exploration can be improved by customizing an application to a specific domain.
 This work is a cross disciplinary effort, combining semantic information of nuclear physics literature and data mining techniques to build a custom application for data exploration and information retrieval in nuclear science.
 
-The United States [National Nuclear Data Center](http://www.nndc.bnl.gov) prepares an evaluated database of nuclear science literature that poses a rich opportunity for knowledge discovery directed at the scientific work and study.
+The United States [National Nuclear Data Center](http://www.nndc.bnl.gov) (NNDC) prepares an evaluated database of nuclear science literature that poses a rich opportunity for knowledge discovery directed at the scientific work and study.
 The knowledge discovery and data mining process reveals trends in the collective scientific study of nuclear structure, processes, and detection.
 This data is presented through a web application that extends the existing facilities of the Nuclear Science References web retrieval system.
 The ultimate goal is to enable further analysis on the body of nuclear science literature.
@@ -44,16 +43,16 @@ The ultimate goal is to enable further analysis on the body of nuclear science l
 %- Point towards what should be done, why?
 %- What is the problem? What will I study?
 %- ROBY good. keep as is.
-The academic field of nuclear science is over one hundred years old, starting with the discovery of radiation.
+The academic field of nuclear science is over one hundred years old, starting with the discovery of radiation @becquerel.
 This discovery is the first of many entries in the Nuclear Science References database, collected, cataloged, distributed, and evaluated by the National Nuclear Data Center [@Kurgan200603].
 The Nuclear Science References, or NSR, has over 210,000 entries documenting the body of nuclear science literature, which provides the opportunity for knowledge discovery on the literature's meta data.
 The metadata that the NSR provides is contributed and maintained by experts from the NNDC.
-Thus the source of metadata is a neutral third party.
-This fact separates the information in the NSR from similar metadata available from [ResearchGate](http://researchgate.net/) and other services.
+The source of metadata is a neutral third party.
+This fact separates the information in the NSR from metadata available through services such as [ResearchGate](http://researchgate.net/).
 
 This is a thesis that applies science from one domain to science from another domain.
 To facilitate understanding, by all readers, no matter their expertise, background information is placed in the thesis close to where it is used.
-Thus, this thesis has no "theory" chapter, as intelligence is spread throughout all chapters.
+Thus, this thesis has no "theory" chapter, as essential knowledge is provided in the chapters that require it.
 
 %- What do we know already?
 %- How will this advance our knowledge?
@@ -141,7 +140,6 @@ The Data and Database
 =====================
 %- Data Structure and Representation?
 The United States National Nuclear Data Center (NNDC) has composed the Nuclear Science References (NSR) database.
-%- TODO create bibtex entry
 A full database dump of the NSR was acquired on January 29th 2014 @borris-data.
 For simplicity, the data acquired from the NNDC on that date will be referred to as if it were the complete NSR database.
 All efforts have been taken to ensure the research procedures can easily be extended and repeated on new NSR data.
@@ -162,9 +160,9 @@ JSON objects are composed of keys and values.
 A key is a unique string that maps to a value.
 A value can be a string, a number, an array, or another object.
 Similarly, arrays can contain strings, numbers, objects or additional arrays.
-Snippet \ref{#blk:rawNSRJSON} shows an example JSON object and the final representation of an NSR entry.
+Snippet \ref{blk:rawNSRJSON} shows an example JSON object and the final representation of an NSR entry.
 
-[^json-document]: These objects are reffered to as documents once stored in the database. See [The Database - MongoDB](#the-database-mongodb).
+[^json-document]: These objects are referred to as documents once stored in the database. See [The Database - MongoDB](#the-database-mongodb).
 
 %- NSR EXCHANGE format discussion
 The NSR has 9 possible types of fields which are shown in Table @tbl:NSRidentifiers.
@@ -280,7 +278,7 @@ The value for A may have any number of digits.
 X may be one, two, or three letters.
 The `subkey` variable is used to link together multiple selectors of the same keyword sentence.
 
-## Final Representation
+## Data Representation
 An example of the final data representation used by the work is shown in Snippet \ref{blk:rawNSRJSON}.
 It is a JSON object for the NSR entry with keynumber `1988AB01`.
 The `_id` value is a string used as the unique identifier in the MongoDB collection.
@@ -351,12 +349,12 @@ MongoDB and CouchDB are both comparatively new database systems.
 Postgres also supports JSON and is a mature database system.
 Despite the prevalence of MySQL, it was not chosen because it is a relational database and would thus not support the arrays in the data schema as outlined in [Data Preparation](#data-preparation).
 
-A document store database such as MongoDB enables simple transformations of each NSR entry into a Mongo document (as discussed in [Data Preparation](#data-preparation)).
+A document store database such as MongoDB enables simple transformations of each NSR entry into a MongoDB document.
 In a relational database system such as MySQL, each NSR entry would have to be split up, with different pieces of information populating different database tables.
 Authors would be a type of entity in their own authors table, that each NSR entry in an NSR table would link to.
 This type of relationship would be necessary for keywords and selectors as well.
 
-As reported in the section [Data Representation](#data-representation), a JSON structure was constructed for each entry in the NSR database.
+As reported in the section [Data Preparation](#data-preparation), a JSON structure was constructed for each entry in the NSR database.
 To populate the MongoDB database, these JSON structures were flattened into a single file, and imported into a MongoDB collection using the [`mongoimport` tool](http://docs.mongodb.org/manual/reference/program/mongoimport/).
 After importing completed, there were 212835 documents in the MongoDB collection, one for each entry in the NSR database.
 
@@ -506,8 +504,14 @@ Table: The top 10 most prolific authors in the NSR database. {#tbl:prolific-auth
 
 ## Author Contributions
 %- Demonstrate that removing all single publication authors is not as harmful as it might seem
-How much of the database is affected if every author below a certain publication amount is removed?
-This question can be answered directly with the MongoDB database.
+There is a wide range in publication numbers among the roughly $100,000$ authors in the NSR.
+Table @tbl:prolific-authors shows the upper bound in publication numbers, and $41254$ authors share the lower bound of one publication.
+These are authors with different publication traits (a topic that is further explored in [Cluster Analysis](#cluster-analysis)).
+We want to learn something about the structure of author contributions.
+Are the majority of NSR entries contributed by the many authors who publish once or the few with hundreds of publications?
+
+The database can be used to answer a similar question:
+How many of the NSR entries are affected if every author below a certain publication amount is removed?
 First every paper is taken and duplicated for every single author in that paper's author list.
 There is now a database object for each author in each paper.
 Each time an author appears their publication count increments.
@@ -515,7 +519,7 @@ Next, each database object that has an author with a publication count below the
 Finally the unique remaining NSR entries are the ones that have authors with more than one publication count.
 Table @tbl:papersWithoutNAuthors shows the number of NSR entries that remain once all the authors with a specified publication count are removed[^code-papersWithoutNAuthors].
 Note that the starting number is $190654$ not $212835$ as quite a few NSR entries do not have an author field.
-Table @tbl:typesWithoutAuthors shows a break down of the NSR entry types that do not have authors.
+Table @tbl:typesWithoutAuthors shows a breakdown of the NSR entry types that do not have authors.
 A large percentage of those entries without author fields are reports and conference proceedings[^no-author-jour].
 
 [^code-papersWithoutNAuthors]: The code to produce the results in Table \ref{tbl:papersWithoutNAuthors} is shown in Appendix Snippet \ref{blk:papersWithoutNAuthors}
@@ -592,8 +596,7 @@ Network Analysis and Visualization
 %- What? Enabled graph data structure operations on NSR author data.
 %- Why? This is not possible with existing NSR data... Why useful?
 %- How? Using python library Networkx to build graph datastructures. D3 and Gephi for visualizations
-All previous analysis of the NSR data has focused on the content of each entry in a flat manner.
-However, the list of authors of a paper can be used to build a network or graph of the authors.
+The list of authors of a paper can be used to build a network or graph of the authors.
 In this work, the word 'graph' will always refer to the mathematical representation of a set of objects and their links.
 
 ##Data Graphs
@@ -804,12 +807,14 @@ This technique is a simple way of numercizing text for further mathematical mani
 
 ### Cosine Similarity of NSR Selectors
 A script was prepared to perform cosine similarity analysis on the NSR selectors.
-The code is available at `calc-cosine-sims.py`.
+The code is available at [github.com/valencik/mastersAPSC](https://github.com/valencik/mastersAPSC).
 For each NSR entry, a vector was formed from the entry's selectors.
 These vectors were used to form a corpus that calculated the frequency of each term in the vectors.
 Any selector with a value equal to `OTHER` was filtered out.
 These selectors are similar to stop words in text mining natural language data.
-Stop words, and these selectors, are the most commonly occuring, they contribute little meaning, and are therefore removed.
+Stop words[^stop-words], and these selectors, are the most commonly occuring, they contribute little meaning, and are therefore removed.
+
+[^stop-words]: Common stop words in english are "the", "and", "it", "is", and "a".
 
 The vectors are formed by turning the selectors into strings.
 We dropped the `subkey` value for this analysis as we were not concerned with the ordering of the of the selectors.
@@ -1021,7 +1026,7 @@ The latter is likely more interesting to users, as it could suggest similar auth
 Frequent pattern mining is an important part of data mining and knowledge discovery @DBLP:books/crc/aggarwal2014.
 It is also known as rule learning and is frequently used on market basket analysis.
 A history of customer transactions at a supermarket is analyzed to find groups of items that are frequently purchased together.
-For example, when customers perchase item A, the frequently purchase item B in the same transaction.
+For example, when customers purchase item A, the frequently purchase item B in the same transaction.
 The connection is between the items A and B and is independent of customers.
 
 Association rules are similar to if-then constructs.
@@ -1094,7 +1099,7 @@ With a support value of 0.00029 the analysis of author lists from NSR entries pr
 %- The rules involving only two authors reveal author pairs where the (Roby - Svenson)
 
 %- papers -> selectors
-Apriori with each paper as a transaction, and selectors as items should produce lists of selectors that frequently occur together in NSR entries.
+Apriori with each paper as a transaction and selectors as items should produce lists of selectors that frequently occur together in NSR entries.
 This tends to produce association rules that look like a list of isotopes involved in nuclear reactions.
 The first four rules in Table @tbl:Apriori2 can be read off as nuclear reactions.
 $^{290}\mbox{Lv}$ undergoes alpha decay and produces the daughter nucleus $^{286}\mbox{Fl}$, along with an alpha particle but this is not recorded in the NSR selectors.
