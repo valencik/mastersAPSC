@@ -288,4 +288,19 @@ references:
   title-short: clusterSim
   note: R package version 0.44-2
   URL: https://cran.r-project.org/web/packages/clusterSim/index.html
+
+- id: Levenshtein66
+  type: article-journal
+  author:
+  - family: Levenshtein
+    given: V. I.
+  issued:
+  - year: '1966'
+    month: '2'
+  title: Binary Codes Capable of Correcting Deletions, Insertions and Reversals
+  container-title: Soviet Physics Doklady
+  page: '707'
+  volume: '10'
+  note: \[Online; accessed 6-October-2015\]
+  URL: https://gitlab.doc.ic.ac.uk/wm613/inidividual-project/raw/4fbe43f863b229b50ca13bf5f59eb029ad71f6b6/reading/litreview/levenshtein66.pdf
 ...

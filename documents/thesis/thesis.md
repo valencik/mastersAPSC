@@ -848,8 +848,7 @@ However, we want to also consider more difficult matches like `J.Svenne` and `J.
 Approximate string matching libraries often use the Levenshtein Distance metric to compare strings.
 
 ### Levenshtein Distance
-%- TODO citation
-String edit distance measures such as the Levenshtein Distance offer an easy first approach to analyzing the author names.
+String edit distance measures such as the Levenshtein Distance @Levenshtein66 offer an easy first approach to analyzing the author names.
 The Levenshtein distance is one type of string metric to evaluate the difference between two sequences of characters.
 A distance of 1 is attributed to every single character edit necessary to transform one of the input strings into the other.
 Single character edits include an insertion of a character, a deletion, or a substitution.
