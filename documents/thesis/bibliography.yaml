@@ -297,10 +297,31 @@ references:
   issued:
   - year: '1966'
     month: '2'
-  title: Binary Codes Capable of Correcting Deletions, Insertions and Reversals
+  title: 'Binary Codes Capable of Correcting Deletions, Insertions and Reversals'
   container-title: Soviet Physics Doklady
   page: '707'
   volume: '10'
   note: \[Online; accessed 6-October-2015\]
   URL: https://gitlab.doc.ic.ac.uk/wm613/inidividual-project/raw/4fbe43f863b229b50ca13bf5f59eb029ad71f6b6/reading/litreview/levenshtein66.pdf
+
+- id: borris-data
+  type: book
+  author:
+  - family: Pritychenko
+    given: B.
+  issued:
+  - year: '2015'
+    month: '1'
+  title: 'Private communication'
+  URL: https://github.com/valencik/mastersAPSC/blob/master/data/mastersNSRDataDump.tbz2
+
+- id: wiki-mongodb
+  type: book
+  author:
+  - family: Wikipedia
+  issued:
+  - year: '2015'
+  title: 'MongoDB — wikipedia, the free encyclopedia'
+  note: \[Online; accessed 6-October-2015\]
+  URL: https://en.wikipedia.org/w/index.php?title=MongoDB&oldid=683358519
 ...
