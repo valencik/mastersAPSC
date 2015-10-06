@@ -47,6 +47,13 @@ The ultimate goal is to enable further analysis on the body of nuclear science l
 The academic field of nuclear science is over one hundred years old, starting with the discovery of radiation.
 This discovery is the first of many entries in the Nuclear Science References database, collected, cataloged, distributed, and evaluated by the National Nuclear Data Center [@Kurgan200603].
 The Nuclear Science References, or NSR, has over 210,000 entries documenting the body of nuclear science literature, which provides the opportunity for knowledge discovery on the literature's meta data.
+The metadata that the NSR provides is contributed and maintained by experts from the NNDC.
+Thus the source of metadata is a neutral third party.
+This fact separates the information in the NSR from similar metadata available from [ResearchGate](http://researchgate.net/) and other services.
+
+This is a thesis that applies science from one domain to science from another domain.
+To facilitate understanding, by all readers, no matter their expertise, background information is placed in the thesis close to where it is used.
+Thus, this thesis has no "theory" chapter, as intelligence is spread throughout all chapters.
 
 %- What do we know already?
 %- How will this advance our knowledge?
