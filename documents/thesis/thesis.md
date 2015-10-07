@@ -8,7 +8,7 @@ author:
 - name: Andrew Valencik
   affiliation: Saint Mary\'s University
 author: Andrew Valencik
-date: October 5th 2015 - Marvelous Monday Manuscript.
+date: October 6th 2015
 bibliography: bibliography.yaml
 csl: american-physics-society.csl
 link-citations: true
