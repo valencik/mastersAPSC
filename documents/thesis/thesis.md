@@ -22,49 +22,64 @@ linestretch: 1.6
 
 Introduction
 ============
-%- TODO ROBY be less speculative, summarize work
 
-%- The problem and its setting
-%- Proposed methodology to solve problem
+%- IR and vertical search
 Information retrieval has been repeatedly improved by large search engines like Google, Yahoo, DuckDuckGo, and more.
 Vast quantities of information are now easily retrieved on an extensive array of subjects.
 Scientific literature has received special attention through projects like [Google Scholar](https://scholar.google.ca) or [Microsoft Academic Search](http://academic.research.microsoft.com).
-These projects are still generalized to accommodate all sciences.
-%- Vertical search
+These projects are generalized to accommodate all sciences.
 Information retrieval and data exploration can be improved by customizing an application to a specific domain.
-This work is a cross disciplinary effort, combining semantic information of nuclear physics literature and data mining techniques to build a custom application for data exploration and information retrieval in nuclear science.
 
+%- NNDC and NSR
 The United States [National Nuclear Data Center](http://www.nndc.bnl.gov) (NNDC) prepares an evaluated database of nuclear science literature that poses a rich opportunity for knowledge discovery directed at the scientific work and study.
+The academic field of nuclear science is over one hundred years old, starting with the discovery of radiation @becquerel.
+This discovery is the first of many entries in the Nuclear Science References database, collected, cataloged, distributed, and evaluated by the National Nuclear Data Center [@Kurgan200603].
+The Nuclear Science References, or NSR, has over 210,000 entries documenting the body of nuclear science literature, which provides the opportunity for knowledge discovery on the literature's meta data.
+The metadata that the NSR provides is contributed and maintained by neutral third party experts from the NNDC.
+This fact separates the information in the NSR from metadata available through services such as [ResearchGate](http://researchgate.net/).
+
+%- Data mining + physics
+This work is a cross disciplinary effort, combining semantic information of nuclear physics literature and data mining techniques to build a custom application for data exploration and information retrieval in nuclear science.
 The knowledge discovery and data mining process reveals trends in the collective scientific study of nuclear structure, processes, and detection.
 This data is presented through a web application that extends the existing facilities of the Nuclear Science References web retrieval system.
 The ultimate goal is to enable further analysis on the body of nuclear science literature.
 
-%- Define research setting and sum-up what has been done
-%- Point towards what should be done, why?
-%- What is the problem? What will I study?
-%- ROBY good. keep as is.
-The academic field of nuclear science is over one hundred years old, starting with the discovery of radiation @becquerel.
-This discovery is the first of many entries in the Nuclear Science References database, collected, cataloged, distributed, and evaluated by the National Nuclear Data Center [@Kurgan200603].
-The Nuclear Science References, or NSR, has over 210,000 entries documenting the body of nuclear science literature, which provides the opportunity for knowledge discovery on the literature's meta data.
-The metadata that the NSR provides is contributed and maintained by experts from the NNDC.
-The source of metadata is a neutral third party.
-This fact separates the information in the NSR from metadata available through services such as [ResearchGate](http://researchgate.net/).
-
+%- Background info spread throughout
 This is a thesis that applies science from one domain to science from another domain.
 To facilitate understanding, by all readers, no matter their expertise, background information is placed in the thesis close to where it is used.
 Thus, this thesis has no "theory" chapter, as essential knowledge is provided in the chapters that require it.
 
-%- What do we know already?
-%- How will this advance our knowledge?
-%- Explain your choice of model. Advantages? Suitability from theoretical point of view? practical reasons for using it?
-%- Significance, timeliness, and importance of project.
+## Thesis Organization
+The existing NSR website and interface are outline in this introduction chapter.
+Additionally the web application created as a result of this work is discussed.
 
-%- Description of the application domain, existing tools, and functional analysis of a comprehensive application that will be helpful to the physicists.
-%- Get some screenshots of the NSR website. (automate?)
-%- Does the NSR website offer visualizations?
-%- Easy method of exporting data?
-%- How capable is it as a tool to explore further work?
+The transformation of the provided raw data is discussed in the [Data Preparation](#data-preparation) and [Data Representation](data-representation) sections.
+The data is stored in a database as discussed in [The Database - MongoDB](#the-database-mongodb).
+
+Chapter 3 is the first exploration of the NSR data as a whole.
+We discuss the types of queries that can be made on the data, show some examples and discuss the results.
+The [Author Contributions](#author-contributions) section analyzes how the authors of works catalogued in the NSR contribute to build the NSR collection.
+Visualizations for the queries discussed in this chapter are shown.
+
+Chapter 4 introduces the concept and tools for analyzing the NSR data as a network graph.
+A brief overview of graph theory concepts and terminology is given.
+We discuss different queries that can be used to produce graphs of the NSR data.
+The Libraries used are discussed as well as an exportation feature.
+
+Chapter 5 details the usage of tools and techniques from text mining.
+A paper recommender system is built by using a modification of usual cosine similarity recommendations.
+The second component of this chapter analyzes author names to build a system of finding authors that may have multiple identifications in the NSR.
+
+Chapter 6 discusses two common data mining techniques and their application with regard to the NSR data.
+Association mining is performed on nuclides in papers, author names in papers, and author names in selectors.
+In the [Cluster Analysis](#cluster-analysis) section, K-means is used to cluster authors.
+
+Finally, we review the contributions and discuss future works.
+
 ## The Nuclear Science References Website
+%- Link to Data section
+Please note, the data that these interfaces interact with and return as results is fully discussed in the [Data and Database](#the-data-and-database) section.
+
 The NNDC maintains the [NSR website](http://www.nndc.bnl.gov/nsr/) which serves a web interface to the Nuclear Science References database.
 The functionality and architecture of the NSR database and web site is discussed by Pritychenko in @NSRweb.
 Four search interfaces are offered: quick search, text search, indexed search, and keynumber search.
@@ -93,56 +108,32 @@ The quick search results do not offer these output customizations.
 The interface for indexed searching is similar to the Text Search.
 The most important difference is the functionality offered by the browse buttons for the search parameters.
 The user can select a parameter of the following types:
-Author, FirstAuthor, Nuclide, Target, Parent, Daughter, Subject, Measured, Deduced, Calculated, Reaction, Incident, Outgoing, Journal, Topic, Z(range)
+Author, FirstAuthor, Nuclide, Target, Parent, Daughter, Subject, Measured, Deduced, Calculated, Reaction, Incident, Outgoing, Journal, Topic, Z(range).
+%- TODO [^link-data-section].
 For each of the types available the browser button will redirect to another page that either details the possible values or provides another search through the possible values.
 For example, Author and First Author direct to a simple search interface that allows some partial matches against the list of known authors.
 %- TODO ROBY have you compared this to your known multiples?
+
+%- TODO [^link-data-section]: These parameters are explained in the [NSR Data](#nsr-data) section.
 
 %- Result Analysis
 Search queries are remembered and presented in the 'Combine View' tab.
 Users can combine the results of recent queries with boolean logic.
 Analysis is offered on the search queries which displays how many nuclides, authors, journals, and publication years the query involved.
 
-## Thesis Objectives
-The primary function of the developed application is increasing accessibility to exploration of the Nuclear Science References data.
+## NSR Explorer - Web Application
+As a result of this thesis, we have developed a web application, NSR Explorer, to increase accessibility to exploration of the Nuclear Science References data.
 This includes the authors documented, the entries recorded and keyworded, their links, and all available metadata for the nearly 120 years.
 The application makes use of a web interface to aid in increasing accessibility.
 All that is required to use the application is a modern web browser.
 Interactive visualizations are used to encourage exploration of the data.
 Additionally, the new database structure that is developed in this work enables searches that were previously cumbersome or impossible.
 
-### Thesis Organization
-%- TODO bad intro sentence
-This thesis is organized in chapters that are centered in different domains.
-We first discuss the existing NSR data and interface for searching through it.
-
-The transformation of the provided raw data is discussed in the [Data Preparation](#data-preparation) and [Data Representation](data-representation) sections.
-The data is stored in a database as discussed in [The Database - MongoDB](#the-database-mongodb).
-
-Chapter 3 is the first exploration of the NSR data as a whole.
-We discuss the types of queries that can be made on the data, show some examples and discuss the results.
-The [Author Contributions](#author-contributions) section analyzes how the authors of works catalogued in the NSR contribute to build the NSR collection.
-Visualizations for the queries discussed in this chapter are shown.
-
-Chapter 4 introduces the concept and tools for analyzing the NSR data as a network graph.
-A brief overview of graph theory concepts and terminology is given.
-We discuss different queries that can be used to produce graphs of the NSR data.
-The Libraries used are discussed as well as an exportation feature.
-
-Chapter 5 details the usage of tools and techniques from text mining.
-A paper recommender system is built by using a modification of usual cosine similarity recommendations.
-The second component of this chapter analyzes author names to build a system of finding authors that may have multiple identifications in the NSR.
-
-Chapter 6 discusses two common data mining techniques and their application with regard to the NSR data.
-Association mining is performed on nuclides in papers, author names in papers, and author names in selectors.
-In the [Cluster Analysis](#cluster-analysis) section, K-means is used to cluster authors.
-
-### NSR Explorer - Web Application
 The web application presents a single search interface as shown in Figure @fig:webapp-search.
-This interface can take queries with a specified command, or one can be inferred.
-If the user inputs a string that matches an author name, the application retrieves a profile page for that author.
+This interface can take queries with a specified command, or the command can be inferred, based on the type of data that is input by the user.
+For example, if the user inputs a string that matches an author name, the application retrieves a profile page for that author.
 An example profile page for input "R.A.E.Austin" is shown in Figure @fig:author-profile.
-The author profiles combine information discussed in [Data Summarization](#data-summarization) and [Cluster Analysis](#cluster-analysis) .
+The author profiles combine information discussed in the [Data Summarization](#data-summarization) and [Cluster Analysis](#cluster-analysis) sections.
 
 If the user inputs a year or year range such as `1989` or `1970-1979` a summary of the data for those years is shown.
 This summary uses information and visualizations discussed in [Data Summarization](#data-summarization).
@@ -151,16 +142,19 @@ This summary uses information and visualizations discussed in [Data Summarizatio
 
 ![The author profile page for "R.A.E.Austin"](images/author-profile.png) {#fig:author-profile}
 
+%- TODO replace with a discussion of choosing views
 Visualizations of a network of collaborators are retrieved with the `collab:` command.
 For example, `collab:R.A.E.Austin` will retrieve a network graph of all the authors who have published with `R.A.E.Austin`.
 Additionally, the `collab:` command can take a nuclide as an input and generate a network graph of all authors who have published on that nuclide.
 Analysis of the network graphs is further discussed in [Network Analysis and Visualization](#network-analysis-and-visualization).
 
+%- TODO replace with a discussion of choosing views
 The `simpapers:` command returns a list of NSR entries that are considered similar to the input selection.
-The command can take an author's name or NSR Keynumber as valid inputs.
+The command can take an author's name or NSR Keynumber as valid inputs [^keynumber-link].
 An example for author "A.J.Sarty" is shown in Figure @fig:simpapers-author.
 The method by which NSR entries are determined to be similar is discussed in [Cosine Similarity of NSR Selectors](#cosine-similarity-of-nsr-selectors).
 
+[^keynumber-link]: NSR Keynumbers are the unique identifcation code given to each NSR entry. They are further discussed in the [NSR Data](#nsr-data) section.
 
 The Data and Database
 =====================
