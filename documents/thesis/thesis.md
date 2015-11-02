@@ -144,6 +144,11 @@ A full database dump of the NSR was acquired on January 29th 2014 @borris-data.
 For simplicity, the data acquired from the NNDC on that date will be referred to as if it were the complete NSR database.
 All efforts have been taken to ensure the research procedures can easily be extended and repeated on new NSR data.
 
+%- Motivation
+The work discussed in this chapter is motivated by the need to easily retrieve information from the NSR data and manipulate it to facilitate answering questions.
+We discuss the method for converting the provided raw data into our JSON representation.
+Additionally the database software is introduced and discussed.
+
 ## Data Preparation
 The NSR data is maintained in a custom EXCHANGE format @nsr-manual.
 This format is flat text that is not suitable for direct analysis.
@@ -409,10 +414,16 @@ Data Summarization
 %- What? Created summaries and ranked info in a web app.
 %- Why? Visualizations are important in understanding data. As are summaries and rankings.
 %- How? MongoDB aggregations to D3 charts.
+This chapter introduces the queries that can be run on the database constructed in [The Data and Database](#this-data-and-database) section.
+Examples are shown that filter the data using constraints on different data types such as year ranges or author names.
+Bar charts and pie charts are introduced for visualizing the data.
 
-## Data Composition and Queries
+%- Motivation
 Through data summarization we can learn the first-order characteristics of the data set.
 Our goal was to obtain a broad perspective of its structure and composition.
+
+## Data Composition and Queries
+We can construct queries to reveal the composition of the NSR data.
 For example, there are 212835 entries[^our-data-set] that span from 1896 to 2014.
 We can answer questions such as "What percentage of all entries are journal articles?"
 As Table @tbl:typesAll shows, the majority of the document types in the NSR are journal articles.
@@ -596,8 +607,14 @@ Network Analysis and Visualization
 %- What? Enabled graph data structure operations on NSR author data.
 %- Why? This is not possible with existing NSR data... Why useful?
 %- How? Using python library Networkx to build graph datastructures. D3 and Gephi for visualizations
-The list of authors of a paper can be used to build a network or graph of the authors.
+This chapter explores the analysis of the NSR data as a network graph.
+The list of authors of a paper is used to build a network graph of authors and their copublication relationships.
 In this work, the word 'graph' will always refer to the mathematical representation of a set of objects and their links.
+
+%- Motivation
+Exploring the NSR data has been a core motivation for this work.
+Transforming the NSR data into a network graph has enabled new questions and analyses.
+Additionally network graphs lend themselves well to interesting visualizations which has been another motivator.
 
 ##Data Graphs
 The first graphs constructed in this work had each node represent an author, and each edge or link represent a coauthorship.
@@ -750,8 +767,10 @@ Text mining is an area of analysis that focuses on extracting useful information
 The data to analyze is often natural language text written by humans.
 Examples of such data include user reviews of a product or service, customer feedback comments, emails, forum posts, or even academic journal articles.
 
-A simple goal of text mining could be to summarize the input text.
-However, this can be abstracted further to 'numericizing' text data for use in an analysis model.
+%- Motivation
+In this section, two distinct goals of this work were solved using tools commonly employed in text mining.
+Recommending similar papers for a given selection of papers was solved using cosine similarity.
+Determining authors that may have multiple identifiers in the data was accomplished using string edit distances.
 
 ## Cosine Similarity
 %- https://stackoverflow.com/questions/15173225/how-to-calculate-cosine-similarity-given-2-sentence-strings-python
@@ -1008,17 +1027,16 @@ Common neighbours with a low degree are less likely to be common through random 
 Data Mining
 ===========
 
-%- ROBY very nice introduction!
-The ultimate goal of the analysis in this section is to enable a flexible recommender system that supports recommending different types of objects within the database.
+%- Motivation
+The ultimate goal of the analysis in this section and the [Text Mining](#text-mining) section is to enable a flexible recommender system that supports recommending different types of objects within the database.
+The work in the [Cosine Similarity](#cosine-similarity) section enabled finding papers that had similar nuclide selectors associated with them.
+In this section we use association mining to produce lists of association rules that could be used in a future recommendation system.
+Additionally this analysis enables finding similar authors based on clustering attributes of their publication traits.
 An obvious use case of this feature is to find similar authors to those the user is currently inspecting or searching.
-%- However the system should be extendible to also recommend similar keywords or periods in time, for example.
+
 Implementing this feature requires a significant amount of offline data mining and analysis.
 Once the analysis is done, the runtime of the application need only do quick lookups in tables to find the desired results.
 With this in mind, the high level summary of this analysis stage is to build data labels and relationships and then enable the user interface to search and display the results.
-
-There are a number of metrics used in producing the data object labels.
-Similar authors could be authors who publish together, or authors who do not publish together but publish with similar keywords.
-The latter is likely more interesting to users, as it could suggest similar authors they are unaware of.
 
 
 ## Association Mining
