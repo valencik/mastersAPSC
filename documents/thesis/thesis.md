@@ -169,26 +169,7 @@ The work discussed in this chapter is motivated by the need to easily retrieve i
 We discuss the method for converting the provided raw data into our JSON representation.
 Additionally the database software is introduced and discussed.
 
-## Data Preparation
-The NSR data is maintained in a custom EXCHANGE format @nsr-manual.
-This format is flat text that is not suitable for direct analysis.
-The data needs to be parsed into data structures for analysis and use.
-The approach least likely to introduce errors is to transform the data into a common format for which parsers already exist.
-
-[JavaScript Object Notation](http://json.org), or JSON, was chosen as the data format for this work.
-While other data formats could have sufficed (perhaps [YAML](http://yaml.org), for example), certain common data formats like comma separated values (csv) would have been more difficult.
-JSON met the requirements, including those for arrays and has the advantage of being openly available, well-supported, with a handy user community, and it was familiar to the author.
-This requirement is discussed further in the [Data Representation](#data-representation) section.
-
-Each NSR entry will be represented as a JSON object [^json-document].
-JSON objects are composed of keys and values.
-A key is a unique string that maps to a value.
-A value can be a string, a number, an array, or another object.
-Similarly, arrays can contain strings, numbers, objects or additional arrays.
-Snippet \ref{blk:rawNSRJSON} shows an example JSON object and the final representation of an NSR entry.
-
-[^json-document]: These objects are referred to as documents once stored in the database. See [The Database - MongoDB](#the-database-mongodb).
-
+## NSR Data
 %- NSR EXCHANGE format discussion
 The NSR has 9 possible types of fields which are shown in Table @tbl:NSRidentifiers.
 Each entry can only have one of each field type except for `<KEYWORDS>` and `<SELECTRS>` which exist as a pair and an entry can have multiple pairs of them.
@@ -234,6 +215,53 @@ The `<DOI     >` field contains the digital object identifier code that uniquely
 While not strictly necessary, the DOI often has a URL associated with it that links to the source document on the website of the publishing journal @wiki-DOI.
 The two fields, `<KEYWORDS>` and `<SELECTRS>` have the most structure and require special attention which is given in [Keyword Abstracts](#keyword-abstracts).
 
+### Keyword Abstracts
+The `<KEYWORDS>` field is written by the maintainers of the NSR database, and then used to generate the `<SELECTRS>` field @nsr-manual.
+Each NSR entry is read and then a keyword abstract is manually created to reflect the physical systems that were studied and measured in the work.
+
+> "What distinguishes NSR from more general bibliographic databases is the level of detail provided in the keyword abstracts." @nsr-manual
+
+Keyword abstracts each have one of the following major topics:
+`NUCLEAR REACTIONS`, `RADIOACTIVITY`, `NUCLEAR STRUCTURE`, `NUCLEAR MOMENTS`, `ATOMIC PHYSICS`, `ATOMIC MASSES`, and `COMPILATION`.
+To accommodate work that spans multiple topics, NSR entries can have multiple keyword abstracts.
+Following these major topics are one or more indexed sentences.
+These sentences describe the elements of the physical system studied, and any measurements that were made.
+It is this structure that provides the most semantic information about the NSR entry.
+Thanks to the careful work of the NSR maintainers, the `<KEYWORDS>` and resulting `<SELECTRS>` fields reveal the NSR entry's content in a machine readable manner.
+Without this information any data mining project using the content of the NSR entries would require raw text access to the either the full document or the abstract.
+
+The selectors are generated from the keyword abstracts.
+The current schema has `<SELECTRS>` parsed into a 3 dimensional array with `type`, `value`, and `subkey` variables.
+The following quote from the NSR Coding Manual @nsr-manual describes the valid `type`s:
+
+> N, T, P, G, R, S, M, D, C, X, A, or Z, which stand for nuclide, target, parent, daughter, reaction, subject, measured, deduced, calculated, other subject, mass range, and charge range, respectively. @nsr-manual
+
+The type of data for `value` changes based on the value of the `type`.
+For `type`s N, T, P, and G, the `value` is a nuclide written in the form AX with A equal to the mass number, and X equal to the chemical symbol.
+The value for A may have any number of digits.
+X may be one, two, or three letters.
+The `subkey` variable is used to link together multiple selectors of the same keyword sentence.
+
+## Data Preparation
+The NSR data is maintained in a custom EXCHANGE format @nsr-manual.
+This format is flat text that is not suitable for direct analysis.
+The data needs to be parsed into data structures for analysis and use.
+The approach least likely to introduce errors is to transform the data into a common format for which parsers already exist.
+
+[JavaScript Object Notation](http://json.org), or JSON, was chosen as the data format for this work.
+While other data formats could have sufficed (perhaps [YAML](http://yaml.org), for example), certain common data formats like comma separated values (csv) would have been more difficult.
+JSON met the requirements, including those for arrays and has the advantage of being openly available, well-supported, with a handy user community, and it was familiar to the author.
+This requirement is discussed further in the [Data Representation](#data-representation) section.
+
+Each NSR entry will be represented as a JSON object [^json-document].
+JSON objects are composed of keys and values.
+A key is a unique string that maps to a value.
+A value can be a string, a number, an array, or another object.
+Similarly, arrays can contain strings, numbers, objects or additional arrays.
+Snippet \ref{blk:rawNSRJSON} shows an example JSON object and the final representation of an NSR entry.
+
+[^json-document]: These objects are referred to as documents once stored in the database. See [The Database - MongoDB](#the-database-mongodb).
+
 %- NSR to JSON
 Transforming the NSR data to JSON is possible with a series of search and replace commands using regular expressions.
 The commands are recorded in the Perl[^why-perl] script `parseNSRtoJSON.pl` available at [github.com/valencik/mastersAPSC](https://github.com/valencik/mastersAPSC).
@@ -275,33 +303,6 @@ However, it is more efficient to convert the original data into a data schema th
 This is the primary motivator for not using a standard relational database.
 In a relational database the authors would have their own tables, separate from papers, as they are separate entities.
 This inefficient choice would entail a table and data schema created for the papers and then a separate table and schema for the authors, and similarly for keywords, selectors, and history.
-
-### Keyword Abstracts
-The `<KEYWORDS>` field is written by the maintainers of the NSR database, and then used to generate the `<SELECTRS>` field @nsr-manual.
-Each NSR entry is read and then a keyword abstract is manually created to reflect the physical systems that were studied and measured in the work.
-
-> "What distinguishes NSR from more general bibliographic databases is the level of detail provided in the keyword abstracts." @nsr-manual
-
-Keyword abstracts each have one of the following major topics:
-`NUCLEAR REACTIONS`, `RADIOACTIVITY`, `NUCLEAR STRUCTURE`, `NUCLEAR MOMENTS`, `ATOMIC PHYSICS`, `ATOMIC MASSES`, and `COMPILATION`.
-To accommodate work that spans multiple topics, NSR entries can have multiple keyword abstracts.
-Following these major topics are one or more indexed sentences.
-These sentences describe the elements of the physical system studied, and any measurements that were made.
-It is this structure that provides the most semantic information about the NSR entry.
-Thanks to the careful work of the NSR maintainers, the `<KEYWORDS>` and resulting `<SELECTRS>` fields reveal the NSR entry's content in a machine readable manner.
-Without this information any data mining project using the content of the NSR entries would require raw text access to the either the full document or the abstract.
-
-The selectors are generated from the keyword abstracts.
-The current schema has `<SELECTRS>` parsed into a 3 dimensional array with `type`, `value`, and `subkey` variables.
-The following quote from the NSR Coding Manual @nsr-manual describes the valid `type`s:
-
-> N, T, P, G, R, S, M, D, C, X, A, or Z, which stand for nuclide, target, parent, daughter, reaction, subject, measured, deduced, calculated, other subject, mass range, and charge range, respectively. @nsr-manual
-
-The type of data for `value` changes based on the value of the `type`.
-For `type`s N, T, P, and G, the `value` is a nuclide written in the form AX with A equal to the mass number, and X equal to the chemical symbol.
-The value for A may have any number of digits.
-X may be one, two, or three letters.
-The `subkey` variable is used to link together multiple selectors of the same keyword sentence.
 
 ## Data Representation
 An example of the final data representation used by the work is shown in Snippet \ref{blk:rawNSRJSON}.
