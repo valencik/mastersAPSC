@@ -103,7 +103,7 @@ Search queries are remembered and presented in the 'Combine View' tab.
 Users can combine the results of recent queries with boolean logic.
 Analysis is offered on the search queries which displays how many nuclides, authors, journals, and publication years the query involved.
 
-## Proposed Improvements
+## Thesis Objectives
 The primary function of the developed application is increasing accessibility to exploration of the Nuclear Science References data.
 This includes the authors documented, the entries recorded and keyworded, their links, and all available metadata for the nearly 120 years.
 The application makes use of a web interface to aid in increasing accessibility.
@@ -111,7 +111,33 @@ All that is required to use the application is a modern web browser.
 Interactive visualizations are used to encourage exploration of the data.
 Additionally, the new database structure that is developed in this work enables searches that were previously cumbersome or impossible.
 
-### The Web Application
+### Thesis Organization
+%- TODO bad intro sentence
+This thesis is organized in chapters that are centered in different domains.
+We first discuss the existing NSR data and interface for searching through it.
+
+The transformation of the provided raw data is discussed in the [Data Preparation](#data-preparation) and [Data Representation](data-representation) sections.
+The data is stored in a database as discussed in [The Database - MongoDB](#the-database-mongodb).
+
+Chapter 3 is the first exploration of the NSR data as a whole.
+We discuss the types of queries that can be made on the data, show some examples and discuss the results.
+The [Author Contributions](#author-contributions) section analyzes how the authors of works catalogued in the NSR contribute to build the NSR collection.
+Visualizations for the queries discussed in this chapter are shown.
+
+Chapter 4 introduces the concept and tools for analyzing the NSR data as a network graph.
+A brief overview of graph theory concepts and terminology is given.
+We discuss different queries that can be used to produce graphs of the NSR data.
+The Libraries used are discussed as well as an exportation feature.
+
+Chapter 5 details the usage of tools and techniques from text mining.
+A paper recommender system is built by using a modification of usual cosine similarity recommendations.
+The second component of this chapter analyzes author names to build a system of finding authors that may have multiple identifications in the NSR.
+
+Chapter 6 discusses two common data mining techniques and their application with regard to the NSR data.
+Association mining is performed on nuclides in papers, author names in papers, and author names in selectors.
+In the [Cluster Analysis](#cluster-analysis) section, K-means is used to cluster authors.
+
+### NSR Explorer - Web Application
 The web application presents a single search interface as shown in Figure @fig:webapp-search.
 This interface can take queries with a specified command, or one can be inferred.
 If the user inputs a string that matches an author name, the application retrieves a profile page for that author.
