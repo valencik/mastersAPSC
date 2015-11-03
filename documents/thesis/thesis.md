@@ -1,14 +1,13 @@
+%- TODO cite multiple times: a-priori algorithm
 %- Code in appendix? Additional screenshots in appendix?
 %- Custom bibliography styling?
-%- TODO cite: Facebook paper A good overview of the process
-%- TODO cite: Medical clusters and MDS paper
 ---
-title:  'Structure Mining the Nuclear Science References'
+title:  'Data Mining and Exploration of the Nuclear Science References'
 author:
 - name: Andrew Valencik
   affiliation: Saint Mary\'s University
 author: Andrew Valencik
-date: October 6th 2015
+date: November 1st 2015
 bibliography: bibliography.yaml
 csl: american-physics-society.csl
 link-citations: true
@@ -33,7 +32,7 @@ Information retrieval and data exploration can be improved by customizing an app
 %- NNDC and NSR
 The United States [National Nuclear Data Center](http://www.nndc.bnl.gov) (NNDC) prepares an evaluated database of nuclear science literature that poses a rich opportunity for knowledge discovery directed at the scientific work and study.
 The academic field of nuclear science is over one hundred years old, starting with the discovery of radiation @becquerel.
-This discovery is the first of many entries in the Nuclear Science References database, collected, cataloged, distributed, and evaluated by the National Nuclear Data Center [@Kurgan200603].
+This discovery is the first of many entries in the Nuclear Science References database, collected, cataloged, distributed, and evaluated by the National Nuclear Data Center @Kurgan200603.
 The Nuclear Science References, or NSR, has over 210,000 entries documenting the body of nuclear science literature, which provides the opportunity for knowledge discovery on the literature's meta data.
 The metadata that the NSR provides is contributed and maintained by neutral third party experts from the NNDC.
 This fact separates the information in the NSR from metadata available through services such as [ResearchGate](http://researchgate.net/).
@@ -54,7 +53,7 @@ The existing NSR website and interface are outline in this introduction chapter.
 Additionally the web application created as a result of this work is discussed.
 
 The transformation of the provided raw data is discussed in the [Data Preparation](#data-preparation) and [Data Representation](data-representation) sections.
-The data is stored in a database as discussed in [The Database - MongoDB](#the-database-mongodb).
+The data is stored in a database as discussed in [The Database](#the-database).
 
 Chapter 3 is the first exploration of the NSR data as a whole.
 We discuss the types of queries that can be made on the data, show some examples and discuss the results.
@@ -152,7 +151,7 @@ Analysis of the network graphs is further discussed in [Network Analysis and Vis
 The `simpapers:` command returns a list of NSR entries that are considered similar to the input selection.
 The command can take an author's name or NSR Keynumber as valid inputs [^keynumber-link].
 An example for author "A.J.Sarty" is shown in Figure @fig:simpapers-author.
-The method by which NSR entries are determined to be similar is discussed in [Cosine Similarity of NSR Selectors](#cosine-similarity-of-nsr-selectors).
+The method by which NSR entries are determined to be similar is discussed in the [Similar Papers](#similar-papers) section.
 
 [^keynumber-link]: NSR Keynumbers are the unique identifcation code given to each NSR entry. They are further discussed in the [NSR Data](#nsr-data) section.
 
@@ -166,8 +165,12 @@ All efforts have been taken to ensure the research procedures can easily be exte
 
 %- Motivation
 The work discussed in this chapter is motivated by the need to easily retrieve information from the NSR data and manipulate it to facilitate answering questions.
-We discuss the method for converting the provided raw data into our JSON representation.
-Additionally the database software is introduced and discussed.
+We first discuss the NSR data as provided by the NNDC @borris-data.
+Special attention is given to the keyword abstracts as the metadata they provided is what sets the NSR data apart from other bibliographic databases.
+Then the method for converting the provided raw data into our JSON representation is discussed.
+The MongoDB database software is introduced and its Aggregation Framework is discussed.
+The mechanics of transform and importing the data are not fully described in this text.
+Instead the conversion and importing procedures have all been scripted and made available as included source code in the Appendix.
 
 ## NSR Data
 %- NSR EXCHANGE format discussion
@@ -175,7 +178,7 @@ The NSR has 9 possible types of fields which are shown in Table @tbl:NSRidentifi
 Each entry can only have one of each field type except for `<KEYWORDS>` and `<SELECTRS>` which exist as a pair and an entry can have multiple pairs of them.
 An example of the raw data for a single paper can be seen in Snippet \ref{blk:rawNSRentry}.
 
-``` {#blk:rawNSRentry .text caption="An example NSR entry showing the raw NSR data format." fontsize=\small baselinestretch=1}
+``` {#blk:rawNSRentry .text caption="An example NSR entry showing the raw NSR EXCHANGE data format." fontsize=\small baselinestretch=1}
 <KEYNO   >1988AB01                                                              &
 <HISTORY >A19880309 M19880315                                                   &
 <CODEN   >JOUR PRVCA 37 401                                                     &
@@ -204,7 +207,7 @@ Identifiers   Description
 Table: The nine legal record identifiers from the Nuclear Science References Coding Manual @nsr-manual. {#tbl:NSRidentifiers}
 
 The `<KEYNO   >` field is a unique key number assigned to each NSR entry.
-The data on which a particular entry was added to the database or last modified is encoded in the `<HISTORY >` field.
+The date on which a particular entry was added to the database or last modified is encoded in the `<HISTORY >` field.
 The `<CODEN   >` and `<REFRENCE>` fields contain information about the journal or other type of resource the document came from.
 The `<AUTHORS >` field is a comma separated list of author names.
 The author list is one of the key relational components of the data, establishing links between NSR entries and other authors.
@@ -216,7 +219,7 @@ While not strictly necessary, the DOI often has a URL associated with it that li
 The two fields, `<KEYWORDS>` and `<SELECTRS>` have the most structure and require special attention which is given in [Keyword Abstracts](#keyword-abstracts).
 
 ### Keyword Abstracts
-The `<KEYWORDS>` field is written by the maintainers of the NSR database, and then used to generate the `<SELECTRS>` field @nsr-manual.
+The `<KEYWORDS>` field , or keyword abstract, is written by the maintainers of the NSR database, and then used to generate the `<SELECTRS>` field @nsr-manual.
 Each NSR entry is read and then a keyword abstract is manually created to reflect the physical systems that were studied and measured in the work.
 
 > "What distinguishes NSR from more general bibliographic databases is the level of detail provided in the keyword abstracts." @nsr-manual
@@ -226,12 +229,16 @@ Keyword abstracts each have one of the following major topics:
 To accommodate work that spans multiple topics, NSR entries can have multiple keyword abstracts.
 Following these major topics are one or more indexed sentences.
 These sentences describe the elements of the physical system studied, and any measurements that were made.
+For example, the `<KEYWORDS>` field in Snippet \ref{blk:rawNSRentry} encodes that the referenced work calculated energy (implied) levels and band features using a semi-empirical formalism for
+$^{232}\mbox{Th}$, $^{232}\mbox{U}$, $^{23r42}\mbox{U}$, $^{23r62}\mbox{U}$, and $^{238}\mbox{U}$.
+
 It is this structure that provides the most semantic information about the NSR entry.
 Thanks to the careful work of the NSR maintainers, the `<KEYWORDS>` and resulting `<SELECTRS>` fields reveal the NSR entry's content in a machine readable manner.
 Without this information any data mining project using the content of the NSR entries would require raw text access to the either the full document or the abstract.
+Unfortunately, getting full text access to thousands of papers is often significantly challenged by copyright laws.
 
-The selectors are generated from the keyword abstracts.
-The current schema has `<SELECTRS>` parsed into a 3 dimensional array with `type`, `value`, and `subkey` variables.
+The selectors are computer generated from the keyword abstracts.
+The schema used in this work, as discussed in [Data Representation](#data-representation) has `<SELECTRS>` parsed into a 3 dimensional array with `type`, `value`, and `subkey` variables.
 The following quote from the NSR Coding Manual @nsr-manual describes the valid `type`s:
 
 > N, T, P, G, R, S, M, D, C, X, A, or Z, which stand for nuclide, target, parent, daughter, reaction, subject, measured, deduced, calculated, other subject, mass range, and charge range, respectively. @nsr-manual
@@ -250,38 +257,36 @@ The approach least likely to introduce errors is to transform the data into a co
 
 [JavaScript Object Notation](http://json.org), or JSON, was chosen as the data format for this work.
 While other data formats could have sufficed (perhaps [YAML](http://yaml.org), for example), certain common data formats like comma separated values (csv) would have been more difficult.
-JSON met the requirements, including those for arrays and has the advantage of being openly available, well-supported, with a handy user community, and it was familiar to the author.
-This requirement is discussed further in the [Data Representation](#data-representation) section.
+JSON met the following requirements: support for arrays, openly available, well-supported, with an established user community, and it was familiar to the author.
+The requirement for array support is discussed further in the [Data Representation](#data-representation) section.
 
 Each NSR entry will be represented as a JSON object [^json-document].
 JSON objects are composed of keys and values.
 A key is a unique string that maps to a value.
 A value can be a string, a number, an array, or another object.
 Similarly, arrays can contain strings, numbers, objects or additional arrays.
-Snippet \ref{blk:rawNSRJSON} shows an example JSON object and the final representation of an NSR entry.
+The arrays in JSON may be considered as ordered lists by some as they can contain elements of mixed types.
+However, the arrays in our data do not contain mixed types.
+Snippet \ref{blk:rawNSRJSON} shows an example of a JSON object and the final representation of an NSR entry.
 
-[^json-document]: These objects are referred to as documents once stored in the database. See [The Database - MongoDB](#the-database-mongodb).
+[^json-document]: These objects are referred to as documents once stored in the database. See [The Database](#the-database).
 
 %- NSR to JSON
-Transforming the NSR data to JSON is possible with a series of search and replace commands using regular expressions.
+Transforming the NSR data to a collection of JSON objects is possible with a series of search and replace commands using regular expressions.
 The commands are recorded in the Perl[^why-perl] script `parseNSRtoJSON.pl` available at [github.com/valencik/mastersAPSC](https://github.com/valencik/mastersAPSC).
-The result of the scripts is a file with a valid JSON structure for each NSR entry.
+The result of the scripts is a file with a valid JSON object for each NSR entry.
+The scripts can be used to reproduce the transformation data as new NSR data becomes available.
 
 [^why-perl]: Perl is used here as it remains one of the best RegEx implementations, and allowed for scripts that read as a simple ordered list of transformations to apply.
 
+%- Data representation
 The data representation is the result of careful consideration of the types of queries to be made on the data.
 The data schema uses data types that best reflect how the data will be used.
+This is important as the data schema will determine the types of queries we can make on the database.
 For example, with data spanning 120 years, it is helpful to filter the data based on a numeric year value.
 As such the `year` value in the data schema is an integer.
-Allowing the construction of a simple query to get all the entries from a given year range.
-Example code to retrieve all NSR entries from the 1970s is given in Snippet \ref{blk:NSR1970s}.
-Note the use of `$gte` and `$lt` which correspond to the mathematical operators greater than or equal to and less than.
-
-``` {#blk:NSR1970s .python caption="Python code to get all NSR entries from 1970 to 1979." fontsize=\small baselinestretch=1}
-import pymongo
-db = pymongo.MongoClient()['masters']
-db.NSR.find({"year": {"$gte": 1970, "$lt": 1980}})
-```
+This allows the construction simple queries to get NSR entries from a specific year or from a year range.
+Queries and example code are discussed in [The Database](#the-database).
 
 %- Author data structure
 The list of authors for a NSR entry is a more complicated data type as it involves multiple elements.
@@ -291,23 +296,23 @@ With this structure comes information and ease of computing different properties
 The length of the array tells us how many authors collaborated on a given NSR entry.
 And since arrays are ordered, we can easily determine the first author[^first-author] of an entry.
 While it is possible to extract the same information from a free text field, parsing our data into data structures creates structures that are compatible with many tools, such as our database.
-Users of the database can now sort entries by their number of authors, or count the number of times someone was first author on an entry.
-Additionally, almost every aggregation query[^see-aggregation] made in this work relies on unwinding a data array at some stage.
+Users of the database can now sort entries by their number of authors, or count the number of times someone was first author.
+Additionally, almost every aggregation query[^see-aggregation] made in our work relied on using array specific operations on the author array at some stage.
 
 [^first-author]: The significance, if any, of being first author changes amongst journals. A clever data scientist will want to consider the `<REFRENCE>` information along with any first author analysis.
 [^see-aggregation]: See the [MongoDB Aggregation Framework](#mongodb-aggregation-framework) section for more details.
 
 %- Getting into SQL vs NoSQL here...
 It is possible to store the NSR data in a relational model.
-However, it is more efficient to convert the original data into a data schema that uses arrays.
-This is the primary motivator for not using a standard relational database.
 In a relational database the authors would have their own tables, separate from papers, as they are separate entities.
 This inefficient choice would entail a table and data schema created for the papers and then a separate table and schema for the authors, and similarly for keywords, selectors, and history.
+However, it is more efficient to convert the original data into a data schema that uses arrays.
+This is the primary motivator for not using a standard relational database.
 
 ## Data Representation
-An example of the final data representation used by the work is shown in Snippet \ref{blk:rawNSRJSON}.
+An example of the final data representation we use is shown in Snippet \ref{blk:rawNSRJSON}.
 It is a JSON object for the NSR entry with keynumber `1988AB01`.
-The `_id` value is a string used as the unique identifier in the MongoDB collection.
+The `_id` value is a string used as the unique identifier in the MongoDB collection (as discussed in [The Database](#the-database)), its value is the same as the `<KEYNO   >` of the original NSR entry.
 The `year` value is an integer and represents the year the resource was published.
 The `history` value is an array that contains encoded information representing dates when the original NSR document was added and/or modified.
 The `code` value is a string copy of the `CODEN` value in the NSR data.
@@ -317,11 +322,11 @@ The `authors` value is an array of string elements representing the authors who 
 The `title` value is a string, formatted for \LaTeX, that represents the title of the resource.
 The `keywords` value is an array of strings that represent the KEYWORD sentences as described in the NSR manual.
 The `selectors` value is an array of objects that contain the type, value, and subkey information generated by the keyword entry by the NSR.
-The `simPapers` value is an array that contains objects, where each object refers to another NSR entry that is above a minimum similarity threshold.
-It is a calculated field and is further discussed in [Cosine Similarity of NSR Selectors](#cosine-similarity-of-nsr-selectors).
-Finally, the `DOI` value is a string of the Digital Object Identifier for the published resource.
+The `DOI` value is a string of the Digital Object Identifier for the published resource.
+Finally, the `simPapers` value is an array that contains objects, where each object refers to another NSR entry that is above a minimum similarity threshold.
+The objects in `simPapers` are determined via calculation which is discussed in [Similar Papers](#similar-papers).
 
-``` {#blk:rawNSRJSON .json caption="An example NSR entry showing the final NSR JSON structure." fontsize=\footnotesize breaklines=true baselinestretch=1}
+``` {#blk:rawNSRJSON .json caption="An example NSR entry showing the final data representation as a JSON object. Note that newlines are ignored in JSON and only present for readability. Also note that the order of keys and values in an object is not garunteed to be preserved, as can be seen from the `selectors` objects." fontsize=\footnotesize breaklines=true baselinestretch=1}
 {
   "_id": "1988AB01",
   "year": 1988,
@@ -365,24 +370,51 @@ Finally, the `DOI` value is a string of the Digital Object Identifier for the pu
 }
 ```
 
-## The Database - MongoDB
+## The Database
 
+Database systems are an important tool in information retrieval.
+Large datasets should be organized in databases to provide useful abstractions for users.
+E. F. Codd discusses this in his 1970 paper @large-data-banks, as such the idea is not new nor uncommon.
+In the [Data Preparation](#data-preparation) and [Data Representation](#data-representation) sections we discussed the transformation of the provided data into our own representation.
+The users of our application, NSR Explorer, should not be concerned with the internal representation of data [^data-banks-dev].
+The resulting data representation is imported and stored in a database to enable the NSR Explorer web application to query the data.
+This section will detail our choice in database software, how queries are made, and briefly introduce some performance considerations.
+
+[^data-banks-dev]: The work in @large-data-banks goes further to suggest that even the developers of the NSR Explorer application should not be concerned about the internal data representation. This should be abstracted by the relational model of data discussed in that work.
+
+### MongoDB
 [MongoDB](https://www.mongodb.org) is an open source NoSQL document store database system.
 It was chosen because it is open source, easy to use, well supported, and the author is familiar with it.
-Additionally it has nice features such as JSON support, an aggregation framework, and is easy to setup.
+Additionally it has nice features such as JSON support, an aggregation framework (see [MongoDB Aggregation Framework](#mongodb-aggregation-framework)), and is easy to setup.
+
 Other NoSQL databases like CouchDB support JSON and may have been acceptable as well.
 MongoDB and CouchDB are both comparatively new database systems.
 Postgres also supports JSON and is a mature database system.
 Despite the prevalence of MySQL, it was not chosen because it is a relational database and would thus not support the arrays in the data schema as outlined in [Data Preparation](#data-preparation).
 
-A document store database such as MongoDB enables simple transformations of each NSR entry into a MongoDB document.
 In a relational database system such as MySQL, each NSR entry would have to be split up, with different pieces of information populating different database tables.
 Authors would be a type of entity in their own authors table, that each NSR entry in an NSR table would link to.
 This type of relationship would be necessary for keywords and selectors as well.
 
-As reported in the section [Data Preparation](#data-preparation), a JSON structure was constructed for each entry in the NSR database.
+As reported in the section [Data Preparation](#data-preparation), a JSON object was constructed for each entry in the NSR data.
+We create a database in MongoDB titled `masters`, this database will hold multiple collections.
+MongoDB collections store multiple documents.
+Each JSON object is a document in MongoDB terminology.
 To populate the MongoDB database, these JSON structures were flattened into a single file, and imported into a MongoDB collection using the [`mongoimport` tool](http://docs.mongodb.org/manual/reference/program/mongoimport/).
-After importing completed, there were 212835 documents in the MongoDB collection, one for each entry in the NSR database.
+After importing was completed, there were 212835 documents in the MongoDB collection, one for each entry in the NSR database.
+
+The `pymongo` module @pymongo-doc can be used to query our database using the Python programming language.
+Example python code to retrieve all NSR entries from the 1970s is given in Snippet \ref{blk:NSR1970s}.
+The first line imports the `pymongo` module which enables communication with a MongoDB database.
+We then establish a connection with the local database titled `masters` and save that connection in the `db` object.
+Finally we use the `NSR` collection of the database and pass the `find` method our query expressed as a JSON object.
+Note the use of `$gte` and `$lt` which correspond to the mathematical operators greater than or equal to and less than.
+
+``` {#blk:NSR1970s .python caption="Python code to get all NSR entries from 1970 to 1979." fontsize=\small baselinestretch=1}
+import pymongo
+db = pymongo.MongoClient()['masters']
+db.NSR.find({"year": {"$gte": 1970, "$lt": 1980}})
+```
 
 ### Indexing the Data
 The performance of the database can be optimized by indexing on important or frequently referenced fields such as "authors" and "year".
@@ -424,10 +456,18 @@ MongoDB is currently a popular database and there exist tutorials and example ap
 The MongoDB documentation is well written and provides a good overview of the aggregation framework @mongo-doc.
 All MongoDB interactions in this work use the python driver, `pymongo` @pymongo-doc.
 
-### Future Work
+### Future Work - The Database
 An extension to this work is to support additional database systems.
 The prevalence of MySQL is motivation to support it.
 However, in continuing with the desire to use a NoSQL database system, the work could be extended to support CouchDB with relative ease.
+
+## Conclusion
+We have described the NSR data as provided by the NNDC @borris-data.
+Scripts have been prepared to transform the NSR EXCHANGE format into a list of JSON objects, one for each NSR entry.
+The JSON objects have been imported into a MongoDB database called `masters` in a collection called `NSR`.
+Basic queries as well as aggregation queries have been introduced.
+The system architecture for querying the data is complete as described.
+The sections following this will describe different analyses and results from querying the data.
 
 
 Data Summarization
@@ -625,6 +665,7 @@ Figures @fig:viz-types-histo and @fig:viz-types-pie are visual representations o
 
 Network Analysis and Visualization
 ==================================
+%- TODO cite graph evolution paper
 %- What? Enabled graph data structure operations on NSR author data.
 %- Why? This is not possible with existing NSR data... Why useful?
 %- How? Using python library Networkx to build graph datastructures. D3 and Gephi for visualizations
@@ -636,6 +677,9 @@ In this work, the word 'graph' will always refer to the mathematical representat
 Exploring the NSR data has been a core motivation for this work.
 Transforming the NSR data into a network graph has enabled new questions and analyses.
 Additionally network graphs lend themselves well to interesting visualizations which has been another motivator.
+
+This thesis does not consider the analysis of specific network graphs but rather enables the NSR Explorer users to easily do so.
+
 
 ##Data Graphs
 The first graphs constructed in this work had each node represent an author, and each edge or link represent a coauthorship.
@@ -726,9 +770,14 @@ This could be achieved with a text label, or an added thickness to the edge line
 We can also visualize graphs with multiple components.
 Disconnected components, like those visible in Figure @fig:first50years, are groups of authors who have published together and not with any author in another component.
 There is only ever one node per author identifier.
+
 Most graphs produced from yearly data queries have multiple components.
-As the data slice forming the graph gets larger the main connected component gets much larger than the rest of the components.
-%- I did some analysis on this for the whole dataset
+A graph produced by papers including a single author will have a single component by definition.
+As the amount of NSR entries forming the graph gets larger the main connected component gets much larger than the rest of the components.
+Researchers at Facebook have done some interesting work confirming this on the largest social network studied @facebook-social-graph.
+They calculated that $99.91\%$ of the 721 million users considered were in a single connected component [^facebook-paper].
+
+[^facebook-paper]: The work in @facebook-social-graph also serves as an accessible overview of the types of analysis one might want to do on a network graph.
 
 ![Network graph of the first 50 years of NSR data](images/First-50-Years-NSR-Authors.pdf){#fig:first50years}
 
@@ -765,11 +814,13 @@ The largest connected component, alone, can be viewed by adding `topnetwork:1` t
 %- Citation
 The Python library [Networkx](https://networkx.github.io) was used to create the graph data structures, which can then be sent to our visualization code, or be exported for analysis with other tools.
 Networkx has a collection of algorithms and functions used to analyze and manipulate the graphs.
-Such manipulations include identifying and sorting disconnected subgraphs within a slice of data.
+
+The Networkx library is primarily used for its graph data structure reading and writing methods.
+To be explicit, Networkx is used to create graphs from data returned by aggregation queries, and then convert the graph data into a format suitable for exporting to disk or to the NSR Explorer web application for visualization.
+The identification of connected components is the only algorithm provided by Networkx that is used in this work.
 For example, Figure @fig:nsr1989graphyifanhu and Figure @fig:nsr1989graph use only the largest connected graph of all the NSR entries in the year 1989.
 
 ## Exporting Graph Data
-%- TODO ROBY say something about typical social network?
 Treating the NSR database as graph data opens up avenues for future work.
 All of the graphs we have created have authors as nodes with edges determined by their coauthors.
 These graphs are social networks of collaborating scientists.
@@ -783,31 +834,53 @@ Example code for exporting the 1989 data to `gexf` format is available at [githu
 
 Text Mining
 ===========
-%- TODO citation
 Text mining is an area of analysis that focuses on extracting useful information from unstructured plain text data.
 The data to analyze is often natural language text written by humans.
 Examples of such data include user reviews of a product or service, customer feedback comments, emails, forum posts, or even academic journal articles.
+Example goals of analyzing such works might be summarization, determining sentiment, finding topics, or finding similar items.
 
 %- Motivation
 In this section, two distinct goals of this work were solved using tools commonly employed in text mining.
-Recommending similar papers for a given selection of papers was solved using cosine similarity.
+Recommending similar papers for a given selection of papers was solved using cosine simularity in a vector space model.
 Determining authors that may have multiple identifiers in the data was accomplished using string edit distances.
 
-## Cosine Similarity
-%- https://stackoverflow.com/questions/15173225/how-to-calculate-cosine-similarity-given-2-sentence-strings-python
+A common task to both of these goals is comparing text.
 In order to compare two items we need a metric by which we can measure them.
-In the [K-means Clustering](#k-means-clustering) section we discuss distance metrics for clustering.
-When dealing with text we often use the cosine similarity of two documents to compute their distance.
-We build a term vector for each document to be analyzed.
-This is a vector describing the amount of occurrences each word has in the document.
-Let document one, $d1$, be "The quick brown fox jumped over the lazy dog" and document two, $d2$, be "The brown dog jumped over the brown fox".
-We create a term vector for each document, as seen in table @tbl:termtable.
-Often in doing this, common words like "the" are omitted.
+The comparison of individual strings as needed in the [Author Name Analysis](#author-name-analysis) was done with string edit distances as discussed in that section.
+The comparison of documents or whole NSR entries requires another technique that operates on words instead of individual characters.
+The vector space model was ultimately chosen as mentioned above and fully discussed in the [Vector Space Model](#vector-space-model) section.
+However, a topic modelling method is discussed in the [Future Work - Text Mining](#future-work-text-mining) section of this chapter.
+
+Introduction to Information Retrieval @stanford-ir-book, or the Standford IR Book, serves as an excellent and freely available resource introducing concepts and techniques in information retrieval.
+
+## Vector Space Model
+A substantial portion of the functionality of NSR Explorer as an information retrieval system is provided by simple queries to the database.
+However, in developing the similar paper recommendation system, we make use of the vector space model [^vsm-citation], an early information retrieval model @vsm-ir-reeval @stanford-ir-book.
+The vector space model is simple and powerful.
+Documents are represented as vectors where each dimension is a separate term.
+There are multiple ways of calculating the value for each dimension such as tf-idf or bag of words @tfidf-jones @alternate-tfidf.
+The work done in the [Similar Papers](#similar-papers) section uses 0, or 1 to represent if a particular selector was present in the NSR entry.
+
+[^vsm-citation]: The correct earliest citation for the vector space model used today is not trivially found. Frequently @vsm-automatic-indexing is cited because of its title "A vector space model for automatic indexing", however, as Dubin outlines in @salton-never-wrote, this paper does not describe the vector space model as an information retrieval model.
+
+%- https://stackoverflow.com/questions/15173225/how-to-calculate-cosine-similarity-given-2-sentence-strings-python
+Let document one, $d1$, be "The quick brown fox jumps over the lazy dog" and document two, $d2$, be "The brown dog jumped over the brown fox".
+We will model these two documents using a vector space model.
+A term vector for each document is created using a dimension for each separate term occuring in the collection of documents.
+The final vectorization of these two documents is shown in Table @tbl:termtable.
+
+Often in information retrieval systems the most frequent words, like "the" or "a" are omitted.
+Consider the 5th and 4th of $d1$ and $d2$, "jumps" and "jumped".
+These words are clearly similar, but are strictly different terms and would thus be represented with different dimensions after vectorization.
+Word stemming addresses this issue by trimming the suffix of words such that we only use the root word.
+The first stemming algorithm was published in 1968 @lovins-stem @lovins-stem-info.
+This algorithm was later improved by Porter in 1980 and has since become widely used thanks to the author making his continued improvements freely available @porter-stem @porter-stem-review.
+
 Equations @eq:d1termvector and @eq:d2termvector are the term vectors for each document.
 The cosine similarity is the dot product of the two documents divided by the product of their magnitudes @eq:cosinesimilarity. @huang2008similarity
 
-vector    quick   brown   fox   jumped   over   lazy   dog
-------    -----   -----   ---   ------   ----   ----   ---
+vector    quick   brown   fox   jump   over   lazy   dog
+------    -----   -----   ---   ----   ----   ----   ---
 d1        1       1       1     1        1      1      1
 d2        0       2       1     1        1      0      1
 
@@ -845,7 +918,7 @@ As Equation @eq:cosinesimilarityF shows, the two documents are quite similar, an
 When $d1 = d2$ the similarity is 1.0.
 This technique is a simple way of numercizing text for further mathematical manipulation and treatment.
 
-### Cosine Similarity of NSR Selectors
+### Similar Papers
 A script was prepared to perform cosine similarity analysis on the NSR selectors.
 The code is available at [github.com/valencik/mastersAPSC](https://github.com/valencik/mastersAPSC).
 For each NSR entry, a vector was formed from the entry's selectors.
@@ -909,7 +982,7 @@ The general problem is referred to as approximate string matching.
 If the supplied query was `A.Herzan`, then `A. Herzan` would be considered an approximate string match.
 This type of match could be found without much sophistication.
 However, we want to also consider more difficult matches like `J.Svenne` and `J.P.Svenne`.
-Approximate string matching libraries often use the Levenshtein Distance metric to compare strings.
+Approximate string matching libraries often use the Levenshtein Distance metric to compare strings @string-matching-tour.
 
 ### Levenshtein Distance
 String edit distance measures such as the Levenshtein Distance @Levenshtein66 offer an easy first approach to analyzing the author names.
@@ -1027,7 +1100,17 @@ The scoring function is the average of all the `score` fields for that paper tha
 
 ![Similar entries for author "A.J.Sarty"](images/simpapers-author.png) {#fig:simpapers-author}
 
-## Further Analysis
+## Future Work - Text Mining
+%- TODO Topic Modelling
+Topic Modelling is a statistical model used to discover abstract topics in a collection of text @topic-models-intro.
+A commonly used topic modelling algorithm is Latent Dirichlet Allocation @topic-models-tech.
+It models documents as having been created by sampling a distribution of topics @latent-dirichlet-allocation.
+Where topics are distributions of words.
+This approach has proven effective on natural language text as well as on other data sources @bio-latent.
+The selectors present in NSR entries are not natural language text but they could be used as input to LDA.
+This could find "topics" in the NSR data where topics are made up of NSR selectors such as nuclear isotopes and types of measurements.
+The Gensim package comes with topic modelling modules and algorithms, such as LDA, that could be used in future work.
+
 %- Clustering? no. Graph analysis.
 %- Can I come up with a # of publication independent clustering schema?
 %- Probably not, and so the graph analysis would be quite useful here!
@@ -1050,7 +1133,7 @@ Data Mining
 
 %- Motivation
 The ultimate goal of the analysis in this section and the [Text Mining](#text-mining) section is to enable a flexible recommender system that supports recommending different types of objects within the database.
-The work in the [Cosine Similarity](#cosine-similarity) section enabled finding papers that had similar nuclide selectors associated with them.
+The work in the [Similar Papers](#similar-papers) section enabled finding papers that had similar nuclide selectors associated with them.
 In this section we use association mining to produce lists of association rules that could be used in a future recommendation system.
 Additionally this analysis enables finding similar authors based on clustering attributes of their publication traits.
 An obvious use case of this feature is to find similar authors to those the user is currently inspecting or searching.
@@ -1062,17 +1145,19 @@ With this in mind, the high level summary of this analysis stage is to build dat
 
 ## Association Mining
 %- Intro to association mining
-Frequent pattern mining is an important part of data mining and knowledge discovery @DBLP:books/crc/aggarwal2014.
+Frequent pattern mining is an important part of data mining and knowledge discovery @data-classification-aggarwal.
 It is also known as rule learning and is frequently used on market basket analysis.
 A history of customer transactions at a supermarket is analyzed to find groups of items that are frequently purchased together.
 For example, when customers purchase item A, the frequently purchase item B in the same transaction.
 The connection is between the items A and B and is independent of customers.
 
+Our analysis will make use of the Apriori algorithm implementation in the [`arules`](https://cran.r-project.org/web/packages/arules/index.html)@arules-manual @arules-article package in R @apriori-agrawal94.
+
 Association rules are similar to if-then constructs.
 A rule written {R (N,G),T 238U} => {N 239U} with support $0.00129$ and confidence $0.9308$ tells us that the selectors `R (N,G)`, `T 238U`, and `N 239U` appear together in $0.129\%$ of the data.
 The confidence is a measure of reliability in the rule.
 In the above example $93.08\%$ of the time that `R (N,G)` and  `T 238U` appear, `N 239U` also appears.
-Formally the support is defined @DBLP:books/crc/aggarwal2014 in Equation @eq:ap-support, as is confidence in Equation @eq:ap-confidence.
+Formally the support is defined @data-classification-aggarwal in Equation @eq:ap-support, as is confidence in Equation @eq:ap-confidence.
 Lift is defined in Equation @eq:ap-lift as described in the arules package @arules-manual.
 
 %- Apriori algorithm
@@ -1089,7 +1174,6 @@ $$
 $$ {#eq:ap-lift}
 
 %- Apriori-dedup.r
-Our analysis will make use of the Apriori algorithm implementation in the [`arules`](https://cran.r-project.org/web/packages/arules/index.html)@arules-manual @arules-article package in R.
 The `prepare-data.py` program generates three transaction lists for analysis in R.
 The R script `Apriori-dedup.r` takes an input file, output file, minimum support, and minimum confidence as command line arguments.
 The arules package provides facilities in helping prune duplicate rules, and rules that are subsets of other rules.
@@ -1110,10 +1194,8 @@ rules                                                            support     con
 {A.M.Stefanini,L.Corradi} => {G.Montagnoli}                      0.0008129   0.9687       1009.2
 {A.M.Stefanini,F.Scarlassara} => {G.Montagnoli}                  0.0008077   0.9625       1002.7
 {A.M.Stefanini,F.Scarlassara} => {L.Corradi}                     0.0008025   0.9562       974.9
-{H.Iwasaki,H.Sakurai,S.Shimoura,S.Takeuchi} => {T.Minemura}      0.0008287   0.9461       949.3
 {G.G.Adamian} => {N.V.Antonenko}                                 0.0008182   0.9397       942.9
 {H.Iwasaki,S.Shimoura,S.Takeuchi} => {T.Minemura}                0.0008497   0.9257       928.9
-{H.Iwasaki,H.Sakurai,S.Shimoura,T.Motobayashi} => {T.Minemura}   0.0008444   0.9252       928.4
 {H.Iwasaki,S.Shimoura,T.Motobayashi} => {T.Minemura}             0.0008706   0.9071       910.2
 {L.Corradi} => {G.Montagnoli}                                    0.0008549   0.8716       908.1
 
@@ -1202,7 +1284,7 @@ Classification is the process of deciding to what group a particular datum shoul
 Clustering is the grouping of multiple data points such that those belonging to a group are more similar in some manner than those outside of that group.
 
 ### K-means Clustering
-K-means clustering is a cluster analysis technique that can group data objects in $k$ clusters based on minimizing their distances with respect to cluster centroids.
+K-means clustering is a cluster analysis technique that can group data objects in $k$ clusters based on minimizing their distances with respect to cluster centroids @kmeans-macqueen67 @Jain2010651 @clustering-review.
 K-means is a partitional clustering algorithm.
 
 Take a finite set of objects,  $X = {x_1, x_2, ..., x_n}$ where each is a data object in $d$ dimensions.
@@ -1228,7 +1310,7 @@ Some heuristics exist to aid in determining an optimal $k$. @tibshirani2001estim
 In practice, K-means is normally run multiple times with varying $k$ values and the optimum is selected by a domain expert.
 
 However, there exist methods to measure the effectiveness of a clustering configuration.
-The Davies-Bouldin index considers the ratio of external separation between clusters to the scatter within a cluster @wiki-dbi.
+The Davies-Bouldin index considers the ratio of external separation between clusters to the scatter within a cluster @davies1979 @wiki-dbi.
 Given two clustering schemes of the same input data, the one with the lowest Davies-Bouldin index is preferred.
 The G1, or Calinski-Harabasz criterion is a hueristic device to help evaluate different clustering schemes on the same input data @g1-paper.
 It works best when used on standardized data in a Euclidean space @ch-stackoverflow.
@@ -1356,14 +1438,14 @@ The clustering results for 6 centers is shown in Figure @fig:kmeans-thirds6.
 
 ![Secondary K-means clustering with 6 centers](images/11papers-ratio-third6clusters.png){#fig:kmeans-thirds6}
 
-| careerLength | meanCoauthors | numEntries | numEntries033 | numEntries066 | numEntries100 | size |
-| ------------ | ------------- | ---------- | ------------- | ------------- | ------------- | ---- |
-| 1.16972      | -0.27103      | 0.46882    | -0.45377      | 0.71277       | -0.11090      | 3299 |
-| 1.08866      | 1.88560       | 4.07120    | -0.78269      | 0.51341       | 0.41716       | 564  |
-| 0.41893      | -0.21279      | -0.17738   | -0.83277      | -0.83916      | 1.62115       | 2993 |
-| -0.64822     | -0.31975      | -0.36245   | -0.25189      | 0.63417       | -0.26423      | 5227 |
-| -0.71602     | 1.98927       | 0.10059    | -0.02918      | 0.25118       | -0.18162      | 1651 |
-| -0.27094     | -0.26837      | -0.37100   | 1.35796       | -0.90415      | -0.71240      | 4268 |
+| careerLength | meanCoauthors | numEntries | numEntries1 | numEntries2 | numEntries3 | size |
+| ------------ | ------------- | ---------- | ----------- | ----------- | ----------- | ---- |
+| 1.16972      | -0.27103      | 0.46882    | -0.45377    | 0.71277     | -0.11090    | 3299 |
+| 1.08866      | 1.88560       | 4.07120    | -0.78269    | 0.51341     | 0.41716     | 564  |
+| 0.41893      | -0.21279      | -0.17738   | -0.83277    | -0.83916    | 1.62115     | 2993 |
+| -0.64822     | -0.31975      | -0.36245   | -0.25189    | 0.63417     | -0.26423    | 5227 |
+| -0.71602     | 1.98927       | 0.10059    | -0.02918    | 0.25118     | -0.18162    | 1651 |
+| -0.27094     | -0.26837      | -0.37100   | 1.35796     | -0.90415    | -0.71240    | 4268 |
 
 Table: Centroid data points for 6 cluster K-Means on initial data {#tbl:thirds-6clusters}
 
@@ -1385,7 +1467,7 @@ The results of cluster analysis can be written to the database with the `update-
 The clusters (if multiple are written to the database) an author belongs to are shown on the author profile page.
 This is demonstrated in Figure @fig:author-profile.
 
-## Future Work
+## Future Work - Data Mining
 
 As the NSR database spans several decades, each data object presents time series information.
 Finding similar authors separated in time could be interesting.

@@ -114,7 +114,7 @@ references:
     student conference (nZCSRSC2008), christchurch, new zealand
   page: '49-56'
 
-- id: DBLP:books/crc/aggarwal2014
+- id: data-classification-aggarwal
   type: book
   editor:
   - family: Aggarwal
@@ -337,4 +337,341 @@ references:
   page: '501'
   volume: '122'
   URL: http://cds.cern.ch/record/261888
+
+- id: stanford-ir-book
+  type: book
+  author:
+  - family: Manning
+    given: C.D.
+  - family: Raghavan
+    given: P.
+  - family: Schütze
+    given: H.
+  issued:
+  - year: '2009'
+  title: 'Introduction to information retrieval'
+  publisher: Cambridge University Press
+  URL: http://nlp.stanford.edu/IR-book/
+  ISBN: '9780521865715'
+
+- id: large-data-banks
+  type: article-journal
+  author:
+  - family: Codd
+    given: E. F.
+  issued:
+  - year: '1970'
+    month: '6'
+  title: 'A relational model of data for large shared data banks'
+  container-title: Commun. ACM
+  publisher: ACM
+  publisher-place: New York, NY, USA
+  page: '377-387'
+  volume: '13'
+  issue: '6'
+  keyword: composition, consistency, data bank, data base, data integrity, data organization,
+    data structure, derivability, hierarchies of data, join, networks of data, predicate
+    calculus, redundancy, relations, retrieval language, security
+  URL: http://doi.acm.org.library.smu.ca:2048/10.1145/362384.362685
+  DOI: 10.1145/362384.362685
+  ISSN: '0001-0782'
+
+- id: facebook-social-graph
+  type: article-journal
+  author:
+  - family: Ugander
+    given: Johan
+  - family: Karrer
+    given: Brian
+  - family: Backstrom
+    given: Lars
+  - family: Marlow
+    given: Cameron
+  issued:
+  - year: '2011'
+  title: The anatomy of the facebook social graph
+  container-title: CoRR
+  volume: abs/1111.4503
+  URL: http://arxiv.org/abs/1111.4503
+
+- id: salton-never-wrote
+  type: article-journal
+  author:
+  - family: Dubin
+    given: David
+  title: 'The most influential paper gerard salton never wrote'
+  container-title: Library Trends
+  page: '2004'
+
+- id: vsm-automatic-indexing
+  type: article-journal
+  author:
+  - family: Salton
+    given: G.
+  - family: Wong
+    given: A.
+  - family: Yang
+    given: C. S.
+  issued:
+  - year: '1975'
+    month: '11'
+  title: 'A vector space model for automatic indexing'
+  container-title: Commun. ACM
+  publisher: ACM
+  publisher-place: New York, NY, USA
+  page: '613-620'
+  volume: '18'
+  issue: '11'
+  keyword: automatic indexing, automatic information retrieval, content analysis,
+    document space
+  URL: http://doi.acm.org/10.1145/361219.361220
+  DOI: 10.1145/361219.361220
+  ISSN: '0001-0782'
+
+- id: vsm-ir-reeval
+  type: paper-conference
+  author:
+  - family: Wong
+    given: S. K. Michael
+  - family: Raghavan
+    given: Vijay V.
+  issued:
+  - year: '1984'
+  title: 'Vector Space Model of Information Retrieval - A Reevaluation'
+  container-title: Research and development in information retrieval
+  page: '167-185'
+
+- id: lovins-stem
+  type: article-journal
+  author:
+  - family: Lovins
+    given: J. B.
+  issued:
+  - year: '1968'
+  title: 'Development of a Stemming Algorithm" Mechanical Translation and Computational Linguistics'
+
+- id: lovins-stem-info
+  type: book
+  author:
+  - family: Porter
+    given: Martin
+  issued:
+  - year: '2015'
+  title: 'The Lovins stemming algorithm'
+  note: \[Online; accessed 3-November-2015\]
+  URL: http://snowball.tartarus.org/algorithms/lovins/stemmer.html
+
+- id: porter-stem
+  type: article-journal
+  author:
+  - family: Porter
+    given: M.F.
+  issued:
+  - year: '2006'
+  title: 'An algorithm for suffix stripping'
+  container-title: Program
+  page: '211-218'
+  volume: '40'
+  issue: '3'
+  URL: http://www.emeraldinsight.com/doi/abs/10.1108/00330330610681286
+  DOI: 10.1108/00330330610681286
+
+- id: porter-stem-review
+  type: article-journal
+  author:
+  - family: Willett
+    given: Peter
+  issued:
+  - year: '2006'
+  title: 'The porter stemming algorithm: Then and now'
+  title-short: The porter stemming algorithm
+  container-title: Program
+  page: '219-223'
+  volume: '40'
+  issue: '3'
+  URL: http://www.emeraldinsight.com/doi/abs/10.1108/00330330610681295
+  DOI: 10.1108/00330330610681295
+
+- id: alternate-tfidf
+  type: article-journal
+  author:
+  - family: Xu
+    given: Zhixiang Eddie
+  - family: Chen
+    given: Minmin
+  - family: Weinberger
+    given: Kilian Q.
+  - family: Sha
+    given: Fei
+  issued:
+  - year: '2013'
+  title: 'An alternative text representation to TF-IDF and bag-of-words'
+  container-title: CoRR
+  volume: abs/1301.6770
+  URL: http://arxiv.org/abs/1301.6770
+
+- id: tfidf-jones
+  type: article-journal
+  author:
+  - family: Sparck Jones
+    given: Karen
+  issued:
+  - year: '1972'
+  title: 'A statistical interpretation of term specificity and its application in retrieval'
+  container-title: Journal of documentation
+  publisher: MCB UP Ltd
+  page: '11-21'
+  volume: '28'
+  issue: '1'
+
+- id: topic-models-intro
+  type: book
+  author:
+  - family: Blei
+    given: David
+  issued:
+  - year: 2012
+  title: 'Probabilistic Topic Models'
+  note: \[Online; accessed 3-November-2015\]
+  URL: http://www.cs.columbia.edu/~blei/papers/Blei2012.pdf
+
+- id: topic-models-tech
+  type: book
+  author:
+  - family: Blei
+    given: David
+  - family: Lafferty
+    given: John
+  issued:
+  - year: 2009
+  title: 'Topic Models'
+  note: \[Online; accessed 3-November-2015\]
+  URL: http://www.cs.columbia.edu/~blei/papers/BleiLafferty2009.pdf
+
+- id: latent-dirichlet-allocation
+  type: article-journal
+  author:
+  - family: Blei
+    given: David M
+  - family: Ng
+    given: Andrew Y
+  - family: Jordan
+    given: Michael I
+  issued:
+  - year: '2003'
+  title: 'Latent dirichlet allocation'
+  container-title: the Journal of machine Learning research
+  publisher: JMLR. org
+  page: '993-1022'
+  volume: '3'
+
+- id: bio-latent
+  type: article-journal
+  author:
+  - family: Pinoli
+    given: Pietro
+  - family: Chicco
+    given: Davide
+  - family: Masseroli
+    given: Marco
+  issued:
+  - year: '2014'
+  title: 'Latent dirichlet allocation based on gibbs sampling for gene function prediction'
+  container-title: Computational intelligence in bioinformatics and computational
+    biology, 2014 iEEE conference on
+  publisher: IEEE
+  page: '1-8'
+
+- id: kmeans-macqueen67
+  type: article-journal
+  author:
+  - family: MacQueen
+    given: James
+  - literal: others
+  issued:
+  - year: '1967'
+  title: 'Some methods for classification and analysis of multivariate observations'
+  container-title: Proceedings of the fifth berkeley symposium on mathematical statistics
+    and probability
+  collection-number: '14'
+  publisher: Oakland, CA, USA.
+  page: '281-297'
+  volume: '1'
+
+- id: clustering-review
+  type: article-journal
+  author:
+  - family: Jain
+    given: A. K.
+  - family: Murty
+    given: M. N.
+  - family: Flynn
+    given: P. J.
+  issued:
+  - year: '1999'
+    month: '9'
+  title: 'Data clustering: A review'
+  title-short: Data clustering
+  container-title: ACM Comput. Surv.
+  publisher: ACM
+  publisher-place: New York, NY, USA
+  page: '264-323'
+  volume: '31'
+  issue: '3'
+  keyword: cluster analysis, clustering applications, exploratory data analysis, incremental
+    clustering, similarity indices, unsupervised learning
+  URL: http://doi.acm.org/10.1145/331499.331504
+  DOI: 10.1145/331499.331504
+  ISSN: '0360-0300'
+
+- id: davies1979
+  type: article-journal
+  author:
+  - family: Davies
+    given: David L
+  - family: Bouldin
+    given: Donald W
+  issued:
+  - year: '1979'
+  title: 'A cluster separation measure'
+  container-title: Pattern Analysis and Machine Intelligence, IEEE Transactions on
+  publisher: IEEE
+  page: '224-227'
+  issue: '2'
+
+- id: string-matching-tour
+  type: article-journal
+  author:
+  - family: Navarro
+    given: Gonzalo
+  issued:
+  - year: '2001'
+    month: '3'
+  title: 'A guided tour to approximate string matching'
+  container-title: ACM Comput. Surv.
+  publisher: ACM
+  publisher-place: New York, NY, USA
+  page: '31-88'
+  volume: '33'
+  issue: '1'
+  keyword: Levenshtein distance, edit distance, online string matching, text searching
+    allowing errors
+  URL: http://doi.acm.org/10.1145/375360.375365
+  DOI: 10.1145/375360.375365
+  ISSN: '0360-0300'
+
+- id: apriori-agrawal94
+  type: paper-conference
+  author:
+  - family: Agrawal
+    given: Rakesh
+  - family: Srikant
+    given: Ramakrishnan
+  - literal: others
+  issued:
+  - year: '1994'
+  title: 'Fast algorithms for mining association rules'
+  container-title: Proc. 20th int. conf. very large data bases, vLDB
+  page: '487-499'
+  volume: '1215'
 ...
