@@ -7,7 +7,7 @@ author:
 - name: Andrew Valencik
   affiliation: Saint Mary\'s University
 author: Andrew Valencik
-date: November 1st 2015
+date: November 3rd 2015
 bibliography: bibliography.yaml
 csl: american-physics-society.csl
 link-citations: true
@@ -49,31 +49,31 @@ To facilitate understanding, by all readers, no matter their expertise, backgrou
 Thus, this thesis has no "theory" chapter, as essential knowledge is provided in the chapters that require it.
 
 ## Thesis Organization
-The existing NSR website and interface are outline in this introduction chapter.
+The existing NSR website and interface are outlined in this introduction chapter.
 Additionally the web application created as a result of this work is discussed.
 
-The transformation of the provided raw data is discussed in the [Data Preparation](#data-preparation) and [Data Representation](data-representation) sections.
+The transformation of the provided raw data is discussed in the [Data Preparation](#data-preparation) and [Data Representation](#data-representation) sections.
 The data is stored in a database as discussed in [The Database](#the-database).
 
-Chapter 3 is the first exploration of the NSR data as a whole.
-We discuss the types of queries that can be made on the data, show some examples and discuss the results.
-The [Author Contributions](#author-contributions) section analyzes how the authors of works catalogued in the NSR contribute to build the NSR collection.
+Chapter 3 is the first exploration of the NSR data and the database created with our data representation.
+We discuss the types of queries that can be made on the data, show some examples, and discuss the results.
+The [Author Contributions](#author-contributions) section analyzes how the authors of works catalogued in the NSR contribute to the NSR collection as a whole.
 Visualizations for the queries discussed in this chapter are shown.
 
 Chapter 4 introduces the concept and tools for analyzing the NSR data as a network graph.
 A brief overview of graph theory concepts and terminology is given.
-We discuss different queries that can be used to produce graphs of the NSR data.
+We discuss different queries that can be used to produce graphs of the NSR data in the [Data Graphs](#data-graphs) and [Nuclide Graphs](#nuclide-graphs) sections.
 The Libraries used are discussed as well as an exportation feature.
 
 Chapter 5 details the usage of tools and techniques from text mining.
-A paper recommender system is built by using a modification of usual cosine similarity recommendations.
+A paper recommender system is built in the [Similar Papers](#similar-papers) section by using a modification of cosine similarity.
 The second component of this chapter analyzes author names to build a system of finding authors that may have multiple identifications in the NSR.
 
 Chapter 6 discusses two common data mining techniques and their application with regard to the NSR data.
 Association mining is performed on nuclides in papers, author names in papers, and author names in selectors.
 In the [Cluster Analysis](#cluster-analysis) section, K-means is used to cluster authors.
 
-Finally, we review the contributions and discuss future works.
+Finally, we review the contributions and discuss future works in the [Conclusions](#conclusions) chapter.
 
 ## The Nuclear Science References Website
 %- Link to Data section
@@ -230,7 +230,7 @@ To accommodate work that spans multiple topics, NSR entries can have multiple ke
 Following these major topics are one or more indexed sentences.
 These sentences describe the elements of the physical system studied, and any measurements that were made.
 For example, the `<KEYWORDS>` field in Snippet \ref{blk:rawNSRentry} encodes that the referenced work calculated energy (implied) levels and band features using a semi-empirical formalism for
-$^{232}\mbox{Th}$, $^{232}\mbox{U}$, $^{23r42}\mbox{U}$, $^{23r62}\mbox{U}$, and $^{238}\mbox{U}$.
+$^{232}\mbox{Th}$, $^{232}\mbox{U}$, $^{234}\mbox{U}$, $^{236}\mbox{U}$, and $^{238}\mbox{U}$.
 
 It is this structure that provides the most semantic information about the NSR entry.
 Thanks to the careful work of the NSR maintainers, the `<KEYWORDS>` and resulting `<SELECTRS>` fields reveal the NSR entry's content in a machine readable manner.
