@@ -227,10 +227,14 @@ def parse_search():
         {"_id": 1, "year": 1, "authors": 1, "selectors": "$selectors.value"}})
     results = nsr.aggregate(pipeline)
 
+    # Iterate over mongo docs and update default values in _json vars
     documents = []
     for doc in results:
         documents.append(doc)
+        year = int(doc['year'])
+        year_json[year_json.index([_ for _ in year_json if _['x'] == year][0])]['y'] += 1
 
+    # Convert everything to JSON and ship it to the client
     return toJson({'years': year_json, 'entries': documents})
 
 
