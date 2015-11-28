@@ -224,18 +224,26 @@ def parse_search():
         pipeline.append({"$match": {"selectors.value": {"$in": nuclide_list}}})
 
     pipeline.append({"$project":
-        {"_id": 1, "year": 1, "authors": 1, "selectors": "$selectors.value"}})
+        {"_id": 1, "year": 1, "authors": 1, "type": 1, "selectors": "$selectors.value"}})
     results = nsr.aggregate(pipeline)
 
     # Iterate over mongo docs and update default values in _json vars
+    # This can throw IndexErrors which I am not catching
     documents = []
+    type_json = [{'label': 'JOUR', 'value': 0}, {'label': 'REPT', 'value': 0}, {'label': 'CONF', 'value': 0},
+        {'label': 'THESIS', 'value': 0}, {'label': 'PC', 'value': 0}, {'label': 'PREPRINT', 'value': 0},
+        {'label': 'BOOK', 'value': 0}, {'label': 'UNKNOWN', 'value': 0}]
     for doc in results:
         documents.append(doc)
+        # Find the dict with x == year in year_json and increment it
         year = int(doc['year'])
         year_json[year_json.index([_ for _ in year_json if _['x'] == year][0])]['y'] += 1
+        # Find the dict with x == year in year_json and increment it
+        nsr_type = str(doc['type'])
+        type_json[type_json.index([_ for _ in type_json if _['label'] == nsr_type][0])]['value'] += 1
 
     # Convert everything to JSON and ship it to the client
-    return toJson({'years': year_json, 'entries': documents})
+    return toJson({'years': year_json, 'types': type_json, 'entries': documents})
 
 
 # If executed directly from python interpreter, run local server
