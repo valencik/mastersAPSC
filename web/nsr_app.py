@@ -3,6 +3,16 @@ from flask import Flask, jsonify, request, render_template
 import networkx as nx
 from networkx.readwrite import json_graph
 from itertools import combinations
+import re
+import json
+from bson import json_util
+from bson.objectid import ObjectId
+
+def toJson(data):
+    """
+    Convert Mongo object(s) to JSON
+    """
+    return json.dumps(data, default=json_util.default)
 
 # Setup the connection to MongoDB and get the NSR collection
 client = MongoClient('localhost', 27017)
@@ -179,6 +189,49 @@ def authorgraph(pipeline, options):
     else:
         data = json_graph.node_link_data(G)
     return data
+
+@app.route('/api/search')
+def parse_search():
+    """
+    We apply a series of RegEx to the user search query and then modify
+    the default query object passed to MongoDB.
+    """
+    search = request.args['input']
+    print("NSR> recieved search: " + search)
+    pipeline = []
+
+    year_list = re.findall(r"(?<![:=_])([12][0-9]{3})+", search)
+    if len(year_list) == 1:
+        pipeline.append({"$match": {"year": int(year_list[0])}})
+        year_json = [{'x': year_list[0], 'y': 0}]
+    if len(year_list) == 2:
+        year_start = int(min(year_list))
+        year_end = int(max(year_list))
+        pipeline.append({"$match": {"year": {"$gte": year_start, "$lte": year_end}}})
+        year_json = [{'x': year, 'y': 0} for year in range(year_start, year_end + 1)]
+    if len(year_list)  > 2:
+        pipeline.append({"$match": {"year": {"$in": year_list}}})
+        year_json = [{'x': year, 'y': 0} for year in year_list]
+
+    author_tuples = re.findall(r"(?<![:=_])(([a-zA-Z]\.){1,3}[a-zA-Z-]+)+", search)
+    if len(author_tuples) >= 1:
+        author_list = [author[0] for author in author_tuples]
+        pipeline.append({"$match": {"authors": {"$in": author_list}}})
+
+    nuclide_tuples = re.findall(r"(?<![:=_])([0-9]{1,3}[a-zA-Z]{1,3})+", search)
+    if len(nuclide_tuples) >= 1:
+        nuclide_list = [nuclide.upper() for nuclide in nuclide_tuples]
+        pipeline.append({"$match": {"selectors.value": {"$in": nuclide_list}}})
+
+    pipeline.append({"$project":
+        {"_id": 1, "year": 1, "authors": 1, "selectors": "$selectors.value"}})
+    results = nsr.aggregate(pipeline)
+
+    documents = []
+    for doc in results:
+        documents.append(doc)
+
+    return toJson({'years': year_json, 'entries': documents})
 
 
 # If executed directly from python interpreter, run local server

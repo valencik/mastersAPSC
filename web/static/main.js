@@ -64,6 +64,12 @@ function omniSearch(ev){
             break;
 
         default:
+            // Send entire input to /api/search
+            d3.xhr("/api/search?input="+search)
+            .get(function(error, data){
+                response = JSON.parse(data.response)
+                console.log(response)
+            })
             break;
 
     }//end of switch on search command
