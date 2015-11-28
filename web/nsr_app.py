@@ -130,7 +130,7 @@ def yearnetwork(year_id):
     yearnetwork_pipeline = [
         {"$match": {"year": year_id}}
     ]
-    data = yeargraph(yearnetwork_pipeline, yearnetwork_params)
+    data = authorgraph(yearnetwork_pipeline, yearnetwork_params)
     return jsonify(data)
 
 # API: authornetwork
