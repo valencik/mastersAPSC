@@ -68,7 +68,7 @@ function omniSearch(ev){
             d3.xhr("/api/search?input="+search)
             .get(function(error, data){
                 response = JSON.parse(data.response)
-                stackedBar(response.years)
+                stackedBar(response.types)
             })
             break;
 

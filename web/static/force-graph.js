@@ -124,12 +124,12 @@ function forceDirectedGraph(error, nodes, links, options) {
 }; // End forceDirectedGraph worker func
 
 function stackedBar(data) {
-    d3.select("#charts").append("svg").attr("width", 800).attr("height", 800)
+    d3.select("#charts").append("svg").attr("width", 1000).attr("height", 750)
     nv.addGraph(function() {
         var chart = nv.models.multiBarChart();
 
         d3.select('#charts svg')
-            .datum([{key: "Publications", values: data}])
+            .datum(data)
             .call(chart);
 
         nv.utils.windowResize(chart.update);

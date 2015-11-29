@@ -228,18 +228,27 @@ def parse_search():
     # Iterate over mongo docs and update default values in _json vars
     # This can throw IndexErrors which I am not catching
     documents = []
+    years_types_dict = defaultdict(lambda: defaultdict(int)) #2 level deep defaultdict with in int
     years_dict = defaultdict(int)
 
     for doc in results:
         documents.append(doc)
         doc_year = int(doc['year'])
+        doc_type = doc['type']
 
         years_dict[doc_year] += 1
+        years_types_dict[doc_year][doc_type] += 1
 
-    year_json = [{'x': year, 'y': years_dict[year]} for year in range(min(years_dict.keys()), max(years_dict.keys()) + 1)]
+    year_start = min(years_dict.keys())
+    year_end = max(years_dict.keys())
+    nsr_types = ['JOUR', 'CONF', 'REPT', 'PC', 'BOOK', 'THESIS', 'PREPRINT', 'UNKNOWN']
+
+    year_json = [{'x': year, 'y': years_dict[year]} for year in range(year_start, year_end + 1)]
+    types_json = [{'key': _type, 'values': [ {'x': year, 'y': int(years_types_dict[year][_type])} for year in 
+        range(year_start, year_end + 1) ]} for _type in nsr_types]
 
     # Convert everything to JSON and ship it to the client
-    return toJson({'years': year_json, 'entries': documents})
+    return toJson({'years': year_json, 'types': types_json, 'entries': documents})
 
 
 # If executed directly from python interpreter, run local server
