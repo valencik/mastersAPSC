@@ -12,38 +12,34 @@
 <body>
   <div class="columns-container">
 
-    <div class="sidebar">
-      <h1>Menu</h1>
-
-      <nav>
-        <ul class="nav">
-          <li>
-            <a href="#">Home</a>
-          </li>
-
-          <li>
-            <a href="#">Fake Link 1</a>
-          </li>
-        </ul>
-      </nav>
+    <div class="menu">
+      <div id="logo">
+        <h1>NSR Explorer</h1>
+      </div>
+      <div id="search-area">
+        <input id="omnisearch" type="search" name="userAction" placeholder="NSR Database Search..." autofocus="autofocus">
+      </div>
+      <div id="views-menu">
+        <div class="view-button">
+          <a href="#" onclick="stackedBar(response.types)">
+            <span>Charts</span>
+         </a>
+        </div>
+        <div class="view-button">
+          <a href="#" onclick="forceDirectedGraph(null, response.network.nodes, response.network.links, {})">
+            <span>Graph</span>
+         </a>
+        </div>
+      </div>
     </div>
 
-    <div class="right-column">
-      <h2>{{ header }}</h2>
-
-      <input id="omnisearch" type="search" name="userAction" placeholder="NSR Database Search..." autofocus="autofocus">
-      <button type="button" onclick="stackedBar(response.types)">Chart</button>
-      <button type="button" onclick="forceDirectedGraph(null, response.network.nodes, response.network.links, {})">Graph</button>
-
-      <div id="charts"> </div>
-
-    </div>
+    <div id="charts"></div>
 
     <div class="push"></div>
   </div>
 
   <footer>
-    <p>&copy;2015</p>
+    <p>Created by Andrew Valencik &copy;2015</p>
   </footer>
 
   <script src="static/seedrandom.js"></script>
