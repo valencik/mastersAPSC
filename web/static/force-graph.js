@@ -126,9 +126,15 @@ function forceDirectedGraph(error, nodes, links, options) {
 
 function stackedBar(data) {
     d3.select("#charts svg").remove()
-    d3.select("#charts").append("svg").attr("width", 1000).attr("height", 750)
+    d3.select("#charts").append("svg").attr("width", 600).attr("height", 400)
     nv.addGraph(function() {
-        var chart = nv.models.multiBarChart();
+        var chart = nv.models.multiBarChart().stacked(true);
+
+        chart.xAxis
+            .tickFormat(d3.format(''));
+
+        chart.yAxis
+            .tickFormat(d3.format(''));
 
         d3.select('#charts svg')
             .datum(data)
