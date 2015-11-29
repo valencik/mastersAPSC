@@ -239,18 +239,19 @@ def parse_search():
     nsr_entries = []
     G = nx.Graph()
     author_nodes = set()
-    for nsr_entry in results:
-        nsr_entries.append(nsr_entry)
+    for index, nsr_entry in enumerate(results):
         nsr_year = int(nsr_entry['year'])
-        nsr_type = nsr_entry['type']
+        nsr_type = nsr_entry['type'] if 'type' in nsr_entry else 'UNKNOWN'
         years_dict[nsr_year] += 1
         types_dict[nsr_year][nsr_type] += 1
 
-        # Build author network-graph
-        if 'authors' in nsr_entry:
-            author_nodes.update(nsr_entry['authors'])
-            for i in combinations(nsr_entry['authors'], 2):
-                G.add_edge(i[0], i[1])
+        # Limit nsr_entries and graph to only 1000 results
+        if index <= 1000:
+            nsr_entries.append(nsr_entry)
+            if 'authors' in nsr_entry:
+                author_nodes.update(nsr_entry['authors'])
+                for i in combinations(nsr_entry['authors'], 2):
+                    G.add_edge(i[0], i[1])
 
     # Clean up network-graph
     G.add_nodes_from(author_nodes)
