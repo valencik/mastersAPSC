@@ -122,3 +122,19 @@ function forceDirectedGraph(error, nodes, links, options) {
     }
 
 }; // End forceDirectedGraph worker func
+
+function stackedBar(data) {
+    d3.select("#charts").append("svg").attr("width", 800).attr("height", 800)
+    nv.addGraph(function() {
+        var chart = nv.models.multiBarChart();
+
+        d3.select('#charts svg')
+            .datum([{key: "Publications", values: data}])
+            .call(chart);
+
+        nv.utils.windowResize(chart.update);
+        chart.update()
+
+        return chart;
+    });
+}
