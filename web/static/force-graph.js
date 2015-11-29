@@ -36,7 +36,8 @@ function forceDirectedGraph(error, nodes, links, options) {
         .on("zoom", zoomed);
 
     // Establish/instantiate an SVG container object
-    var svg = d3.select("#charts") .append("svg")
+    d3.select("#charts svg").remove()
+    var svg = d3.select("#charts").append("svg")
         .attr("height",height)
         .attr("width",width)
         .append("g")
@@ -124,6 +125,7 @@ function forceDirectedGraph(error, nodes, links, options) {
 }; // End forceDirectedGraph worker func
 
 function stackedBar(data) {
+    d3.select("#charts svg").remove()
     d3.select("#charts").append("svg").attr("width", 1000).attr("height", 750)
     nv.addGraph(function() {
         var chart = nv.models.multiBarChart();

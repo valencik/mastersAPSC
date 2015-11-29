@@ -201,6 +201,7 @@ def parse_search():
     search = request.args['input']
     print("NSR> recieved search: " + search)
     pipeline = []
+    options = {}
 
     # Try to match years (only supports four digit years)
     year_list = re.findall(r"(?<![:=_])([12][0-9]{3})+", search)
@@ -236,12 +237,30 @@ def parse_search():
     types_dict = defaultdict(lambda: defaultdict(int)) #2 level deep defaultdict with in int
     years_dict = defaultdict(int)
     nsr_entries = []
+    G = nx.Graph()
+    author_nodes = set()
     for nsr_entry in results:
         nsr_entries.append(nsr_entry)
         nsr_year = int(nsr_entry['year'])
         nsr_type = nsr_entry['type']
         years_dict[nsr_year] += 1
         types_dict[nsr_year][nsr_type] += 1
+
+        # Build author network-graph
+        if 'authors' in nsr_entry:
+            author_nodes.update(nsr_entry['authors'])
+            for i in combinations(nsr_entry['authors'], 2):
+                G.add_edge(i[0], i[1])
+
+    # Clean up network-graph
+    G.add_nodes_from(author_nodes)
+    graphs = list(nx.connected_component_subgraphs(G))
+    graphs.sort(key = lambda x: -x.number_of_edges())
+    if 'topnetwork' in options and int(options['topnetwork']) != 0:
+        top_num = int(options['topnetwork'])
+        network_data = json_graph.node_link_data(graphs[top_num-1])
+    else:
+        network_data = json_graph.node_link_data(G)
 
     year_start = min(years_dict.keys())
     year_end = max(years_dict.keys())
@@ -257,7 +276,7 @@ def parse_search():
         range(year_start, year_end + 1) ]} for _type in nsr_types]
 
     # Convert everything to JSON and ship it to the client
-    return toJson({'years': year_json, 'types': types_json, 'entries': nsr_entries})
+    return toJson({'years': year_json, 'types': types_json, 'entries': nsr_entries, 'network': network_data})
 
 
 # If executed directly from python interpreter, run local server
