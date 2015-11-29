@@ -194,13 +194,15 @@ def authorgraph(pipeline, options):
 @app.route('/api/search')
 def parse_search():
     """
-    We apply a series of RegEx to the user search query and then modify
-    the default query object passed to MongoDB.
+    We apply a series of RegEx to the user search query and use tge matches to
+    build a aggregation pipeline to pass to the NSR collection in MongoDB.
     """
+    # Get the query parameter 'input' and setup an empty pipeline list
     search = request.args['input']
     print("NSR> recieved search: " + search)
     pipeline = []
 
+    # Try to match years (only supports four digit years)
     year_list = re.findall(r"(?<![:=_])([12][0-9]{3})+", search)
     if len(year_list) == 1:
         pipeline.append({"$match": {"year": int(year_list[0])}})
@@ -211,44 +213,51 @@ def parse_search():
     if len(year_list)  > 2:
         pipeline.append({"$match": {"year": {"$in": year_list}}})
 
+    # Try to match author names (room for improvement)
     author_tuples = re.findall(r"(?<![:=_])(([a-zA-Z]\.){1,3}[a-zA-Z-]+)+", search)
     if len(author_tuples) >= 1:
         author_list = [author[0] for author in author_tuples]
         pipeline.append({"$match": {"authors": {"$in": author_list}}})
 
+    # Try an match nuclides written like: 11li 12C 238U
     nuclide_tuples = re.findall(r"(?<![:=_])([0-9]{1,3}[a-zA-Z]{1,3})+", search)
     if len(nuclide_tuples) >= 1:
         nuclide_list = [nuclide.upper() for nuclide in nuclide_tuples]
         pipeline.append({"$match": {"selectors.value": {"$in": nuclide_list}}})
 
+    # Format data with a projection and then perform the aggregation
+    # The pipeline before projection is a good candidate for building a cache
     pipeline.append({"$project":
         {"_id": 1, "year": 1, "authors": 1, "type": 1, "selectors": "$selectors.value"}})
     results = nsr.aggregate(pipeline)
 
-    # Iterate over mongo docs and update default values in _json vars
+    # Iterate over MongoDB cursor and update defaultdict values in _dict vars
     # This can throw IndexErrors which I am not catching
-    documents = []
-    years_types_dict = defaultdict(lambda: defaultdict(int)) #2 level deep defaultdict with in int
+    types_dict = defaultdict(lambda: defaultdict(int)) #2 level deep defaultdict with in int
     years_dict = defaultdict(int)
-
-    for doc in results:
-        documents.append(doc)
-        doc_year = int(doc['year'])
-        doc_type = doc['type']
-
-        years_dict[doc_year] += 1
-        years_types_dict[doc_year][doc_type] += 1
+    nsr_entries = []
+    for nsr_entry in results:
+        nsr_entries.append(nsr_entry)
+        nsr_year = int(nsr_entry['year'])
+        nsr_type = nsr_entry['type']
+        years_dict[nsr_year] += 1
+        types_dict[nsr_year][nsr_type] += 1
 
     year_start = min(years_dict.keys())
     year_end = max(years_dict.keys())
     nsr_types = ['JOUR', 'CONF', 'REPT', 'PC', 'BOOK', 'THESIS', 'PREPRINT', 'UNKNOWN']
 
+    # Transform year data to NVD3 format for multibar chart: [{x: 1989, y: 10}, {x: 1999, y: 20}, ...]
+    # Additionally we build x,y dicts for years that do not appear in the results to avoid sparse data
     year_json = [{'x': year, 'y': years_dict[year]} for year in range(year_start, year_end + 1)]
-    types_json = [{'key': _type, 'values': [ {'x': year, 'y': int(years_types_dict[year][_type])} for year in 
+
+    # Transforms year and type data to NVD3 format for multibar chart where each type is given a key
+    # We use the nsr_types list to ensure all types are represented even in sparse data
+    types_json = [{'key': _type, 'values': [ {'x': year, 'y': int(types_dict[year][_type])} for year in
         range(year_start, year_end + 1) ]} for _type in nsr_types]
 
     # Convert everything to JSON and ship it to the client
-    return toJson({'years': year_json, 'types': types_json, 'entries': documents})
+    return toJson({'years': year_json, 'types': types_json, 'entries': nsr_entries})
 
 
 # If executed directly from python interpreter, run local server
