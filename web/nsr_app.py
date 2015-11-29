@@ -3,6 +3,7 @@ from flask import Flask, jsonify, request, render_template
 import networkx as nx
 from networkx.readwrite import json_graph
 from itertools import combinations
+from collections import defaultdict
 import re
 import json
 from bson import json_util
@@ -203,15 +204,12 @@ def parse_search():
     year_list = re.findall(r"(?<![:=_])([12][0-9]{3})+", search)
     if len(year_list) == 1:
         pipeline.append({"$match": {"year": int(year_list[0])}})
-        year_json = [{'x': year_list[0], 'y': 0}]
     if len(year_list) == 2:
         year_start = int(min(year_list))
         year_end = int(max(year_list))
         pipeline.append({"$match": {"year": {"$gte": year_start, "$lte": year_end}}})
-        year_json = [{'x': year, 'y': 0} for year in range(year_start, year_end + 1)]
     if len(year_list)  > 2:
         pipeline.append({"$match": {"year": {"$in": year_list}}})
-        year_json = [{'x': year, 'y': 0} for year in year_list]
 
     author_tuples = re.findall(r"(?<![:=_])(([a-zA-Z]\.){1,3}[a-zA-Z-]+)+", search)
     if len(author_tuples) >= 1:
@@ -230,20 +228,18 @@ def parse_search():
     # Iterate over mongo docs and update default values in _json vars
     # This can throw IndexErrors which I am not catching
     documents = []
-    type_json = [{'label': 'JOUR', 'value': 0}, {'label': 'REPT', 'value': 0}, {'label': 'CONF', 'value': 0},
-        {'label': 'THESIS', 'value': 0}, {'label': 'PC', 'value': 0}, {'label': 'PREPRINT', 'value': 0},
-        {'label': 'BOOK', 'value': 0}, {'label': 'UNKNOWN', 'value': 0}]
+    years_dict = defaultdict(int)
+
     for doc in results:
         documents.append(doc)
-        # Find the dict with x == year in year_json and increment it
-        year = int(doc['year'])
-        year_json[year_json.index([_ for _ in year_json if _['x'] == year][0])]['y'] += 1
-        # Find the dict with x == year in year_json and increment it
-        nsr_type = str(doc['type'])
-        type_json[type_json.index([_ for _ in type_json if _['label'] == nsr_type][0])]['value'] += 1
+        doc_year = int(doc['year'])
+
+        years_dict[doc_year] += 1
+
+    year_json = [{'x': year, 'y': years_dict[year]} for year in range(min(years_dict.keys()), max(years_dict.keys()) + 1)]
 
     # Convert everything to JSON and ship it to the client
-    return toJson({'years': year_json, 'types': type_json, 'entries': documents})
+    return toJson({'years': year_json, 'entries': documents})
 
 
 # If executed directly from python interpreter, run local server
