@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+
+  <title>NSR Explorer</title>
+  <link href="static/right-fluid.css" media="screen" rel="stylesheet">
+  <link href="static/nv.d3.css" media="screen" rel="stylesheet">
+
+</head>
+
+<body>
+  <div class="columns-container">
+
+    <div class="sidebar">
+      <h1>Menu</h1>
+
+      <nav>
+        <ul class="nav">
+          <li>
+            <a href="#">Home</a>
+          </li>
+
+          <li>
+            <a href="#">Fake Link 1</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="right-column">
+      <h2>{{ header }}</h2>
+
+      <input id="omnisearch" type="search" name="userAction" placeholder="NSR Database Search..." autofocus="autofocus">
+      <button type="button" onclick="stackedBar(response.types)">Chart</button>
+      <button type="button" onclick="forceDirectedGraph(null, response.network.nodes, response.network.links, {})">Graph</button>
+
+      <div id="charts"> </div>
+
+    </div>
+
+    <div class="push"></div>
+  </div>
+
+  <footer>
+    <p>&copy;2015</p>
+  </footer>
+
+  <script src="static/seedrandom.js"></script>
+  <script src="static/d3.js" charset="utf-8"></script>
+  <script src="static/nv.d3.js" charset="utf-8"></script>
+  <script src="static/main.js"></script>
+  <script src="static/force-graph.js"></script>
+</body>
+</html>
