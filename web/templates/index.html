@@ -21,6 +21,11 @@
       </div>
       <div id="views-menu">
         <div class="view-button">
+          <a href="#" onclick="listEntries(response.entries)">
+            <span>List</span>
+         </a>
+        </div>
+        <div class="view-button">
           <a href="#" onclick="stackedBar(response.types)">
             <span>Charts</span>
          </a>
@@ -33,7 +38,9 @@
       </div>
     </div>
 
-    <div id="charts"></div>
+    <div id="contentContainer">
+        <div id="charts"></div>
+    </div>
 
     <div class="push"></div>
   </div>

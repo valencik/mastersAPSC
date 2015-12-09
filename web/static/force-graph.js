@@ -36,8 +36,8 @@ function forceDirectedGraph(error, nodes, links, options) {
         .on("zoom", zoomed);
 
     // Establish/instantiate an SVG container object
-    d3.select("#charts svg").remove()
-    var svg = d3.select("#charts").append("svg")
+    d3.select("#charts").remove()
+    var svg = d3.select("#contentContainer").append("div").attr("id", "charts").append("svg")
         .attr("height",height)
         .attr("width",width)
         .append("g")
@@ -125,8 +125,9 @@ function forceDirectedGraph(error, nodes, links, options) {
 }; // End forceDirectedGraph worker func
 
 function stackedBar(data) {
-    d3.select("#charts svg").remove()
-    d3.select("#charts").append("svg").attr("width", 600).attr("height", 400)
+    d3.select("#charts").remove()
+    d3.select("#contentContainer").append("div").attr("id", "charts").append("svg")
+        .attr("width", 600).attr("height", 400)
     nv.addGraph(function() {
         var chart = nv.models.multiBarChart().stacked(true);
 
@@ -145,4 +146,18 @@ function stackedBar(data) {
 
         return chart;
     });
+}
+
+function listEntries(data) {
+    d3.select("#charts").remove()
+    d3.select("#contentContainer").append("div").attr("id", "charts")
+    data.forEach(function (nsr){
+        d3.select("#charts").append("div").attr("class", "nsrEntry").attr("id", "id" + nsr._id)
+        var entry = d3.select("#id" + nsr._id)
+        entry.append("span").attr("class", "year").text(nsr.year);
+        entry.append("span").attr("class", "tile").text(nsr.title);
+        entry.append("p").attr("class", "authors").text(nsr.authors);
+        entry.append("p").attr("class", "selectors").text(nsr.selectors);
+    })
+
 }
