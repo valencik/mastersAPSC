@@ -10,71 +10,37 @@
 
 function forceDirectedGraph(error, nodes, links, options) {
 
-    // Set up seeded random number generator
-    Math.seedrandom('hello.');
-    console.log(Math.random());
+    d3.select("#charts").remove()
+    var svg = d3.select("div#contentContainer")
+       .append("div")
+       .classed("svg-container", true) //container class to make it responsive
+       .attr("id", "charts")
+       .append("svg")
+       //responsive SVG needs these 2 attributes and no width and height attr
+       //.attr("preserveAspectRatio", "xMinYMin meet")
+       .attr("viewBox", "0 0 1000 1000")
+       //class to make it responsive
+       .classed("svg-content-responsive", true);
 
-    // Setup spacing
-    var margin = {top: -5, right: -5, bottom: -5, left: -5};
-    var width = self.frameElement ? 960 : innerWidth;
-    var height = self.frameElement ? 500 : innerHeight;
-    width = width - margin.left - margin.right,
-    height = height - margin.top - margin.bottom;
-
-    // Intialize variables for semantic zooming
-    var scaleFactor = 1;
-    var translation = [0,0];
+    var container = svg.append("g")
 
     // Optional radius customization or set default
     var radius = options.radius || 5;
     // Set the color scale we want to use
     var color = d3.scale.category20();
 
-    // Set the zoom minimum and maximum levels
-    var zoom = d3.behavior.zoom()
-        .scaleExtent([0.5, 5])
-        .on("zoom", zoomed);
-
-    // Establish/instantiate an SVG container object
-    d3.select("#charts").remove()
-    var svg = d3.select("#contentContainer").append("div").attr("id", "charts").append("svg")
-        .attr("height",height)
-        .attr("width",width)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.right + ")")
-        .call(zoom);
-
-    // Make an invisible rectangle to facilitate zooming/dragging anywhere
-    var rect = svg.append("rect")
-        .attr("width", width)
-        .attr("height", height)
-        .style("fill", "none")
-        .style("pointer-events", "all");
-
-    // Initialize container
-    var container = svg.append("g");
-    container.append("g");
-
-    // Establish the dynamic force behavor of the nodes
-    var force = d3.layout.force()
-        .on("tick", tick)
-        .nodes(nodes)
-        .links(links)
-        .size([width,height])
-        .linkDistance(options.links || 30)
-        .charge(options.charge || -120)
-        .friction(options.friction || 0.8)
-        .gravity(options.gravity || 0.1)
-        .start();
-
     // Draw the edges/links between the nodes
     var edges = container.selectAll("line")
         .data(links)
         .enter()
         .append("line")
-        .style("stroke", "#999")
-        .style("stroke-opacity", ".8")
-        .style("stroke-width", 1);
+        .style("stroke", "#666")
+        .style("stroke-opacity", ".2")
+        .style("stroke-width", 1)
+        .attr("x1", function(d) { return nodes[d.source].x; })
+        .attr("y1", function(d) { return nodes[d.source].y; })
+        .attr("x2", function(d) { return nodes[d.target].x; })
+        .attr("y2", function(d) { return nodes[d.target].y; });
 
     // Options node labels
     if (options.labels) {
@@ -97,30 +63,8 @@ function forceDirectedGraph(error, nodes, links, options) {
         .style("fill", function(d,i) { return color(i); })
         .style("stroke", "#fff")
         .style("stroke-width", "1.5px")
-
-    // Optional dragging
-    if (options.drag){nodes.call(force.drag);}
-
-    // Set positions of elements
-    function tick() {
-        edges.attr("x1", function(d) { return translation[0] + scaleFactor*d.source.x; })
-             .attr("y1", function(d) { return translation[1] + scaleFactor*d.source.y; })
-             .attr("x2", function(d) { return translation[0] + scaleFactor*d.target.x; })
-             .attr("y2", function(d) { return translation[1] + scaleFactor*d.target.y; });
-        nodes.attr("cx", function(d) { return translation[0] + scaleFactor*d.x; })
-             .attr("cy", function(d) { return translation[1] + scaleFactor*d.y; });
-        if(options.labels){
-             texts.attr("x", function(d) { return translation[0]+ radius + scaleFactor*d.x; })
-                  .attr("y", function(d) { return translation[1]+ radius + scaleFactor*d.y; });
-        }
-    } // End tick func
-
-    // Zooming function
-    function zoomed() {
-      scaleFactor = d3.event.scale;
-      translation = d3.event.translate;
-      tick(); //update positions
-    }
+        .attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; })
 
 }; // End forceDirectedGraph worker func
 

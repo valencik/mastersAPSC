@@ -253,15 +253,24 @@ def parse_search():
                 for i in combinations(nsr_entry['authors'], 2):
                     G.add_edge(i[0], i[1])
 
-    # Clean up network-graph
+    # Layout graph
     G.add_nodes_from(author_nodes)
-    graphs = list(nx.connected_component_subgraphs(G))
-    graphs.sort(key = lambda x: -x.number_of_edges())
+    dist_scale = pow(G.number_of_nodes(), -0.3)
+    positions=nx.spring_layout(G, k=dist_scale)
+
+    # Split network-graph into components
     if 'topnetwork' in options and int(options['topnetwork']) != 0:
+        graphs = list(nx.connected_component_subgraphs(G))
+        graphs.sort(key = lambda x: -x.number_of_edges())
         top_num = int(options['topnetwork'])
         network_data = json_graph.node_link_data(graphs[top_num-1])
     else:
         network_data = json_graph.node_link_data(G)
+
+    # Add positions to network_data
+    for n in network_data['nodes']:
+        n['x'] = int(positions[n['id']][0]*500+500)
+        n['y'] = int(positions[n['id']][1]*500+500)
 
     year_start = min(years_dict.keys())
     year_end = max(years_dict.keys())
