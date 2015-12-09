@@ -229,7 +229,7 @@ def parse_search():
     # Format data with a projection and then perform the aggregation
     # The pipeline before projection is a good candidate for building a cache
     pipeline.append({"$project":
-        {"_id": 1, "year": 1, "authors": 1, "type": 1, "selectors": "$selectors.value"}})
+        {"_id": 1, "year": 1, "authors": 1, "type": 1, "selectors": "$selectors.value", "title": 1}})
     results = nsr.aggregate(pipeline)
 
     # Iterate over MongoDB cursor and update defaultdict values in _dict vars
