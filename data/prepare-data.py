@@ -69,6 +69,14 @@ if 'NSR' not in db.collection_names():
         sys.exit("ERROR: Could not find data files NSR.json or mastersNSRDataDump.tbz2")
 print("Found NSR collection...")
 
+# Ensure indexing for NSR collection
+if 'NSR' in db.collection_names():
+    db.NSR.create_index("year")
+    db.NSR.create_index("authors")
+    db.NSR.create_index("type")
+    db.NSR.create_index("selectors.type")
+    db.NSR.create_index("selectors.value")
+
 # Create collection authorSummary
 if 'authorSummary' not in db.collection_names():
     print("Collection authorSummary not found, creating...")
@@ -81,6 +89,12 @@ if 'authorSummary' not in db.collection_names():
         {"$out": "authorSummary"}
     ], allowDiskUse=True)
 
+# Ensure indexing for authorSummary collection
+if 'authorSummary' in db.collection_names():
+    db.authorSummary.create_index("coauthors")
+    db.authorSummary.create_index("years")
+    db.authorSummary.create_index("papers")
+
 # Create collection authorSummaryByYear
 if 'authorSummaryByYear' not in db.collection_names():
     print("Collection authorSummaryByYear not found, creating...")
@@ -92,6 +106,11 @@ if 'authorSummaryByYear' not in db.collection_names():
             "$addToSet": "$copyauthors"}, "papers": {"$addToSet": "$_id"}}},
         {"$out": "authorSummaryByYear"}
     ], allowDiskUse=True)
+
+# Ensure indexing for authorSummaryByYear collection
+if 'authorSummaryByYear' in db.collection_names():
+    db.authorSummaryByYear.create_index("coauthors")
+    db.authorSummaryByYear.create_index("papers")
 
 
 # Generate authorSummary tsv for clustering
