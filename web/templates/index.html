@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+
+  <title>NSR Explorer</title>
+  <link href="static/right-fluid.css" media="screen" rel="stylesheet">
+  <link href="static/nv.d3.css" media="screen" rel="stylesheet">
+
+</head>
+
+<body>
+  <div class="columns-container">
+
+    <div class="menu">
+      <div id="logo">
+        <h1>NSR Explorer</h1>
+      </div>
+      <div id="search-area">
+        <input id="omnisearch" type="search" name="userAction" placeholder="NSR Database Search..." autofocus="autofocus">
+      </div>
+      <div id="views-menu">
+        <div class="view-button">
+          <a href="#" onclick="listEntries(response.entries)">
+            <span>List</span>
+         </a>
+        </div>
+        <div class="view-button">
+          <a href="#" onclick="stackedBar(response.types)">
+            <span>Charts</span>
+         </a>
+        </div>
+        <div class="view-button">
+          <a href="#" onclick="forceDirectedGraph(null, response.network.nodes, response.network.links, {})">
+            <span>Graph</span>
+         </a>
+        </div>
+      </div>
+    </div>
+
+    <div id="contentContainer">
+        <div id="charts"></div>
+    </div>
+
+    <div class="push"></div>
+  </div>
+
+  <footer>
+    <p>Created by Andrew Valencik &copy;2015</p>
+  </footer>
+
+  <script src="static/seedrandom.js"></script>
+  <script src="static/d3.js" charset="utf-8"></script>
+  <script src="static/nv.d3.js" charset="utf-8"></script>
+  <script src="static/main.js"></script>
+  <script src="static/force-graph.js"></script>
+</body>
+</html>
