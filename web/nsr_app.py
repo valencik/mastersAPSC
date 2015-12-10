@@ -256,7 +256,8 @@ def parse_search():
     # Layout graph
     G.add_nodes_from(author_nodes)
     dist_scale = pow(G.number_of_nodes(), -0.3)
-    positions=nx.spring_layout(G, k=dist_scale)
+    positions=nx.spring_layout(G, k=dist_scale, iterations=75)
+    #positions=nx.spectral_layout(G)
 
     # Split network-graph into components
     if 'topnetwork' in options and int(options['topnetwork']) != 0:
