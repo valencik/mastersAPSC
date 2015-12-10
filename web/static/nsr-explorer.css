@@ -1,0 +1,65 @@
+html {
+    box-sizing:border-box;
+    font-family: sans-serif;
+    height: 100%;
+}
+
+body {
+    margin:0 auto;
+    height: 100%;
+}
+
+footer,header {
+    clear:both
+}
+
+.menu {
+    background-color: #302040;
+    color: #fff;
+}
+
+h1 {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+#search-area {
+    width: 80%;
+    margin: 0 auto;
+}
+
+#omnisearch {
+    font-size: larger;
+    width: 100%;
+}
+
+.view-button {
+    display: inline-block;
+    padding-left: 1em;
+}
+
+a:link, a:visited, a:active {
+    color: #fff;
+    text-decoration: none
+}
+
+footer a:link {
+    color: #000
+}
+
+.svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* aspect ratio */
+    vertical-align: top;
+    overflow: hidden;
+}
+.svg-content-responsive {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
