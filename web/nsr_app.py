@@ -8,12 +8,20 @@ import re
 import json
 from bson import json_util
 from bson.objectid import ObjectId
+import csv
 
 def toJson(data):
     """
     Convert Mongo object(s) to JSON
     """
     return json.dumps(data, default=json_util.default)
+
+# Read in static cluster info
+cluster_info = defaultdict(int)
+with open('../data/results/k3p3c0.tsv') as cluster_file:
+    cluster_reader = csv.reader(cluster_file, delimiter='\t')
+    for author_line in cluster_reader:
+        cluster_info[author_line[0]] = author_line[1]
 
 # Setup the connection to MongoDB and get the NSR collection
 client = MongoClient('localhost', 27017)
@@ -272,6 +280,7 @@ def parse_search():
     for n in network_data['nodes']:
         n['x'] = int(positions[n['id']][0]*500+500)
         n['y'] = int(positions[n['id']][1]*500+500)
+        n['k'] = cluster_info[n['id']]
 
     year_start = min(years_dict.keys())
     year_end = max(years_dict.keys())

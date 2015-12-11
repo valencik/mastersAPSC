@@ -27,7 +27,7 @@ function forceDirectedGraph(error, nodes, links, options) {
     // Optional radius customization or set default
     var radius = options.radius || 5;
     // Set the color scale we want to use
-    var color = d3.scale.category20();
+    var color = d3.scale.category10();
 
     // Draw the edges/links between the nodes
     var edges = container.selectAll("line")
@@ -60,7 +60,7 @@ function forceDirectedGraph(error, nodes, links, options) {
         .enter()
         .append("circle")
         .attr("r", radius)
-        .style("fill", function(d,i) { return color(i); })
+        .style("fill", function(d,i) { return color(d.k); })
         .style("stroke", "#fff")
         .style("stroke-width", "1.5px")
         .attr("cx", function(d) { return d.x; })
