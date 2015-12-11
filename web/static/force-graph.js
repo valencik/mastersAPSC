@@ -99,9 +99,9 @@ function listEntries(data) {
         d3.select("#charts").append("div").attr("class", "nsrEntry").attr("id", "id" + nsr._id)
         var entry = d3.select("#id" + nsr._id)
         entry.append("span").attr("class", "year").text(nsr.year);
-        entry.append("span").attr("class", "tile").text(nsr.title);
-        entry.append("p").attr("class", "authors").text(nsr.authors);
-        entry.append("p").attr("class", "selectors").text(nsr.selectors);
+        entry.append("span").attr("class", "title").text(nsr.title);
+        entry.append("p").attr("class", "authors").text(nsr.authors.join(", "));
+        entry.append("p").attr("class", "selectors").text("Selectors: " + nsr.selectors.join(", "));
     })
 
 }
