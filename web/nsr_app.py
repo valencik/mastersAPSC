@@ -9,6 +9,7 @@ import json
 from bson import json_util
 from bson.objectid import ObjectId
 import csv
+import numpy as np
 
 def toJson(data):
     """
@@ -264,6 +265,8 @@ def parse_search():
     # Layout graph
     G.add_nodes_from(author_nodes)
     dist_scale = pow(G.number_of_nodes(), -0.3)
+    # Fix Numpy random seed to generate reproducible graphs
+    np.random.seed(0)
     positions=nx.spring_layout(G, k=dist_scale, iterations=75)
     #positions=nx.spectral_layout(G)
 
