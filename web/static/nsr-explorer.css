@@ -37,6 +37,7 @@ h1 {
 .view-button {
     display: inline-block;
     padding-left: 1em;
+    text-decoration: underline;
 }
 
 a:link, a:visited, a:active {
@@ -60,9 +61,8 @@ footer a:link {
     display: inline-block;
     position: absolute;
     top: 10px;
-    left: 0;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 5em;
+    padding-bottom: 5em;
 }
 
 .nsrEntry {

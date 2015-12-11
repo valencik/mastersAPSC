@@ -281,8 +281,8 @@ def parse_search():
 
     # Add positions to network_data
     for n in network_data['nodes']:
-        n['x'] = int(positions[n['id']][0]*500+500)
-        n['y'] = int(positions[n['id']][1]*500+500)
+        n['x'] = int(positions[n['id']][0]*400+400)
+        n['y'] = int(positions[n['id']][1]*400+400)
         n['k'] = cluster_info[n['id']]
 
     year_start = min(years_dict.keys())
