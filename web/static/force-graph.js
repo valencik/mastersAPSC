@@ -51,6 +51,8 @@ function forceDirectedGraph(error, nodes, links, options) {
             .attr("fill", "black")
             .attr("font-family", "sans-serif")
             .attr("font-size", "12px")
+            .attr("x", function(d) { return d.x + 5; })
+            .attr("y", function(d) { return d.y + 5; })
             .text(function(d) { return d.id; });
     }
 
@@ -62,7 +64,7 @@ function forceDirectedGraph(error, nodes, links, options) {
         .attr("r", radius)
         .style("fill", function(d,i) { return color(d.k); })
         .style("stroke", "#fff")
-        .style("stroke-width", "1.5px")
+        .style("stroke-width", "1px")
         .attr("cx", function(d) { return d.x; })
         .attr("cy", function(d) { return d.y; })
 
