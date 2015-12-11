@@ -34,7 +34,7 @@ db = client['masters']
 if 'authorSummary' not in db.collection_names():
     sys.exit("ERROR: Collection 'authorSummary' was not found. Inspect database and run 'prepare-data.py' if needed.")
 else:
-    author_reader = csv.reader(membership_document, delimiter=',')
+    author_reader = csv.reader(membership_document, delimiter='\t')
     for author_line in author_reader:
         author = author_line[0]
         cluster_membership = author_line[1]

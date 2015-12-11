@@ -52,16 +52,16 @@ for (numCenters in numCentersMin:numCentersMax) {
     # Record cluster analysis measurements to file
     writeLines("Recording clustering results to file...")
     clusterIndexes = rbind(numCenters, km$betweenss, km$tot.withinss, km$totss, dbi$DB, g1i)
-    write(clusterIndexes, file=paste0(outDir, outputName, "cluster-analysis.csv"), append=analysisAppend, ncolumns=6, sep=',')
+    write(clusterIndexes, file=paste0(outDir, outputName, "cluster-analysis.csv"), append=analysisAppend, ncolumns=6, sep='\t')
 
     # Write cluster centers to a file
     write.csv(km$centers, file=paste0(outDir, outputName, numCenters,"cluster-centers.csv"))
     
     # Write cluster membership to a file
-    write(t(cbind(array(row.names(data)),km$cluster)), file=paste0(outDir, outputName, numCenters,"cluster-memberships.csv"), ncolumns=2, sep=',')
+    write(t(cbind(array(row.names(data)),km$cluster)), file=paste0(outDir, outputName, numCenters,"cluster-memberships.csv"), ncolumns=2, sep='\t')
     
     # Write the sizes of the clusters to a file
-    write((km$size), file=paste0(outDir, outputName, numCenters,"cluster-sizes.csv"), ncolumns=numCenters, sep=',')
+    write((km$size), file=paste0(outDir, outputName, numCenters,"cluster-sizes.csv"), ncolumns=numCenters, sep='\t')
 
     # Some plotting
     png(filename=paste0("images/", outputName, numCenters, "clusters.png"), width=1200, height=1200)
@@ -69,7 +69,7 @@ for (numCenters in numCentersMin:numCentersMax) {
 }
 
 # Plot Cluster Images
-data = read.csv(file=paste0(outDir, outputName, "cluster-analysis.csv"), header=FALSE)
+data = read.csv(file=paste0(outDir, outputName, "cluster-analysis.csv"), header=FALSE, sep='\t')
 x = data[,1]
 
 png(file=paste0("images/", outputName, "-totss-clusters.png"), width=800, height=800)
