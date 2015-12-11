@@ -191,6 +191,9 @@ Copublications are edges or links
 
 Frequent pattern mining
 
+- Author Names
+- Selectors
+
 
 # Reactions
 
