@@ -30,7 +30,7 @@ These projects are generalized to accommodate all sciences.
 Information retrieval and data exploration can be improved by customizing an application to a specific domain.
 
 %- NNDC and NSR
-The United States [National Nuclear Data Center](http://www.nndc.bnl.gov) (NNDC) prepares an evaluated database of nuclear science literature that poses a rich opportunity for knowledge discovery directed at the scientific work and study.
+The United States [National Nuclear Data Center](http://www.nndc.bnl.gov) (NNDC) prepares an evaluated database of nuclear science literature that poses a rich opportunity for knowledge discovery directed at scientific work and study.
 The academic field of nuclear science is over one hundred years old, starting with the discovery of radiation @becquerel.
 This discovery is the first of many entries in the Nuclear Science References database, collected, cataloged, distributed, and evaluated by the National Nuclear Data Center @Kurgan200603.
 The Nuclear Science References, or NSR, has over 210,000 entries documenting the body of nuclear science literature, which provides the opportunity for knowledge discovery on the literature's metadata.
@@ -45,12 +45,12 @@ The ultimate goal is to enable further analysis on the body of nuclear science l
 
 %- Background info spread throughout
 This is a thesis that applies science from one domain to science from another domain.
-To facilitate understanding, by all readers, no matter their expertise, background information is placed in the thesis close to where it is used.
+To facilitate understanding by all readers, no matter their expertise, background information is placed in the thesis close to where it is used.
 Thus, this thesis has no "theory" chapter, as essential knowledge is provided in the chapters that require it.
 
 ## Thesis Organization
 The existing NSR website and interface are outlined in this introduction chapter.
-Additionally the web application created as a result of this work is discussed.
+Additionally, the web application created as a result of this work is discussed.
 
 The transformation of the provided raw data is discussed in the [Data Preparation](#data-preparation) and [Data Representation](#data-representation) sections.
 The data are stored in a database as discussed in [The Database](#the-database).
@@ -67,9 +67,9 @@ The Libraries used are discussed as well as an exportation feature.
 
 Chapter 5 details the usage of tools and techniques from text mining.
 A paper recommender system is built in the [Similar Papers](#similar-papers) section by using a modification of cosine similarity.
-The second component of this chapter analyzes author names to build a system of finding authors that may have multiple identifications in the NSR.
+The second component of this chapter analyzes author names to build a system of finding authors who may have multiple identifications in the NSR.
 
-Chapter 6 discusses two common data mining techniques and their application with regard to the NSR data.
+Chapter 6 discusses two common data mining techniques and their applications with regard to the NSR data.
 Association mining is performed on nuclides in papers, author names in papers, and author names in selectors.
 In the [Cluster Analysis](#cluster-analysis) section, K-means is used to cluster authors.
 
@@ -77,7 +77,7 @@ Finally, we review the contributions and discuss future works in the [Conclusion
 
 ## The Nuclear Science References Website
 %- Link to Data section
-Please note, the data that these interfaces interact with and return as results is fully discussed in the [Data and Database](#the-data-and-database) section.
+Please note, the data that these interfaces interact with and return as results are fully discussed in the [Data and Database](#the-data-and-database) section.
 
 The NNDC maintains the [NSR website](http://www.nndc.bnl.gov/nsr/) which serves a web interface to the Nuclear Science References database.
 The functionality and architecture of the NSR database and web site is discussed by Pritychenko in @NSRweb.
@@ -121,8 +121,8 @@ Users can combine the results of recent queries with boolean logic.
 Analysis is offered on the search queries which displays how many nuclides, authors, journals, and publication years the query involved.
 
 ## NSR Explorer - Web Application
-As a result of this thesis, we have developed a web application, NSR Explorer, to increase accessibility to exploration of the Nuclear Science References data.
-This includes the authors documented, the entries recorded and keyworded, their links, and all available metadata for the nearly 120 years.
+As a contribution to this thesis, we have developed a web application, NSR Explorer, to increase accessibility to exploration of the Nuclear Science References data.
+This includes the authors documented, the entries recorded and keyworded, their links, and all available metadata for the nearly 120 years of records.
 The application makes use of a web interface to aid in increasing accessibility.
 All that is required to use the application is a modern web browser.
 Interactive visualizations are used to encourage exploration of the data.
@@ -168,9 +168,9 @@ The work discussed in this chapter is motivated by the need to easily retrieve i
 We first discuss the NSR data as provided by the NNDC @borris-data.
 Special attention is given to the keyword abstracts as the metadata they provided is what sets the NSR data apart from other bibliographic databases.
 Then the method for converting the provided raw data into our JSON representation is discussed.
-The MongoDB database software is introduced and its Aggregation Framework is discussed.
+The MongoDB database software is introduced and its aggregation framework is discussed.
 The mechanics of transform and importing the data are not fully described in this text.
-Instead the conversion and importing procedures have all been scripted and made available as included source code in the Appendix.
+Instead, the conversion and importing procedures have all been scripted and made available as included source code in the Appendix.
 
 ## NSR Data
 %- NSR EXCHANGE format discussion
@@ -209,7 +209,7 @@ Table: The nine legal record identifiers from the Nuclear Science References Cod
 The `<KEYNO   >` field is a unique key number assigned to each NSR entry.
 The date on which a particular entry was added to the database or last modified is encoded in the `<HISTORY >` field.
 The `<CODEN   >` and `<REFRENCE>` fields contain information about the journal or other type of resource the document came from.
-The `<AUTHORS >` field is a comma separated list of author names.
+The `<AUTHORS >` field is a comma-separated list of author names.
 The author list is one of the key relational components of the data, establishing links between NSR entries and other authors.
 The `<TITLE   >` field is a free text field representing the title of the reference with a custom set of abbreviations for special characters like Greek letters.
 These abbreviations are detailed in the NSR coding manual @nsr-manual.
@@ -233,12 +233,12 @@ For example, the `<KEYWORDS>` field in Snippet \ref{blk:rawNSRentry} encodes tha
 $^{232}\mbox{Th}$, $^{232}\mbox{U}$, $^{234}\mbox{U}$, $^{236}\mbox{U}$, and $^{238}\mbox{U}$.
 
 It is this structure that provides the most semantic information about the NSR entry.
-Thanks to the careful work of the NSR maintainers, the `<KEYWORDS>` and resulting `<SELECTRS>` fields reveal the NSR entry's content in a machine readable manner.
+Thanks to the careful work of the NSR maintainers, the `<KEYWORDS>` and resulting `<SELECTRS>` fields reveal the NSR entry's content in a machine-readable manner.
 Without this information any data mining project using the content of the NSR entries would require raw text access to the either the full document or the abstract.
-Unfortunately, getting full text access to thousands of papers is often significantly challenged by copyright laws.
+Getting full text access to thousands of papers is often significantly challenged by copyright laws.
 
 The selectors are computer generated from the keyword abstracts.
-The schema used in this work, as discussed in [Data Representation](#data-representation) has `<SELECTRS>` parsed into a 3 dimensional array with `type`, `value`, and `subkey` variables.
+The schema used in this work, as discussed in [Data Representation](#data-representation), has `<SELECTRS>` parsed into a 3 dimensional array with `type`, `value`, and `subkey` variables.
 The following quote from the NSR Coding Manual @nsr-manual describes the valid `type`s:
 
 > N, T, P, G, R, S, M, D, C, X, A, or Z, which stand for nuclide, target, parent, daughter, reaction, subject, measured, deduced, calculated, other subject, mass range, and charge range, respectively. @nsr-manual
@@ -256,7 +256,7 @@ The data needs to be parsed into data structures for analysis and use.
 The approach least likely to introduce errors is to transform the data into a common format for which parsers already exist.
 
 [JavaScript Object Notation](http://json.org), or JSON, was chosen as the data format for this work.
-While other data formats could have sufficed (perhaps [YAML](http://yaml.org), for example), certain common data formats like comma separated values (csv) would have been more difficult.
+While other data formats could have sufficed (perhaps [YAML](http://yaml.org), for example), certain common data formats like comma-separated values (csv) would have been more difficult.
 JSON met the following requirements: support for arrays, openly available, well-supported, with an established user community, and it was familiar to the author.
 The requirement for array support is discussed further in the [Data Representation](#data-representation) section.
 
@@ -266,7 +266,7 @@ A key is a unique string that maps to a value.
 A value can be a string, a number, an array, or another object.
 Similarly, arrays can contain strings, numbers, objects or additional arrays.
 The arrays in JSON may be considered as ordered lists by some as they can contain elements of mixed types.
-However, the arrays in our data do not contain mixed types.
+However, the arrays in the NSR data do not contain mixed types.
 Snippet \ref{blk:rawNSRJSON} shows an example of a JSON object and the final representation of an NSR entry.
 
 [^json-document]: These objects are referred to as documents once stored in the database. See [The Database](#the-database).
@@ -295,7 +295,7 @@ The representation of the author list as an array instead of a free text field i
 With this structure comes information and ease of computing different properties of that data.
 The length of the array tells us how many authors collaborated on a given NSR entry.
 And since arrays are ordered, we can easily determine the first author[^first-author] of an entry.
-While it is possible to extract the same information from a free text field, parsing our data into data structures creates structures that are compatible with many tools, such as our database.
+While it is possible to extract the same information from a free text field, parsing our data into data structures creates structures that are compatible with many tools, such as [MongoDB](#mongodb).
 Users of the database can now sort entries by their number of authors, or count the number of times someone was first author.
 Additionally, almost every aggregation query[^see-aggregation] made in our work relied on using array specific operations on the author array at some stage.
 
@@ -306,7 +306,7 @@ Additionally, almost every aggregation query[^see-aggregation] made in our work 
 It is possible to store the NSR data in a relational model.
 In a relational database the authors would have their own tables, separate from papers, as they are separate entities.
 This inefficient choice would entail a table and data schema created for the papers and then a separate table and schema for the authors, and similarly for keywords, selectors, and history.
-However, it is more efficient to convert the original data into a data schema that uses arrays.
+It is more efficient to convert the original data into a data schema that uses arrays.
 This is the primary motivator for not using a standard relational database.
 
 ## Data Representation
@@ -326,7 +326,7 @@ The `DOI` value is a string of the Digital Object Identifier for the published r
 Finally, the `simPapers` value is an array that contains objects, where each object refers to another NSR entry that is above a minimum similarity threshold.
 The objects in `simPapers` are determined via calculation which is discussed in [Similar Papers](#similar-papers).
 
-``` {#blk:rawNSRJSON .json caption="An example NSR entry showing the final data representation as a JSON object. Note that newlines are ignored in JSON and only present for readability. Also note that the order of keys and values in an object is not garunteed to be preserved, as can be seen from the `selectors` objects." fontsize=\footnotesize breaklines=true baselinestretch=1}
+``` {#blk:rawNSRJSON .json caption="An example NSR entry showing the final data representation as a JSON object. Note that newlines are ignored in JSON and only present for readability. Also note that the order of keys and values in an object is not garunteed to be preserved, as can be seen from the \texttt{selectors} objects." fontsize=\footnotesize breaklines=true baselinestretch=1}
 {
   "_id": "1988AB01",
   "year": 1988,
@@ -385,7 +385,7 @@ This section will detail our choice in database software, how queries are made, 
 ### MongoDB
 [MongoDB](https://www.mongodb.org) is an open source NoSQL document store database system.
 It was chosen because it is open source, easy to use, well supported, and the author is familiar with it.
-Additionally it has nice features such as JSON support, an aggregation framework (see [MongoDB Aggregation Framework](#mongodb-aggregation-framework)), and is easy to setup.
+Additionally it has nice features such as JSON support, an aggregation framework (see [MongoDB Aggregation Framework](#mongodb-aggregation-framework)), and is easy to set up.
 
 Other NoSQL databases like CouchDB support JSON and may have been acceptable as well.
 MongoDB and CouchDB are both comparatively new database systems.
@@ -397,7 +397,8 @@ Authors would be a type of entity in their own authors table, that each NSR entr
 This type of relationship would be necessary for keywords and selectors as well.
 
 As reported in the section [Data Preparation](#data-preparation), a JSON object was constructed for each entry in the NSR data.
-We create a database in MongoDB titled `masters`, this database will hold multiple collections.
+We create a database in MongoDB titled `masters`.
+This database will hold multiple collections.
 MongoDB collections store multiple documents.
 Each JSON object is a document in MongoDB terminology.
 To populate the MongoDB database, these JSON structures were flattened into a single file, and imported into a MongoDB collection using the [`mongoimport` tool](http://docs.mongodb.org/manual/reference/program/mongoimport/).
@@ -420,7 +421,7 @@ db.NSR.find({"year": {"$gte": 1970, "$lt": 1980}})
 The performance of the database can be optimized by indexing on important or frequently referenced fields such as "authors" and "year".
 Indexing speeds up search queries in a manner similar to sorting a series of data elements.
 MongoDB allows for many different types of indexes.
-We create a single field indexes on the `_id`, `year`, `authors`, `selectors.type`, `selectors.value`, and `type` fields[^dot-notation].
+We create single field indexes on the `_id`, `year`, `authors`, `selectors.type`, `selectors.value`, and `type` fields[^dot-notation].
 This enables fast lookups for documents[^documents] according to the indexed fields.
 For example it would be quick to find all the documents with type 'Journal' and year '1983'.
 Text indexes can also be created to enable fast search of words in the titles or keyword fields.
@@ -437,9 +438,11 @@ These issues, and additional performance configurations will not be further addr
 They are however addressed in the code repository for this work available at: [github.com/valencik/mastersAPSC](https://github.com/valencik/mastersAPSC).
 
 ### MongoDB Aggregation Framework
-The MongoDB Aggregation Framework is powerful and enables data manipulation similar to that obtain in SQL via the `GROUP BY` operation @wiki-mongodb.
+The MongoDB aggregation framework is powerful and enables data manipulation similar to that obtain in SQL[^sql] via the `GROUP BY` operation @wiki-mongodb.
 There are a handful of simple aggregation operations that can be piped together to build complex queries.
 All aggregation operations take in a list of data documents, manipulate them in some way, and then output the results to the next operation.
+
+[^sql]: SQL or Structured Query Language is a common programming language for interacting with data.
 
 The `match` operation acts as a filter, returning only the documents that meet the specified criteria.
 The `project` operation manipulates each individual document renaming, omitting, or changing each field according to the input parameters.
@@ -475,7 +478,7 @@ Data Summarization
 %- What? Created summaries and ranked info in a web app.
 %- Why? Visualizations are important in understanding data. As are summaries and rankings.
 %- How? MongoDB aggregations to D3 charts.
-This chapter introduces the queries that can be run on the database constructed in [The Data and Database](#this-data-and-database) section.
+This chapter introduces the queries that can be run on the database constructed in [The Data and Database](#the-data-and-database) section.
 Examples are shown that filter the data using constraints on different data types such as year ranges or author names.
 Bar charts and pie charts are introduced for visualizing the data.
 
@@ -579,17 +582,17 @@ Table: The top 10 most prolific authors in the NSR database. {#tbl:prolific-auth
 There is a wide range in publication numbers among the roughly $100,000$ authors in the NSR.
 Table @tbl:prolific-authors shows the upper bound in publication numbers, and $41254$ authors share the lower bound of one publication.
 These are authors with different publication traits (a topic that is further explored in [Cluster Analysis](#cluster-analysis)).
-We want to learn something about the structure of author contributions.
+We want to enable discovery about the structure of author contributions.
 Are the majority of NSR entries contributed by the many authors who publish once or the few with hundreds of publications?
 
 The database can be used to answer a similar question:
-How many of the NSR entries are affected if every author below a certain publication amount is removed?
-First every paper is taken and duplicated for every single author in that paper's author list.
+How many of the NSR entries are affected if every author who contributed to fewer than a given number of entries is removed?
+First, every paper is taken and duplicated for every single author in that paper's author list.
 There is now a database object for each author in each paper.
 Each time an author appears their publication count increments.
 Next, each database object that has an author with a publication count below the cutoff is removed.
-Finally the unique remaining NSR entries are the ones that have authors with more than one publication count.
-Table @tbl:papersWithoutNAuthors shows the number of NSR entries that remain once all the authors with a specified publication count are removed[^code-papersWithoutNAuthors].
+Finally, the unique remaining NSR entries are the ones that have authors with more than the given publication count.
+Table @tbl:papersWithoutNAuthors shows the number of NSR entries that remain after all the authors with a specified publication count are removed[^code-papersWithoutNAuthors].
 Note that the starting number is $190654$ not $212835$ as quite a few NSR entries do not have an author field.
 Table @tbl:typesWithoutAuthors shows a breakdown of the NSR entry types that do not have authors.
 A large percentage of those entries without author fields are reports and conference proceedings[^no-author-jour].
@@ -627,7 +630,7 @@ Total      22181
 
 Table: Types without any authors. {#tbl:typesWithoutAuthors}
 
-The relationship between publication amount cutoff and NSR entries remaining is quite consistent.
+The relationship between publication amount cutoff and NSR entries remaining is consistent.
 The same data in Table @tbl:papersWithoutNAuthors is plotted in Figure @fig:papersWithoutNAuthors.
 
 ![NSR entries remaining after author removal](images/papersWithoutNAuthors.png) {#fig:papersWithoutNAuthors}
@@ -645,13 +648,13 @@ Consider Figure @fig:nsrhisto, which quickly demonstrates that the majority of N
 
 ![A histogram of all NSR entries published from 1896 to 2014](images/NSR-yearly-histogram.pdf){#fig:nsrhisto}
 
-The comparatively low publication numbers in the first 50 years was a useful property of the dataset.
+The fact that there were comparatively low publication numbers in the first 50 years was a useful property of the dataset.
 It permitted testing data analysis code on small portions of the data (years pre 1950), before applying the code to the full dataset.
 This was helpful in developing the network analysis code and visualizations, as post 1950 the networks are too large to process quickly.
 
 There are two primary visual methods for displaying summary information in this application: histograms and pie charts.
 The histograms, as seen in Figure @fig:nsrhisto, can show how a slice of the database evolves over time.
-It is also useful to see amounts in categorical data.
+They are also useful to see amounts in categorical data.
 Figure @fig:viz-types-histo shows the amount of each different document type in the NSR database.
 
 ![A histogram showing the contribution types over all years](images/viz-types-NSR-histo.png){#fig:viz-types-histo}
@@ -674,9 +677,9 @@ The list of authors of a paper is used to build a network graph of authors and t
 In this work, the word 'graph' will always refer to the mathematical representation of a set of objects and their links.
 
 %- Motivation
-Exploring the NSR data has been a core motivation for this work.
+Enabling exploration of the NSR data has been a core motivation for this work.
 Transforming the NSR data into a network graph has enabled new questions and analyses.
-Additionally network graphs lend themselves well to interesting visualizations which has been another motivator.
+Additionally, network graphs lend themselves well to interesting visualizations which has been another motivator.
 
 This thesis does not consider the analysis of specific network graphs but rather enables the NSR Explorer users to easily do so.
 
@@ -703,9 +706,9 @@ One paper titled "Fission Products of Uranium by Fast Neutrons" has authors `Y.N
 The other entries, titled "Neutron Induced Radioactivity in Columbium" and "Artificial Radioactivity Induced in Zr and Mo" respectively are both authored by `R.Sagane`, `S.Kojima`, `G.Miyamoto`, and `M.Ikawa`.
 This demonstrates a limitation in the current graph visualization.
 `G.Miyamoto` and `M.Ikawa` have published together twice (in 1940) but their edge looks no different than the edge between `Y.Nishina` and `T.Yasski`.
-Most graph libraries allow for a lot of customization and embedding of data.
-In a future work, the graphing routines could be modified to represent the number of copublications along the graph edges.
-This could be achieved with a text label, or an added thickness to the edge line.
+Most graph libraries allow for customization and embedding of data.
+In future work, the graphing routines could be modified to represent the number of copublications along the graph edges.
+This could be achieved with a text label, an added thickness to the edge line, or colour.
 
 ``` {#blk:graph1940s-results .json caption="JSON documents for the NSR entries in Figure \ref{fig:small-graph-1940}." fontsize=\footnotesize breaklines=true baselinestretch=1}
 {
@@ -773,7 +776,7 @@ There is only ever one node per author identifier.
 
 Most graphs produced from yearly data queries have multiple components.
 A graph produced by papers including a single author will have a single component by definition.
-As the amount of NSR entries forming the graph gets larger the main connected component gets much larger than the rest of the components.
+As the number of NSR entries forming the graph gets larger, the main connected component gets much larger than the rest of the components.
 Researchers at Facebook have done some interesting work confirming this on the largest social network studied @facebook-social-graph.
 They calculated that $99.91\%$ of the 721 million users considered were in a single connected component [^facebook-paper].
 
@@ -826,7 +829,7 @@ All of the graphs we have created have authors as nodes with edges determined by
 These graphs are social networks of collaborating scientists.
 The study of them could be of interest to social scientists and network scientists.
 
-Exporting the graph data helps enable future work.
+Exporting the graph data offers efficiencies to future work.
 The Networkx library has support for writing the graph data structures to multiple file types, such as `gexf`, `GML`, `GraphML` and [others](http://networkx.readthedocs.org/en/latest/reference/readwrite.html).
 These files can then be imported into other analysis applications like Gephi.
 Example code for exporting the 1989 data to `gexf` format is available at [github.com/valencik/mastersAPSC](https://github.com/valencik/mastersAPSC).
@@ -840,9 +843,9 @@ Examples of such data include user reviews of a product or service, customer fee
 Example goals of analyzing such works might be summarization, determining sentiment, finding topics, or finding similar items.
 
 %- Motivation
-In this section, two distinct goals of this work were solved using tools commonly employed in text mining.
-Recommending similar papers for a given selection of papers was solved using cosine simularity in a vector space model.
-Determining authors that may have multiple identifiers in the data was accomplished using string edit distances.
+In this section, two distinct goals of this work were achieved using tools commonly employed in text mining.
+Recommending similar papers for a given selection of papers was executed using cosine simularity in a vector space model.
+Determining authors who may have multiple identifiers in the data was accomplished using string edit distances.
 
 A common task to both of these goals is comparing text.
 In order to compare two items we need a metric by which we can measure them.
@@ -854,17 +857,17 @@ However, a topic modelling method is discussed in the [Future Work - Text Mining
 Introduction to Information Retrieval @stanford-ir-book, or the Standford IR Book, serves as an excellent and freely available resource introducing concepts and techniques in information retrieval.
 
 ## Vector Space Model
-A substantial portion of the functionality of NSR Explorer as an information retrieval system is provided by simple queries to the database.
+A substantial portion of the functionality of the NSR Explorer as an information retrieval system is provided by simple queries to the database.
 However, in developing the similar paper recommendation system, we make use of the vector space model [^vsm-citation], an early information retrieval model @vsm-ir-reeval @stanford-ir-book.
 The vector space model is simple and powerful.
 Documents are represented as vectors where each dimension is a separate term.
 There are multiple ways of calculating the value for each dimension such as tf-idf or bag of words @tfidf-jones @alternate-tfidf.
-The work done in the [Similar Papers](#similar-papers) section uses 0, or 1 to represent if a particular selector was present in the NSR entry.
+The work done in the [Similar Papers](#similar-papers) section uses 0 or 1 to represent whether a particular selector was present in the NSR entry.
 
 [^vsm-citation]: The correct earliest citation for the vector space model used today is not trivially found. Frequently @vsm-automatic-indexing is cited because of its title "A vector space model for automatic indexing", however, as Dubin outlines in @salton-never-wrote, this paper does not describe the vector space model as an information retrieval model.
 
 %- https://stackoverflow.com/questions/15173225/how-to-calculate-cosine-similarity-given-2-sentence-strings-python
-Let document one, $d1$, be "The quick brown fox jumps over the lazy dog" and document two, $d2$, be "The brown dog jumped over the brown fox".
+As an example, let document one, $d1$, be "The quick brown fox jumps over the lazy dog" and document two, $d2$, be "The brown dog jumped over the brown fox".
 We will model these two documents using a vector space model.
 A term vector for each document is created using a dimension for each separate term occuring in the collection of documents.
 The final vectorization of these two documents is shown in Table @tbl:termtable.
@@ -916,7 +919,7 @@ $$ {#eq:cosinesimilarityF}
 
 As Equation @eq:cosinesimilarityF shows, the two documents are quite similar, and thus have a high cosine similarity.
 When $d1 = d2$ the similarity is 1.0.
-This technique is a simple way of numercizing text for further mathematical manipulation and treatment.
+This technique is a simple way of numericizing text for further mathematical manipulation and treatment.
 
 ### Similar Papers
 A script was prepared to perform cosine similarity analysis on the NSR selectors.
@@ -930,7 +933,7 @@ Stop words[^stop-words], and these selectors, are the most commonly occuring, th
 [^stop-words]: Common stop words in english are "the", "and", "it", "is", and "a".
 
 The vectors are formed by turning the selectors into strings.
-We dropped the `subkey` value for this analysis as we were not concerned with the ordering of the of the selectors.
+We dropped the `subkey` value for this analysis as we were not concerned with the ordering of the selectors.
 The fact that cosine similarity does not take into account the ordering of words is a limitation that negatively impacts its performance on real world text documents @wiki-vsm.
 This does not affect our analysis as we were not analyzing natural language but constructing our "words" out of a list of items that act like keywords.
 
@@ -947,25 +950,25 @@ The usage of these similarity scores is shown in the [Application Section](#the-
 
 ## Author Name Analysis
 
-In this section, we describe the analysis which identifies and mitigates the issue of having multiple variants of author names in the database.
+In this section, we describe the analysis which identifies and makes steps towards mitigating the issue of having multiple variants of author names in the database.
 We will use the word "author" (formatted plainly and without quotes) to refer to an individual human being who contributed to a work that is documented in the NSR database.
 The term "identifier" (also formatted plainly and without quotes) will refer to the string of text that occurs in the database.
 The actual identifier strings will always appear in a fixed width typeface.
 For example, an author may be Andrew Valencik, and he may have more than one identifier such as `A.Valencik`, `A. Valencik`, and or `A.C.Valencik`.
 
-This analysis locates multiple identifiers in the database that correspond to single authors.
+This analysis locates multiple identifiers in the database that may correspond to single authors.
 This may be caused by differences in style from one publication to the next, changes in formatting, or simple typos.
 Authors themselves may opt in some publications to be identified by more than one initial and only one in others.
 
 Pritychenko reports 96200 unique authors in his 2014 paper @Pritychenko14.
 However, at the end of the data preparation stage in this work, the database reported 100147 unique identifiers.
-An accurate total author count is not particularly important for this work.
-However, correctly identifying and including all authors when doing network analysis is important.
+An accurate total author count is not particularly important for this work creating a database and exploration application.
+However, correctly identifying and including all authors when doing network analysis *is* important.
 
-Currently there are 41254 unique identifiers that appear only once in the NSR database.
+There are 41254 unique identifiers that appear only once in the NSR database.
 Some portion of those are author name variances that only occur once.
 Knowing that portion is important to understanding something about the database; in the [Initial Author Clustering](#initial-author-clustering) section we investigated how the database changed as we removed identifiers (referred to as "authors" in that section) below a publication threshold.
-This analysis depends on correctly identifying the number of authors who have published a given number of times.
+That analysis depended on correctly identifying the number of authors who had published a given number of times.
 Variances in the list of authors render such an analysis in inaccurate.
 
 After the data preparation and importing step, the database contains identifiers `A.Herzan` and `A. Herzan`.
@@ -975,14 +978,14 @@ In the [Further Analysis](#further-analysis) subsection we will discuss methods 
 In this subsection, the analysis described finds identifiers that are similar to one another.
 
 %- Online vs offline
-Searching for similar identifiers could happen either online (immediately after the user submits a query) or offline (before the app is presented to users).
+Searching for similar identifiers could happen either online (immediately after the user-submits a query) or offline (before the app is presented to users).
 Because our database is static and manually updated with new entries periodically, the offline approach makes sense.
 An additional benefit to the offline approach is that it can be easily moderated and tweaked with user submitted suggestions.
 The general problem is referred to as approximate string matching.
 If the supplied query was `A.Herzan`, then `A. Herzan` would be considered an approximate string match.
 This type of match could be found without much sophistication.
 However, we want to also consider more difficult matches like `J.Svenne` and `J.P.Svenne`.
-Approximate string matching libraries often use the Levenshtein Distance metric to compare strings @string-matching-tour.
+Approximate string matching libraries often use the Levenshtein distance metric to compare strings @string-matching-tour.
 
 ### Levenshtein Distance
 String edit distance measures such as the Levenshtein Distance @Levenshtein66 offer an easy first approach to analyzing the author names.
@@ -1015,7 +1018,7 @@ R.Del Moral	R.del Moral
 J.M.Van Den Cruyce	J.M.Van den Cruyce	J.M.van den Cruyce
 ```
 
-The second stage toke the lower case identifiers and removed all spaces.
+The second stage took the lower case identifiers and removed all spaces.
 There were $2619$ identifiers that had duplicates when reduced to lower case letters with no spaces.
 
 ``` {#blk:names-nospace .text caption="Identifiers which became duplicates after transformations 1 and 2." fontsize=\small baselinestretch=1}
@@ -1027,7 +1030,7 @@ C.Ciofi Degli Atti	C.Ciofi Degliatti	C.Ciofi degli Atti
 C.Le Brun	C.Le brun	C.LeBrun	C.Lebrun	C.le Brun
 ```
 
-Finally, we remove all punctuation as well, which resulted in $6561$ identifiers that were not unique.
+Finally, we removed all punctuation as well, which resulted in $6561$ identifiers that were not unique.
 A python script, `calc-author-name-transform-pairs.py` was prepared to perform these transformations and write the identifiers which form duplicates to a file.
 
 ``` {#blk:names-nopunc .text caption="Identifiers which became duplicates after transformations 1, 2, and 3." fontsize=\small baselinestretch=1}
@@ -1041,20 +1044,20 @@ C.Le Brun	C.Le Brun,	C.Le brun	C.LeBrun	C.Lebrun	C.le Brun
 As the progression of transformations shows, an identifier that becomes non-unique in transformation 1 will continue to appear in the output results of transformations 2 and 3.
 Some authors have been represented up to 6 different ways.
 Surnames composed of multiple words separated by spaces are likely to be multiply represented.
-The output of transformation 3 provided a list of reasonable size to apply additional analysis to.
+The output of transformation 3 provided a list of reasonable size to apply additional analysis.
 There are 3063 groups of identifiers identified as duplicates in the transformation 3 analysis (and 6561 identifiers in total).
 
 We have reduced, by two orders of magnitude, the number of identifiers that should be subject to additional analysis.
 With the transformed list, it is worth repeating analysis.
 Performing the Levenshtein distance analysis on the 'nopunc' list will locate identifiers where an initial has been omitted as an edit distance of 1.
-For example the edit distance of 'J.P.Svenne' and 'J.Svenne' is 2 before the transformations and 1 afterwards.
+For example the edit distance of `J.P.Svenne` and `J.Svenne` is 2 before the transformations and 1 afterwards.
 %- Sam Austin
 
 Performing the Levenshtein distance analysis will still fall short of identifying identifiers where the first name is fully spelled out.
 `Adam Sarty` and `A.Sarty` are both valid identifiers for a single author.
 An application to locate multiple identifiers of this type would require a significant modification to the existing string metrics.
 There are many open source implementations of string distance functions, so a modification is not out of the question.
-However, such a modification is outside the scope of this work.
+However, such modification is outside the scope of this work.
 
 ### Collaboration Groups
 In addition to single authors who may or may not be multiply identified, there are collaboration groups.
@@ -1078,8 +1081,7 @@ For the CMS Collaboration	for the CERES Collaboration	4
 ## The Application
 
 The cosine similarity results are presented in the web application via the `simpapers:` command.
-The user of the application can search and for an author and see entries that are similar to the entries the author has coauthored.
-The user's input is first matched against possibly multiple identifiers, making use of the results from the [Author Name Analysis](#author-name-analysis) section.
+The user of the application can search for an author and see entries that are similar to the entries the author has coauthored.
 
 %- Mongo
 A two-staged database query is then performed.
@@ -1093,7 +1095,7 @@ The similarity ranking considers the selectors used, and authors often publish m
 The render object is then prepared to be sent to the html template to show the user.
 The end user then sees a web page with the search author in prominent text followed by a list of entries that have a cosine similarity to at least one of their own entries greater than 0.65.
 An example for author "A.J.Sarty" is shown in Figure @fig:simpapers-author.
-The similar entries are sorting in descending order of their score function value.
+The similar entries are sorted in descending order of their score function value.
 The scoring function is the average of all the `score` fields for that paper that were encountered in the aggregation.[^multiple-scores]
 
 [^multiple-scores]: Because we fetch the `simPapers` array for multiple entries when searching for an author's similar entries, we can see the same `_id` multiple times and with different scores each time.
@@ -1103,9 +1105,9 @@ The scoring function is the average of all the `score` fields for that paper tha
 ## Future Work - Text Mining
 %- TODO Topic Modelling
 Topic Modelling is a statistical model used to discover abstract topics in a collection of text @topic-models-intro.
-A commonly used topic modelling algorithm is Latent Dirichlet Allocation @topic-models-tech.
+A commonly used topic modelling algorithm is Latent Dirichlet Allocation (LDA) @topic-models-tech.
 It models documents as having been created by sampling a distribution of topics @latent-dirichlet-allocation.
-Where topics are distributions of words.
+The topics are distributions of words.
 This approach has proven effective on natural language text as well as on other data sources @bio-latent.
 The selectors present in NSR entries are not natural language text but they could be used as input to LDA.
 This could find "topics" in the NSR data where topics are made up of NSR selectors such as nuclear isotopes and types of measurements.
@@ -1158,7 +1160,7 @@ A rule written {R (N,G),T 238U} => {N 239U} with support $0.00129$ and confidenc
 The confidence is a measure of reliability in the rule.
 In the above example $93.08\%$ of the time that `R (N,G)` and  `T 238U` appear, `N 239U` also appears.
 Formally the support is defined @data-classification-aggarwal in Equation @eq:ap-support, as is confidence in Equation @eq:ap-confidence.
-Lift is defined in Equation @eq:ap-lift as described in the arules package @arules-manual.
+Lift is defined in Equation @eq:ap-lift as described in the `arules` package @arules-manual.
 
 %- Apriori algorithm
 $$
@@ -1176,7 +1178,7 @@ $$ {#eq:ap-lift}
 %- Apriori-dedup.r
 The `prepare-data.py` program generates three transaction lists for analysis in R.
 The R script `Apriori-dedup.r` takes an input file, output file, minimum support, and minimum confidence as command line arguments.
-The arules package provides facilities in helping prune duplicate rules, and rules that are subsets of other rules.
+The `arules` package provides facilities in helping prune duplicate rules, and rules that are subsets of other rules.
 However, in analyses that produce many thousands of rules, such as those using low minimum support thresholds, this pruning is computationally expensive and thus not used.
 As a result, the final list of rules on our extended runs contained many duplicates.
 
@@ -1214,13 +1216,13 @@ The author still needs to have a rule that satisfied the confidence constraint a
 %- Extended p-a run
 On an extended run with a low support of 0.00029 the Apriori algorithm produces 2.2 million rules.
 With this many rules we can no longer prune duplicates in R as the memory requirements are enormous.
-However we can still perform some simple analyses like counting unique authors.
+However we can perform some simple analyses like counting unique authors.
 With a support value of 0.00029 the analysis of author lists from NSR entries produces 2211797 rules involving 859 unique author identifiers.
 %- Running the Apriori algorithm on author lists from papers is of little utility.
 %- The rules involving only two authors reveal author pairs where the (Roby - Svenson)
 
 %- papers -> selectors
-Apriori with each paper as a transaction and selectors as items should produce lists of selectors that frequently occur together in NSR entries.
+Applying apriori with each paper as a transaction and selectors as items should produce lists of selectors that frequently occur together in NSR entries.
 This tends to produce association rules that look like a list of isotopes involved in nuclear reactions.
 The first four rules in Table @tbl:Apriori2 can be read off as nuclear reactions.
 $^{290}\mbox{Lv}$ undergoes alpha decay and produces the daughter nucleus $^{286}\mbox{Fl}$, along with an alpha particle but this is not recorded in the NSR selectors.
@@ -1244,7 +1246,7 @@ Table: Frequent itemset rules for selectors in NSR entries. {#tbl:Apriori2}
 
 %- selectors -> authors
 Our final analysis with Apriori uses each selector as a transaction and the list of authors who have published with that selector as the itemset.
-There is a chance that some of these rules involve authors who have not published together.
+Some of these rules may involve authors who have not published together.
 This information would be useful, however the analysis to find such a rule has not been completed.
 With a support value of 0.0042 the analysis of author lists for each selector produces 3832412 rules involving 774 unique author identifiers.
 %- TODO tie back to motivation? (similar objects)
@@ -1280,7 +1282,7 @@ Table: Frequent itemset rules for selectors in entries. {#tbl:Apriori3}
 %- Starting with some of the naive algorithms, and then going to graph theory.
 %- A review of graph theoretic concepts and piecing them together for the application on hand.
 Classification and clustering are related approaches to organizing data elements into groups for further analysis.
-Classification is the process of deciding to what group a particular datum should most optimally belong.
+Classification is the process of deciding to which group a particular datum should most optimally belong.
 Clustering is the grouping of multiple data points such that those belonging to a group are more similar in some manner than those outside of that group.
 
 ### K-means Clustering
@@ -1290,8 +1292,8 @@ K-means is a partitional clustering algorithm.
 Take a finite set of objects,  $X = {x_1, x_2, ..., x_n}$ where each is a data object in $d$ dimensions.
 We can create $k$ clusters $C = {c_1, c_2, ..., c_k}$ where $k <= n$.
 The process starts by randomly choosing $k$ points, ${x_1, ..., x_k}$ to be the centroids of a cluster.
-Iterate over each object $x$ and assign it to a cluster $c$ based on the minimization of some parameter; for now, Euclidean distance.
-The new centroids are now computed and the process is repeated until cluster stability is achieved.
+The process continues by iterating over each object $x$ and assigning it to a cluster $c$ based on the minimization of some parameter; for now, Euclidean distance.
+The new centroids are then computed and the process is repeated until cluster stability is achieved.
 The goal is to minimize the total sum of squared errors between the centroids and all objects (see Equation @eq:kmeans).
 
 $$
@@ -1301,9 +1303,10 @@ $$ {#eq:kmeans}
 %- Kmeans step by step from "Data clustering: 50 years beyond K-means" by Anil K. Jain
 ![Step by step illustration of K-means algorithm. (a) The initial input data. (b) Three seed points are chosen as the starting 'centroids' and the data points are assigned to the cluster with the closest seed point. (c) (d) The centroids of the new clusters are calculated, and data labels updated; (e) the iteration stops when the clusters converge.](images/Kmeans-iterations-Jain09.pdf){#fig:kmeansJain}
 
-Three parameters for K-means must be specified initially, the number of clusters, initial centroid guesses, and the distance metric.
+Three parameters for K-means must be specified initially.
+The number of clusters, initial centroid guesses, and the distance metric.
 The metric is the function on a space that describes how two points differ from one another, i.e. distance.
-Euclidean distance is typically used, leading to ball or sphere shaped clusters. @Jain2010651
+Euclidean distance is typically used, leading to ball-shaped or sphere-shaped clusters. @Jain2010651
 
 The chosen number of clusters has a huge impact on the data partitions.
 Some heuristics exist to aid in determining an optimal $k$. @tibshirani2001estimating
@@ -1325,33 +1328,33 @@ Both of these evaluation methods are provided in the R package `clusterSim` @clu
 There is a considerable amount of multivariate data in the NSR database.
 In order to gain insight from this data, only a section is initially considered.
 In this section, the authors will be analyzed to identify groups or clusters based on publication traits.
-Specifically we considered three parameters:
+Specifically, we considered three parameters:
 the total length in years an author has published to date,
 their average number of coauthors across all their NSR entries,
 and their total publication count.
 
 To help evaluate this summarization of authors, three heat maps of this data are presented in figures @fig:nyne-log, @fig:nync-log, and @fig:nenc-log.
 Figure @fig:nyne-log shows an expected trend: Authors who publish over more years tend to have more publications overall.
-Each of these figures shows that there is a large number of authors who have published only a few times.
+Each of these figures shows that there are a large number of authors who have published only a few times.
 Additionally, there are comparatively few authors who have published many times.
-The heat map coloring is on a logarithmic scale, while the axes are linear.
-Without the log color scale, the plots would be washed out by the incredibly many authors who have published only once.
+The heat map colouring is on a logarithmic scale, while the axes are linear.
+Without the log colour scale, the plots would be washed out by the incredibly many authors who have published only once.
 (Linearly coloured heat maps are shown in the Appendix, figures @fig:nyne-linear, @fig:nync-linear, and @fig:nenc-linear.)
 
-![Number of entries an author has given the number of years they have published.](images/nyne-log-heatmap.png){#fig:nyne-log}
+![Number of entries from an author related to the number of years the author has published.](images/nyne-log-heatmap.png){#fig:nyne-log}
 
-![Number of coauthors an author has given the number of years they have published.](images/nync-log-heatmap.png){#fig:nync-log}
+![Number of coauthors associated with an author given the number of years the author has published.](images/nync-log-heatmap.png){#fig:nync-log}
 
-![Number of coauthors an author has given the number of entries they have published.](images/nenc-log-heatmap.png){#fig:nenc-log}
+![Number of coauthors associated with an author given the number of entries the author has published.](images/nenc-log-heatmap.png){#fig:nenc-log}
 
 The three heat maps show that the 3 dimensional data are not well segmented and are instead continuous.
 This is a result of the input data being continuous in nature.
 Clustering categorical data could lead to more discrete or separated clusters.
-Nevertheless, the cluster results of this data could be used to aid in classifying authors.
+Nevertheless, the cluster results of this data could be of value to researchers using these tools.
 
 The Davies-Bouldin index and G1 index have been calculated for all K-means clustering schemes from 2 centers to 16.
 The results are plotted in Figure @fig:cluster-dbi for Davies-Bouldin index and Figure @fig:cluster-g1 for the G1 index.
-The Davies-Bouldin index suggest either 5 or 6 cluster centers is best for this data.
+The Davies-Bouldin index suggests either 5 or 6 cluster centers is best for this data.
 The G1 index results suggest that 5 cluster centers is best, with 6 being the next best.
 
 ![Davies-Bouldin index for number of clusters](images/11papers-noratio-dbi-clusters.png){#fig:cluster-dbi}
@@ -1365,9 +1368,9 @@ Note that the data has been standardized, so the values in the tables are in sta
 %- In all cases we can see `numCoauthors`, `numYears`, and `numEntries` monotonically increase as the size of the cluster decreases.
 
 Figure @fig:kmeans-noratio5 shows the `numCoauthors`, `numYears`, and `numEntries` data coloured according to their cluster membership in the 5 cluster scheme.
-This figure again demonstrates the data are continuous and that well separated clusters do not exist.
-As a result the clusters function as segmentations along a continuous spectrum.
-As the number of clusters increases, the size of the segmentations decrease.
+This figure again demonstrates that the data are continuous and that well separated clusters do not exist in this domain.
+As a result, the clusters function as segmentations along a continuous spectrum.
+As the number of clusters increases, the size of the segmentations decreases.
 
 |   careerLength   |   meanCoauthors  |   numEntries     | size  |
 |------------------|------------------|------------------|-------|
@@ -1392,7 +1395,7 @@ Table: Centroid data points for 6 cluster K-Means on initial data {#tbl:first-6c
 
 ![Initial clustering on authors with K-means](images/11papers-noratio5clusters.png){#fig:kmeans-noratio5}
 
-The first cluster in Table @tbl:first-5clusters represents authors who have had short careers but published an average number of entries with many coauthors.
+The first cluster in Table @tbl:first-5clusters represents authors who have had short careers but published an average number of entries with above-average numbers of coauthors.
 The second cluster of authors have had long careers and published an average amount with an average number of coauthors.
 The authors in the third cluster have published the most and frequently publish with many coauthors.
 The fourth and largest cluster of authors are those with shorter careers and fewer publications with fewer coauthors.
@@ -1400,8 +1403,8 @@ Finally, the fifth cluster of authors have had the longest careers, published ma
 
 ### Secondary Clustering
 %- Want data with more dimensionality
-In this analysis, an author publishing 20 entries in 1995 and 5 entries in 1997 appears has a numYears value of 3.
-It is blind to how prolific a given author may have been in shorter periods.
+In this analysis, an author publishing 20 entries in 1995 and 5 entries in 1997 has a numYears value of 3.
+The previous section's analysis was blind to how prolific a given author may have been in shorter periods.
 Our goal is for the the author who published 20 entries in 1995 to be measured differently than an author who published once in each of 1995 and 1997.
 
 Instead of a single number representing an author's number of publications, a parameter representing the distribution of publications over time is used.
@@ -1412,15 +1415,16 @@ the percentage of their total publications in the first, second, and final third
 
 %- Need authors with many publications
 In order to break up the number of entries over time like this, each author needs to have multiple entries over multiple years.
+%- TODO recall from where?
 Recall there are 41254 authors with only a single publication in the database.
 That is 41254 out of 100147, roughly $40\%$ of the total unique authors.
 Therefore we lose $40\%$ of the authors in the database if we require an author to have published over multiple years.
-In order to have a non zero number of publications in each third an author must have a minimum of 3 publications in three different years.
+In order to have a non-zero number of publications in each third an author must have a minimum of 3 publications in three different years.
 The requirement for publishing 3 or more times in any years cuts out $55\%$ of authors in the database.
 
 %- Tie in to Author Contributions results
-Recall the analysis in [Author Contributions](#author-contributions) suggests that a small portion of the authors contribute a large portion of the NSR entries.
-This result means that filtering out low publication authors in additional analysis does not affect the majority of the NSR entries.
+Recall the analysis in [Author Contributions](#author-contributions) suggested that a small portion of the authors contribute a large portion of the NSR entries.
+This result means that filtering out low-publication authors in additional analyses does not affect the majority of the NSR entries.
 As a result the secondary clustering only considered the authors who contribute $90\%$ of the NSR entries with author fields.
 Explicitly, we considered authors who published 11 or more times.
 This amounted to $18006$ authors.
@@ -1430,7 +1434,7 @@ The code to produce the input data for the secondary clustering is available in 
 The G1 index for the secondary clustering is shown in Figure @fig:thirds-g1.
 It suggests a clustering scheme of either 4 or 6 centers.
 The Davies-Bouldin index, shown in Figure @fig:thirds-dbi suggests either 2, 5, 6.
-The clustering results for 6 centers is shown in Figure @fig:kmeans-thirds6.
+The clustering results for 6 centers are shown in Figure @fig:kmeans-thirds6.
 
 ![Davies-Bouldin index for secondary clustering](images/11papers-ratio-third-dbi-clusters.png){#fig:thirds-dbi}
 
@@ -1464,7 +1468,7 @@ Therefore, in this analysis, every author's career either ends naturally on some
 ### The Application
 
 The results of cluster analysis can be written to the database with the `update-database.py` script.
-The clusters (if multiple are written to the database) an author belongs to are shown on the author profile page.
+The clusters an author belongs to are shown on the author profile page.
 This is demonstrated in Figure @fig:author-profile.
 
 ## Future Work - Data Mining
@@ -1488,7 +1492,7 @@ Conclusions
 
 %- Data (and App?)
 This work has enabled exploration and manipulation of the data that was inaccessible or impossible using the existing applications.
-The new web application provides interactive search and visualizations to aid data exploration.
+The new tools and web application provide interactive search and visualizations to aid data exploration.
 
 %- Network
 The treatment of the data as a network is a new and flexible contribution.
@@ -1507,11 +1511,11 @@ The metadata provided by the Nuclear Science References has enabled a custom exp
 Appendix
 ========
 
-![Number of entries an author has given the number of years they have published.](images/nyne-heatmap.png){#fig:nyne-linear}
+![Number of entries contributed by an author related to the number of years the author has published.](images/nyne-heatmap.png){#fig:nyne-linear}
 
-![Number of coauthors an author has given the number of years they have published.](images/nync-heatmap.png){#fig:nync-linear}
+![Number of coauthors associated with an author related to the number of years the author has published.](images/nync-heatmap.png){#fig:nync-linear}
 
-![Number of coauthors an author has given the number of entries they have published.](images/nenc-heatmap.png){#fig:nenc-linear}
+![Number of coauthors associated with an author related to the number of entries the author has published.](images/nenc-heatmap.png){#fig:nenc-linear}
 
 ![Complete 1940 author graph.](images/complete-graph-1940.pdf){#fig:complete-graph-1940}
 
