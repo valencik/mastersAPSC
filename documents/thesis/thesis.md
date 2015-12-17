@@ -33,7 +33,7 @@ Information retrieval and data exploration can be improved by customizing an app
 The United States [National Nuclear Data Center](http://www.nndc.bnl.gov) (NNDC) prepares an evaluated database of nuclear science literature that poses a rich opportunity for knowledge discovery directed at the scientific work and study.
 The academic field of nuclear science is over one hundred years old, starting with the discovery of radiation @becquerel.
 This discovery is the first of many entries in the Nuclear Science References database, collected, cataloged, distributed, and evaluated by the National Nuclear Data Center @Kurgan200603.
-The Nuclear Science References, or NSR, has over 210,000 entries documenting the body of nuclear science literature, which provides the opportunity for knowledge discovery on the literature's meta data.
+The Nuclear Science References, or NSR, has over 210,000 entries documenting the body of nuclear science literature, which provides the opportunity for knowledge discovery on the literature's metadata.
 The metadata that the NSR provides is contributed and maintained by neutral third party experts from the NNDC.
 This fact separates the information in the NSR from metadata available through services such as [ResearchGate](http://researchgate.net/).
 
@@ -1501,7 +1501,7 @@ The use of text mining tools has enabled the creation of a paper recommender sys
 Due to the high quality of the Nuclear Science References database and in particular the selectors, this recommender system can function without access to the whole text for each recommended source.
 
 %- Contribution wrap up
-The meta data provided by the Nuclear Science References has enabled a custom exploration and information retrieval system that extends the capabilities of the existing system and other more general search engines.
+The metadata provided by the Nuclear Science References has enabled a custom exploration and information retrieval system that extends the capabilities of the existing system and other more general search engines.
 
 
 Appendix
