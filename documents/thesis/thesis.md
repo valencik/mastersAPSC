@@ -40,7 +40,7 @@ This fact separates the information in the NSR from metadata available through s
 %- Data mining + physics
 This work is a cross disciplinary effort, combining semantic information of nuclear physics literature and data mining techniques to build a custom application for data exploration and information retrieval in nuclear science.
 The knowledge discovery and data mining process reveals trends in the collective scientific study of nuclear structure, processes, and detection.
-This data is presented through a web application that extends the existing facilities of the Nuclear Science References web retrieval system.
+These data are presented through a web application that extends the existing facilities of the Nuclear Science References web retrieval system.
 The ultimate goal is to enable further analysis on the body of nuclear science literature.
 
 %- Background info spread throughout
@@ -53,7 +53,7 @@ The existing NSR website and interface are outlined in this introduction chapter
 Additionally the web application created as a result of this work is discussed.
 
 The transformation of the provided raw data is discussed in the [Data Preparation](#data-preparation) and [Data Representation](#data-representation) sections.
-The data is stored in a database as discussed in [The Database](#the-database).
+The data are stored in a database as discussed in [The Database](#the-database).
 
 Chapter 3 is the first exploration of the NSR data and the database created with our data representation.
 We discuss the types of queries that can be made on the data, show some examples, and discuss the results.
@@ -250,7 +250,7 @@ X may be one, two, or three letters.
 The `subkey` variable is used to link together multiple selectors of the same keyword sentence.
 
 ## Data Preparation
-The NSR data is maintained in a custom EXCHANGE format @nsr-manual.
+The NSR data are maintained in a custom EXCHANGE format @nsr-manual.
 This format is flat text that is not suitable for direct analysis.
 The data needs to be parsed into data structures for analysis and use.
 The approach least likely to introduce errors is to transform the data into a common format for which parsers already exist.
@@ -538,7 +538,7 @@ db.NSR.aggregate([{"$match": {"authors": "A.J.Sarty"}},
 The data can also be partitioned or sliced in time, supporting questions such as "what percentage of 1989 entries are journal articles?"
 As we can see from Table @tbl:types1989 $72.06\%$ of the NSR entries in 1989 are journal articles.
 This percentage is different than that of the whole work (as shown in Table @tbl:typesAll), but not by a significant amount.
-It does highlight a particular point of interest, i.e. that the data is not uniform.
+It does highlight a particular point of interest, i.e. that the data are not uniform.
 
 Type       Amount   Percentage
 ----       ------   ----------
@@ -1344,7 +1344,7 @@ Without the log color scale, the plots would be washed out by the incredibly man
 
 ![Number of coauthors an author has given the number of entries they have published.](images/nenc-log-heatmap.png){#fig:nenc-log}
 
-The three heat maps show that the 3 dimensional data is not well segmented and is instead continuous.
+The three heat maps show that the 3 dimensional data are not well segmented and are instead continuous.
 This is a result of the input data being continuous in nature.
 Clustering categorical data could lead to more discrete or separated clusters.
 Nevertheless, the cluster results of this data could be used to aid in classifying authors.
@@ -1365,7 +1365,7 @@ Note that the data has been standardized, so the values in the tables are in sta
 %- In all cases we can see `numCoauthors`, `numYears`, and `numEntries` monotonically increase as the size of the cluster decreases.
 
 Figure @fig:kmeans-noratio5 shows the `numCoauthors`, `numYears`, and `numEntries` data coloured according to their cluster membership in the 5 cluster scheme.
-This figure again demonstrates the data is continuous and that well separated clusters do not exist.
+This figure again demonstrates the data are continuous and that well separated clusters do not exist.
 As a result the clusters function as segmentations along a continuous spectrum.
 As the number of clusters increases, the size of the segmentations decrease.
 
