@@ -8,3 +8,12 @@
 % Makes label links refer to top of figure not caption
 \usepackage[all]{hypcap}
 \hypcapredef{listing}
+
+% Customize the color and style of PDF links
+% From http://tex.stackexchange.com/a/51349
+\hypersetup{
+  colorlinks   = true, %Colours links instead of ugly boxes
+  urlcolor     = red, %Colour for external hyperlinks
+  linkcolor    = blue, %Colour of internal links
+  citecolor   = red %Colour of citations
+}
