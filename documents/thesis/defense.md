@@ -34,15 +34,14 @@ vels,band features. Semi-empirical formalism.                                   
 
 # Keyword Abstracts
 
-`<KEYWORDS>` and `<SELECTRS>`
+- `<KEYWORDS>` and `<SELECTRS>`
 
-Expert produced metadata
+- Expert produced metadata
 
-Provides information on the content of the NSR entry
+- Provides information on the content of the NSR entry
 
-# Major Topics
+- `NUCLEAR REACTIONS`, `RADIOACTIVITY`, `NUCLEAR STRUCTURE`, `NUCLEAR MOMENTS`, `ATOMIC PHYSICS`, `ATOMIC MASSES`, and `COMPILATION`.
 
-`NUCLEAR REACTIONS`, `RADIOACTIVITY`, `NUCLEAR STRUCTURE`, `NUCLEAR MOMENTS`, `ATOMIC PHYSICS`, `ATOMIC MASSES`, and `COMPILATION`.
 
 # Selectors
 
@@ -57,21 +56,10 @@ Types:
 
 # NSR Explorer
 
-Web application (Python, MongoDB, JavaScript, HTML, CSS)
-
-Offers a search interface
-
-Visualizations for return data
-
-
-# NSR Explorer
-
-[NSR Explorer Web App](http://localhost:5000)
-
-%- What problems does it solve
-Vertical search engine
-
-Domain specific
+- Web application (Python, MongoDB, JavaScript, HTML, CSS)
+- Offers a (vertical) search interface
+- Visualizations for return data
+- [NSR Explorer Web App](http://localhost:5000)
 
 
 # Data Preparation
@@ -79,7 +67,6 @@ Domain specific
 - Transform raw data to JSON
 - Regular expressions
 - Repeatable
-- `s/<KEYNO   >/"_id":/g`
 %- It was long and important work.
 %- It laid the foundation for everything else in this thesis.
 %- But it is somewhat tedious (dirty work)
@@ -205,10 +192,6 @@ rules                              support     confidence   lift
 {P 286FL,S A-DECAY} => {G 282CN}   0.000310    1.0000       3225.0
 {G 285CN} => {P 289FL}             0.000310    1.0000       3167.4
 {P 289FL} => {G 285CN}             0.000310    0.9821       3167.4
-{G 286FL} => {P 290LV}             0.000298    1.0000       3167.4
-{G 285CN,S A-DECAY} => {P 289FL}   0.000310    1.0000       3167.4
-{G 286FL,S A-DECAY} => {P 290LV}   0.000298    1.0000       3167.4
-{P 290LV} => {G 286FL}             0.000298    0.9464       3167.4
 
 
 # Clustering
