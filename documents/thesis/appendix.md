@@ -34,6 +34,27 @@ The organization loosely follows the order one might follow to recreate this wor
 Note that the most updated version of these programs should be available at [https://github.com/valencik/mastersAPSC](https://github.com/valencik/mastersAPSC).
 
 
+## parseNSRtoJSON.pl
+
+\inputminted[baselinestretch=1, breaklines=true, linenos=true]{perl}{../../data/parseNSRtoJSON.pl}
+
+
+\pagebreak
+
+## massageJSONtoSchema.pl
+
+\inputminted[baselinestretch=1, breaklines=true, linenos=true]{perl}{../../data/massageJSONtoSchema.pl}
+
+
+\pagebreak
+
+## flattenJSONforMongo.pl
+
+\inputminted[baselinestretch=1, breaklines=true, linenos=true]{perl}{../../data/flattenJSONforMongo.pl}
+
+
+\pagebreak
+
 ## prepare-data.py
 
 \inputminted[baselinestretch=1, breaklines=true, linenos=true]{python}{../../data/prepare-data.py}
