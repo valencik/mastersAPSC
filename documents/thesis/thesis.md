@@ -502,8 +502,8 @@ Examples are shown that filter the data using constraints on different data type
 Bar charts and pie charts are introduced for visualizing the data.
 
 %- Motivation
-Through data summarization we can learn the first-order characteristics of the data set.
-Our goal was to obtain a broad perspective of its structure and composition.
+Through data summarization we can reveal first-order characteristics of the data set.
+Our goal was to make available a broad perspective of its structure and composition.
 
 ## Data Composition and Queries
 We can construct queries to reveal the composition of the NSR data.
@@ -697,7 +697,7 @@ In this work, the word 'graph' will always refer to the mathematical representat
 
 %- Motivation
 Enabling exploration of the NSR data has been a core motivation for this work.
-Transforming the NSR data into a network graph has enabled new questions and analyses.
+Transforming the NSR data into a network graph has made new questions and analyses accessible.
 Additionally, network graphs lend themselves well to interesting visualizations which has been another motivator.
 
 This thesis does not consider the analysis of specific network graphs but rather enables the NSR Explorer users to easily do so.
@@ -843,10 +843,10 @@ The identification of connected components is the only algorithm provided by Net
 For example, Figure @fig:nsr1989graphyifanhu and Figure @fig:nsr1989graph use only the largest connected graph of all the NSR entries in the year 1989.
 
 ## Exporting Graph Data
-Treating the NSR database as graph data opens up avenues for future work.
-All of the graphs we have created have authors as nodes with edges determined by their coauthors.
+Treating the NSR database as graph data fulfils one of the primary goals of this thesis by opening up avenues for future work.
+All of the graphs we have created are constituted of authors as nodes with edges determined by their coauthors.
 These graphs are social networks of collaborating scientists.
-The study of them could be of interest to social scientists and network scientists.
+The study of them may be of interest to social scientists and network scientists.
 
 Exporting the graph data offers efficiencies to future work.
 The Networkx library has support for writing the graph data structures to multiple file types, such as `gexf`, `GML`, `GraphML` and [others](http://networkx.readthedocs.org/en/latest/reference/readwrite.html).
@@ -865,6 +865,7 @@ Example goals of analyzing such works might be summarization, determining sentim
 In this section, two distinct goals of this work were achieved using tools commonly employed in text mining.
 Recommending similar papers for a given selection of papers was executed using cosine simularity in a vector space model.
 Determining authors who may have multiple identifiers in the data was accomplished using string edit distances.
+Reducing instances of multiple identification of individuals in the NSR dataset facilitates later work by network analysts and social scientists.
 
 A common task to both of these goals is comparing text.
 In order to compare two items we need a metric by which we can measure them.
@@ -1151,11 +1152,13 @@ Data Mining
 ===========
 
 %- Motivation
-The ultimate goal of the analysis in this section and the [Text Mining](#text-mining) section is to enable a flexible recommender system that supports recommending different types of objects within the database.
+The ultimate goal of the analysis in this section and the [Text Mining](#text-mining) section is to create a flexible system that can recognize objects that are similar and not the same.
+Support for different types of objects within the database has been implemented.
 The work in the [Similar Papers](#similar-papers) section enabled finding papers that had similar nuclide selectors associated with them.
 In this section we use association mining to produce lists of association rules that could be used in a future recommendation system.
 Additionally this analysis enables finding similar authors based on clustering attributes of their publication traits.
-An obvious use case of this feature is to find similar authors to those the user is currently inspecting or searching.
+An obvious use case of this feature for nuclear scientists is to find similar authors to those the user is currently inspecting or searching.
+Experts from other domains will be able to use these developments in other use cases.
 
 Implementing this feature requires a significant amount of offline data mining and analysis.
 Once the analysis is done, the runtime of the application need only do quick lookups in tables to find the desired results.
