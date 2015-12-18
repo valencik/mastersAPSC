@@ -7,7 +7,7 @@ author:
 - name: Andrew Valencik
   affiliation: Saint Mary\'s University
 author: Andrew Valencik
-date: November 3rd 2015
+date: December 18th 2015
 bibliography: bibliography.yaml
 csl: american-physics-society.csl
 link-citations: true
@@ -32,16 +32,16 @@ Information retrieval and data exploration can be improved by customizing an app
 %- NNDC and NSR
 The United States [National Nuclear Data Center](http://www.nndc.bnl.gov) (NNDC) prepares an evaluated database of nuclear science literature that poses a rich opportunity for knowledge discovery directed at scientific work and study.
 The academic field of nuclear science is over one hundred years old, starting with the discovery of radiation @becquerel.
-This discovery is the first of many entries in the Nuclear Science References database, collected, cataloged, distributed, and evaluated by the National Nuclear Data Center @Kurgan200603.
+This discovery represents the first of many entries in the Nuclear Science References database, collected, cataloged, distributed, and evaluated by the National Nuclear Data Center @Kurgan200603.
 The Nuclear Science References, or NSR, has over 210,000 entries documenting the body of nuclear science literature, which provides the opportunity for knowledge discovery on the literature's metadata.
 The metadata that the NSR provides is contributed and maintained by neutral third party experts from the NNDC.
 This fact separates the information in the NSR from metadata available through services such as [ResearchGate](http://researchgate.net/).
 
 %- Data mining + physics
 This work is a cross disciplinary effort, combining semantic information of nuclear physics literature and data mining techniques to build a custom application for data exploration and information retrieval in nuclear science.
-The knowledge discovery and data mining process reveals trends in the collective scientific study of nuclear structure, processes, and detection.
-These data are presented through a web application that extends the existing facilities of the Nuclear Science References web retrieval system.
-The ultimate goal is to enable further analysis on the body of nuclear science literature.
+The practice of knowledge discovery and data mining on the NSR dataset can reveal trends in the collective scientific study of nuclear structure, processes, and detection.
+These data are presented through a web application that extends the existing facilities of the Nuclear Science References web retrieval system @NSRweb.
+The ultimate goal of this work is to enable further analysis on the body of nuclear science literature.
 
 %- Background info spread throughout
 This is a thesis that applies science from one domain to science from another domain.
@@ -49,9 +49,9 @@ To facilitate understanding by all readers, no matter their expertise, backgroun
 Thus, this thesis has no "theory" chapter, as essential knowledge is provided in the chapters that require it.
 
 %- Disclaimer: Not a social scientist or graph theorist
-The primary contribution is the construction of tools and a framework for future analysis into the valuable NSR dataset.
+The primary contribution of this thesis is the construction of tools and a framework for future analysis into the valuable NSR dataset.
 Assertions about the interpretation of results from these tools have been avoided.
-The goal of this work was not to study physics or physicists, but instead to enable diverse research interests including network analysts and social scientists.
+The goal of this work was not to study physics or physicists, but instead to apply expertise in nuclear science and data analytics to enable diverse research interests, including network analysts and social scientists to explore the NSR dataset.
 The resulting work is flexible enough, by design, to be easily adapted to the needs of anyone investigating the NSR.
 
 ## Thesis Organization
@@ -1497,9 +1497,9 @@ Conclusions
 %- How the application uncovers some of the previously unknown and interesting results.
 
 %- Data (and App?)
-This work has enabled exploration and manipulation of the data that was inaccessible or impossible using the existing applications.
+This work has enabled exploration and manipulation of the NSR dataset that was inaccessible or impossible using the existing applications.
 The new tools and web application provide interactive search and visualizations to aid data exploration.
-Futher research into the NSR is now more accessible by nonexperts, or experts of other domains such as network analysis or social science.
+Further research into the NSR is now more accessible by nonexperts, or experts of other domains such as network analysis or social science.
 
 %- Network
 The treatment of the data as a network is a new and flexible contribution.
@@ -1507,7 +1507,7 @@ It can be used to visualize an author's collaborators, or to see the collaborati
 Accessing the data as a network can facilitate further work in studying the NSR as a social network.
 
 %- Data Mining
-The data mining analysis has revealed naming issues in the database, and I have proposed methods for mitigating them.
+The data mining analysis revealed naming issues in the database, and methods have been proposed for mitigating them.
 The use of text mining tools has enabled the creation of a paper recommender system that recommends based on semantic information of the given journal titles, theses, conference proceedings, and other sources.
 Due to the high quality of the Nuclear Science References database and in particular the selectors, this recommender system can function without access to the whole text for each recommended source.
 
