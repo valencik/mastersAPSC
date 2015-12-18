@@ -51,7 +51,7 @@ Thus, this thesis has no "theory" chapter, as essential knowledge is provided in
 %- Disclaimer: Not a social scientist or graph theorist
 The primary contribution of this thesis is the construction of tools and a framework for future analysis into the valuable NSR dataset.
 Assertions about the interpretation of results from these tools have been avoided.
-The goal of this work was not to study physics or physicists, but instead to apply expertise in nuclear science and data analytics to enable diverse research interests, including network analysts and social scientists to explore the NSR dataset.
+The goal of this work was not to study physics or physicists, but instead to apply expertise in nuclear science and data analytics to enable diverse researchers, including network analysts and social scientists to explore the NSR dataset.
 The resulting work is flexible enough, by design, to be easily adapted to the needs of anyone investigating the NSR.
 
 ## Thesis Organization
