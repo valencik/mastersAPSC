@@ -48,6 +48,12 @@ This is a thesis that applies science from one domain to science from another do
 To facilitate understanding by all readers, no matter their expertise, background information is placed in the thesis close to where it is used.
 Thus, this thesis has no "theory" chapter, as essential knowledge is provided in the chapters that require it.
 
+%- Disclaimer: Not a social scientist or graph theorist
+The primary contribution is the construction of tools and a framework for future analysis into the valuable NSR dataset.
+Assertions about the interpretation of results from these tools have been avoided.
+The goal of this work was not to study physics or physicists, but instead to enable diverse research interests including network analysts and social scientists.
+The resulting work is flexible enough, by design, to be easily adapted to the needs of anyone investigating the NSR.
+
 ## Thesis Organization
 The existing NSR website and interface are outlined in this introduction chapter.
 Additionally, the web application created as a result of this work is discussed.
@@ -1493,6 +1499,7 @@ Conclusions
 %- Data (and App?)
 This work has enabled exploration and manipulation of the data that was inaccessible or impossible using the existing applications.
 The new tools and web application provide interactive search and visualizations to aid data exploration.
+Futher research into the NSR is now more accessible by nonexperts, or experts of other domains such as network analysis or social science.
 
 %- Network
 The treatment of the data as a network is a new and flexible contribution.
