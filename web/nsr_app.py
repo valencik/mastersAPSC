@@ -129,6 +129,7 @@ def parse_search():
         {"$project": {"_id": 1, "year": 1, "authors": 1, "type": 1, "selectors": "$selectors.value", "title": 1}}])
     simpaper_entries = []
     for simpaper in simpaper_results:
+        simpaper['score'] = "Score: {:6.4f}".format(scores[simpaper['_id']])
         simpaper_entries.append(simpaper)
 
 
