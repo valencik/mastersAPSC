@@ -27,41 +27,6 @@ function omniSearch(ev){
 
     // Handle the passed search command
     switch (command){
-        case 'collab':
-            if(verbose){console.log("Search collabParam: "+commandParam);};
-
-            // Parse collab: input for single year or range
-            var reYearArray = /(?:^(\d{4})-(\d{4})$)|(?:^(\d{4}))/.exec(commandParam);
-            if (reYearArray){
-                if(reYearArray[3]){
-                    d3.xhr("/api/yearnetwork/"+parseInt(reYearArray[3])+"?topnetwork="+options.topnetwork)
-                    .get(function(error, data){
-                        graphData = JSON.parse(data.response)
-                        forceDirectedGraph(null, graphData.nodes, graphData.links, options);
-                    })
-                }
-                if(reYearArray[1] && reYearArray[2]){
-                    console.log("Ranges not yet supported");
-                }
-            } else {
-                d3.xhr("/api/authornetwork?author="+commandParam+"&topnetwork="+options.topnetwork)
-                .get(function(error, data){
-                    graphData = JSON.parse(data.response)
-                    forceDirectedGraph(null, graphData.nodes, graphData.links, options);
-                })
-            }
-            break;
-
-        case 'nuclide':
-            if(verbose){console.log("Search nuclideParam: "+commandParam);};
-
-            // Parse nuclide: input for single year or range
-            d3.xhr("/api/searchnetwork?nuclide="+commandParam+"&topnetwork="+options.topnetwork)
-            .get(function(error, data){
-                graphData = JSON.parse(data.response)
-                forceDirectedGraph(null, graphData.nodes, graphData.links, options);
-            })
-            break;
 
         default:
             // Send entire input to /api/search
