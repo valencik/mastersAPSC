@@ -15,6 +15,10 @@ fi
 echo "Removing custom markdown comments..."
 sed '/^%- .*$/d' thesis.md > no_comments_thesis.md
 
+# Concatenate Appendix and Bibliography
+cat appendix.md >> no_comments_thesis.md
+cat bibliography-stub.md >> no_comments_thesis.md
+
 echo "Invoking Pandoc for TeX file creation..."
 pandoc --table-of-contents --number-sections --standalone \
   --include-in-header=header.tex --include-before-body=beforebody.tex \
