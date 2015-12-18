@@ -1204,7 +1204,6 @@ rules                                                            support     con
 {A.M.Stefanini,F.Scarlassara} => {L.Corradi}                     0.0008025   0.9562       974.9
 {G.G.Adamian} => {N.V.Antonenko}                                 0.0008182   0.9397       942.9
 {H.Iwasaki,S.Shimoura,S.Takeuchi} => {T.Minemura}                0.0008497   0.9257       928.9
-{H.Iwasaki,S.Shimoura,T.Motobayashi} => {T.Minemura}             0.0008706   0.9071       910.2
 {L.Corradi} => {G.Montagnoli}                                    0.0008549   0.8716       908.1
 
 Table: Frequent itemset rules for authors of entries. {#tbl:Apriori1}
@@ -1274,7 +1273,6 @@ rules                                                           support     conf
 {V.I.Chepigin} => {A.P.Kabachenko}                              0.008846    0.9148       96.7
 {E.Fioretto,L.Corradi} => {S.Szilner}                           0.008043    0.9536       93.6
 {A.Gadea,A.M.Stefanini,G.Montagnoli} => {S.Szilner}             0.008012    0.9487       93.1
-{A.Gadea,F.Scarlassara,G.Montagnoli,L.Corradi} => {S.Szilner}   0.008115    0.9459       92.8
 {A.Gadea,F.Scarlassara,G.Montagnoli} => {S.Szilner}             0.008125    0.9437       92.6
 {A.Gadea,G.Montagnoli,L.Corradi} => {S.Szilner}                 0.008115    0.9425       92.5
 {F.Scarlassara,L.Corradi,S.Szilner} => {G.Montagnoli}           0.008517    1.0000       92.4
