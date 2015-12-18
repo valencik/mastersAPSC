@@ -93,6 +93,8 @@ def parse_search():
     if len(author_tuples) >= 1:
         author_list = [author[0] for author in author_tuples]
         pipeline.append({"$match": {"authors": {"$in": author_list}}})
+        # Copy the pipeline for use with simpapers query
+        simpapers_pipeline = list(pipeline)
 
     # Try an match nuclides written like: 11li 12C 238U
     nuclide_tuples = re.findall(r"(?<![:=_])([0-9]{1,3}[a-zA-Z]{1,3})+", search)
@@ -105,6 +107,30 @@ def parse_search():
     pipeline.append({"$project":
         {"_id": 1, "year": 1, "authors": 1, "type": 1, "selectors": "$selectors.value", "title": 1}})
     results = nsr.aggregate(pipeline)
+
+
+    # Similar papers
+    simpapers_pipeline.extend([
+        {"$unwind": "$simPapers"},
+        {"$group": {"_id": "$simPapers.paper", "score": {"$avg": "$simPapers.score"}}},
+        {"$sort": {"score": -1}},
+        {"$limit": 100}
+    ])
+    recommended_papers = db.simNSR.aggregate(simpapers_pipeline)
+
+    # save the score for each recommended paper
+    scores = dict()
+    for paper in recommended_papers:
+        scores[paper['_id']] = paper['score']
+
+    # get the full documents for each paper
+    simpaper_results = nsr.aggregate([
+        {"$match": {"_id": {"$in": [x for x in scores.keys()]}}},
+        {"$project": {"_id": 1, "year": 1, "authors": 1, "type": 1, "selectors": "$selectors.value", "title": 1}}])
+    simpaper_entries = []
+    for simpaper in simpaper_results:
+        simpaper_entries.append(simpaper)
+
 
     # Iterate over MongoDB cursor and update defaultdict values in _dict vars
     # This can throw IndexErrors which I am not catching
@@ -164,7 +190,7 @@ def parse_search():
         range(year_start, year_end + 1) ]} for _type in nsr_types]
 
     # Convert everything to JSON and ship it to the client
-    return toJson({'years': year_json, 'types': types_json, 'entries': nsr_entries, 'network': network_data})
+    return toJson({'years': year_json, 'types': types_json, 'entries': nsr_entries, 'network': network_data, 'simpapers': simpaper_entries})
 
 
 # If executed directly from python interpreter, run local server
