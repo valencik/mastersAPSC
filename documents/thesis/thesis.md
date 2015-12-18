@@ -1446,16 +1446,21 @@ The clustering results for 6 centers are shown in Figure @fig:kmeans-thirds6.
 
 ![Secondary K-means clustering with 6 centers](images/11papers-ratio-third6clusters.png){#fig:kmeans-thirds6}
 
-| careerLength | meanCoauthors | numEntries | numEntries1 | numEntries2 | numEntries3 | size |
-| ------------ | ------------- | ---------- | ----------- | ----------- | ----------- | ---- |
-| 1.16972      | -0.27103      | 0.46882    | -0.45377    | 0.71277     | -0.11090    | 3299 |
-| 1.08866      | 1.88560       | 4.07120    | -0.78269    | 0.51341     | 0.41716     | 564  |
-| 0.41893      | -0.21279      | -0.17738   | -0.83277    | -0.83916    | 1.62115     | 2993 |
-| -0.64822     | -0.31975      | -0.36245   | -0.25189    | 0.63417     | -0.26423    | 5227 |
-| -0.71602     | 1.98927       | 0.10059    | -0.02918    | 0.25118     | -0.18162    | 1651 |
-| -0.27094     | -0.26837      | -0.37100   | 1.35796     | -0.90415    | -0.71240    | 4268 |
+| cLength  | mCoauthors | nEntries | nEntries1 | nEntries2 | nEntries3 | size |
+| -------- | ---------- | -------- | --------- | --------- | --------- | ---- |
+| 1.16972  | -0.27103   | 0.46882  | -0.45377  | 0.71277   | -0.11090  | 3299 |
+| 1.08866  | 1.88560    | 4.07120  | -0.78269  | 0.51341   | 0.41716   | 564  |
+| 0.41893  | -0.21279   | -0.17738 | -0.83277  | -0.83916  | 1.62115   | 2993 |
+| -0.64822 | -0.31975   | -0.36245 | -0.25189  | 0.63417   | -0.26423  | 5227 |
+| -0.71602 | 1.98927    | 0.10059  | -0.02918  | 0.25118   | -0.18162  | 1651 |
+| -0.27094 | -0.26837   | -0.37100 | 1.35796   | -0.90415  | -0.71240  | 4268 |
 
-Table: Centroid data points for 6 cluster K-Means on initial data {#tbl:thirds-6clusters}
+Table: Centroid data points for 6 cluster K-Means on initial data {#tbl:thirds-6clusters}.
+
+The clustering results are tabulated in Table @tbl:thirds-6clusters.
+In this table, `cLength` represents the career length and `mCoauthors` the mean of the number of coauthors.
+`nEntries` `nEntries1` `nEntries2` `nEntries3` represent the total number of NSR entries, the amount in the first, second, and final third of an authors career respectively.
+Finally `size` is the number of authors in a given cluster.
 
 The first cluster presented in Table @tbl:thirds-6clusters represents authors who have had longer careers, published with fewer coauthors, and published a relatively normal amount of NSR entries, mostly in the middle of their careers.
 The second cluster of authors had similar length careers and published with more coauthors and contributed many more entries in total.

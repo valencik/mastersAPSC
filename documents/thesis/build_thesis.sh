@@ -22,6 +22,7 @@ cat bibliography-stub.md >> no_comments_thesis.md
 echo "Invoking Pandoc for TeX file creation..."
 pandoc --table-of-contents --number-sections --standalone \
   --include-in-header=header.tex --include-before-body=beforebody.tex \
+  --columns=120 \
   --filter ./minted-listings.py \
   --filter pandoc-fignos \
   --filter pandoc-tablenos \
