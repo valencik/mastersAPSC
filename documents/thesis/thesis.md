@@ -134,32 +134,45 @@ All that is required to use the application is a modern web browser.
 Interactive visualizations are used to encourage exploration of the data.
 Additionally, the new database structure that is developed in this work enables searches that were previously cumbersome or impossible.
 
-The web application presents a single search interface as shown in Figure @fig:webapp-search.
-This interface can take queries with a specified command, or the command can be inferred, based on the type of data that is input by the user.
-For example, if the user inputs a string that matches an author name, the application retrieves a profile page for that author.
-An example profile page for input "R.A.E.Austin" is shown in Figure @fig:author-profile.
-The author profiles combine information discussed in the [Data Summarization](#data-summarization) and [Cluster Analysis](#cluster-analysis) sections.
+%- Filters
+The web application presents a single search interface as shown in Figure @fig:author-list.
+This interface supports a variety of filters to retrieve NSR entries from the database.
+For example, if the user inputs a string that matches an author name, the application retrieves all NSR entries for that author.
+An example list view for input "R.A.E.Austin" is shown in Figure @fig:author-list.
+%- The author profiles combine information discussed in the [Data Summarization](#data-summarization) and [Cluster Analysis](#cluster-analysis) sections.
 
-If the user inputs a year or year range such as `1989` or `1970-1979` a summary of the data for those years is shown.
-This summary uses information and visualizations discussed in [Data Summarization](#data-summarization).
+If the user inputs a year or year range such as "1989" or "1970-1979" the entries that were published in those years are retrieved.
+%- This summary uses information and visualizations discussed in [Data Summarization](#data-summarization).
+Selector values (further discussed in [Keyword Abstracts](keyword-abstracts)) such as "11Li" can also be used as a filter.
+Finally, these filters can be combined to form advanced queries retrieving NSR entries on certain authors working on particular nuclides in a given range as shown in Figure @fig:combined-filters.
 
-![The search interface of the new web app](images/webapp-search.png) {#fig:webapp-search}
-
-![The author profile page for "R.A.E.Austin"](images/author-profile.png) {#fig:author-profile}
-
-%- TODO replace with a discussion of choosing views
-Visualizations of a network of collaborators are retrieved with the `collab:` command.
-For example, `collab:R.A.E.Austin` will retrieve a network graph of all the authors who have published with `R.A.E.Austin`.
-Additionally, the `collab:` command can take a nuclide as an input and generate a network graph of all authors who have published on that nuclide.
+%- Views
+The web application provides 5 basic views of retrieved NSR entries.
+The "List" view shows basic information such as the publication year, title, author list, and selector values.
+The "Charts" view shows a bar chart depicted the amount and type of NSR entry per year as shown in Figure @fig:author-chart.
+The "Graph" view shows a network graph with nodes coloured by author cluster membership as shown in Figure @fig:author-graph (further discussion on author clusters in [Cluster Analysis](#cluster-analysis)).
+The "Graph (labels)" view presents the same information as the "Graph" view but with text labels on the nodes as shown in @fig:author-graph-labels.
 Analysis of the network graphs is further discussed in [Network Analysis and Visualization](#network-analysis-and-visualization).
 
 %- TODO replace with a discussion of choosing views
-The `simpapers:` command returns a list of NSR entries that are considered similar to the input selection.
-The command can take an author's name or NSR Keynumber as valid inputs [^keynumber-link].
-An example for author "A.J.Sarty" is shown in Figure @fig:simpapers-author.
+The "Similar Papers" reuses the "List" view but instead displays semantically similar papers for the searched author.
+An example for author "R.A.E.Austin" is shown in Figure @fig:author-simpapers.
 The method by which NSR entries are determined to be similar is discussed in the [Similar Papers](#similar-papers) section.
 
 [^keynumber-link]: NSR Keynumbers are the unique identifcation code given to each NSR entry. They are further discussed in the [NSR Data](#nsr-data) section.
+
+![The list view for "R.A.E.Austin"](images/list-view-roby.png) {#fig:author-list}
+
+![The list view of a query taking advantage of combined filters](images/combined-filters.png) {#fig:combined-filters}
+
+![The chart view for "R.A.E.Austin"](images/chart-view-roby.png) {#fig:author-chart}
+
+![The graph view for "R.A.E.Austin"](images/graph-view-roby.png) {#fig:author-graph}
+
+![The graph-labels view for "R.A.E.Austin"](images/graph-labels-view-roby.png) {#fig:author-graph-labels}
+
+![The similar papers view for "R.A.E.Austin"](images/simpapers-view-roby.png) {#fig:author-simpapers}
+
 
 The Data and Database
 =====================
@@ -1086,7 +1099,7 @@ For the CMS Collaboration	for the CERES Collaboration	4
 
 ## The Application
 
-The cosine similarity results are presented in the web application via the `simpapers:` command.
+The cosine similarity results are presented in the web application via the "Similar Papers" view.
 The user of the application can search for an author and see entries that are similar to the entries the author has coauthored.
 
 %- Mongo
@@ -1100,13 +1113,11 @@ The similarity ranking considers the selectors used, and authors often publish m
 %- Web app
 The render object is then prepared to be sent to the html template to show the user.
 The end user then sees a web page with the search author in prominent text followed by a list of entries that have a cosine similarity to at least one of their own entries greater than 0.65.
-An example for author "A.J.Sarty" is shown in Figure @fig:simpapers-author.
+An example for author "R.A.E.Austin" is shown in Figure @fig:author-simpapers.
 The similar entries are sorted in descending order of their score function value.
 The scoring function is the average of all the `score` fields for that paper that were encountered in the aggregation.[^multiple-scores]
 
 [^multiple-scores]: Because we fetch the `simPapers` array for multiple entries when searching for an author's similar entries, we can see the same `_id` multiple times and with different scores each time.
-
-![Similar entries for author "A.J.Sarty"](images/simpapers-author.png) {#fig:simpapers-author}
 
 ## Future Work - Text Mining
 %- TODO Topic Modelling
@@ -1477,8 +1488,8 @@ Therefore, in this analysis, every author's career either ends naturally on some
 ### The Application
 
 The results of cluster analysis can be written to the database with the `update-database.py` script.
-The clusters an author belongs to are shown on the author profile page.
-This is demonstrated in Figure @fig:author-profile.
+The clusters an author belongs to are used to colour the nodes on network graphs.
+This is demonstrated in Figure @fig:author-graph.
 
 ## Future Work - Data Mining
 
