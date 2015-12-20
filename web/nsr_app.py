@@ -75,6 +75,7 @@ def parse_search():
     search = request.args['input']
     print("NSR> recieved search: " + search)
     pipeline = []
+    simpapers_pipeline = []
     options = {}
 
     # Try to match years (only supports four digit years)
@@ -110,27 +111,30 @@ def parse_search():
 
 
     # Similar papers
-    simpapers_pipeline.extend([
-        {"$unwind": "$simPapers"},
-        {"$group": {"_id": "$simPapers.paper", "score": {"$avg": "$simPapers.score"}}},
-        {"$sort": {"score": -1}},
-        {"$limit": 100}
-    ])
-    recommended_papers = db.simNSR.aggregate(simpapers_pipeline)
-
-    # save the score for each recommended paper
-    scores = dict()
-    for paper in recommended_papers:
-        scores[paper['_id']] = paper['score']
-
-    # get the full documents for each paper
-    simpaper_results = nsr.aggregate([
-        {"$match": {"_id": {"$in": [x for x in scores.keys()]}}},
-        {"$project": {"_id": 1, "year": 1, "authors": 1, "type": 1, "selectors": "$selectors.value", "title": 1}}])
     simpaper_entries = []
-    for simpaper in simpaper_results:
-        simpaper['score'] = "Score: {:6.4f}".format(scores[simpaper['_id']])
-        simpaper_entries.append(simpaper)
+    if len(simpapers_pipeline) > 0:
+        simpapers_pipeline.extend([
+            {"$unwind": "$simPapers"},
+            {"$group": {"_id": "$simPapers.paper", "score": {"$avg": "$simPapers.score"}}},
+            {"$sort": {"score": -1}},
+            {"$limit": 100}
+        ])
+        recommended_papers = db.simNSR.aggregate(simpapers_pipeline)
+
+        # save the score for each recommended paper
+        scores = dict()
+        for paper in recommended_papers:
+            scores[paper['_id']] = paper['score']
+
+        # get the full documents for each paper
+        simpaper_results = nsr.aggregate([
+            {"$match": {"_id": {"$in": [x for x in scores.keys()]}}},
+            {"$project": {"_id": 1, "year": 1, "authors": 1, "type": 1,
+                "selectors": "$selectors.value", "title": 1}}])
+        simpaper_entries = []
+        for simpaper in simpaper_results:
+            simpaper['score'] = "Score: {:6.4f}".format(scores[simpaper['_id']])
+            simpaper_entries.append(simpaper)
 
 
     # Iterate over MongoDB cursor and update defaultdict values in _dict vars
