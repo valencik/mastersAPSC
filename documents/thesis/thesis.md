@@ -2,12 +2,6 @@
 %- Code in appendix? Additional screenshots in appendix?
 %- Custom bibliography styling?
 ---
-title:  'Data Mining and Exploration of the Nuclear Science References'
-author:
-- name: Andrew Valencik
-  affiliation: Saint Mary\'s University
-author: Andrew Valencik
-date: December 18th 2015
 bibliography: bibliography.yaml
 csl: american-physics-society.csl
 link-citations: true
