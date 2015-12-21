@@ -101,10 +101,18 @@ function listEntries(data) {
         d3.select("#charts").append("div").attr("class", "nsrEntry").attr("id", "id" + nsr._id)
         var entry = d3.select("#id" + nsr._id)
         entry.append("span").attr("class", "year").text(nsr.year);
-        entry.append("span").attr("class", "title").text(nsr.title);
-        entry.append("span").attr("class", "score").text(nsr.score);
-        entry.append("p").attr("class", "authors").text(nsr.authors.join(", "));
-        entry.append("p").attr("class", "selectors").text("Selectors: " + nsr.selectors.join(", "));
+
+        var title = typeof nsr.title === "undefined" ? "NA" : nsr.title
+        entry.append("span").attr("class", "title").text(title);
+
+        var score = typeof nsr.score === "undefined" ? "" : nsr.score
+        entry.append("span").attr("class", "score").text(score);
+
+        var authors = typeof nsr.authors === "undefined" ? "NA" : nsr.authors.join(", ")
+        entry.append("p").attr("class", "authors").text(authors);
+
+        var selectors = typeof nsr.selectors === "undefined" ? "NA" : nsr.selectors.join(", ")
+        entry.append("p").attr("class", "selectors").text("Selectors: " + selectors);
     })
 
 }
