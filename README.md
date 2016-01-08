@@ -1,28 +1,52 @@
 M.Sc. in Applied Science Thesis
 ===============================
  
-This project is a work in progress.
-It is in partial fulfillment for my Masters in Applied Science at SMU.
+This repo represents the work completed in partial fufilment of a Masters of Science in Applied Science at Saint Mary's University.
 
-Tasks to complete
-=================
+As this repo may change over time, the following is a link to the version of this work as it was when printed and bound:
 
-## Analysis
-+ Who should a given author work with?
-  - Authors with similar keywords that the original author has not already published with
+[https://github.com/valencik/mastersAPSC/releases/tag/v1.0](https://github.com/valencik/mastersAPSC/releases/tag/v1.0)
 
-## App
-+ Write user level documentation
-+ Single keyword view
-+ Single year view
-+ Enable filters and cutoffs, particularly for graph results
-+ Fix searches/commands to work on any page (author summary)
 
-##Data
-+ Make author collection that can be searched for partial author names
-+ Make keyword collection similar in purpose to author collection
-+ Add MongoDB index creation to `prepare-data.py`
+Installation
+------------
 
-## Maintenance (low priority)
-+ Clean up the repo
-+ Documentation
+All development was completed on MAc OS X 10.10.
+Although it should run on linux, the following instructions are Mac specific.
+
+The database used is MongoDB, which is available on [Homebrew](http://brew.sh).
+
+```
+brew install mongodb
+```
+
+The code in this work uses Python3, R and Perl (the system default was fine).
+
+```
+brew install python3 r
+```
+
+The python libraries are installable via pip.
+
+```
+pip install -r requirements.txt
+```
+
+The database is populated using the [prepare-data.py](https://github.com/valencik/mastersAPSC/blob/master/data/prepare-data.py) script.
+
+```
+cd data
+python3 prepare-data.py
+```
+
+
+Usage
+-----
+
+Make sure the MongoDB service `mongod` is running.
+
+The [nsr_app.py](https://github.com/valencik/mastersAPSC/blob/master/web/nsr_app.py) script launches the web app.
+
+```
+python3 nsr_app.py
+```
